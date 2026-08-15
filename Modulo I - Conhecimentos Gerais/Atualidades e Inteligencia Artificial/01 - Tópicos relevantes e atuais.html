@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tópicos Relevantes e Atuais | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Atualidades e Inteligência Artificial</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Tópicos relevantes e atuais</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Tópicos relevantes e atuais.html" selected>01 - Tópicos relevantes e atuais</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Tópicos Relevantes e Atuais</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Rotina de estudo</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Atualidades e Inteligência Artificial<br>Tópico 01 de 02<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Tópicos Relevantes e Atuais de Diversas Áreas</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Atualidades e Inteligência Artificial</b> &nbsp;›&nbsp; Tópico 01</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">5h de estudo ativo + rotina contínua</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — hábito de acompanhamento de notícias é o principal insumo</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio — poucos itens, mas exige atualização constante até a data da prova</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender a <b>lógica de cobrança</b> de "atualidades" em concursos FGV — o que é testado e como se preparar de forma contínua, não pontual.</li>
+            <li>Mapear as <b>áreas temáticas</b> previstas no edital: segurança, transportes, política, economia, sociedade, educação, saúde, cultura, tecnologia, energia, relações internacionais, desenvolvimento sustentável e ecologia.</li>
+            <li>Construir uma <b>rotina de acompanhamento de notícias</b> eficiente para as últimas semanas antes da prova.</li>
+            <li>Reconhecer os <b>tipos de questão</b> mais usados pela FGV neste bloco (fato x opinião, cronologia, relação causa-efeito entre eventos).</li>
+            <li>Identificar <b>fontes confiáveis</b> de atualização e evitar fontes não confiáveis ou desatualizadas.</li>
+            <li>Diferenciar conhecimento de atualidades "efêmero" (fatos pontuais) de conhecimento "estrutural" (processos e tendências de longo prazo), que tendem a ser mais cobrados.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>O bloco de <b>Atualidades</b> é estruturalmente diferente de todos os demais tópicos do edital: seu conteúdo <b>muda constantemente</b> até a data da prova, o que significa que este capítulo funciona como um <b>guia de método de estudo</b>, não como uma lista fixa e definitiva de fatos — fatos "atuais" hoje podem estar desatualizados amanhã, e a FGV privilegia acontecimentos dos meses mais próximos da aplicação da prova.</p>
+          <p>O edital lista treze grandes áreas temáticas: <b>segurança, transportes, política, economia, sociedade, educação, saúde, cultura, tecnologia, energia, relações internacionais, desenvolvimento sustentável e ecologia</b>. Dado o perfil da vaga (Gestão Econômico-Financeira), é razoável esperar maior incidência de questões relacionadas a <b>economia, tecnologia e política pública</b>, sem que as demais áreas sejam descartadas.</p>
+          <p>A estratégia de estudo mais eficaz para este bloco não é "decorar fatos isolados", mas desenvolver o <b>hábito de leitura regular de notícias de fontes confiáveis</b>, com atenção especial ao período de 3 a 6 meses anteriores à data da prova — a maioria das bancas, incluindo a FGV, prioriza fatos recentes e de repercussão nacional/internacional significativa, não eventos triviais ou hiperlocais.</p>
+          <p>É fundamental diferenciar <b>conhecimento efêmero</b> (um fato pontual, como o resultado de uma eleição específica) de <b>conhecimento estrutural</b> (um processo ou tendência de longo prazo, como mudanças demográficas, transformação digital do setor público, ou transição energética) — o segundo tipo tende a ser mais cobrado, pois permanece relevante por mais tempo e testa compreensão, não apenas memorização.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Tópicos Relevantes<br>e Atuais</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Áreas do edital</h4><ul><li>Segurança, transportes</li><li>Política, economia</li><li>Sociedade, educação, saúde</li><li>Cultura, tecnologia, energia</li><li>Relações internacionais</li><li>Sustentabilidade e ecologia</li></ul></div>
+              <div class="mm-node"><h4>Tipo de conhecimento</h4><ul><li>Efêmero (fato pontual)</li><li>Estrutural (tendência, processo)</li></ul></div>
+              <div class="mm-node"><h4>Fontes confiáveis</h4><ul><li>Agências de notícias</li><li>Órgãos oficiais</li><li>Veículos de referência</li></ul></div>
+              <div class="mm-node"><h4>Rotina de estudo</h4><ul><li>Leitura diária/semanal</li><li>Foco nos últimos 3-6 meses</li><li>Fichamento por área temática</li></ul></div>
+              <div class="mm-node"><h4>Tipos de questão FGV</h4><ul><li>Fato x opinião</li><li>Cronologia de eventos</li><li>Causa-efeito</li></ul></div>
+              <div class="mm-node"><h4>Prioridade p/ o perfil</h4><ul><li>Economia</li><li>Tecnologia</li><li>Política pública</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Por que "atualidades" exige um método diferente de estudo</h3>
+          <p>Diferentemente de tópicos como Matemática Financeira ou Contabilidade, cujo conteúdo é estável ao longo do tempo, "atualidades" é, por definição, <b>dependente da data da prova</b>. Isso significa que qualquer material de estudo — inclusive este — não pode listar "os fatos que cairão na prova", mas deve ensinar <b>como identificar, organizar e reter</b> as informações relevantes conforme elas surgem.</p>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Atenção sobre este capítulo</div>
+            <p>Este material não lista eventos específicos como "certos de cair na prova", porque fatos recentes mudam semana a semana e um material desatualizado pode induzir a erro. Em vez disso, o capítulo ensina o <b>método</b> de preparação para atualidades — a parte que permanece válida independentemente da data em que for consultada. Complemente este estudo acompanhando fontes de notícia atualizadas nas semanas anteriores à prova.</p>
+          </div>
+
+          <h3>4.2 As treze áreas temáticas do edital</h3>
+          <table>
+            <thead><tr><th>Área</th><th>O que costuma ser cobrado</th></tr></thead>
+            <tbody>
+              <tr><td>Segurança</td><td>Políticas de segurança pública, segurança da informação, criminalidade, grandes operações policiais de repercussão nacional</td></tr>
+              <tr><td>Transportes</td><td>Infraestrutura, mobilidade urbana, grandes obras, novos modais, política de transporte público</td></tr>
+              <tr><td>Política</td><td>Processos eleitorais, mudanças institucionais, decisões do STF/STJ de grande repercussão, reformas em tramitação</td></tr>
+              <tr><td>Economia</td><td>Indicadores macroeconômicos (inflação, PIB, taxa de juros), políticas fiscais, mercado de trabalho</td></tr>
+              <tr><td>Sociedade</td><td>Movimentos sociais, mudanças demográficas, questões de desigualdade e inclusão</td></tr>
+              <tr><td>Educação</td><td>Políticas educacionais, resultados de avaliações nacionais, reformas curriculares</td></tr>
+              <tr><td>Saúde</td><td>Políticas de saúde pública, o SUS, epidemiologia, avanços médicos de repercussão</td></tr>
+              <tr><td>Cultura</td><td>Eventos culturais de grande repercussão nacional, políticas culturais</td></tr>
+              <tr><td>Tecnologia</td><td>Inovações relevantes, regulação tecnológica, transformação digital do setor público</td></tr>
+              <tr><td>Energia</td><td>Matriz energética brasileira, transição energética, grandes projetos de infraestrutura energética</td></tr>
+              <tr><td>Relações internacionais</td><td>Posicionamento do Brasil em fóruns internacionais, acordos comerciais, conflitos geopolíticos relevantes</td></tr>
+              <tr><td>Desenvolvimento sustentável</td><td>Metas de desenvolvimento sustentável (ODS), políticas ambientais, relatórios internacionais</td></tr>
+              <tr><td>Ecologia</td><td>Questões ambientais específicas — desmatamento, biodiversidade, mudanças climáticas</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.3 Conhecimento efêmero x conhecimento estrutural</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Característica</th><th>Exemplo genérico</th></tr></thead>
+            <tbody>
+              <tr><td>Efêmero</td><td>Fato pontual, relevante por pouco tempo</td><td>Resultado específico de uma eleição, um evento isolado</td></tr>
+              <tr><td>Estrutural</td><td>Processo, tendência ou política de longo prazo</td><td>Transformação digital do setor público, transição energética, mudanças demográficas</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Onde concentrar o estudo</div>
+            <p>Priorize entender processos e tendências estruturais — eles têm maior probabilidade de aparecer na prova, pois permanecem relevantes por mais tempo e a banca pode formulá-los de diferentes formas sem depender de uma data exata.</p>
+          </div>
+
+          <h3>4.4 Fontes confiáveis de atualização</h3>
+          <table>
+            <thead><tr><th>Tipo de fonte</th><th>Exemplos genéricos</th><th>Por que usar</th></tr></thead>
+            <tbody>
+              <tr><td>Agências de notícias</td><td>Agências nacionais e internacionais de referência</td><td>Cobertura factual, checagem editorial, menor viés</td></tr>
+              <tr><td>Órgãos oficiais</td><td>Sites do governo federal, IBGE, Banco Central, ministérios</td><td>Dados primários, estatísticas oficiais, sem interpretação</td></tr>
+              <tr><td>Veículos de imprensa de referência</td><td>Jornais e portais de grande circulação com histórico de apuração</td><td>Contextualização e análise de fatos complexos</td></tr>
+              <tr><td>Boletins e relatórios institucionais</td><td>Relatórios de organismos internacionais (ONU, OMS, Banco Mundial)</td><td>Dados estruturados sobre desenvolvimento, saúde, economia global</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Atenção às fontes não confiáveis</div>
+            <p>Evite basear seu estudo em redes sociais sem verificação, blogs sem apuração jornalística, ou conteúdo viral não checado — esse tipo de fonte é a principal via de desinformação e pode levar a erros básicos de fato na prova.</p>
+          </div>
+
+          <h3>4.5 Como a FGV costuma estruturar as questões deste bloco</h3>
+          <ul class="styled">
+            <li><b>Fato x opinião</b>: apresenta um texto sobre um evento atual e pede que o candidato distinga a informação factual da interpretação/opinião do autor do texto.</li>
+            <li><b>Cronologia</b>: pede que o candidato ordene eventos relacionados a um mesmo processo (ex.: etapas de uma política pública).</li>
+            <li><b>Causa-efeito</b>: relaciona um evento atual a suas causas estruturais ou consequências esperadas.</li>
+            <li><b>Múltipla escolha direta</b>: testa conhecimento factual específico sobre um evento de grande repercussão.</li>
+          </ul>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV tende a contextualizar questões de atualidades dentro de um texto-base (notícia, trecho de relatório), testando simultaneamente compreensão de texto e conhecimento factual — raramente pergunta datas exatas isoladas, preferindo testar a compreensão do processo ou da relevância do fato.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV costuma priorizar fatos de grande repercussão nacional e internacional dos meses imediatamente anteriores à prova, evitando questões excessivamente específicas ou de baixa relevância pública.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões baseadas em texto jornalístico ou institucional recente, testando compreensão combinada com conhecimento factual.</li>
+            <li>Questões sobre indicadores econômicos e sociais divulgados por órgãos oficiais.</li>
+            <li>Dificuldade variável — mais fácil para quem mantém rotina constante de leitura, mais difícil para quem tenta "decorar" atualidades na última semana.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca (por natureza do perfil da vaga)</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Motivo da relevância</th></tr></thead>
+            <tbody>
+              <tr><td>Indicadores econômicos e política fiscal</td><td>Diretamente relacionado ao perfil de Gestão Econômico-Financeira</td></tr>
+              <tr><td>Transformação digital do setor público</td><td>Alinhado à natureza tecnológica da DATAPREV</td></tr>
+              <tr><td>Políticas sociais e previdenciárias</td><td>Vínculo direto com a missão institucional da DATAPREV</td></tr>
+              <tr><td>Sustentabilidade e ESG</td><td>Tema crescente em relatórios institucionais e governança corporativa</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Confundir opinião do autor de um texto jornalístico com fato relatado objetivamente.</li>
+            <li>Datar incorretamente um evento por confundi-lo com outro semelhante ocorrido em período diferente.</li>
+            <li>Extrapolar a informação de uma notícia, indo além do que o texto realmente afirma (mesmo erro estudado em Interpretação de Textos).</li>
+            <li>Estudar apenas fatos "virais" e ignorar processos estruturais de maior relevância para a prova.</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver uma questão de atualidades baseada em texto, aplique a mesma cautela interpretativa do bloco de Português: não extrapole.</li>
+            <li>Desconfie de alternativas que parecem "opinião popular" sobre o tema, mas não estão sustentadas no texto-base.</li>
+            <li>Priorize, na revisão final, os temas de maior repercussão nos últimos 3 meses antes da prova.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Regra dos 3-6 meses</div><p>Concentre a revisão final nos fatos de grande repercussão dos últimos 3 a 6 meses antes da data da prova — é a janela mais provável de cobrança.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Estrutural &gt; Efêmero</div><p>Entre decorar um fato pontual e entender um processo de longo prazo, priorize sempre o processo — ele rende mais pontos por cobrir várias formulações possíveis de pergunta.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Aplique a lógica de interpretação de texto</div><p>Em questões de atualidades baseadas em texto, use o mesmo cuidado do bloco de Português: não extrapole, distinga fato de opinião.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Priorize temas ligados ao perfil da vaga</div><p>Economia, tecnologia e políticas sociais/previdenciárias têm maior probabilidade de aparecer, dado o perfil de Gestão Econômico-Financeira da DATAPREV.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Atualidades exige método contínuo, não memorização de lista fixa.</li>
+            <li>13 áreas temáticas no edital: segurança, transportes, política, economia, sociedade, educação, saúde, cultura, tecnologia, energia, relações internacionais, desenvolvimento sustentável e ecologia.</li>
+            <li>Priorize conhecimento estrutural (processos/tendências) sobre conhecimento efêmero (fatos pontuais).</li>
+            <li>Use fontes confiáveis: agências de notícias, órgãos oficiais, veículos de referência, relatórios institucionais.</li>
+            <li>FGV testa fato x opinião, cronologia e causa-efeito, geralmente a partir de um texto-base.</li>
+            <li>Foque a revisão final nos 3-6 meses anteriores à prova.</li>
+            <li>Dado o perfil da vaga, priorize economia, tecnologia e políticas sociais/previdenciárias.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>Estas questões testam o <b>método</b> de análise de atualidades (fato x opinião, estrutural x efêmero, fontes confiáveis) usando cenários genéricos e atemporais — não fatos específicos que se desatualizariam. Para questões com fatos reais e recentes, complemente com simulados atualizados próximos à data da prova.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 ROTINA DE ESTUDO -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Rotina de estudo recomendada</h2></div>
+        <div class="card">
+          <div class="box info"><div class="box-title">ℹ Observação</div><p>Este tópico não envolve fórmulas — em seu lugar, uma <b>rotina prática semanal</b> de acompanhamento de atualidades.</p></div>
+          <table>
+            <thead><tr><th>Frequência</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td>Diária (10-15 min)</td><td>Ler manchetes de 1-2 fontes confiáveis, focando nas 13 áreas do edital</td></tr>
+              <tr><td>Semanal</td><td>Fichar (resumir em 2-3 linhas) os 3-5 fatos de maior repercussão da semana, por área temática</td></tr>
+              <tr><td>Mensal</td><td>Revisar o fichamento acumulado, buscando conexões entre fatos e tendências estruturais</td></tr>
+              <tr><td>Últimas 4 semanas antes da prova</td><td>Intensificar a leitura, priorizando indicadores econômicos, políticas do setor público e tecnologia</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Fato x Opinião</h3>
+          <table>
+            <thead><tr><th>Fato</th><th>Opinião</th></tr></thead>
+            <tbody>
+              <tr><td>Verificável, sustentado por dados/fontes</td><td>Julgamento de valor, interpretação pessoal do autor</td></tr>
+              <tr><td>"O Banco Central elevou a taxa de juros em X pontos"</td><td>"A decisão do Banco Central foi um erro"</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>A FGV publica regularmente índices econômicos próprios (como o IGP-M), o que reforça sua tendência a cobrar, no bloco de atualidades, temas ligados a indicadores econômicos e à sua própria área de expertise.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade sobre o método jornalístico</div><p>A distinção entre fato e opinião é um dos pilares éticos do jornalismo profissional, formalizada em manuais de redação de grandes veículos — a mesma distinção que a FGV explora em suas questões de atualidades.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>Estudos de ciência da informação mostram que a retenção de conhecimento factual isolado (efêmero) é significativamente menor do que a retenção de conhecimento estrutural (processos, causas, tendências) — reforçando a estratégia de estudo recomendada neste capítulo.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Compreensão e interpretação de textos (Português)</td><td>Questões de atualidades frequentemente usam texto jornalístico como base, exigindo a mesma leitura cuidadosa</td></tr>
+              <tr><td>Inteligência Artificial: fundamentos e aplicações (Tópico 2 desta disciplina)</td><td>IA é, ela própria, um dos temas de maior relevância atual dentro do eixo tecnologia</td></tr>
+              <tr><td>Administração Financeira e Matemática Financeira (Módulo II)</td><td>Indicadores econômicos de atualidades conectam-se diretamente aos conceitos técnicos desses tópicos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e definir suas 2-3 fontes de notícias confiáveis para acompanhamento regular.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Iniciar a rotina diária de leitura e o fichamento semanal por área temática.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Revisar o fichamento acumulado; ajustar o foco para os temas com maior repercussão recente.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Agências de notícias nacionais e internacionais de referência (fonte de acompanhamento contínuo).</li>
+            <li>Portais oficiais: IBGE, Banco Central do Brasil, ministérios e órgãos federais correlatos.</li>
+            <li>Relatórios de organismos internacionais: ONU, OMS, Banco Mundial (para temas de desenvolvimento sustentável e saúde global).</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Atualidades e Inteligência Artificial · Tópico 01/02</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_atu_t01";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Por que 'atualidades' exige um método de estudo diferente dos demais tópicos?", a:"Porque seu conteúdo muda constantemente até a data da prova, exigindo acompanhamento contínuo em vez de memorização de uma lista fixa de fatos."},
+    {q:"Quais são as 13 áreas temáticas listadas no edital para atualidades?", a:"Segurança, transportes, política, economia, sociedade, educação, saúde, cultura, tecnologia, energia, relações internacionais, desenvolvimento sustentável e ecologia."},
+    {q:"Qual a diferença entre conhecimento efêmero e conhecimento estrutural?", a:"Efêmero é um fato pontual, relevante por pouco tempo; estrutural é um processo ou tendência de longo prazo, mais duradouro e mais provável de ser cobrado."},
+    {q:"Por que se deve priorizar conhecimento estrutural no estudo de atualidades?", a:"Porque permanece relevante por mais tempo e pode ser formulado de diferentes formas em questões, ao contrário de um fato pontual isolado."},
+    {q:"Cite dois tipos de fonte confiável para acompanhamento de atualidades.", a:"Agências de notícias de referência e órgãos oficiais (como IBGE e Banco Central)."},
+    {q:"Por que se deve evitar redes sociais sem verificação como fonte de estudo?", a:"Porque são a principal via de desinformação, sem apuração jornalística ou checagem editorial."},
+    {q:"Cite três tipos de questão que a FGV costuma usar no bloco de atualidades.", a:"Fato x opinião, cronologia de eventos, e relação de causa-efeito entre acontecimentos."},
+    {q:"Qual a 'regra dos 3-6 meses' na preparação para atualidades?", a:"Concentrar a revisão final nos fatos de grande repercussão ocorridos nos últimos 3 a 6 meses antes da prova."},
+    {q:"Dado o perfil da vaga (Gestão Econômico-Financeira), quais áreas de atualidades merecem atenção prioritária?", a:"Economia, tecnologia e políticas sociais/previdenciárias."},
+    {q:"O que diferencia um fato de uma opinião em um texto jornalístico?", a:"O fato é verificável e sustentado por dados/fontes; a opinião é um julgamento de valor ou interpretação pessoal do autor."},
+    {q:"Qual é a armadilha mais comum em questões de atualidades baseadas em texto?", a:"Extrapolar a informação do texto, indo além do que ele realmente afirma — o mesmo erro estudado em interpretação de textos."},
+    {q:"Que rotina diária é recomendada para acompanhamento de atualidades?", a:"10 a 15 minutos de leitura de manchetes de 1-2 fontes confiáveis, focando nas áreas do edital."},
+    {q:"Que rotina semanal é recomendada?", a:"Fichar (resumir em 2-3 linhas) os fatos de maior repercussão da semana, organizados por área temática."},
+    {q:"Por que a FGV publica índices econômicos próprios?", a:"A FGV é referência em pesquisa econômica no Brasil, publicando índices como o IGP-M, o que reforça sua tendência a cobrar temas econômicos em atualidades."},
+    {q:"O que estudos de ciência da informação mostram sobre retenção de conhecimento factual isolado?", a:"Que é significativamente menor do que a retenção de conhecimento estrutural (processos, causas, tendências)."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) - cenários atemporais, focados em método */
+  const questoes = [
+    {tema:"Fato x opinião", texto:"“O Banco Central elevou a taxa básica de juros em 0,5 ponto percentual na última reunião do comitê. Para muitos analistas, a decisão foi tardia e insuficiente para conter a inflação.”", enun:"Assinale a alternativa que identifica corretamente o trecho FACTUAL do texto:", alts:["'A decisão foi tardia e insuficiente'","'O Banco Central elevou a taxa básica de juros em 0,5 ponto percentual'","'Muitos analistas' pensam de determinada forma","O texto inteiro é uma opinião","Não há fato identificável no texto"], correta:1, coment:"A elevação da taxa em 0,5 ponto é um dado verificável e objetivo — fato. A avaliação de que foi 'tardia e insuficiente' é interpretação/opinião dos analistas citados."},
+    {tema:"Estrutural x efêmero", texto:"—", enun:"Assinale a alternativa que representa um conhecimento ESTRUTURAL (processo de longo prazo), e não um fato efêmero:", alts:["O resultado de uma eleição municipal específica realizada em determinado mês.","O placar de um evento esportivo pontual.","A transição para uma matriz energética mais renovável ao longo de uma década.","Uma declaração isolada feita por uma autoridade em entrevista.","O anúncio de um evento cultural específico em determinada cidade."], correta:2, coment:"A transição energética é um processo contínuo e de longo prazo, permanecendo relevante por anos — diferente dos demais exemplos, que são fatos pontuais e efêmeros."},
+    {tema:"Fontes confiáveis", texto:"—", enun:"Assinale a alternativa que representa a fonte MAIS confiável para dados econômicos oficiais:", alts:["Uma postagem viral em rede social sem indicação de origem.","Um blog pessoal sem apuração jornalística.","O site oficial do órgão responsável pela estatística (ex.: IBGE, Banco Central).","Um fórum de discussão sem moderação editorial.","Um vídeo sem fontes citadas."], correta:2, coment:"Órgãos oficiais responsáveis pela produção de estatísticas (como IBGE e Banco Central) são fontes primárias e mais confiáveis para dados econômicos, por não dependerem de interpretação de terceiros."},
+    {tema:"Tipo de questão FGV", texto:"“Em 2019 foi lançado o Programa X; em 2021, o programa foi ampliado; em 2023, passou por reformulação; em 2025, atingiu sua fase de consolidação.”", enun:"Uma questão que pede para ordenar corretamente essas etapas está testando:", alts:["Fato x opinião","Cronologia de eventos","Causa-efeito","Conhecimento gramatical","Interpretação poética"], correta:1, coment:"A questão pede a ordenação temporal de etapas de um mesmo processo — trata-se de uma questão de cronologia de eventos, comum no bloco de atualidades."},
+    {tema:"Causa-efeito", texto:"“A elevação do custo de matérias-primas importadas, associada à desvalorização cambial, resultou em pressão inflacionária no setor industrial.”", enun:"Nesse trecho, a relação de causa-efeito identificada é:", alts:["A inflação causou a desvalorização cambial.","O custo de matérias-primas e a desvalorização cambial causaram pressão inflacionária.","A pressão inflacionária causou a elevação do custo de matérias-primas.","Não há relação de causa-efeito no texto.","O setor industrial causou a desvalorização cambial."], correta:1, coment:"O texto apresenta duas causas (custo de matérias-primas + desvalorização cambial) que, combinadas, produzem um efeito (pressão inflacionária) — relação causal explícita."},
+    {tema:"Priorização por perfil de vaga", texto:"—", enun:"Para um candidato ao perfil de Gestão Econômico-Financeira, qual área de atualidades tende a ter maior relevância relativa na prova?", alts:["Cultura","Esportes (não listado no edital)","Economia","Ecologia isolada, sem conexão institucional","Nenhuma área é mais relevante que outra"], correta:2, coment:"Dado o perfil técnico da vaga (Gestão Econômico-Financeira), questões de economia têm maior probabilidade relativa de aparecer, embora as demais áreas do edital também possam ser cobradas."},
+    {tema:"Extrapolação em atualidades", texto:"“O relatório do órgão internacional apontou avanço nos indicadores de acesso à internet no país, com destaque para áreas rurais.”", enun:"Assinale a alternativa que representa uma EXTRAPOLAÇÃO indevida desse texto:", alts:["Houve avanço nos indicadores de acesso à internet no país.","O avanço foi destacado especialmente em áreas rurais.","O relatório é de um órgão internacional.","O país alcançou 100% de cobertura de internet em todo o território (dado não mencionado).","O texto trata de indicadores de acesso à internet."], correta:3, coment:"Afirmar cobertura de 100% é extrapolação — o texto menciona apenas 'avanço', não um valor específico ou cobertura total, que não pode ser inferido com essa precisão."},
+    {tema:"Conhecimento estrutural aplicado", texto:"—", enun:"Assinale a alternativa que melhor representa um tema de 'desenvolvimento sustentável' com caráter estrutural (não pontual):", alts:["O anúncio de uma única obra de infraestrutura sustentável em uma cidade específica.","O cumprimento, ao longo de anos, das metas dos Objetivos de Desenvolvimento Sustentável (ODS) da ONU.","Uma declaração isolada de uma autoridade sobre o tema em um evento específico.","O resultado de uma única pesquisa de opinião sobre sustentabilidade.","Uma notícia pontual sobre um incêndio florestal específico."], correta:1, coment:"O acompanhamento contínuo das metas dos ODS ao longo de anos é um processo estrutural de longo prazo, diferente dos demais exemplos, que são fatos pontuais."},
+    {tema:"Identificação de opinião", texto:"“Especialistas divergem sobre os efeitos da nova política; para alguns, o impacto será positivo a médio prazo; para outros, os resultados são incertos.”", enun:"Esse trecho, do ponto de vista de fato x opinião, caracteriza-se por:", alts:["Apresentar apenas fatos verificáveis, sem qualquer opinião.","Relatar objetivamente a existência de opiniões divergentes entre especialistas, sem afirmar qual está correta.","Afirmar categoricamente que a política terá impacto positivo.","Afirmar categoricamente que a política fracassará.","Ser uma opinião pessoal do texto sobre a política, sem menção a terceiros."], correta:1, coment:"O texto relata, de forma factual, que existe divergência de opiniões entre especialistas — sem que o próprio texto tome partido, apenas registra objetivamente a existência dessa divergência."},
+    {tema:"Rotina de estudo", texto:"—", enun:"Assinale a alternativa que representa a estratégia de estudo MAIS recomendada para atualidades, segundo o método deste capítulo:", alts:["Decorar uma lista fixa de fatos na última semana antes da prova.","Ler apenas manchetes virais em redes sociais sem verificação de fonte.","Manter uma rotina contínua de leitura de fontes confiáveis, com fichamento por área temática.","Ignorar completamente o tópico, já que seu peso na prova é considerado menor.","Estudar apenas fatos de mais de dois anos atrás, evitando notícias recentes."], correta:2, coment:"A rotina contínua com fontes confiáveis e fichamento organizado é a estratégia mais eficaz, permitindo reter tanto fatos relevantes quanto compreender processos estruturais."},
+    {tema:"Tipos de fonte", texto:"—", enun:"Assinale a alternativa que representa uma fonte de dados PRIMÁRIA (não interpretada por terceiros) sobre inflação no Brasil:", alts:["Um artigo de opinião sobre a inflação.","O índice oficial de preços divulgado pelo órgão estatístico responsável.","Um comentário em rede social sobre o custo de vida.","Uma manchete sensacionalista sobre preços.","Um vídeo de opinião sobre economia sem citar fontes."], correta:1, coment:"O índice oficial divulgado por um órgão estatístico responsável (ex.: IBGE) é uma fonte primária, produzida diretamente a partir de coleta e metodologia oficial, sem interpretação intermediária."},
+    {tema:"Tecnologia como área de atualidades", texto:"—", enun:"Assinale a alternativa que melhor representa um tema estrutural dentro da área de 'tecnologia' no contexto de atualidades para concursos:", alts:["O lançamento de um único aplicativo específico em uma data pontual.","O processo contínuo de transformação digital do setor público.","Uma falha técnica pontual em um sistema específico.","Uma atualização isolada de software em uma empresa privada.","Um boato não confirmado sobre uma tecnologia."], correta:1, coment:"A transformação digital do setor público é um processo contínuo, alinhado à natureza institucional da DATAPREV, e tende a ser mais relevante e duradouro que eventos tecnológicos pontuais."},
+    {tema:"Relações internacionais", texto:"—", enun:"Assinale a alternativa que representa melhor um tema de 'relações internacionais' com relevância estrutural para concursos:", alts:["Uma visita diplomática pontual sem desdobramentos relevantes.","O posicionamento contínuo do Brasil em fóruns multilaterais ao longo do tempo.","Um comentário isolado de um diplomata em rede social.","Um evento cultural bilateral pontual sem repercussão.","Uma notícia sensacionalista sem fonte oficial."], correta:1, coment:"O posicionamento contínuo em fóruns multilaterais reflete uma política externa estrutural, mais relevante e duradoura do que eventos diplomáticos pontuais e isolados."},
+    {tema:"Aplicação do método fato x opinião", texto:"“O órgão regulador aprovou a nova norma nesta semana, que entra em vigor em 90 dias. Segundo críticos, o prazo é insuficiente para adequação das empresas.”", enun:"Assinale a alternativa que identifica corretamente os elementos factuais desse trecho:", alts:["Apenas 'o prazo é insuficiente'.","'O órgão regulador aprovou a nova norma' e 'entra em vigor em 90 dias'.","Apenas a opinião dos críticos.","Todo o trecho é opinativo.","Não há fatos identificáveis."], correta:1, coment:"A aprovação da norma e o prazo de vigência (90 dias) são fatos verificáveis; a avaliação de que o prazo é 'insuficiente' é opinião atribuída aos críticos, não um fato objetivo."},
+    {tema:"Ecologia estrutural", texto:"—", enun:"Assinale a alternativa que representa um tema estrutural dentro da área de 'ecologia':", alts:["Um evento climático extremo pontual e isolado.","O monitoramento contínuo de indicadores de desmatamento ao longo dos anos.","Uma foto viral de um animal em risco, sem contexto de políticas públicas.","Um comentário isolado sobre o clima em um dia específico.","Uma previsão de curtíssimo prazo do tempo."], correta:1, coment:"O monitoramento contínuo de indicadores de desmatamento ao longo do tempo reflete uma tendência estrutural, mais relevante para concursos do que um evento climático isolado."},
+    {tema:"Saúde estrutural", texto:"—", enun:"Assinale a alternativa que representa um tema estrutural na área de 'saúde':", alts:["Um caso clínico isolado sem repercussão pública.","A evolução contínua de indicadores de cobertura do sistema público de saúde ao longo dos anos.","Uma notícia pontual sobre um hospital específico.","Um boato de saúde não confirmado.","Uma opinião pessoal sobre um tratamento médico."], correta:1, coment:"A evolução de indicadores de cobertura de saúde pública ao longo do tempo é um processo estrutural, mais provável de ser cobrado do que um caso clínico isolado e específico."},
+    {tema:"Educação estrutural", texto:"—", enun:"Assinale a alternativa que representa um tema estrutural na área de 'educação':", alts:["O resultado de uma única prova aplicada em uma escola específica.","A evolução histórica dos indicadores nacionais de avaliação educacional.","Um comentário isolado de um professor em entrevista.","Um evento escolar pontual sem repercussão nacional.","Uma notícia sobre um único aluno específico."], correta:1, coment:"A evolução histórica de indicadores nacionais de avaliação educacional é um processo estrutural de longo prazo, mais relevante para concursos do que eventos escolares isolados."},
+    {tema:"Segurança estrutural", texto:"—", enun:"Assinale a alternativa que representa um tema estrutural na área de 'segurança':", alts:["Uma ocorrência policial isolada em um bairro específico.","A evolução de políticas públicas de segurança da informação ao longo do tempo.","Um boato não confirmado sobre criminalidade local.","Uma notícia sensacionalista sem fonte oficial.","Um comentário pessoal sobre segurança em rede social."], correta:1, coment:"A evolução de políticas de segurança da informação — tema especialmente relevante para uma empresa como a DATAPREV — reflete um processo estrutural de maior relevância para a prova do que uma ocorrência isolada."},
+    {tema:"Combinação de fato, opinião e extrapolação", texto:"“O relatório trimestral indicou queda de 2% na taxa de desemprego. Para o governo, o resultado reflete o sucesso das políticas adotadas; para a oposição, o dado é insuficiente diante dos desafios estruturais do mercado de trabalho.”", enun:"Assinale a alternativa correta sobre esse trecho:", alts:["A queda de 2% é opinião do governo.","Há um fato (queda de 2%) seguido de duas interpretações opostas (governo e oposição), sem que o texto valide nenhuma delas como verdade absoluta.","O texto afirma categoricamente que as políticas do governo foram bem-sucedidas.","O texto afirma categoricamente que o resultado é insuficiente.","Não há fato identificável no trecho."], correta:1, coment:"O dado numérico (queda de 2%) é fato; as leituras do governo e da oposição são interpretações opostas apresentadas de forma equilibrada pelo texto, sem que ele valide uma ou outra como verdade única."},
+    {tema:"Aplicação da regra dos 3-6 meses", texto:"—", enun:"Um candidato que está estudando 8 meses antes da prova deve, quanto a atualidades:", alts:["Parar de estudar atualidades até a última semana.","Iniciar desde já uma rotina de acompanhamento contínuo, intensificando a leitura nos 3-6 meses finais antes da prova.","Decorar apenas fatos de mais de um ano atrás.","Ignorar completamente fontes oficiais.","Estudar atualidades apenas uma vez, sem repetição."], correta:1, coment:"A rotina contínua deve começar cedo, mas a intensificação da leitura (foco em revisão e retenção) deve se concentrar nos últimos 3 a 6 meses antes da prova, período de maior probabilidade de cobrança pela banca."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) - cenários atemporais */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Fato é:", alts:["Julgamento de valor","Informação verificável e sustentada por dados","Opinião pessoal","Impressão subjetiva","Interpretação livre"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Opinião é:", alts:["Dado verificável","Julgamento de valor ou interpretação pessoal","Estatística oficial","Fato histórico","Informação factual neutra"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Conhecimento efêmero é:", alts:["Um processo de longo prazo","Um fato pontual, relevante por pouco tempo","Uma tendência estrutural","Um dado histórico permanente","Uma lei constante"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Conhecimento estrutural é:", alts:["Um fato isolado","Um processo ou tendência de longo prazo","Um boato não confirmado","Uma notícia sem fonte","Um evento pontual"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale uma fonte oficial de dados estatísticos:", alts:["Rede social sem verificação","Órgão estatístico do governo","Blog pessoal","Fórum sem moderação","Vídeo sem fonte"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Quantas áreas temáticas o edital lista para atualidades?", alts:["8","10","13","15","20"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale uma das áreas listadas no edital:", alts:["Esportes","Astrologia","Economia","Culinária","Moda"], correta:2},
+    {d:"Fácil", texto:"—", enun:"A 'regra dos 3-6 meses' recomenda:", alts:["Ignorar atualidades","Focar a revisão final nos fatos recentes desse período antes da prova","Estudar apenas fatos de anos atrás","Parar de estudar 6 meses antes","Estudar atualidades apenas uma vez"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Dado o perfil de Gestão Econômico-Financeira, qual área tende a ter maior relevância?", alts:["Cultura isolada","Economia","Esportes","Moda","Astrologia"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Redes sociais sem verificação são consideradas fontes:", alts:["Sempre confiáveis","Pouco confiáveis, propensas a desinformação","Oficiais","Primárias","Isentas de erro"], correta:1},
+    {d:"Média", texto:"“O órgão regulador aprovou a nova norma. Para especialistas, o prazo de adequação é curto.”", enun:"O trecho 'o órgão regulador aprovou a nova norma' é:", alts:["Opinião","Fato","Extrapolação","Paradoxo","Pergunta retórica"], correta:1},
+    {d:"Média", texto:"“O órgão regulador aprovou a nova norma. Para especialistas, o prazo de adequação é curto.”", enun:"O trecho 'para especialistas, o prazo de adequação é curto' é:", alts:["Fato objetivo neutro","Opinião atribuída a terceiros","Extrapolação do texto","Dado estatístico oficial","Paradoxo lógico"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale o exemplo de conhecimento estrutural em 'tecnologia':", alts:["O lançamento pontual de um app específico","O processo contínuo de transformação digital do setor público","Uma falha técnica isolada","Um boato sobre tecnologia","Uma atualização isolada de software"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale o exemplo de conhecimento estrutural em 'saúde':", alts:["Um caso clínico isolado","A evolução de indicadores de cobertura da saúde pública ao longo do tempo","Uma notícia pontual sobre um hospital","Um boato de saúde não confirmado","Uma opinião pessoal sobre tratamento"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale o exemplo de conhecimento estrutural em 'educação':", alts:["O resultado de uma prova isolada","A evolução histórica de indicadores nacionais de avaliação educacional","Um comentário isolado de um professor","Um evento escolar pontual","Uma notícia sobre um único aluno"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale o tipo de questão que pede a ordenação de eventos de um mesmo processo:", alts:["Fato x opinião","Cronologia","Causa-efeito","Vocabulário","Regência verbal"], correta:1},
+    {d:"Média", texto:"“O aumento do custo de insumos, somado à alta do dólar, elevou os preços ao consumidor.”", enun:"Esse trecho exemplifica uma relação de:", alts:["Fato x opinião","Cronologia","Causa-efeito","Antonímia","Sinonímia"], correta:2},
+    {d:"Média", texto:"—", enun:"Extrapolar um texto de atualidades significa:", alts:["Resumir fielmente o conteúdo","Acrescentar informação não contida no texto","Citar a fonte corretamente","Distinguir fato de opinião","Usar linguagem técnica"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a rotina de estudo mais recomendada para atualidades:", alts:["Decorar tudo na última semana","Rotina contínua com fontes confiáveis e fichamento por área","Ignorar o tópico completamente","Estudar apenas fatos antigos","Ler apenas conteúdo viral"], correta:1},
+    {d:"Média", texto:"—", enun:"Um relatório de organismo internacional é considerado, em geral, uma fonte:", alts:["Não confiável","Confiável, com dados estruturados","Sempre desatualizada","Irrelevante para concursos","Puramente opinativa"], correta:1},
+    {d:"Difícil", texto:"“O relatório trimestral indicou queda de 2% no indicador. Para o governo, o resultado reflete o sucesso das políticas; para a oposição, é insuficiente.”", enun:"Esse trecho apresenta:", alts:["Apenas fatos, sem qualquer opinião","Um fato seguido de duas interpretações opostas, sem validar nenhuma delas","Apenas a opinião do governo como verdade","Apenas a opinião da oposição como verdade","Nenhum fato identificável"], correta:1},
+    {d:"Difícil", texto:"“Dizer que 'os números falam por si' evitou que o porta-voz comentasse as causas da queda de desempenho relatada no próprio documento.”", enun:"Esse trecho, aplicado à leitura crítica de atualidades, sugere:", alts:["Total transparência do porta-voz","Uma possível omissão sobre as causas do problema, escondida atrás de uma frase feita","Que os números são sempre neutros e suficientes","Que não há qualquer crítica implícita no texto","Que o porta-voz elogiou o desempenho"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a afirmação correta sobre retenção de conhecimento em atualidades, segundo estudos de ciência da informação:", alts:["Fatos isolados são retidos com mais eficácia que processos estruturais.","Processos estruturais tendem a ser retidos com mais eficácia que fatos isolados.","Não há diferença de retenção entre os dois tipos de conhecimento.","A retenção de conhecimento não é influenciada pelo tipo de informação.","Fatos isolados nunca são esquecidos."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor descreve por que a FGV tende a priorizar temas econômicos em atualidades para o Perfil 10:", alts:["Não há qualquer relação entre o perfil da vaga e os temas cobrados.","A FGV é referência em pesquisa econômica e o perfil da vaga é de Gestão Econômico-Financeira.","A FGV nunca cobra temas econômicos em atualidades.","O edital proíbe expressamente temas econômicos.","Apenas temas culturais são cobrados neste bloco."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor representa a diferença entre uma questão de 'causa-efeito' e uma de 'cronologia' em atualidades:", alts:["São exatamente a mesma coisa.","Causa-efeito relaciona motivos e consequências; cronologia ordena eventos no tempo, sem necessariamente exigir relação causal entre eles.","Cronologia sempre envolve causa-efeito.","Causa-efeito nunca envolve tempo.","Nenhuma das duas é cobrada pela FGV."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um candidato que só estuda 'fatos virais' de redes sociais, ignorando fontes oficiais, corre o risco de:", alts:["Ter desempenho superior na prova.","Reter informações imprecisas ou não verificadas, prejudicando seu desempenho.","Não haver qualquer risco associado a essa prática.","Memorizar exclusivamente fatos estruturais relevantes.","Evitar armadilhas de extrapolação com mais eficácia."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a afirmação correta sobre a relação entre atualidades e o bloco de Compreensão de Textos (Português):", alts:["Não há nenhuma relação entre os dois blocos.","Questões de atualidades frequentemente usam texto jornalístico como base, exigindo as mesmas habilidades de leitura cuidadosa e não extrapolação.","Atualidades nunca usa textos como base.","Interpretação de texto não se aplica a questões de atualidades.","Os dois blocos usam metodologias de avaliação totalmente incompatíveis."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor resume a abordagem recomendada por este capítulo diante da natureza mutável do conteúdo de atualidades:", alts:["Memorizar uma lista fixa de fatos, sem se preocupar com atualizações.","Desenvolver um método de acompanhamento contínuo, priorizando fontes confiáveis e conhecimento estrutural.","Ignorar completamente o bloco de atualidades no cronograma de estudos.","Estudar atualidades apenas na semana da prova.","Focar exclusivamente em fatos anteriores a cinco anos da prova."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor caracteriza uma tendência estrutural na área de 'energia', com relevância para concursos:", alts:["O preço do combustível em um único dia específico.","O processo de transição para uma matriz energética mais diversificada e renovável ao longo dos anos.","Um apagão pontual em uma cidade específica.","Uma notícia isolada sobre uma usina específica sem contexto de política energética.","Um boato não confirmado sobre uma fonte de energia."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Compreender por que atualidades exige método contínuo, não memorização pontual",
+    "Mapear as 13 áreas temáticas do edital",
+    "Diferenciar conhecimento efêmero de conhecimento estrutural",
+    "Identificar fontes confiáveis de atualização (agências, órgãos oficiais, veículos de referência)",
+    "Reconhecer os tipos de questão mais usados pela FGV (fato x opinião, cronologia, causa-efeito)",
+    "Distinguir fato de opinião em textos jornalísticos",
+    "Evitar extrapolação em questões de atualidades baseadas em texto",
+    "Estabelecer rotina diária/semanal de acompanhamento de notícias",
+    "Priorizar temas ligados ao perfil da vaga (economia, tecnologia, políticas sociais)",
+    "Intensificar a revisão nos 3-6 meses anteriores à data da prova",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Tentar memorizar uma lista fixa de fatos, ignorando que atualidades muda constantemente.",
+    "Basear o estudo em redes sociais sem verificação, em vez de fontes confiáveis.",
+    "Confundir opinião de terceiros citados em um texto com fato objetivo relatado pelo próprio texto.",
+    "Extrapolar a informação de uma notícia, indo além do que o texto realmente afirma.",
+    "Priorizar fatos virais e triviais em vez de processos estruturais relevantes.",
+    "Deixar o estudo de atualidades para a última semana antes da prova.",
+    "Ignorar áreas temáticas do edital que parecem menos familiares ao candidato.",
+    "Não registrar (fichar) os fatos estudados, perdendo a informação com o tempo.",
+    "Confundir cronologia (ordem no tempo) com causa-efeito (relação causal).",
+    "Não verificar a data e a fonte de uma notícia antes de considerá-la relevante para estudo.",
+    "Assumir que um dado estatístico citado sem fonte é necessariamente confiável.",
+    "Ignorar a conexão entre atualidades e o perfil técnico da vaga (economia, tecnologia).",
+    "Estudar atualidades de forma isolada, sem aplicar a mesma cautela interpretativa do bloco de Português.",
+    "Confiar em manchetes sem ler o conteúdo completo da notícia.",
+    "Negligenciar relatórios de órgãos oficiais e organismos internacionais como fonte de estudo.",
+    "Achar que atualidades tem peso irrelevante na prova e não dedicar tempo a ela.",
+    "Memorizar números exatos sem entender o contexto e a tendência que eles representam.",
+    "Não diferenciar fontes primárias (dados oficiais) de fontes secundárias (interpretação de terceiros).",
+    "Ignorar processos de longo prazo em favor de eventos pontuais e menos duradouros.",
+    "Deixar de atualizar o fichamento de estudos conforme novos fatos relevantes surgem.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Fato","Informação verificável, sustentada por dados ou fontes confiáveis."],
+    ["Opinião","Julgamento de valor ou interpretação pessoal sobre um fato."],
+    ["Conhecimento efêmero","Fato pontual, relevante por um curto período de tempo."],
+    ["Conhecimento estrutural","Processo, tendência ou política de longo prazo, relevante por período extenso."],
+    ["Fonte primária","Fonte de informação produzida diretamente por quem gerou o dado, sem interpretação intermediária."],
+    ["Fonte secundária","Fonte que interpreta ou comenta dados originalmente produzidos por outra fonte."],
+    ["Extrapolação","Erro de interpretação em que se conclui algo não contido nem autorizado pelo texto."],
+    ["Cronologia","Ordenação de eventos segundo sua sequência no tempo."],
+    ["Causa-efeito","Relação em que um evento (causa) produz ou contribui para outro (efeito)."],
+    ["Fichamento","Técnica de estudo que consiste em resumir e organizar informações relevantes de forma estruturada."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

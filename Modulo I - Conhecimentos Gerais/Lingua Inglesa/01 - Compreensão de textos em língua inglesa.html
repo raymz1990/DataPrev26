@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compreensão de Textos em Língua Inglesa | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  em.en{font-style:italic;color:var(--ink-800);}
+  [data-theme="dark"] em.en{color:#cdd4e6;}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Língua Inglesa</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Compreensão de textos em língua inglesa</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Compreensão de textos em língua inglesa.html" selected>01 - Compreensão de textos em língua inglesa</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Compreensão de Textos em Língua Inglesa</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadros gramaticais</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Língua Inglesa<br>Tópico único da disciplina<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Compreensão de Textos em Língua Inglesa e Itens Gramaticais Relevantes</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Língua Inglesa</b> &nbsp;›&nbsp; Tópico 01 (único)</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">8h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Inglês nível básico-intermediário (A2–B1)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio — bloco geralmente com poucos itens, mas de alto índice de acerto se bem preparado</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Ler e interpretar textos curtos e médios em inglês de temática institucional, econômica e de negócios, extraindo ideia central e informações específicas.</li>
+            <li>Reconhecer <b>itens gramaticais relevantes para o sentido</b> — tempos verbais, modais, condicionais, voz passiva, comparativos — sem depender de tradução literal.</li>
+            <li>Identificar <b>falsos cognatos</b> (false friends) e vocabulário técnico de negócios/finanças recorrente em provas de concurso.</li>
+            <li>Reconhecer <b>conectores</b> em inglês (linking words) e sua função lógica no texto, de forma análoga ao estudado em Português.</li>
+            <li>Resolver questões de compreensão que pedem <b>main idea, specific information, inference e vocabulary in context</b> sem necessidade de tradução integral do texto.</li>
+            <li>Aplicar estratégias de leitura (skimming, scanning) adequadas ao tempo limitado de prova.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>O edital do DATAPREV Perfil 10 cobra <em class="en">reading comprehension</em> (compreensão de textos) combinada com o reconhecimento de <b>itens gramaticais que afetam diretamente o sentido do texto</b> — não gramática pura e isolada. Isso significa que o candidato não precisa "traduzir" o texto inteiro, mas precisa entender a <b>função de cada estrutura gramatical destacada</b> na construção do sentido.</p>
+          <p>O foco recai sobre textos <b>curtos a médios</b>, normalmente de temática institucional, econômica, tecnológica ou de gestão — coerente com o perfil da vaga (Gestão Econômico-Financeira). Vocabulário de negócios (<em class="en">business English</em>) e finanças é o mais provável de aparecer: termos como <em class="en">budget, cash flow, stakeholder, investment, revenue, debt, asset</em>.</p>
+          <p>Os itens gramaticais mais relevantes para o sentido em provas de concurso são: <b>tempos verbais</b> (especialmente a distinção entre passado simples, presente perfeito e futuro), <b>verbos modais</b> (can, must, should, may — que expressam capacidade, obrigação, permissão ou possibilidade), <b>voz passiva</b> (comum em textos técnicos e institucionais), <b>orações condicionais</b> (if-clauses, que expressam hipóteses) e <b>conectores lógicos</b> (however, therefore, although, since).</p>
+          <p>A estratégia de leitura mais eficiente para concurso é combinar <em class="en">skimming</em> (leitura rápida para captar a ideia geral) com <em class="en">scanning</em> (busca dirigida por informações específicas mencionadas nas questões) — sem tentar traduzir palavra por palavra, o que consome tempo desnecessário.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Compreensão de Textos<br>em Língua Inglesa</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Estratégias de leitura</h4><ul><li>Skimming (ideia geral)</li><li>Scanning (info específica)</li></ul></div>
+              <div class="mm-node"><h4>Tempos verbais</h4><ul><li>Simple Past</li><li>Present Perfect</li><li>Future (will/going to)</li></ul></div>
+              <div class="mm-node"><h4>Modais</h4><ul><li>Can/could (capacidade)</li><li>Must/have to (obrigação)</li><li>May/might (possibilidade)</li><li>Should (recomendação)</li></ul></div>
+              <div class="mm-node"><h4>Voz passiva</h4><ul><li>to be + particípio</li><li>Comum em textos técnicos</li></ul></div>
+              <div class="mm-node"><h4>Condicionais</h4><ul><li>Zero/First (real)</li><li>Second (hipotética)</li><li>Third (irreal passado)</li></ul></div>
+              <div class="mm-node"><h4>Vocabulário</h4><ul><li>Business English</li><li>False friends</li><li>Linking words</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Estratégias de leitura para concurso</h3>
+          <table>
+            <thead><tr><th>Estratégia</th><th>Quando usar</th><th>Como aplicar</th></tr></thead>
+            <tbody>
+              <tr><td><em class="en">Skimming</em></td><td>Primeira leitura do texto, antes de olhar as questões</td><td>Ler rapidamente buscando o tema geral, sem se deter em palavras desconhecidas</td></tr>
+              <tr><td><em class="en">Scanning</em></td><td>Ao responder questões sobre informação específica (datas, números, nomes)</td><td>Voltar ao texto procurando diretamente o trecho correspondente à pergunta</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Não traduza palavra por palavra</div>
+            <p>Traduzir cada palavra consome tempo e pode levar a erros de interpretação por não captar o sentido global. O objetivo é entender o suficiente para responder às questões, não produzir uma tradução completa e perfeita.</p>
+          </div>
+
+          <h3>4.2 Tempos verbais relevantes para o sentido</h3>
+          <table>
+            <thead><tr><th>Tempo verbal</th><th>Uso</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Simple Present</td><td>Fatos gerais, rotinas, verdades permanentes</td><td><em class="en">"The company reports its results every quarter."</em> (A empresa divulga seus resultados a cada trimestre.)</td></tr>
+              <tr><td>Simple Past</td><td>Ação concluída em momento definido do passado</td><td><em class="en">"The budget was approved last year."</em> (O orçamento foi aprovado no ano passado.)</td></tr>
+              <tr><td>Present Perfect</td><td>Ação passada com relevância/conexão no presente, sem tempo definido</td><td><em class="en">"The company has invested heavily in technology."</em> (A empresa tem investido pesadamente em tecnologia.)</td></tr>
+              <tr><td>Future (will)</td><td>Previsão, decisão espontânea, promessa</td><td><em class="en">"The report will be released next month."</em> (O relatório será divulgado no próximo mês.)</td></tr>
+              <tr><td>Future (going to)</td><td>Plano ou intenção já decididos</td><td><em class="en">"The firm is going to expand its operations."</em> (A empresa vai expandir suas operações.)</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>A diferença entre <em class="en">Simple Past</em> e <em class="en">Present Perfect</em> é frequentemente testada: o Simple Past indica que a ação está encerrada e situada no passado (com marcador de tempo, como "last year"); o Present Perfect indica conexão com o presente, sem marcador de tempo definido específico (frequentemente com "already", "yet", "since", "for").</p>
+          </div>
+
+          <h3>4.3 Verbos modais</h3>
+          <table>
+            <thead><tr><th>Modal</th><th>Sentido</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Can / Could</td><td>Capacidade, permissão (could = passado ou mais formal/hipotético)</td><td><em class="en">"The system can process thousands of transactions per hour."</em></td></tr>
+              <tr><td>Must</td><td>Obrigação forte, dedução lógica certa</td><td><em class="en">"Employees must submit reports by Friday."</em> (obrigação)</td></tr>
+              <tr><td>Have to</td><td>Obrigação externa (regra, lei)</td><td><em class="en">"Companies have to comply with data protection laws."</em></td></tr>
+              <tr><td>Should</td><td>Recomendação, conselho</td><td><em class="en">"The team should review the budget before submission."</em></td></tr>
+              <tr><td>May / Might</td><td>Possibilidade (might = menos certeza que may)</td><td><em class="en">"The results may vary depending on the market."</em></td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p><em class="en">Must</em> (obrigação interna/forte convicção) e <em class="en">have to</em> (obrigação externa) costumam ser tratados como sinônimos em provas básicas, mas questões mais avançadas exploram a diferença: "must not" (proibição) é diferente de "don't have to" (não é necessário, mas não é proibido) — essa distinção é uma das pegadinhas mais cobradas.</p>
+          </div>
+
+          <h3>4.4 Voz passiva</h3>
+          <p>Formada por <em class="en">to be</em> + particípio passado, a voz passiva é extremamente comum em textos técnicos, institucionais e jornalísticos em inglês — justamente os gêneros mais usados pela FGV.</p>
+          <table>
+            <thead><tr><th>Voz ativa</th><th>Voz passiva</th></tr></thead>
+            <tbody>
+              <tr><td><em class="en">"The board approved the budget."</em></td><td><em class="en">"The budget was approved by the board."</em></td></tr>
+              <tr><td><em class="en">"They will publish the report."</em></td><td><em class="en">"The report will be published."</em></td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.5 Orações condicionais (if-clauses)</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Uso</th><th>Estrutura</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Zero Conditional</td><td>Fatos gerais, verdades permanentes</td><td>If + presente, presente</td><td><em class="en">"If costs increase, margins decrease."</em></td></tr>
+              <tr><td>First Conditional</td><td>Situação real/provável no futuro</td><td>If + presente, will + infinitivo</td><td><em class="en">"If the budget is approved, the project will start."</em></td></tr>
+              <tr><td>Second Conditional</td><td>Situação hipotética/improvável no presente/futuro</td><td>If + passado, would + infinitivo</td><td><em class="en">"If the company had more funds, it would expand faster."</em></td></tr>
+              <tr><td>Third Conditional</td><td>Situação irreal, hipótese sobre o passado</td><td>If + past perfect, would have + particípio</td><td><em class="en">"If the team had planned better, they would have avoided delays."</em></td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Conectores lógicos (linking words)</h3>
+          <table>
+            <thead><tr><th>Relação lógica</th><th>Conectores em inglês</th></tr></thead>
+            <tbody>
+              <tr><td>Adição</td><td>and, also, moreover, in addition, furthermore</td></tr>
+              <tr><td>Oposição/contraste</td><td>but, however, although, nevertheless, on the other hand</td></tr>
+              <tr><td>Causa</td><td>because, since, as, due to</td></tr>
+              <tr><td>Consequência</td><td>therefore, so, thus, as a result, consequently</td></tr>
+              <tr><td>Condição</td><td>if, unless, provided that</td></tr>
+              <tr><td>Finalidade</td><td>so that, in order to</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.7 Vocabulário técnico de negócios e falsos cognatos</h3>
+          <table>
+            <thead><tr><th>Termo em inglês</th><th>Tradução correta</th></tr></thead>
+            <tbody>
+              <tr><td>budget</td><td>orçamento</td></tr>
+              <tr><td>cash flow</td><td>fluxo de caixa</td></tr>
+              <tr><td>revenue</td><td>receita</td></tr>
+              <tr><td>expense</td><td>despesa</td></tr>
+              <tr><td>debt</td><td>dívida</td></tr>
+              <tr><td>asset</td><td>ativo</td></tr>
+              <tr><td>liability</td><td>passivo (obrigação financeira)</td></tr>
+              <tr><td>shareholder / stakeholder</td><td>acionista / parte interessada</td></tr>
+              <tr><td>procurement</td><td>aquisição, compras</td></tr>
+              <tr><td>outsourcing</td><td>terceirização</td></tr>
+            </tbody>
+          </table>
+          <table>
+            <thead><tr><th>Falso cognato</th><th>Parece significar</th><th>Significado real</th></tr></thead>
+            <tbody>
+              <tr><td>actually</td><td>"atualmente"</td><td>na verdade, de fato</td></tr>
+              <tr><td>eventually</td><td>"eventualmente"</td><td>finalmente, por fim (não é sinônimo de "às vezes")</td></tr>
+              <tr><td>pretend</td><td>"pretender"</td><td>fingir</td></tr>
+              <tr><td>parents</td><td>"parentes"</td><td>pais (mãe e pai)</td></tr>
+              <tr><td>library</td><td>"livraria"</td><td>biblioteca</td></tr>
+              <tr><td>data</td><td>"data" (calendário)</td><td>dados (informação)</td></tr>
+              <tr><td>expert</td><td>"esperto"</td><td>especialista</td></tr>
+              <tr><td>notice</td><td>"notícia"</td><td>aviso, perceber</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma trabalhar com textos autênticos, curtos a médios, de temática econômica, tecnológica ou institucional, seguidos de questões de <em class="en">main idea, specific information, inference</em> e, ocasionalmente, uma questão sobre item gramatical (tempo verbal, modal, conector) destacado no texto — sempre associando gramática ao sentido, nunca cobrando regra gramatical isolada e descontextualizada.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV apresenta um texto em inglês (geralmente de fonte jornalística ou institucional real, sobre economia, tecnologia ou negócios) seguido de 3 a 6 questões, a maioria em português (enunciado e alternativas em português, cobrando compreensão do texto em inglês), com eventual questão puramente gramatical sobre um trecho destacado.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li><em class="en">"According to the text..."</em> — questão de informação literal/específica.</li>
+            <li><em class="en">"It can be inferred from the text that..."</em> — questão de inferência.</li>
+            <li><em class="en">"The word 'X' in line Y is closest in meaning to..."</em> — vocabulário em contexto.</li>
+            <li>"O termo destacado no texto expressa..." — item gramatical relevante ao sentido (modal, tempo verbal, conector).</li>
+            <li>Dificuldade média — vocabulário técnico é o principal obstáculo, mais que a estrutura gramatical em si.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Ideia central do texto (main idea)</td><td>Muito alta</td></tr>
+              <tr><td>Informação específica (specific information)</td><td>Muito alta</td></tr>
+              <tr><td>Vocabulário técnico de negócios/finanças em contexto</td><td>Alta</td></tr>
+              <tr><td>Diferença entre modais (must x have to; may x might)</td><td>Média-alta</td></tr>
+              <tr><td>Voz passiva em textos técnicos</td><td>Média</td></tr>
+              <tr><td>Conectores lógicos (linking words)</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Confundir <em class="en">false friends</em> (falsos cognatos) com o sentido literal em português.</li>
+            <li>Marcar alternativa que <b>extrapola</b> a informação do texto, seguindo o mesmo princípio das questões de interpretação em português.</li>
+            <li>Confundir <em class="en">Simple Past</em> com <em class="en">Present Perfect</em>, alterando a percepção de quando a ação ocorreu.</li>
+            <li>Não perceber que <em class="en">"must not"</em> (proibição) é diferente de <em class="en">"don't have to"</em> (não é obrigatório).</li>
+            <li>Traduzir vocabulário técnico de forma literal e incorreta (ex.: "actually" como "atualmente").</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV usar trechos de veículos como <em class="en">The Economist, Financial Times, Reuters</em> ou sites institucionais de organismos internacionais, adaptados para o tamanho da prova, versando sobre temas como inovação, sustentabilidade, tecnologia financeira e gestão pública — coerentes com o perfil técnico do cargo.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver uma palavra parecida com português, desconfie — pode ser falso cognato.</li>
+            <li>Ao ver "according to the text", a resposta precisa estar literalmente no texto, sem extrapolação.</li>
+            <li>Ao ver modal verb destacado, pergunte: é obrigação, possibilidade, capacidade ou recomendação?</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Mnemônico dos modais de obrigação</div><p><em class="en">MUST</em> = convicção própria/regra interna forte; <em class="en">HAVE TO</em> = regra externa (lei, norma); <em class="en">MUST NOT</em> = proibido; <em class="en">DON'T HAVE TO</em> = não é obrigatório (mas pode fazer).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Truque do Present Perfect</div><p>Se há marcador de tempo específico e encerrado ("yesterday", "last year", "in 2020") → Simple Past. Se há "already", "yet", "since", "for", ou nenhum marcador → Present Perfect.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Lista rápida de false friends</div><p>Actually (na verdade) · Eventually (finalmente) · Pretend (fingir) · Parents (pais) · Library (biblioteca) · Data (dados) · Expert (especialista) · Notice (aviso).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Estratégia de tempo de prova</div><p>Leia primeiro as perguntas (rapidamente), depois faça skimming do texto, depois volte com scanning para cada questão — economiza tempo e evita releitura completa desnecessária.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Não traduza palavra por palavra — use skimming (ideia geral) e scanning (busca específica).</li>
+            <li>Simple Past = ação encerrada, com marcador de tempo; Present Perfect = conexão com o presente, sem marcador definido.</li>
+            <li>Must (obrigação interna) ≠ Have to (obrigação externa); Must not (proibido) ≠ Don't have to (não obrigatório).</li>
+            <li>Voz passiva: to be + particípio — comum em textos técnicos/institucionais.</li>
+            <li>4 condicionais: Zero (fato geral), First (real/futuro), Second (hipotética), Third (irreal/passado).</li>
+            <li>Cuidado com false friends: actually, eventually, pretend, parents, library, data, expert, notice.</li>
+            <li>"According to the text" exige resposta literal; "it can be inferred" permite inferência, mas nunca extrapolação.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADROS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadros gramaticais de referência rápida</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Estrutura</th><th>Fórmula</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Simple Present</td><td>Subject + verb (+s/es for he/she/it)</td><td><em class="en">"The firm reports quarterly."</em></td></tr>
+              <tr><td>Simple Past</td><td>Subject + verb-ed / irregular past</td><td><em class="en">"The budget was approved."</em></td></tr>
+              <tr><td>Present Perfect</td><td>Subject + have/has + past participle</td><td><em class="en">"They have invested in the project."</em></td></tr>
+              <tr><td>Passive Voice</td><td>Subject + to be + past participle (+ by agent)</td><td><em class="en">"The report was written by the analyst."</em></td></tr>
+              <tr><td>First Conditional</td><td>If + Simple Present, will + base verb</td><td><em class="en">"If sales increase, profits will rise."</em></td></tr>
+              <tr><td>Second Conditional</td><td>If + Simple Past, would + base verb</td><td><em class="en">"If the budget were higher, we would invest more."</em></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Modais de obrigação e possibilidade</h3>
+          <table>
+            <thead><tr><th>Modal</th><th>Sentido</th></tr></thead>
+            <tbody>
+              <tr><td>Must</td><td>Obrigação forte/interna</td></tr>
+              <tr><td>Have to</td><td>Obrigação externa</td></tr>
+              <tr><td>Must not</td><td>Proibição</td></tr>
+              <tr><td>Don't have to</td><td>Não obrigatório</td></tr>
+              <tr><td>May / Might</td><td>Possibilidade</td></tr>
+              <tr><td>Should</td><td>Recomendação</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>A FGV, por manter forte vínculo com formação em economia e negócios, tende a escolher textos de fontes como <em class="en">The Economist</em> e <em class="en">Financial Times</em> — o que torna útil para o candidato acompanhar esse tipo de imprensa em inglês durante a preparação.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>O inglês tornou-se a língua predominante dos negócios internacionais ao longo do século XX, muito em função da hegemonia econômica dos Estados Unidos após a Segunda Guerra Mundial — daí o forte vocabulário técnico de finanças e gestão em inglês incorporado até no português corporativo brasileiro.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>Estudos de linguística aplicada mostram que o reconhecimento de <em class="en">false friends</em> é uma das maiores fontes de erro entre falantes de línguas românicas aprendendo inglês, justamente pela ilusão de familiaridade que a semelhança gráfica cria.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Compreensão e interpretação de textos (Português, Tópico 1)</td><td>Mesma lógica de leitura literal x inferencial x crítica, aplicada em outro idioma</td></tr>
+              <tr><td>Domínio dos mecanismos de coesão textual (Português, Tópico 4)</td><td>Conectores lógicos em inglês (linking words) equivalem funcionalmente aos conectivos em português</td></tr>
+              <tr><td>Administração Financeira e Contabilidade Empresarial (Módulo II)</td><td>Vocabulário técnico de negócios em inglês (budget, cash flow, revenue) é compartilhado com esses tópicos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar a lista de false friends e modais de obrigação.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas sem consultar tradução, cronometrando o tempo de leitura de cada texto.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; complementar com leitura semanal de uma notícia curta em inglês sobre economia/tecnologia.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>MURPHY, Raymond. <i>English Grammar in Use</i>. Cambridge: Cambridge University Press.</li>
+            <li>SWAN, Michael. <i>Practical English Usage</i>. Oxford: Oxford University Press.</li>
+            <li>OXFORD. <i>Oxford Business English Dictionary</i>. Oxford: Oxford University Press.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Língua Inglesa · Tópico único</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_ing_t01";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"O que é 'skimming'?", a:"Leitura rápida para captar a ideia geral do texto, sem se deter em palavras desconhecidas."},
+    {q:"O que é 'scanning'?", a:"Busca dirigida por informações específicas no texto, geralmente feita ao responder uma questão pontual."},
+    {q:"Quando se usa o Simple Past em vez do Present Perfect?", a:"Quando há marcador de tempo específico e encerrado no passado (ex.: 'yesterday', 'last year')."},
+    {q:"Quais marcadores sinalizam o uso do Present Perfect?", a:"'Already', 'yet', 'since', 'for', ou ausência de marcador de tempo específico."},
+    {q:"Qual a diferença entre 'must' e 'have to'?", a:"'Must' expressa obrigação interna/convicção própria; 'have to' expressa obrigação externa (regra, lei)."},
+    {q:"Qual a diferença entre 'must not' e 'don't have to'?", a:"'Must not' significa proibição; 'don't have to' significa que não é obrigatório, mas é permitido."},
+    {q:"Como se forma a voz passiva em inglês?", a:"Com o verbo 'to be' conjugado + particípio passado do verbo principal."},
+    {q:"Qual a estrutura do First Conditional?", a:"If + Simple Present, will + verbo base — usado para situações reais/prováveis no futuro."},
+    {q:"Qual a estrutura do Second Conditional?", a:"If + Simple Past, would + verbo base — usado para situações hipotéticas no presente/futuro."},
+    {q:"Qual a estrutura do Third Conditional?", a:"If + Past Perfect, would have + particípio — usado para hipóteses irreais sobre o passado."},
+    {q:"O que significa 'actually' em inglês?", a:"'Na verdade' ou 'de fato' — não significa 'atualmente' (falso cognato)."},
+    {q:"O que significa 'eventually' em inglês?", a:"'Finalmente' ou 'por fim' — não significa 'eventualmente' no sentido de 'às vezes' (falso cognato)."},
+    {q:"O que significa 'library' em inglês?", a:"'Biblioteca' — não significa 'livraria' (falso cognato); livraria é 'bookstore'."},
+    {q:"O que significa 'pretend' em inglês?", a:"'Fingir' — não significa 'pretender' (falso cognato); pretender é 'intend' ou 'plan to'."},
+    {q:"O que significa 'data' em inglês, em contexto técnico?", a:"'Dados' (informação) — não significa 'data' no sentido de calendário, que em inglês é 'date'."},
+    {q:"O que significa 'cash flow' em português?", a:"Fluxo de caixa."},
+    {q:"O que significa 'liability' em contexto financeiro?", a:"Passivo, obrigação financeira — não confundir com 'asset' (ativo)."},
+    {q:"O que significa 'stakeholder'?", a:"Parte interessada — pessoa ou grupo afetado ou interessado nas atividades de uma organização."},
+    {q:"O que significa 'outsourcing'?", a:"Terceirização."},
+    {q:"O que expressa o modal 'should'?", a:"Recomendação ou conselho, não obrigação estrita."},
+    {q:"O que expressa o modal 'may/might'?", a:"Possibilidade — 'might' geralmente indica menor grau de certeza que 'may'."},
+    {q:"Qual estratégia de prova ajuda a economizar tempo com textos em inglês?", a:"Ler primeiro as perguntas, depois fazer skimming do texto e, por fim, scanning para localizar cada resposta."},
+    {q:"O que significa a expressão 'according to the text' em uma questão?", a:"Que a resposta deve estar literalmente contida no texto, sem extrapolação do candidato."},
+    {q:"O que significa 'it can be inferred that' em uma questão?", a:"Que a resposta exige inferência lógica a partir do texto, mas ainda sustentada por ele, sem extrapolar."},
+    {q:"Qual conector em inglês expressa oposição, equivalente a 'porém'?", a:"'However' (também 'although', 'nevertheless')."},
+    {q:"Qual conector em inglês expressa consequência, equivalente a 'portanto'?", a:"'Therefore' (também 'thus', 'as a result', 'consequently')."},
+    {q:"Por que a FGV costuma usar textos de veículos como The Economist e Financial Times?", a:"Por seu vínculo forte com formação em economia e negócios, coerente com o perfil técnico dos cargos que avalia."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Reading comprehension", texto:"“The company has invested heavily in technology over the past three years, and this strategy has already improved efficiency across all departments.”", enun:"De acordo com o texto, o investimento em tecnologia:", alts:["Começou e terminou no ano passado.","Vem ocorrendo nos últimos três anos e já trouxe resultados.","Ainda não trouxe nenhum resultado visível.","Foi cancelado recentemente.","Ocorreu apenas uma vez, no início do período mencionado."], correta:1, coment:"O uso do Present Perfect ('has invested', 'has already improved') indica uma ação iniciada no passado com continuidade e relevância no presente — o investimento ocorre há três anos e já trouxe resultados."},
+    {tema:"Modais", texto:"“Employees must submit their expense reports by the end of each month.”", enun:"O modal 'must', no trecho, expressa:", alts:["Possibilidade","Permissão","Obrigação","Sugestão leve","Capacidade"], correta:2, coment:"'Must' expressa obrigação — os funcionários são obrigados a enviar os relatórios de despesas até o fim de cada mês."},
+    {tema:"Falsos cognatos", texto:"“Actually, the report shows a completely different trend than expected.”", enun:"A palavra 'actually', no trecho, significa:", alts:["Atualmente","Na verdade","Eventualmente","Especialmente","Certamente (sentido aproximado, mas não o mais preciso)"], correta:1, coment:"'Actually' é falso cognato — significa 'na verdade', não 'atualmente' (que em inglês seria 'currently' ou 'nowadays')."},
+    {tema:"Voz passiva", texto:"“The new policy was approved by the board of directors last week.”", enun:"A frase está na voz:", alts:["Ativa","Passiva","Nem ativa nem passiva","Condicional","Imperativa"], correta:1, coment:"'Was approved' (to be + particípio) caracteriza a voz passiva; 'by the board of directors' introduz o agente da ação."},
+    {tema:"Condicionais", texto:"“If the budget is approved, the project will start next month.”", enun:"Essa frase exemplifica:", alts:["Zero Conditional","First Conditional","Second Conditional","Third Conditional","Não é uma oração condicional"], correta:1, coment:"Estrutura 'If + Simple Present, will + infinitivo' caracteriza o First Conditional, usado para situações reais/prováveis no futuro."},
+    {tema:"Vocabulário de negócios", texto:"“The company's cash flow improved significantly after reducing unnecessary expenses.”", enun:"A expressão 'cash flow' significa:", alts:["Lucro líquido","Fluxo de caixa","Ativo circulante","Passivo circulante","Receita bruta"], correta:1, coment:"'Cash flow' traduz-se como 'fluxo de caixa', termo técnico de finanças referente à movimentação de entradas e saídas de caixa."},
+    {tema:"Tempos verbais", texto:"“The report was released in 2023 and has not been updated since.”", enun:"A combinação de tempos verbais no trecho indica que:", alts:["O relatório será lançado no futuro.","O relatório foi lançado em 2023 (fato pontual) e permanece sem atualização até o presente.","O relatório está sendo atualizado atualmente.","O relatório foi cancelado em 2023.","O relatório é atualizado anualmente."], correta:1, coment:"'Was released' (Simple Past, ação pontual em 2023) combinado com 'has not been updated since' (Present Perfect, situação que persiste até o presente) indica lançamento pontual seguido de ausência de atualização até hoje."},
+    {tema:"Inferência", texto:"“Despite the economic downturn, the firm managed to increase its market share.”", enun:"É possível inferir do texto que:", alts:["A empresa fechou durante a crise.","A empresa teve dificuldades, mas ainda assim ampliou sua participação de mercado.","A crise econômica não afetou nenhuma empresa do setor.","A empresa perdeu participação de mercado durante a crise.","A crise econômica foi causada pela empresa."], correta:1, coment:"'Despite' (apesar de) indica concessão: mesmo com a dificuldade da crise ('economic downturn'), a empresa conseguiu ('managed to') aumentar sua fatia de mercado."},
+    {tema:"Vocabulário técnico", texto:"“Total liabilities exceeded total assets by the end of the fiscal year.”", enun:"O trecho indica que, ao final do ano fiscal:", alts:["Os ativos superaram os passivos.","Os passivos superaram os ativos.","Ativos e passivos ficaram exatamente iguais.","Não havia nem ativos nem passivos registrados.","A empresa não possuía passivos."], correta:1, coment:"'Liabilities' (passivos) 'exceeded' (superaram) 'assets' (ativos) — os passivos totais foram maiores que os ativos totais."},
+    {tema:"Modais - proibição", texto:"“Staff must not access the server room without prior authorization.”", enun:"O trecho expressa:", alts:["Uma recomendação leve","Uma possibilidade","Uma proibição","Uma obrigação externa apenas","Uma permissão condicional"], correta:2, coment:"'Must not' expressa proibição — a equipe está proibida de acessar a sala de servidores sem autorização prévia."},
+    {tema:"Conectores lógicos", texto:"“The project was delayed; however, the final results exceeded expectations.”", enun:"O conector 'however' estabelece uma relação de:", alts:["Causa","Consequência","Oposição/contraste","Condição","Adição"], correta:2, coment:"'However' é conector de oposição/contraste, equivalente a 'porém' — contrapõe o atraso do projeto aos resultados finais positivos."},
+    {tema:"Modais - obrigação externa", texto:"“Under the new regulation, companies have to report data breaches within 72 hours.”", enun:"O trecho indica que o relato de violações de dados é:", alts:["Uma opção das empresas.","Uma obrigação imposta por regulamentação externa.","Proibido pela nova regulamentação.","Recomendado, mas não obrigatório.","Aplicável apenas a empresas estrangeiras."], correta:1, coment:"'Have to' indica obrigação externa, imposta pela regulamentação ('under the new regulation') — as empresas são obrigadas a relatar violações em até 72 horas."},
+    {tema:"Vocabulário - falso cognato", texto:"“The library contains historical records dating back to the company's foundation.”", enun:"A palavra 'library', no trecho, significa:", alts:["Livraria","Biblioteca","Laboratório","Arquivo pessoal","Repositório digital exclusivamente"], correta:1, coment:"'Library' significa 'biblioteca' — falso cognato, já que 'livraria' em inglês é 'bookstore'."},
+    {tema:"Condicional hipotética", texto:"“If the company had more capital, it would invest in new technology.”", enun:"Essa frase exemplifica:", alts:["Zero Conditional","First Conditional","Second Conditional","Third Conditional","Nenhuma condicional"], correta:2, coment:"Estrutura 'If + Simple Past, would + infinitivo' caracteriza o Second Conditional, usado para situações hipotéticas no presente/futuro (a empresa não tem mais capital, hipoteticamente)."},
+    {tema:"Main idea", texto:"“Digital transformation is no longer optional for public institutions. Those that fail to modernize their processes risk losing efficiency and public trust.”", enun:"A ideia central do texto é:", alts:["As instituições públicas devem evitar a transformação digital.","A transformação digital tornou-se essencial para instituições públicas, sob risco de perda de eficiência e confiança.","A confiança pública independe da modernização dos processos.","Apenas empresas privadas precisam se modernizar.","A transformação digital é opcional para todos os setores."], correta:1, coment:"O texto afirma que a transformação digital 'não é mais opcional' e associa a falta de modernização a riscos de eficiência e confiança — a ideia central é a necessidade dessa transformação."},
+    {tema:"Vocabulário em contexto", texto:"“The board decided to outsource the IT support to reduce operational costs.”", enun:"A palavra 'outsource', no trecho, significa:", alts:["Eliminar","Terceirizar","Expandir internamente","Automatizar totalmente","Auditar"], correta:1, coment:"'Outsource' significa 'terceirizar' — contratar um serviço externo em vez de manter a atividade internamente, visando reduzir custos operacionais."},
+    {tema:"Terceira condicional", texto:"“If the team had planned better, they would have avoided the delays.”", enun:"Essa frase exemplifica:", alts:["First Conditional","Second Conditional","Third Conditional","Zero Conditional","Nenhuma condicional"], correta:2, coment:"Estrutura 'If + Past Perfect, would have + particípio' caracteriza o Third Conditional — hipótese irreal sobre o passado (a equipe não planejou melhor, e os atrasos já ocorreram)."},
+    {tema:"Specific information", texto:"“The new system was implemented in March 2025 and is expected to reduce processing time by 40%.”", enun:"Segundo o texto, a redução esperada no tempo de processamento é de:", alts:["30%","40%","50%","Não foi informada","4%"], correta:1, coment:"O texto informa literalmente 'reduce processing time by 40%' — questão de informação específica, resposta direta no texto."},
+    {tema:"Modal - capacidade", texto:"“The new software can process up to ten thousand transactions per minute.”", enun:"O modal 'can', no trecho, expressa:", alts:["Obrigação","Proibição","Capacidade","Recomendação","Possibilidade remota"], correta:2, coment:"'Can', nesse contexto, expressa capacidade técnica do software — ele é capaz de processar até dez mil transações por minuto."},
+    {tema:"Conector de consequência", texto:"“Costs rose significantly; therefore, the company revised its annual budget.”", enun:"O conector 'therefore' estabelece uma relação de:", alts:["Oposição","Condição","Consequência","Adição","Finalidade"], correta:2, coment:"'Therefore' é conector de consequência, equivalente a 'portanto' — o aumento de custos levou à revisão do orçamento anual."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Text:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"“The company reports its results every quarter.”", enun:"O tempo verbal empregado é:", alts:["Simple Present","Simple Past","Present Perfect","Future","Past Perfect"], correta:0},
+    {d:"Fácil", texto:"“The budget was approved last year.”", enun:"O tempo verbal empregado é:", alts:["Simple Present","Simple Past","Present Perfect","Future","Present Continuous"], correta:1},
+    {d:"Fácil", texto:"“The firm has invested heavily in technology.”", enun:"O tempo verbal empregado é:", alts:["Simple Past","Present Perfect","Future","Simple Present","Past Continuous"], correta:1},
+    {d:"Fácil", texto:"“Employees must submit reports by Friday.”", enun:"O modal 'must' expressa:", alts:["Possibilidade","Obrigação","Capacidade","Sugestão leve","Permissão"], correta:1},
+    {d:"Fácil", texto:"“The system can process thousands of transactions per hour.”", enun:"O modal 'can' expressa:", alts:["Obrigação","Proibição","Capacidade","Recomendação","Certeza absoluta"], correta:2},
+    {d:"Fácil", texto:"—", enun:"'Actually' significa, em português:", alts:["Atualmente","Na verdade","Eventualmente","Especialmente","Realmente e atualmente"], correta:1},
+    {d:"Fácil", texto:"—", enun:"'Library' significa, em português:", alts:["Livraria","Biblioteca","Laboratório","Livro","Leitura"], correta:1},
+    {d:"Fácil", texto:"—", enun:"'Cash flow' significa, em português:", alts:["Lucro líquido","Fluxo de caixa","Receita bruta","Custo fixo","Capital social"], correta:1},
+    {d:"Fácil", texto:"“The board approved the budget.”", enun:"A voz passiva correspondente é:", alts:["The budget approved the board.","The budget was approved by the board.","The board was approved by the budget.","The budget is approving the board.","The board has approved by the budget."], correta:1},
+    {d:"Fácil", texto:"—", enun:"'Stakeholder' significa, em português:", alts:["Acionista minoritário apenas","Parte interessada","Funcionário temporário","Auditor externo","Fornecedor exclusivo"], correta:1},
+    {d:"Média", texto:"“If costs increase, margins decrease.”", enun:"Essa frase exemplifica qual tipo de condicional?", alts:["Zero Conditional","First Conditional","Second Conditional","Third Conditional","Nenhuma condicional"], correta:0},
+    {d:"Média", texto:"“If the budget is approved, the project will start next month.”", enun:"Essa frase exemplifica qual tipo de condicional?", alts:["Zero Conditional","First Conditional","Second Conditional","Third Conditional","Nenhuma condicional"], correta:1},
+    {d:"Média", texto:"“If the company had more funds, it would expand faster.”", enun:"Essa frase exemplifica qual tipo de condicional?", alts:["Zero Conditional","First Conditional","Second Conditional","Third Conditional","Nenhuma condicional"], correta:2},
+    {d:"Média", texto:"“If the team had planned better, they would have avoided delays.”", enun:"Essa frase exemplifica qual tipo de condicional?", alts:["Zero Conditional","First Conditional","Second Conditional","Third Conditional","Nenhuma condicional"], correta:3},
+    {d:"Média", texto:"“Staff must not access the server room without authorization.”", enun:"O trecho expressa:", alts:["Recomendação","Possibilidade","Proibição","Obrigação externa apenas","Permissão condicional"], correta:2},
+    {d:"Média", texto:"“Companies have to comply with data protection laws.”", enun:"O tipo de obrigação expressa por 'have to' é:", alts:["Obrigação interna/convicção pessoal","Obrigação externa, imposta por regra ou lei","Recomendação leve","Possibilidade remota","Proibição"], correta:1},
+    {d:"Média", texto:"“The project was delayed; however, the results exceeded expectations.”", enun:"'However' estabelece relação de:", alts:["Causa","Consequência","Oposição","Condição","Finalidade"], correta:2},
+    {d:"Média", texto:"“Costs rose; therefore, the company revised its budget.”", enun:"'Therefore' estabelece relação de:", alts:["Oposição","Condição","Consequência","Adição","Finalidade"], correta:2},
+    {d:"Média", texto:"“Total liabilities exceeded total assets by year end.”", enun:"O trecho indica que:", alts:["Os ativos superaram os passivos.","Os passivos superaram os ativos.","Ativos e passivos eram iguais.","Não havia passivos.","Não havia ativos."], correta:1},
+    {d:"Média", texto:"“The board decided to outsource IT support to cut costs.”", enun:"'Outsource' significa:", alts:["Eliminar","Terceirizar","Automatizar","Expandir","Fiscalizar"], correta:1},
+    {d:"Difícil", texto:"“Despite the economic downturn, the firm managed to increase its market share.”", enun:"É possível inferir que:", alts:["A empresa fechou durante a crise.","A empresa ampliou sua participação de mercado apesar da crise.","A crise não afetou o setor.","A empresa perdeu mercado durante a crise.","A empresa causou a crise."], correta:1},
+    {d:"Difícil", texto:"“The report was released in 2023 and has not been updated since.”", enun:"A combinação de tempos verbais indica que:", alts:["O relatório será lançado no futuro.","O relatório foi lançado em 2023 e segue sem atualização até hoje.","O relatório está sendo atualizado agora.","O relatório foi cancelado em 2023.","O relatório é atualizado todo ano."], correta:1},
+    {d:"Difícil", texto:"“Digital transformation is no longer optional for public institutions.”", enun:"A ideia central do trecho é:", alts:["A transformação digital deve ser evitada.","A transformação digital tornou-se essencial, não mais opcional, para instituições públicas.","Apenas empresas privadas precisam se modernizar.","A transformação digital é opcional para todos.","O texto não trata de transformação digital."], correta:1},
+    {d:"Difícil", texto:"“The new system was implemented in March 2025 and is expected to reduce processing time by 40%.”", enun:"Segundo o texto, a redução esperada é de:", alts:["30%","40%","50%","Não informada","4%"], correta:1},
+    {d:"Difícil", texto:"“Under the new regulation, companies have to report data breaches within 72 hours.”", enun:"Segundo o texto, o relato de violações de dados é:", alts:["Opcional","Obrigatório, por força de regulamentação","Proibido","Recomendado apenas","Aplicável só a empresas estrangeiras"], correta:1},
+    {d:"Difícil", texto:"“Pretend you didn't see the report until the meeting.”", enun:"'Pretend', no trecho, significa:", alts:["Pretender","Fingir","Esperar","Perceber","Anunciar"], correta:1},
+    {d:"Difícil", texto:"“Eventually, the company adopted the new policy after months of discussion.”", enun:"'Eventually', no trecho, significa:", alts:["Eventualmente (às vezes)","Finalmente, por fim","Imediatamente","Provavelmente","Ocasionalmente"], correta:1},
+    {d:"Difícil", texto:"“The data collected during the audit revealed several inconsistencies.”", enun:"'Data', no trecho, significa:", alts:["Data (calendário)","Dados (informações)","Prazo","Encontro","Registro único"], correta:1},
+    {d:"Difícil", texto:"“The expert recommended a full review of the internal controls.”", enun:"'Expert', no trecho, significa:", alts:["Esperto","Especialista","Experiente apenas no sentido informal","Estranho","Externo"], correta:1},
+    {d:"Difícil", texto:"“Although the budget was cut, the team still managed to complete the project on time.”", enun:"'Although' estabelece relação de:", alts:["Causa","Consequência","Concessão/oposição","Condição","Finalidade"], correta:2},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Text:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Aplicar skimming e scanning como estratégias de leitura em prova",
+    "Diferenciar Simple Past de Present Perfect no sentido do texto",
+    "Reconhecer o sentido de modais (can, must, have to, should, may/might)",
+    "Diferenciar must not de don't have to",
+    "Reconhecer voz passiva e seu uso em textos técnicos",
+    "Identificar os quatro tipos de condicionais (Zero, First, Second, Third)",
+    "Reconhecer conectores lógicos em inglês (linking words)",
+    "Reconhecer vocabulário técnico de negócios/finanças mais comum",
+    "Identificar os principais false friends cobrados em concursos",
+    "Resolver questões de main idea, specific information e inference sem tradução literal",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Tentar traduzir o texto palavra por palavra, perdendo tempo de prova.",
+    "Confundir false friends com o sentido literal em português (actually, eventually, library etc.).",
+    "Não perceber a diferença de sentido entre Simple Past e Present Perfect.",
+    "Tratar 'must' e 'have to' como perfeitamente sinônimos em todos os contextos.",
+    "Confundir 'must not' (proibição) com 'don't have to' (não obrigatório).",
+    "Não reconhecer a voz passiva em textos técnicos, perdendo o agente da ação.",
+    "Confundir os quatro tipos de condicionais entre si.",
+    "Marcar alternativa que extrapola a informação do texto em questões 'according to the text'.",
+    "Não diferenciar 'may' (mais certeza) de 'might' (menos certeza).",
+    "Ignorar conectores lógicos (however, therefore) na hora de identificar a relação entre ideias.",
+    "Confundir vocabulário técnico de negócios com sentido comum da palavra em português.",
+    "Não aplicar skimming antes de ler as perguntas, perdendo tempo com releitura completa.",
+    "Traduzir 'data' como calendário em vez de 'dados', em contexto técnico.",
+    "Traduzir 'expert' como 'esperto' em vez de 'especialista'.",
+    "Confundir asset (ativo) com liability (passivo) em textos financeiros.",
+    "Não perceber quando o texto emprega ironia ou tom crítico em inglês.",
+    "Ignorar marcadores de tempo (yesterday, since, for) que indicam o tempo verbal correto.",
+    "Assumir que todo texto em inglês na prova exigirá tradução completa, gerando ansiedade desnecessária.",
+    "Não revisar vocabulário de negócios antes da prova, mesmo sendo altamente recorrente.",
+    "Ignorar o contexto ao escolher o sentido de uma palavra polissêmica em inglês.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Skimming","Estratégia de leitura rápida para captar a ideia geral de um texto."],
+    ["Scanning","Estratégia de busca dirigida por informação específica em um texto."],
+    ["Modal verb","Verbo auxiliar (can, must, should, may etc.) que expressa capacidade, obrigação, possibilidade ou recomendação."],
+    ["Passive voice","Construção verbal (to be + particípio) em que o sujeito sofre a ação, em vez de praticá-la."],
+    ["Conditional clause","Oração condicional, introduzida por 'if', que expressa uma hipótese e sua consequência."],
+    ["False friend","Palavra que se assemelha a uma palavra do português, mas tem significado diferente (ex.: actually, library)."],
+    ["Linking word","Palavra ou expressão conectiva que articula ideias em um texto em inglês (however, therefore etc.)."],
+    ["Business English","Vocabulário e expressões típicas do inglês usado em contextos de negócios e finanças."],
+    ["Cash flow","Fluxo de caixa — movimentação de entradas e saídas financeiras de uma organização."],
+    ["Asset","Ativo — bem ou direito de valor econômico pertencente a uma entidade."],
+    ["Liability","Passivo — obrigação financeira de uma entidade."],
+    ["Stakeholder","Parte interessada — indivíduo ou grupo afetado ou interessado nas atividades de uma organização."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lógica Sentencial (Proposicional) | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  table.truth th, table.truth td{text-align:center;font-family:var(--mono);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Raciocínio Lógico</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">03 - Lógica sentencial</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Estruturas lógicas.html">01 - Estruturas lógicas</option>
+        <option value="02 - Lógica de argumentação.html">02 - Lógica de argumentação</option>
+        <option value="03 - Lógica sentencial.html" selected>03 - Lógica sentencial</option>
+        <option value="04 - Lógica de primeira ordem.html">04 - Lógica de primeira ordem</option>
+        <option value="05 - Raciocínio aritmético, geométrico e matricial.html">05 - Raciocínio aritmético, geométrico e matricial</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Lógica Sentencial (Proposicional)</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Raciocínio Lógico<br>Tópico 03 de 05 (inclui 3.1 a 3.4)<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Lógica Sentencial (ou Proposicional)</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Raciocínio Lógico</b> &nbsp;›&nbsp; Tópico 03 (3.1 a 3.4)</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">10h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Estruturas lógicas e Lógica de argumentação (Tópicos 1 e 2)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Muito alto — núcleo técnico central de Raciocínio Lógico</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Diferenciar <b>proposições simples</b> de <b>proposições compostas</b>, identificando os conectivos lógicos empregados (3.1).</li>
+            <li>Construir e interpretar <b>tabelas-verdade</b> para proposições compostas com um ou mais conectivos (3.2).</li>
+            <li>Determinar se uma proposição composta é uma <b>tautologia</b>, <b>contradição</b> ou <b>contingência</b>.</li>
+            <li>Reconhecer e aplicar as principais <b>equivalências lógicas</b>, incluindo as Leis de De Morgan (3.3).</li>
+            <li>Construir a <b>negação correta</b> de proposições compostas (conjunção, disjunção, condicional, bicondicional).</li>
+            <li>Utilizar <b>diagramas lógicos</b> (diagramas de Venn/Euler) para representar e resolver problemas de conjuntos associados a proposições categóricas (3.4).</li>
+            <li>Resolver questões FGV que exigem montagem de tabela-verdade, aplicação de equivalência ou leitura de diagrama lógico.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A <b>lógica sentencial</b> (ou proposicional) formaliza simbolicamente o que foi estudado de forma intuitiva nos tópicos anteriores. Uma <b>proposição simples</b> não contém conectivos lógicos (ex.: "Chove"); uma <b>proposição composta</b> combina duas ou mais proposições simples por meio de <b>conectivos lógicos</b>: negação (¬), conjunção (∧, "e"), disjunção (∨, "ou"), condicional (→, "se... então"), e bicondicional (↔, "se e somente se").</p>
+          <p>A <b>tabela-verdade</b> é a ferramenta central deste tópico: lista todas as combinações possíveis de valores V/F para as proposições simples envolvidas e mostra o valor resultante da proposição composta em cada combinação. Proposições podem ser classificadas, com base em sua tabela-verdade, como <b>tautologia</b> (sempre V), <b>contradição</b> (sempre F) ou <b>contingência</b> (varia entre V e F).</p>
+          <p>As <b>equivalências lógicas</b> permitem reescrever uma proposição composta em outra forma logicamente idêntica, sem alterar seu valor de verdade em nenhuma combinação. As mais cobradas em concursos são as <b>Leis de De Morgan</b> (negação de conjunção e disjunção) e a equivalência do condicional com a disjunção (¬P ∨ Q).</p>
+          <p>Os <b>diagramas lógicos</b> (diagramas de Venn/Euler) representam visualmente relações entre conjuntos associados a proposições categóricas ("todo", "algum", "nenhum"), sendo especialmente úteis para resolver questões de "quantos elementos satisfazem tal condição" combinando informações de múltiplos conjuntos.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Lógica Sentencial<br>(Proposicional)</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>3.1 Proposições</h4><ul><li>Simples (sem conectivo)</li><li>Compostas (com conectivo)</li></ul></div>
+              <div class="mm-node"><h4>Conectivos</h4><ul><li>¬ negação</li><li>∧ conjunção</li><li>∨ disjunção</li><li>→ condicional</li><li>↔ bicondicional</li></ul></div>
+              <div class="mm-node"><h4>3.2 Tabela-verdade</h4><ul><li>2ⁿ linhas</li><li>Tautologia/Contradição/Contingência</li></ul></div>
+              <div class="mm-node"><h4>3.3 Equivalências</h4><ul><li>Leis de De Morgan</li><li>Condicional = ¬P∨Q</li><li>Dupla negação</li></ul></div>
+              <div class="mm-node"><h4>Negações</h4><ul><li>Neg. da conjunção</li><li>Neg. da disjunção</li><li>Neg. do condicional</li></ul></div>
+              <div class="mm-node"><h4>3.4 Diagramas lógicos</h4><ul><li>Todo/Algum/Nenhum</li><li>Diagramas de Venn/Euler</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>3.1 Proposições simples e compostas</h3>
+          <p>Uma <b>proposição simples</b> (também chamada atômica) não pode ser decomposta em proposições menores — não contém conectivos lógicos. Uma <b>proposição composta</b> (molecular) é formada pela combinação de duas ou mais proposições simples por meio de conectivos.</p>
+          <table>
+            <thead><tr><th>Conectivo</th><th>Símbolo</th><th>Nome</th><th>Leitura</th></tr></thead>
+            <tbody>
+              <tr><td>Negação</td><td>¬P (ou ~P)</td><td>Negação</td><td>"não P"</td></tr>
+              <tr><td>E</td><td>P ∧ Q</td><td>Conjunção</td><td>"P e Q"</td></tr>
+              <tr><td>Ou</td><td>P ∨ Q</td><td>Disjunção (inclusiva)</td><td>"P ou Q"</td></tr>
+              <tr><td>Ou exclusivo</td><td>P ⊻ Q (ou P ∨ Q)</td><td>Disjunção exclusiva</td><td>"ou P ou Q, mas não ambos"</td></tr>
+              <tr><td>Se... então</td><td>P → Q</td><td>Condicional</td><td>"se P, então Q"</td></tr>
+              <tr><td>Se e somente se</td><td>P ↔ Q</td><td>Bicondicional</td><td>"P se e somente se Q"</td></tr>
+            </tbody>
+          </table>
+
+          <h3>3.2 Tabelas-verdade</h3>
+          <p>A tabela-verdade lista todas as combinações possíveis de V/F para as proposições simples (2ⁿ linhas, onde n é o número de proposições simples envolvidas) e o resultado da proposição composta em cada uma.</p>
+          <table class="truth">
+            <thead><tr><th>P</th><th>Q</th><th>¬P</th><th>P∧Q</th><th>P∨Q</th><th>P→Q</th><th>P↔Q</th></tr></thead>
+            <tbody>
+              <tr><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td></tr>
+              <tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td></tr>
+              <tr><td>F</td><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td><td>F</td></tr>
+              <tr><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td><td>V</td><td>V</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box tip">
+            <div class="box-title">✅ Macetes de memorização das tabelas</div>
+            <p><b>Conjunção (∧):</b> só é V quando AMBAS são V ("time apertado, exige tudo certo"). <b>Disjunção (∨):</b> só é F quando AMBAS são F ("basta uma ser V"). <b>Condicional (→):</b> só é F quando o antecedente é V e o consequente é F ("promessa quebrada" — prometeu Q se P, e não cumpriu). <b>Bicondicional (↔):</b> é V quando P e Q têm o MESMO valor (ambas V ou ambas F).</p>
+          </div>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV: condicional com antecedente falso</div>
+            <p>Muitos candidatos acham, intuitivamente, que "se P então Q" deveria ser falso quando P é falso — mas pela tabela-verdade, o condicional é <b>sempre verdadeiro quando o antecedente é falso</b>, independentemente do valor de Q (as duas últimas linhas da tabela de P→Q são ambas V). Essa é uma das maiores fontes de erro em questões de lógica sentencial.</p>
+          </div>
+
+          <h3>Classificação de proposições compostas</h3>
+          <table>
+            <thead><tr><th>Classificação</th><th>Definição</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Tautologia</td><td>Verdadeira em TODAS as linhas da tabela-verdade</td><td>P ∨ ¬P (sempre V)</td></tr>
+              <tr><td>Contradição</td><td>Falsa em TODAS as linhas da tabela-verdade</td><td>P ∧ ¬P (sempre F)</td></tr>
+              <tr><td>Contingência</td><td>Varia entre V e F, dependendo da linha</td><td>P ∧ Q (nem sempre V, nem sempre F)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>3.3 Equivalências lógicas</h3>
+          <table>
+            <thead><tr><th>Equivalência</th><th>Fórmula</th></tr></thead>
+            <tbody>
+              <tr><td>Dupla negação</td><td>¬(¬P) ≡ P</td></tr>
+              <tr><td>Condicional como disjunção</td><td>P → Q ≡ ¬P ∨ Q</td></tr>
+              <tr><td>Lei de De Morgan (negação da conjunção)</td><td>¬(P ∧ Q) ≡ ¬P ∨ ¬Q</td></tr>
+              <tr><td>Lei de De Morgan (negação da disjunção)</td><td>¬(P ∨ Q) ≡ ¬P ∧ ¬Q</td></tr>
+              <tr><td>Negação do condicional</td><td>¬(P → Q) ≡ P ∧ ¬Q</td></tr>
+              <tr><td>Contrapositiva</td><td>P → Q ≡ ¬Q → ¬P</td></tr>
+              <tr><td>Comutatividade</td><td>P ∧ Q ≡ Q ∧ P; P ∨ Q ≡ Q ∨ P</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box tip">
+            <div class="box-title">✅ Macete das Leis de De Morgan</div>
+            <p>"Nega tudo e troca o conectivo": para negar P∧Q, negue P, negue Q, e troque ∧ por ∨ (resultado: ¬P∨¬Q). Para negar P∨Q, negue P, negue Q, e troque ∨ por ∧ (resultado: ¬P∧¬Q).</p>
+          </div>
+
+          <h3>Negação de proposições compostas — quadro completo</h3>
+          <table>
+            <thead><tr><th>Proposição original</th><th>Negação correta</th></tr></thead>
+            <tbody>
+              <tr><td>P ∧ Q ("P e Q")</td><td>¬P ∨ ¬Q ("não P ou não Q")</td></tr>
+              <tr><td>P ∨ Q ("P ou Q")</td><td>¬P ∧ ¬Q ("não P e não Q")</td></tr>
+              <tr><td>P → Q ("se P, então Q")</td><td>P ∧ ¬Q ("P e não Q")</td></tr>
+              <tr><td>P ↔ Q ("P se e somente se Q")</td><td>(P ∧ ¬Q) ∨ (¬P ∧ Q) — ou equivalentemente, P ⊻ Q</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV: negar o condicional</div>
+            <p>O erro mais comum é achar que a negação de "P → Q" é "P → ¬Q" ou "¬P → Q". A negação correta do condicional é <b>P ∧ ¬Q</b> (mantém P afirmado, nega apenas Q, e troca → por ∧). Exemplo: negar "Se chove, a rua molha" é "Chove E a rua não molha" — não "se chove, a rua não molha".</p>
+          </div>
+
+          <h3>3.4 Diagramas lógicos (Venn/Euler)</h3>
+          <p>Os diagramas lógicos representam graficamente relações entre conjuntos, muito usados para proposições categóricas ("todo A é B", "algum A é B", "nenhum A é B") e para problemas de contagem envolvendo interseção e união de conjuntos.</p>
+          <table>
+            <thead><tr><th>Proposição categórica</th><th>Representação no diagrama</th></tr></thead>
+            <tbody>
+              <tr><td>"Todo A é B"</td><td>Círculo A totalmente contido dentro do círculo B</td></tr>
+              <tr><td>"Algum A é B"</td><td>Círculos A e B com interseção parcial (pelo menos um elemento comum)</td></tr>
+              <tr><td>"Nenhum A é B"</td><td>Círculos A e B completamente separados, sem interseção</td></tr>
+              <tr><td>"Algum A não é B"</td><td>Círculo A com uma região fora do círculo B</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Fórmula de contagem com dois conjuntos</div>
+            <p>|A ∪ B| = |A| + |B| − |A ∩ B| — o total de elementos na união é a soma dos elementos de cada conjunto, menos os elementos contados duas vezes (a interseção).</p>
+          </div>
+          <p>Exemplo de aplicação: em uma equipe de 50 pessoas, 30 falam inglês, 20 falam espanhol e 8 falam ambos os idiomas. Quantas não falam nenhum dos dois? |A∪B| = 30+20−8 = 42 falam pelo menos um idioma; logo, 50−42 = 8 não falam nenhum.</p>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV combina, com frequência, tabelas-verdade com contextos institucionais (avaliando se determinada regra normativa, expressa como condicional, é violada em um cenário dado) e problemas de diagrama lógico com dados de pesquisas internas (funcionários que usam determinados sistemas, línguas faladas, cursos concluídos).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV cobra tanto questões de simbolização pura (montar tabela-verdade, aplicar equivalência) quanto questões contextualizadas (uma norma expressa como condicional, avaliada em um cenário concreto de violação ou cumprimento).</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>"Assinale a alternativa que apresenta a negação correta da proposição..."</li>
+            <li>"A proposição P∧(P→Q) é uma tautologia, contradição ou contingência?"</li>
+            <li>Problemas de conjunto com diagrama de Venn, geralmente envolvendo 2 ou 3 conjuntos.</li>
+            <li>Dificuldade alta — exige domínio simultâneo de simbolização, tabela-verdade e equivalências.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Negação de proposições compostas (especialmente condicional)</td><td>Muito alta</td></tr>
+              <tr><td>Leis de De Morgan</td><td>Muito alta</td></tr>
+              <tr><td>Valor-verdade do condicional com antecedente falso</td><td>Alta</td></tr>
+              <tr><td>Problemas de diagrama de Venn com 2-3 conjuntos</td><td>Alta</td></tr>
+              <tr><td>Classificação tautologia/contradição/contingência</td><td>Média-alta</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Negar "P → Q" como "P → ¬Q" em vez de "P ∧ ¬Q".</li>
+            <li>Não perceber que P→Q é verdadeiro quando P é falso, independentemente de Q.</li>
+            <li>Errar a troca de conectivo nas Leis de De Morgan (esquecer de trocar ∧ por ∨ ou vice-versa).</li>
+            <li>Contar elementos da interseção duas vezes em problemas de diagrama de Venn.</li>
+            <li>Confundir disjunção inclusiva (∨, "ou" comum) com disjunção exclusiva (⊻, "ou... ou, mas não ambos").</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV formular a norma institucional como um condicional ("se o servidor solicitar afastamento, deverá apresentar justificativa") e pedir a identificação de um cenário que a viola — o único cenário que viola um condicional é aquele em que o antecedente é verdadeiro e o consequente é falso.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao negar uma proposição composta, aplique sempre o quadro de negações — nunca "no olho".</li>
+            <li>Ao montar tabela-verdade, confira se o número de linhas é 2ⁿ (n = número de proposições simples).</li>
+            <li>Em diagrama de Venn, sempre desenhe (mesmo mentalmente) antes de somar ou subtrair elementos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Macete da conjunção</div><p>P∧Q = "time apertado" — só dá certo (V) se as duas partes derem certo.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete da disjunção</div><p>P∨Q = "salvavidas" — basta uma ser V para o time todo se salvar (só falha se as duas falharem).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete do condicional</div><p>P→Q só é falso quando "promete e não cumpre" (P verdadeiro, Q falso). Em qualquer outro caso, é verdadeiro — inclusive quando a promessa nem foi feita (P falso).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete da negação do condicional</div><p>Nega "se P então Q" virando "P e não Q" — troca a seta por "e" e nega só o segundo pedaço.</p></div>
+          <div class="box tip"><div class="box-title">🧠 De Morgan em uma frase</div><p>"Nega as duas partes e troca o conectivo do meio."</p></div>
+          <div class="box tip"><div class="box-title">🧠 Fórmula da união de conjuntos</div><p>|A∪B| = |A| + |B| − |A∩B| — sempre subtraia a interseção para não contar duas vezes.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Proposição simples = sem conectivo; composta = com conectivo (¬, ∧, ∨, →, ↔).</li>
+            <li>Conjunção (∧): V só se ambas V. Disjunção (∨): F só se ambas F. Condicional (→): F só se P=V e Q=F.</li>
+            <li>Tautologia = sempre V; Contradição = sempre F; Contingência = varia.</li>
+            <li>Negação de P∧Q = ¬P∨¬Q; negação de P∨Q = ¬P∧¬Q (Leis de De Morgan).</li>
+            <li>Negação de P→Q = P∧¬Q (NUNCA "P→¬Q").</li>
+            <li>|A∪B| = |A|+|B|−|A∩B| — fórmula-base de contagem em diagramas de Venn.</li>
+            <li>P→Q é sempre verdadeiro quando P é falso, independentemente de Q.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS/TÉCNICAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e técnicas de resolução</h2></div>
+        <div class="card">
+          <table class="truth">
+            <thead><tr><th>P</th><th>Q</th><th>¬P</th><th>P∧Q</th><th>P∨Q</th><th>P→Q</th><th>P↔Q</th></tr></thead>
+            <tbody>
+              <tr><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td></tr>
+              <tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td></tr>
+              <tr><td>F</td><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td><td>F</td></tr>
+              <tr><td>F</td><td>F</td><td>V</td><td>F</td><td>F</td><td>V</td><td>V</td></tr>
+            </tbody>
+          </table>
+          <table>
+            <thead><tr><th>Fórmula</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td>Número de linhas da tabela-verdade = 2ⁿ</td><td>n = número de proposições simples distintas</td></tr>
+              <tr><td>|A∪B| = |A| + |B| − |A∩B|</td><td>Contagem de elementos na união de dois conjuntos</td></tr>
+              <tr><td>|A∪B∪C| = |A|+|B|+|C|−|A∩B|−|A∩C|−|B∩C|+|A∩B∩C|</td><td>Contagem de elementos na união de três conjuntos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Quadro de negações</h3>
+          <table>
+            <thead><tr><th>Proposição</th><th>Negação</th></tr></thead>
+            <tbody>
+              <tr><td>P ∧ Q</td><td>¬P ∨ ¬Q</td></tr>
+              <tr><td>P ∨ Q</td><td>¬P ∧ ¬Q</td></tr>
+              <tr><td>P → Q</td><td>P ∧ ¬Q</td></tr>
+              <tr><td>Todo A é B</td><td>Algum A não é B</td></tr>
+              <tr><td>Algum A é B</td><td>Nenhum A é B</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>A FGV costuma contextualizar tabelas-verdade em normas institucionais reais, testando se o candidato consegue "traduzir" uma regra de conduta em uma proposição condicional antes de aplicar a lógica formal.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>As Leis de De Morgan têm esse nome em homenagem a Augustus De Morgan, matemático britânico do século XIX, que as formalizou — embora princípios semelhantes já fossem conhecidos por lógicos medievais.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>A lógica proposicional clássica é a base matemática de todos os circuitos digitais modernos: portas lógicas AND, OR e NOT em processadores correspondem exatamente aos conectivos ∧, ∨ e ¬ estudados neste tópico.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Estruturas lógicas (Tópico 1)</td><td>Formaliza simbolicamente os conceitos de proposição e validade vistos ali</td></tr>
+              <tr><td>Lógica de argumentação (Tópico 2)</td><td>As regras de inferência (modus ponens etc.) usam diretamente os conectivos aqui estudados</td></tr>
+              <tr><td>Lógica de primeira ordem (Tópico 4)</td><td>Amplia a lógica sentencial incluindo quantificadores e predicados</td></tr>
+              <tr><td>Raciocínio lógico envolvendo problemas aritméticos (Tópico 5)</td><td>Diagramas lógicos e contagem de conjuntos são aplicados a problemas numéricos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar de cor a tabela-verdade dos cinco conectivos.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, escrevendo a simbolização completa de cada proposição antes de responder.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para Lógica de Primeira Ordem (Tópico 4).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ALENCAR FILHO, Edgard de. <i>Iniciação à Lógica Matemática</i>. São Paulo: Nobel.</li>
+            <li>MORTARI, Cezar A. <i>Introdução à Lógica</i>. São Paulo: Editora Unesp.</li>
+            <li>SILVA, Jônatas Zampa. <i>Raciocínio Lógico Comentado</i>. São Paulo: Método.</li>
+            <li>SÉRATES, Jonofon. <i>Raciocínio Lógico</i>. Brasília: JS Editora.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Raciocínio Lógico · Tópico 03/05</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_rlog_t03";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual a diferença entre proposição simples e composta?", a:"Simples não contém conectivo lógico; composta combina duas ou mais proposições simples por meio de conectivos."},
+    {q:"Quando a conjunção P∧Q é verdadeira?", a:"Apenas quando P e Q são ambas verdadeiras."},
+    {q:"Quando a disjunção P∨Q é falsa?", a:"Apenas quando P e Q são ambas falsas."},
+    {q:"Quando o condicional P→Q é falso?", a:"Apenas quando P é verdadeiro e Q é falso."},
+    {q:"O condicional P→Q é verdadeiro quando P é falso?", a:"Sim, sempre — independentemente do valor de Q."},
+    {q:"Quando o bicondicional P↔Q é verdadeiro?", a:"Quando P e Q têm o mesmo valor de verdade (ambas V ou ambas F)."},
+    {q:"O que é uma tautologia?", a:"Proposição composta que é verdadeira em todas as linhas da tabela-verdade."},
+    {q:"O que é uma contradição?", a:"Proposição composta que é falsa em todas as linhas da tabela-verdade."},
+    {q:"O que é uma contingência?", a:"Proposição composta cujo valor de verdade varia entre V e F, conforme a linha."},
+    {q:"Qual a negação correta de P∧Q, segundo De Morgan?", a:"¬P∨¬Q."},
+    {q:"Qual a negação correta de P∨Q, segundo De Morgan?", a:"¬P∧¬Q."},
+    {q:"Qual a negação correta de P→Q?", a:"P∧¬Q (nunca 'P→¬Q')."},
+    {q:"Qual o macete para lembrar as Leis de De Morgan?", a:"'Nega as duas partes e troca o conectivo do meio' (∧ vira ∨, ou vice-versa)."},
+    {q:"Como o condicional P→Q pode ser reescrito como disjunção?", a:"P→Q ≡ ¬P∨Q."},
+    {q:"O que é a contrapositiva de P→Q?", a:"¬Q→¬P — logicamente equivalente ao condicional original."},
+    {q:"Quantas linhas tem a tabela-verdade de uma proposição com 3 proposições simples?", a:"2³ = 8 linhas."},
+    {q:"Como representar 'Todo A é B' em um diagrama de Venn?", a:"O círculo A totalmente contido dentro do círculo B."},
+    {q:"Como representar 'Nenhum A é B' em um diagrama de Venn?", a:"Os círculos A e B completamente separados, sem interseção."},
+    {q:"Qual a negação de 'Todo A é B'?", a:"'Algum A não é B'."},
+    {q:"Qual a negação de 'Algum A é B'?", a:"'Nenhum A é B'."},
+    {q:"Qual a fórmula para contar elementos na união de dois conjuntos?", a:"|A∪B| = |A| + |B| − |A∩B|."},
+    {q:"Por que se subtrai a interseção na fórmula da união?", a:"Porque os elementos da interseção são contados duas vezes (uma em cada conjunto) se não forem subtraídos."},
+    {q:"Em homenagem a quem foram nomeadas as Leis de De Morgan?", a:"A Augustus De Morgan, matemático britânico do século XIX."},
+    {q:"Qual a relação entre a lógica proposicional e circuitos digitais?", a:"As portas lógicas AND, OR e NOT dos processadores correspondem exatamente aos conectivos ∧, ∨ e ¬."},
+    {q:"Qual é o erro mais comum ao negar um condicional?", a:"Achar que a negação de 'P→Q' é 'P→¬Q' ou '¬P→Q', quando na verdade é 'P∧¬Q'."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Conectivos", texto:"—", enun:"Assinale a alternativa que representa corretamente a proposição 'Se o orçamento for aprovado, o projeto iniciará':", alts:["Orçamento aprovado ∧ Projeto inicia","Orçamento aprovado → Projeto inicia","Orçamento aprovado ∨ Projeto inicia","Orçamento aprovado ↔ Projeto inicia","¬Orçamento aprovado → Projeto inicia"], correta:1, coment:"'Se... então' é o conectivo condicional (→), com o antecedente sendo 'orçamento aprovado' e o consequente 'projeto inicia'."},
+    {tema:"Tabela-verdade", texto:"—", enun:"Considerando P falso e Q verdadeiro, o valor de P→Q é:", alts:["Falso","Verdadeiro","Indeterminado","Depende de outra proposição","Nem verdadeiro nem falso"], correta:1, coment:"O condicional só é falso quando o antecedente é V e o consequente é F. Com P falso, o condicional é sempre verdadeiro, independentemente de Q."},
+    {tema:"Negação do condicional", texto:"“Se o servidor solicitar afastamento, deverá apresentar justificativa por escrito.”", enun:"A negação correta dessa proposição é:", alts:["Se o servidor solicitar afastamento, não deverá apresentar justificativa.","O servidor não solicitou afastamento e não apresentou justificativa.","O servidor solicitou afastamento e não apresentou justificativa por escrito.","Se o servidor não solicitar afastamento, deverá apresentar justificativa.","O servidor solicitou afastamento ou apresentou justificativa."], correta:2, coment:"A negação de P→Q é P∧¬Q: mantém o antecedente afirmado ('solicitou afastamento') e nega o consequente ('não apresentou justificativa')."},
+    {tema:"Leis de De Morgan", texto:"“O relatório foi aprovado e enviado à diretoria.”", enun:"A negação correta dessa proposição, segundo as Leis de De Morgan, é:", alts:["O relatório não foi aprovado e não foi enviado à diretoria.","O relatório não foi aprovado ou não foi enviado à diretoria.","O relatório foi aprovado ou enviado à diretoria.","Se o relatório foi aprovado, foi enviado à diretoria.","O relatório não foi aprovado e foi enviado à diretoria."], correta:1, coment:"A negação de P∧Q é ¬P∨¬Q: nega as duas partes e troca 'e' por 'ou' — 'não foi aprovado OU não foi enviado'."},
+    {tema:"Classificação de proposições", texto:"—", enun:"A proposição 'P ∨ ¬P' é classificada como:", alts:["Contradição","Contingência","Tautologia","Proposição simples","Bicondicional"], correta:2, coment:"'P ou não P' é sempre verdadeira, em qualquer valoração de P — é uma tautologia clássica (princípio do terceiro excluído formalizado)."},
+    {tema:"Classificação de proposições", texto:"—", enun:"A proposição 'P ∧ ¬P' é classificada como:", alts:["Tautologia","Contradição","Contingência","Proposição simples","Condicional"], correta:1, coment:"'P e não P' nunca pode ser verdadeira — é sempre falsa, caracterizando uma contradição (princípio da não contradição formalizado)."},
+    {tema:"Diagrama de Venn", texto:"—", enun:"Em uma equipe de 40 pessoas, 25 usam o Sistema A, 18 usam o Sistema B, e 10 usam ambos. Quantas pessoas não usam nenhum dos dois sistemas?", alts:["5","7","10","15","33"], correta:1, coment:"|A∪B| = 25+18−10 = 33 usam pelo menos um sistema. Logo, 40−33 = 7 não usam nenhum dos dois."},
+    {tema:"Equivalência lógica", texto:"—", enun:"A proposição 'P → Q' é logicamente equivalente a:", alts:["P ∧ Q","¬P ∨ Q","¬P ∧ Q","P ∨ ¬Q","¬P ∧ ¬Q"], correta:1, coment:"P→Q é equivalente a ¬P∨Q — equivalência fundamental usada para reescrever condicionais como disjunções."},
+    {tema:"Proposições categóricas", texto:"—", enun:"A negação de 'Todo servidor é pontual' é:", alts:["Nenhum servidor é pontual.","Algum servidor não é pontual.","Todo servidor não é pontual.","Algum servidor é pontual.","Nenhum servidor não é pontual."], correta:1, coment:"A negação de 'todo A é B' é 'algum A não é B' — basta um único contraexemplo para negar a afirmação universal."},
+    {tema:"Bicondicional", texto:"—", enun:"Considerando P verdadeiro e Q falso, o valor de P↔Q é:", alts:["Verdadeiro","Falso","Indeterminado","Depende de outra proposição","Sempre verdadeiro, por definição"], correta:1, coment:"O bicondicional só é verdadeiro quando P e Q têm o mesmo valor. Com P=V e Q=F (valores diferentes), o bicondicional é falso."},
+    {tema:"Tabela-verdade aplicada", texto:"—", enun:"Quantas linhas tem a tabela-verdade de uma proposição composta com 4 proposições simples distintas?", alts:["4","8","12","16","32"], correta:3, coment:"O número de linhas é 2ⁿ, onde n é o número de proposições simples distintas: 2⁴ = 16 linhas."},
+    {tema:"Negação da disjunção", texto:"“O pagamento será feito em dinheiro ou em cartão.”", enun:"A negação correta dessa proposição é:", alts:["O pagamento não será feito em dinheiro nem em cartão.","O pagamento será feito em dinheiro e em cartão.","O pagamento não será feito em dinheiro ou não será em cartão.","Se não for em dinheiro, será em cartão.","O pagamento será feito de alguma forma."], correta:0, coment:"A negação de P∨Q é ¬P∧¬Q: 'não em dinheiro E não em cartão', equivalente a 'não será feito nem em dinheiro nem em cartão'."},
+    {tema:"Aplicação contextual do condicional", texto:"“Se o funcionário faltar sem justificativa, terá desconto no salário.”", enun:"Assinale a situação que representa uma VIOLAÇÃO dessa norma:", alts:["O funcionário faltou sem justificativa e teve desconto.","O funcionário não faltou e não teve desconto.","O funcionário faltou sem justificativa e não teve desconto.","O funcionário não faltou, mas teve desconto por outro motivo.","O funcionário faltou com justificativa e não teve desconto."], correta:2, coment:"A norma (condicional P→Q) só é violada quando o antecedente é verdadeiro (faltou sem justificativa) e o consequente é falso (não teve desconto) — único cenário que contraria a regra estabelecida."},
+    {tema:"Contrapositiva", texto:"—", enun:"A contrapositiva de 'Se chove, a rua molha' é:", alts:["Se a rua molha, chove.","Se não chove, a rua não molha.","Se a rua não molha, não chove.","Chove ou a rua molha.","A rua molha e não chove."], correta:2, coment:"A contrapositiva de P→Q é ¬Q→¬P: 'se a rua não molha (¬Q), não chove (¬P)' — logicamente equivalente à proposição original."},
+    {tema:"Diagrama de Venn - três conjuntos", texto:"—", enun:"Em uma pesquisa com 100 pessoas, 50 leem o jornal A, 40 leem o jornal B, e 15 leem ambos. Quantas leem pelo menos um dos dois jornais?", alts:["65","75","90","15","25"], correta:1, coment:"|A∪B| = 50+40−15 = 75 pessoas leem pelo menos um dos dois jornais."},
+    {tema:"Disjunção exclusiva", texto:"“Ou o candidato é aprovado, ou é reprovado — nunca ambos.”", enun:"Essa proposição exemplifica:", alts:["Conjunção","Disjunção inclusiva","Disjunção exclusiva","Condicional","Bicondicional"], correta:2, coment:"A expressão 'ou... ou... nunca ambos' caracteriza a disjunção exclusiva, diferente da disjunção inclusiva comum (que permite ambos serem verdadeiros)."},
+    {tema:"Equivalência com negação dupla", texto:"—", enun:"A proposição '¬(¬P)' é logicamente equivalente a:", alts:["¬P","P","P∧Q","Uma contradição","Uma tautologia, independente de P"], correta:1, coment:"A dupla negação equivale à proposição original: ¬(¬P) ≡ P — regra básica de equivalência lógica."},
+    {tema:"Aplicação de De Morgan em contexto", texto:"“O documento não está aprovado nem foi enviado.”", enun:"Essa afirmação é logicamente equivalente a:", alts:["O documento está aprovado e foi enviado.","Não é verdade que o documento está aprovado ou foi enviado.","O documento está aprovado ou foi enviado.","Se o documento está aprovado, foi enviado.","O documento está aprovado, mas não foi enviado."], correta:1, coment:"'Não P e não Q' (¬P∧¬Q) é equivalente, por De Morgan, a '¬(P∨Q)' — não é verdade que P ou Q sejam verdadeiros."},
+    {tema:"Classificação de contingência", texto:"—", enun:"A proposição 'P ∧ Q', considerando P e Q como proposições distintas e independentes, é classificada como:", alts:["Tautologia","Contradição","Contingência — pode ser V ou F dependendo dos valores de P e Q","Proposição simples","Bicondicional necessariamente falsa"], correta:2, coment:"P∧Q não é sempre V (falha quando P ou Q é F) nem sempre F (é V quando ambas são V) — é uma contingência, dependente dos valores específicos de P e Q."},
+    {tema:"Diagrama lógico avançado", texto:"—", enun:"Considerando as proposições 'Todo A é B' e 'Nenhum B é C', é correto concluir que:", alts:["Todo A é C.","Nenhum A é C.","Algum A é C.","Não é possível concluir a relação entre A e C com certeza.","Todo C é A."], correta:1, coment:"Se todo A está contido em B, e nenhum B está em C (B e C são disjuntos), então A também não pode ter interseção com C — logo, nenhum A é C, por transitividade da exclusão."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Quando P∧Q é verdadeira?", alts:["Quando P ou Q é verdadeira","Quando ambas P e Q são verdadeiras","Quando ambas são falsas","Sempre","Nunca"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Quando P∨Q é falsa?", alts:["Quando ambas são verdadeiras","Quando apenas uma é verdadeira","Quando ambas são falsas","Sempre","Nunca"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Quando P→Q é falsa?", alts:["Quando P é falso","Quando Q é verdadeiro","Quando P é verdadeiro e Q é falso","Quando ambas são falsas","Nunca"], correta:2},
+    {d:"Fácil", texto:"—", enun:"P→Q, com P falso, é:", alts:["Sempre falso","Sempre verdadeiro","Depende de Q","Indeterminado","Uma contradição"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Quando P↔Q é verdadeira?", alts:["Quando P e Q têm valores diferentes","Quando P e Q têm o mesmo valor","Sempre que P é verdadeiro","Sempre que Q é verdadeiro","Nunca"], correta:1},
+    {d:"Fácil", texto:"—", enun:"'P∨¬P' é uma:", alts:["Contradição","Contingência","Tautologia","Proposição simples","Negação"], correta:2},
+    {d:"Fácil", texto:"—", enun:"'P∧¬P' é uma:", alts:["Tautologia","Contingência","Contradição","Proposição simples","Bicondicional"], correta:2},
+    {d:"Fácil", texto:"—", enun:"A negação de P∧Q é:", alts:["¬P∧¬Q","¬P∨¬Q","P∨Q","¬P∧Q","P∧¬Q"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A negação de P∨Q é:", alts:["¬P∨¬Q","¬P∧¬Q","P∧Q","¬P∨Q","P∨¬Q"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A negação de P→Q é:", alts:["¬P→Q","P→¬Q","P∧¬Q","¬P∧¬Q","¬P∨Q"], correta:2},
+    {d:"Média", texto:"—", enun:"P→Q é equivalente a:", alts:["P∧Q","¬P∨Q","¬P∧Q","P∨¬Q","¬P∧¬Q"], correta:1},
+    {d:"Média", texto:"—", enun:"A contrapositiva de P→Q é:", alts:["Q→P","¬P→¬Q","¬Q→¬P","¬P→Q","Q→¬P"], correta:2},
+    {d:"Média", texto:"—", enun:"A negação de 'Todo A é B' é:", alts:["Nenhum A é B","Algum A não é B","Algum A é B","Todo B é A","Nenhum B é A"], correta:1},
+    {d:"Média", texto:"—", enun:"A negação de 'Algum A é B' é:", alts:["Todo A é B","Nenhum A é B","Algum A não é B","Todo B é A","Algum B é A"], correta:1},
+    {d:"Média", texto:"—", enun:"Quantas linhas tem a tabela-verdade de uma proposição com 3 proposições simples?", alts:["3","6","8","9","16"], correta:2},
+    {d:"Média", texto:"—", enun:"Em uma equipe de 30 pessoas, 20 usam o sistema X, 15 usam o sistema Y, e 10 usam ambos. Quantas não usam nenhum?", alts:["0","5","10","15","25"], correta:1},
+    {d:"Média", texto:"“Se chove, a rua molha.”", enun:"A negação correta dessa proposição é:", alts:["Se não chove, a rua não molha.","Se chove, a rua não molha.","Chove e a rua não molha.","Não chove e a rua molha.","Chove ou a rua molha."], correta:2},
+    {d:"Média", texto:"“O relatório foi aprovado e enviado.”", enun:"A negação correta, por De Morgan, é:", alts:["Não foi aprovado e não foi enviado.","Não foi aprovado ou não foi enviado.","Foi aprovado ou enviado.","Se foi aprovado, foi enviado.","Não foi aprovado, mas foi enviado."], correta:1},
+    {d:"Média", texto:"“O pagamento é em dinheiro ou em cartão.”", enun:"A negação correta, por De Morgan, é:", alts:["Não é em dinheiro nem em cartão.","É em dinheiro e em cartão.","Não é em dinheiro ou não é em cartão.","Se não é dinheiro, é cartão.","É pago de alguma forma."], correta:0},
+    {d:"Média", texto:"“Se o funcionário faltar sem justificativa, terá desconto.”", enun:"Assinale o cenário que viola essa norma:", alts:["Faltou sem justificativa e teve desconto.","Não faltou e não teve desconto.","Faltou sem justificativa e não teve desconto.","Não faltou, mas teve desconto.","Faltou com justificativa e não teve desconto."], correta:2},
+    {d:"Difícil", texto:"—", enun:"A proposição 'P∧(P→Q)' implica logicamente:", alts:["P","¬Q","Q","¬P","Nenhuma conclusão"], correta:2},
+    {d:"Difícil", texto:"—", enun:"Considerando 'Todo A é B' e 'Nenhum B é C', é correto concluir que:", alts:["Todo A é C.","Nenhum A é C.","Algum A é C.","Não é possível concluir.","Todo C é A."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Em uma pesquisa com 100 pessoas, 60 leem o jornal A, 50 leem o jornal B, 20 leem ambos. Quantas não leem nenhum dos dois?", alts:["0","10","20","30","90"], correta:1},
+    {d:"Difícil", texto:"—", enun:"A proposição '(P→Q)∧(Q→P)' é logicamente equivalente a:", alts:["P∧Q","P∨Q","P↔Q","¬P∧¬Q","Uma contradição"], correta:2},
+    {d:"Difícil", texto:"—", enun:"A negação de 'P↔Q' é logicamente equivalente a:", alts:["P∧Q","¬P∧¬Q","P⊻Q (disjunção exclusiva)","P→Q","¬P→¬Q"], correta:2},
+    {d:"Difícil", texto:"“Nenhum servidor do setor financeiro trabalha aos sábados. Alguns servidores da empresa trabalham aos sábados.”", enun:"É correto concluir que:", alts:["Todos os servidores da empresa são do setor financeiro.","Existem servidores da empresa que não são do setor financeiro.","Nenhum servidor da empresa trabalha aos sábados.","Todos os servidores que trabalham aos sábados são do setor financeiro.","Não é possível relacionar as duas premissas."], correta:1, coment:""},
+    {d:"Difícil", texto:"—", enun:"Considerando P verdadeiro, Q falso e R verdadeiro, o valor de '(P∧Q)∨R' é:", alts:["Verdadeiro","Falso","Indeterminado","Depende de outra proposição","Contraditório"], correta:0},
+    {d:"Difícil", texto:"—", enun:"Considerando P verdadeiro, Q falso e R falso, o valor de '(P→Q)∧R' é:", alts:["Verdadeiro","Falso","Indeterminado","Tautológico","Contraditório"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Em um diagrama com três conjuntos A, B e C, sabendo que |A|=30, |B|=25, |C|=20, |A∩B|=10, |A∩C|=8, |B∩C|=5 e |A∩B∩C|=3, o total de elementos em A∪B∪C é:", alts:["55","65","75","85","45"], correta:0},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Diferenciar proposição simples de composta",
+    "Conhecer os cinco conectivos lógicos e seus símbolos",
+    "Montar tabelas-verdade para proposições com até 3 proposições simples",
+    "Classificar proposições em tautologia, contradição ou contingência",
+    "Aplicar as Leis de De Morgan para negar conjunção e disjunção",
+    "Negar corretamente uma proposição condicional (P∧¬Q, não P→¬Q)",
+    "Aplicar a equivalência do condicional como disjunção (¬P∨Q)",
+    "Resolver problemas de contagem com diagrama de Venn (2 e 3 conjuntos)",
+    "Negar proposições categóricas (todo/algum/nenhum)",
+    "Resolver questões que aplicam a lógica sentencial a normas institucionais",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Negar 'P→Q' como 'P→¬Q' em vez de 'P∧¬Q'.",
+    "Achar que P→Q é falso quando P é falso.",
+    "Errar a troca de conectivo nas Leis de De Morgan (esquecer de trocar ∧ por ∨ ou vice-versa).",
+    "Confundir disjunção inclusiva (∨) com disjunção exclusiva (⊻).",
+    "Contar elementos da interseção duas vezes em problemas de diagrama de Venn.",
+    "Não subtrair a interseção na fórmula |A∪B| = |A|+|B|−|A∩B|.",
+    "Confundir tautologia com contingência quando a proposição é sempre verdadeira só por coincidência de valores testados.",
+    "Montar tabela-verdade com número errado de linhas (esquecer a fórmula 2ⁿ).",
+    "Negar 'todo A é B' como 'nenhum A é B' em vez de 'algum A não é B'.",
+    "Negar 'algum A é B' como 'algum A não é B' em vez de 'nenhum A é B'.",
+    "Não perceber que a contrapositiva (¬Q→¬P) é equivalente ao condicional original, mas a recíproca (Q→P) não é.",
+    "Confundir bicondicional com conjunção, ignorando que bicondicional também é V quando ambas são F.",
+    "Ignorar que uma norma condicional só é violada em um único cenário: antecedente V e consequente F.",
+    "Esquecer de aplicar De Morgan corretamente em proposições com mais de dois termos.",
+    "Não desenhar (nem mentalmente) o diagrama de Venn antes de somar ou subtrair elementos de conjuntos.",
+    "Confundir a fórmula de união de 2 conjuntos com a de 3 conjuntos.",
+    "Aplicar a equivalência do condicional (¬P∨Q) incorretamente, esquecendo de negar apenas o antecedente.",
+    "Não simbolizar o problema antes de tentar resolvê-lo, tentando fazer tudo 'de cabeça'.",
+    "Confundir a negação de uma proposição categórica com sua proposição contrária.",
+    "Assumir que um resultado de contagem em diagrama de Venn está correto sem verificar a soma total.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Proposição simples","Sentença declarativa que não contém conectivos lógicos."],
+    ["Proposição composta","Combinação de duas ou mais proposições simples por meio de conectivos lógicos."],
+    ["Negação (¬)","Conectivo que inverte o valor de verdade de uma proposição."],
+    ["Conjunção (∧)","Conectivo 'e', verdadeiro apenas quando ambas as proposições são verdadeiras."],
+    ["Disjunção (∨)","Conectivo 'ou', falso apenas quando ambas as proposições são falsas."],
+    ["Condicional (→)","Conectivo 'se... então', falso apenas quando o antecedente é V e o consequente é F."],
+    ["Bicondicional (↔)","Conectivo 'se e somente se', verdadeiro quando as duas proposições têm o mesmo valor."],
+    ["Tabela-verdade","Tabela que lista todas as combinações de valores V/F das proposições simples e o resultado da composta."],
+    ["Tautologia","Proposição composta verdadeira em todas as linhas da tabela-verdade."],
+    ["Contradição","Proposição composta falsa em todas as linhas da tabela-verdade."],
+    ["Contingência","Proposição composta cujo valor de verdade varia conforme a linha da tabela-verdade."],
+    ["Equivalência lógica","Relação entre duas proposições que possuem exatamente a mesma tabela-verdade."],
+    ["Leis de De Morgan","Equivalências que descrevem como negar corretamente uma conjunção ou disjunção."],
+    ["Contrapositiva","Forma equivalente de uma condicional P→Q, dada por ¬Q→¬P."],
+    ["Diagrama de Venn/Euler","Representação gráfica de conjuntos e suas relações (interseção, união, exclusão)."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

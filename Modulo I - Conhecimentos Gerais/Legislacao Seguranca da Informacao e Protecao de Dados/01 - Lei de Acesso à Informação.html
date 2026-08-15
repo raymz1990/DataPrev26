@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lei de Acesso à Informação (Lei nº 12.527/2011) | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Legislação — Segurança da Informação e Proteção de Dados</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Lei de Acesso à Informação (Lei nº 12.527/2011)</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Lei de Acesso à Informação.html" selected>01 - Lei de Acesso à Informação</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Lei de Acesso à Informação (Lei nº 12.527/2011)</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadros de prazos</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Legislação: Segurança da Informação e Proteção de Dados<br>Tópico 01 de 04<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Lei nº 12.527/2011 — Lei de Acesso à Informação (LAI)</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Legislação: Segurança da Informação e Proteção de Dados</b> &nbsp;›&nbsp; Tópico 01</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">8h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — mas noções de direito administrativo ajudam</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Muito alto — tema central desta disciplina de Legislação</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender o <b>fundamento constitucional</b> da Lei de Acesso à Informação (art. 5º, XXXIII, art. 37, §3º, II, e art. 216, §2º, da Constituição Federal).</li>
+            <li>Dominar a estrutura dos <b>capítulos I a V</b> da Lei nº 12.527/2011: Disposições Gerais; Do Acesso a Informações e da sua Divulgação; Do Procedimento de Acesso à Informação; Das Restrições de Acesso à Informação; Das Responsabilidades.</li>
+            <li>Diferenciar <b>transparência ativa</b> (divulgação espontânea) de <b>transparência passiva</b> (resposta a pedido específico).</li>
+            <li>Dominar os <b>prazos</b> de resposta a pedidos de acesso e os prazos de sigilo por grau de classificação (ultrassecreta, secreta, reservada).</li>
+            <li>Compreender o <b>rito recursal</b> em caso de negativa de acesso à informação.</li>
+            <li>Compreender o objeto e o alcance dos <b>Decretos nº 7.724/2012</b> (regulamentação da LAI no Executivo federal) e <b>nº 7.845/2012</b> (credenciamento de segurança e tratamento de informação classificada).</li>
+            <li>Resolver questões FGV que exigem aplicação literal do texto legal a cenários institucionais concretos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A <b>Lei nº 12.527/2011</b>, conhecida como <b>Lei de Acesso à Informação (LAI)</b>, regulamenta o direito fundamental de acesso a informações públicas, previsto no <b>art. 5º, inciso XXXIII</b>, da Constituição Federal, aplicando-se à administração pública direta e indireta de todos os Poderes (Executivo, Legislativo e Judiciário) e esferas (União, estados, DF e municípios), além de entidades privadas sem fins lucrativos que recebam recursos públicos, quanto à parcela desses recursos.</p>
+          <p>O princípio norteador da lei é a inversão da lógica tradicional: <b>a publicidade é a regra, e o sigilo é a exceção</b>. A lei estabelece dois mecanismos complementares de acesso: a <b>transparência ativa</b> (divulgação espontânea de informações de interesse coletivo, independentemente de solicitação, como em portais de transparência) e a <b>transparência passiva</b> (resposta a pedidos específicos formulados por qualquer pessoa, física ou jurídica, sem necessidade de motivação).</p>
+          <p>O <b>Capítulo III</b> (Do Procedimento de Acesso à Informação) estabelece prazos precisos: o órgão deve conceder acesso imediato sempre que possível; não sendo possível, tem até <b>20 dias</b> para responder, prorrogáveis por mais <b>10 dias</b> mediante justificativa expressa. Em caso de negativa, cabe <b>recurso</b> à autoridade hierarquicamente superior, que deve decidir em até <b>5 dias</b>.</p>
+          <p>O <b>Capítulo IV</b> (Das Restrições de Acesso à Informação) disciplina a classificação de informações em três graus de sigilo — <b>ultrassecreta (25 anos)</b>, <b>secreta (15 anos)</b> e <b>reservada (5 anos)</b> — sempre pelo prazo mínimo necessário à proteção do interesse público, e trata também da proteção de informações pessoais.</p>
+          <p>O <b>Capítulo V</b> (Das Responsabilidades) prevê sanções para agentes públicos que descumprirem a lei (que podem configurar infração disciplinar e, em casos graves, ato de improbidade administrativa) e para pessoas físicas ou entidades privadas que receberam recursos públicos e descumprirem as obrigações da lei (advertência, multa, rescisão do vínculo, suspensão de participar de licitação por até 2 anos, e declaração de inidoneidade).</p>
+          <p>Complementarmente, o <b>Decreto nº 7.724/2012</b> regulamenta a LAI no âmbito do <b>Poder Executivo federal</b>, detalhando procedimentos de acesso e classificação de informações sigilosas; e o <b>Decreto nº 7.845/2012</b> regulamenta os procedimentos de <b>credenciamento de segurança</b> e tratamento de informação classificada em qualquer grau de sigilo, dispondo sobre o <b>Núcleo de Segurança e Credenciamento (NSC)</b>.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Lei de Acesso<br>à Informação</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Cap. I — Disposições Gerais</h4><ul><li>Publicidade é regra</li><li>Abrangência: 3 Poderes, todas esferas</li></ul></div>
+              <div class="mm-node"><h4>Cap. II — Acesso e Divulgação</h4><ul><li>Transparência ativa</li><li>SIC (Serviço de Informação ao Cidadão)</li></ul></div>
+              <div class="mm-node"><h4>Cap. III — Procedimento</h4><ul><li>Pedido de acesso</li><li>Prazo 20+10 dias</li><li>Recurso em 5 dias</li></ul></div>
+              <div class="mm-node"><h4>Cap. IV — Restrições</h4><ul><li>Ultrassecreta (25a)</li><li>Secreta (15a)</li><li>Reservada (5a)</li><li>Informações pessoais</li></ul></div>
+              <div class="mm-node"><h4>Cap. V — Responsabilidades</h4><ul><li>Agente público</li><li>Pessoa física/entidade privada</li></ul></div>
+              <div class="mm-node"><h4>Decretos regulamentadores</h4><ul><li>7.724/2012 (Executivo federal)</li><li>7.845/2012 (credenciamento/NSC)</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Fundamento constitucional e princípio geral</h3>
+          <p>A LAI regulamenta três dispositivos constitucionais: o <b>art. 5º, XXXIII</b> (direito de receber informações de órgãos públicos), o <b>art. 37, §3º, II</b> (participação do usuário na administração pública) e o <b>art. 216, §2º</b> (gestão da documentação governamental). O princípio geral, previsto já no Capítulo I, é que a <b>publicidade é a regra e o sigilo é a exceção</b> — inversão da lógica histórica de sigilo administrativo.</p>
+
+          <h3>4.2 Capítulo I — Disposições Gerais (arts. 1º a 5º)</h3>
+          <table>
+            <thead><tr><th>Elemento</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Abrangência subjetiva</td><td>Administração direta e indireta de todos os Poderes (Executivo, Legislativo, Judiciário) e de todas as esferas (União, estados, DF, municípios); Tribunais de Contas e Ministério Público</td></tr>
+              <tr><td>Entidades privadas</td><td>Entidades privadas sem fins lucrativos que recebam recursos públicos para realização de ações de interesse público se submetem à lei quanto à parcela dos recursos públicos recebidos</td></tr>
+              <tr><td>Conceito de informação</td><td>Dados, processados ou não, que podem ser usados para produção e transmissão de conhecimento, contidos em qualquer meio, suporte ou formato</td></tr>
+              <tr><td>Diretrizes</td><td>Observância da publicidade como preceito geral e do sigilo como exceção; divulgação de informações de interesse público independentemente de solicitação; desenvolvimento de cultura de transparência</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.3 Capítulo II — Do Acesso a Informações e da sua Divulgação (arts. 6º a 9º)</h3>
+          <p>Este capítulo estabelece o dever dos órgãos de <b>gestão transparente da informação</b> e de promoção da <b>transparência ativa</b>, especialmente por meio de sítios oficiais na internet.</p>
+          <table>
+            <thead><tr><th>Elemento</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Gestão transparente</td><td>Dever de gerenciar a informação de forma transparente, franqueando o acesso e promovendo sua divulgação</td></tr>
+              <tr><td>Transparência ativa</td><td>Divulgação, em local de fácil acesso, de informações de interesse coletivo/geral, independentemente de requerimento — inclui registros de despesas, estrutura organizacional, programas e ações</td></tr>
+              <tr><td>Sítios eletrônicos oficiais</td><td>Requisitos mínimos: ferramenta de busca de conteúdo, acesso automatizado por sistemas externos, dados atualizados, informações claras e em formatos abertos</td></tr>
+              <tr><td>SIC — Serviço de Informação ao Cidadão</td><td>Unidade física, em todos os órgãos e entidades, destinada a atender e orientar o público quanto ao acesso a informações, protocolar pedidos e informar sobre a tramitação de documentos</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Capítulo III — Do Procedimento de Acesso à Informação (arts. 10 a 20)</h3>
+          <p>Este capítulo se divide em duas seções: <b>Seção I — Do Pedido de Acesso</b> e <b>Seção II — Dos Recursos</b>.</p>
+          <table>
+            <thead><tr><th>Etapa</th><th>Regra</th></tr></thead>
+            <tbody>
+              <tr><td>Legitimidade</td><td>Qualquer interessado, pessoa física ou jurídica, pode apresentar pedido de acesso, sem necessidade de motivar o pedido</td></tr>
+              <tr><td>Forma do pedido</td><td>Deve conter identificação do requerente e especificação da informação solicitada; a administração não pode exigir motivos do pedido</td></tr>
+              <tr><td>Prazo de resposta</td><td>Acesso imediato, sempre que possível; não sendo possível, prazo de até <b>20 dias</b>, prorrogável por mais <b>10 dias</b> mediante justificativa expressa</td></tr>
+              <tr><td>Negativa de acesso</td><td>Deve ser fundamentada, indicando a razão legal do sigilo e informando sobre a possibilidade de recurso</td></tr>
+              <tr><td>Recurso</td><td>Cabe recurso à autoridade hierarquicamente superior à que negou o acesso, que deve se manifestar em até <b>5 dias</b></td></tr>
+              <tr><td>Instância final (Executivo federal)</td><td>Após esgotadas as instâncias recursais no órgão, cabe recurso à CGU (Controladoria-Geral da União) e, por fim, à CMRI (Comissão Mista de Reavaliação de Informações)</td></tr>
+              <tr><td>Gratuidade</td><td>O acesso à informação é gratuito, ressalvada a cobrança do custo dos serviços de reprodução de documentos</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>O prazo padrão de resposta é de <b>20 dias</b>, prorrogável por <b>mais 10 dias</b> — totalizando até 30 dias no máximo, e não "30 dias corridos desde o início". A banca costuma trocar esses números (ex.: "15 dias prorrogáveis por 15") ou inverter a ordem (10+20) para testar a leitura literal do candidato.</p>
+          </div>
+
+          <h3>4.5 Capítulo IV — Das Restrições de Acesso à Informação (arts. 21 a 31)</h3>
+          <p>Este capítulo trata das exceções ao princípio da publicidade, organizando-se, de forma geral, em disposições sobre restrição, classificação de sigilo, proteção de informações sigilosas e proteção de informações pessoais.</p>
+          <table>
+            <thead><tr><th>Grau de sigilo</th><th>Prazo máximo de restrição</th><th>Autoridades competentes para classificar (âmbito federal)</th></tr></thead>
+            <tbody>
+              <tr><td>Ultrassecreta</td><td>25 anos (prorrogável uma única vez, por igual período)</td><td>Presidente da República, Vice-Presidente, Ministros de Estado e autoridades com as mesmas prerrogativas, Comandantes das Forças Armadas, chefes de missões diplomáticas</td></tr>
+              <tr><td>Secreta</td><td>15 anos</td><td>Autoridades acima e titulares de autarquias, fundações, empresas públicas e sociedades de economia mista</td></tr>
+              <tr><td>Reservada</td><td>5 anos</td><td>Autoridades acima e demais agentes públicos, conforme regulamento</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Regra geral sobre os prazos de sigilo</div>
+            <p>Os prazos de restrição contam-se a partir da <b>data de produção</b> do documento, e o sigilo deve durar o <b>prazo mínimo necessário</b> à proteção do interesse público envolvido — a classificação não é automática nem definitiva, estando sujeita a reavaliação periódica.</p>
+          </div>
+          <p>Sobre <b>informações pessoais</b>, o Capítulo IV estabelece que o tratamento deve ser feito de forma transparente e com respeito à intimidade, vida privada, honra e imagem, tendo acesso restrito, independentemente de classificação de sigilo, pelo prazo máximo de <b>100 anos</b> a contar da data de produção, salvo consentimento expresso do titular ou hipóteses legais específicas (como pesquisa histórica ou proteção do próprio titular).</p>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Não confundir os prazos: sigilo por segurança do Estado/sociedade tem no máximo <b>25 anos</b> (ultrassecreto); já a proteção de <b>informações pessoais</b> tem prazo de restrição de até <b>100 anos</b> — são regimes de proteção diferentes, com fundamentos e prazos distintos, frequentemente confundidos em provas.</p>
+          </div>
+
+          <h3>4.6 Capítulo V — Das Responsabilidades (arts. 32 a 34)</h3>
+          <table>
+            <thead><tr><th>Sujeito</th><th>Condutas ilícitas / Sanções</th></tr></thead>
+            <tbody>
+              <tr><td>Agente público</td><td>Recusar-se a fornecer informação, retardar deliberadamente o fornecimento, agir com dolo/má-fé, divulgar informação sigilosa/pessoal indevidamente, destruir documentos — configura infração disciplinar (podendo ser enquadrada como improbidade administrativa em casos graves)</td></tr>
+              <tr><td>Pessoa física ou entidade privada (que recebeu recursos públicos)</td><td>Sujeita a: advertência; multa; rescisão do vínculo com o poder público; suspensão temporária de participar em licitação e impedimento de contratar com a administração pública por prazo não superior a 2 anos; declaração de inidoneidade</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.7 Decreto nº 7.724/2012</h3>
+          <p>Regulamenta a LAI especificamente no âmbito do <b>Poder Executivo federal</b> — não se aplica automaticamente aos demais Poderes (Legislativo, Judiciário) nem a estados e municípios, que possuem regulamentação própria. Detalha os procedimentos para garantia do acesso à informação e para a classificação de informações sob restrição de acesso, observados grau e prazo de sigilo.</p>
+
+          <h3>4.8 Decreto nº 7.845/2012</h3>
+          <p>Regulamenta os procedimentos para <b>credenciamento de segurança</b> e tratamento de informação classificada em qualquer grau de sigilo, e dispõe sobre o <b>Núcleo de Segurança e Credenciamento (NSC)</b>, órgão vinculado ao Gabinete de Segurança Institucional da Presidência da República, responsável por credenciar pessoas e órgãos para o trato de informações sigilosas.</p>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma cobrar a LAI por meio de cenários institucionais concretos ("um servidor recebe um pedido de acesso e..."), exigindo que o candidato aplique corretamente prazos, competências e hipóteses de sigilo ao caso apresentado — a literalidade da lei é essencial, mas sempre em contexto aplicado, não em pergunta puramente decorativa.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV apresenta cenários institucionais (pedidos de acesso, negativas, prazos, classificação de documentos) e pede a aplicação correta do texto legal — a leitura literal da lei é indispensável, mas sempre contextualizada em situações práticas de gestão pública.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Assertivas certo/errado sobre prazos, competências e procedimentos.</li>
+            <li>Questões de múltipla escolha com cenários de negativa de acesso, pedindo o próximo passo correto (recurso, prazo, autoridade competente).</li>
+            <li>Questões sobre classificação de documentos e prazos de sigilo por grau.</li>
+            <li>Dificuldade alta — muitos números e prazos específicos a memorizar com precisão.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Prazos de resposta a pedidos de acesso (20+10 dias)</td><td>Muito alta</td></tr>
+              <tr><td>Prazos de sigilo por grau (25/15/5 anos)</td><td>Muito alta</td></tr>
+              <tr><td>Transparência ativa x passiva</td><td>Alta</td></tr>
+              <tr><td>Rito recursal (prazo de 5 dias, autoridades envolvidas)</td><td>Alta</td></tr>
+              <tr><td>Responsabilidades de agentes públicos e privados</td><td>Média-alta</td></tr>
+              <tr><td>Prazo de proteção de informações pessoais (100 anos)</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Trocar o prazo de 20 dias por outro número (15, 30) ou inverter com o prazo de prorrogação (10 dias).</li>
+            <li>Confundir os prazos de sigilo entre os três graus (ultrassecreta/secreta/reservada).</li>
+            <li>Confundir o prazo de sigilo de segurança do Estado (máx. 25 anos) com o de proteção de dados pessoais (100 anos).</li>
+            <li>Exigir motivação do pedido de acesso, quando a lei expressamente dispensa essa exigência.</li>
+            <li>Confundir competências entre CGU (instância recursal) e CMRI (última instância, reavaliação de classificação).</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV apresentar um cenário de negativa de acesso a uma informação e pedir a sequência correta de providências: identificação do fundamento legal do sigilo, prazo para recurso, autoridade competente para julgá-lo, e eventual instância final aplicável — testando o fluxo processual completo da lei, não apenas fatos isolados.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Toda vez que aparecer um número (dias, anos), releia com atenção — é o detalhe mais explorado pela banca.</li>
+            <li>Desconfie de alternativas que exigem "justificativa do interesse" do requerente — a LAI dispensa essa exigência.</li>
+            <li>Verifique se a questão trata de sigilo por segurança (25/15/5 anos) ou de dados pessoais (100 anos) antes de aplicar o prazo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Mnemônico dos prazos de sigilo: 25-15-5</div><p><b>U</b>ltrassecreta = <b>25</b> anos · <b>S</b>ecreta = <b>15</b> anos · <b>R</b>eservada = <b>5</b> anos — ordem decrescente, do mais grave ao menos grave.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Mnemônico do prazo de resposta: 20+10</div><p>20 dias é o prazo padrão; +10 dias é a prorrogação, sempre mediante justificativa expressa — nunca automática.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Truque da motivação</div><p>"Sem necessidade de motivar" é praticamente uma marca registrada da LAI — qualquer alternativa que exija justificativa do pedido de acesso está incorreta.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra dos 100 anos</div><p>Dados pessoais = sigilo de até 100 anos (regime diferente do sigilo por segurança do Estado, que vai no máximo a 25 anos).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Decoreba dos decretos</div><p>7.724 = regulamenta a LAI no Executivo federal (procedimentos gerais). 7.845 = credenciamento de segurança + NSC (Núcleo de Segurança e Credenciamento).</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Princípio geral: publicidade é a regra, sigilo é a exceção.</li>
+            <li>Abrangência: todos os Poderes e esferas; entidades privadas sem fins lucrativos que recebem recursos públicos (quanto a esses recursos).</li>
+            <li>Transparência ativa (espontânea) x passiva (mediante pedido, sem necessidade de motivação).</li>
+            <li>Prazo de resposta: 20 dias, prorrogável por mais 10 dias com justificativa.</li>
+            <li>Recurso à autoridade superior: decisão em até 5 dias; instâncias finais no Executivo federal: CGU, depois CMRI.</li>
+            <li>Prazos de sigilo: ultrassecreta 25 anos, secreta 15 anos, reservada 5 anos.</li>
+            <li>Informações pessoais: proteção por até 100 anos, regime distinto do sigilo por segurança do Estado.</li>
+            <li>Responsabilidades: agente público (infração disciplinar/improbidade); pessoa física/entidade privada (advertência a declaração de inidoneidade).</li>
+            <li>Decreto 7.724/2012: regulamenta a LAI no Executivo federal. Decreto 7.845/2012: credenciamento de segurança e NSC.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADROS DE PRAZOS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadros de prazos (referência rápida)</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Situação</th></tr></thead>
+            <tbody>
+              <tr><td>Imediato</td><td>Acesso à informação, sempre que possível</td></tr>
+              <tr><td>20 dias</td><td>Prazo padrão de resposta a pedido de acesso</td></tr>
+              <tr><td>+10 dias</td><td>Prorrogação do prazo de resposta, com justificativa</td></tr>
+              <tr><td>5 dias</td><td>Prazo para decisão de recurso pela autoridade superior</td></tr>
+              <tr><td>25 anos</td><td>Prazo máximo de sigilo — informação ultrassecreta (prorrogável uma vez)</td></tr>
+              <tr><td>15 anos</td><td>Prazo máximo de sigilo — informação secreta</td></tr>
+              <tr><td>5 anos</td><td>Prazo máximo de sigilo — informação reservada</td></tr>
+              <tr><td>100 anos</td><td>Prazo máximo de restrição de acesso a informações pessoais</td></tr>
+              <tr><td>2 anos</td><td>Prazo máximo de suspensão de participar de licitação, para entidade privada infratora</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Estrutura dos capítulos I a V</h3>
+          <table>
+            <thead><tr><th>Capítulo</th><th>Título</th><th>Conteúdo central</th></tr></thead>
+            <tbody>
+              <tr><td>I</td><td>Disposições Gerais</td><td>Abrangência, princípios, conceito de informação</td></tr>
+              <tr><td>II</td><td>Do Acesso a Informações e da sua Divulgação</td><td>Transparência ativa, sítios eletrônicos, SIC</td></tr>
+              <tr><td>III</td><td>Do Procedimento de Acesso à Informação</td><td>Pedido de acesso; recursos</td></tr>
+              <tr><td>IV</td><td>Das Restrições de Acesso à Informação</td><td>Classificação de sigilo; informações pessoais</td></tr>
+              <tr><td>V</td><td>Das Responsabilidades</td><td>Sanções a agentes públicos e a particulares</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Por sua tradição em administração pública, a FGV costuma explorar a LAI em conjunto com temas de governança e transparência institucional — relevante ao perfil da DATAPREV como empresa pública que lida com dados sensíveis de milhões de segurados.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>A LAI foi sancionada em 18 de novembro de 2011, mas entrou em vigor apenas 180 dias depois, em maio de 2012, prazo estabelecido para que os órgãos públicos se adaptassem à nova exigência de transparência.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>A LAI brasileira integra um movimento internacional de leis de acesso à informação (Freedom of Information Acts), inspirado em legislações pioneiras como a sueca (1766) e a norte-americana (FOIA, 1966) — o Brasil foi um dos últimos grandes países da América Latina a adotar legislação equivalente.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Lei nº 13.709/2018 (LGPD) — Tópico 4 desta disciplina</td><td>Ambas tratam de acesso/proteção de informação, mas em direções opostas: LAI amplia acesso público; LGPD protege dados pessoais</td></tr>
+              <tr><td>Lei nº 12.965/2014 (Marco Civil da Internet) — Tópico 3</td><td>Complementa a LAI no que se refere a direitos e deveres no ambiente digital</td></tr>
+              <tr><td>Inteligência Artificial: fundamentos e aplicações (Atualidades)</td><td>Governança de IA no setor público exige equilíbrio entre transparência (LAI) e privacidade (LGPD)</td></tr>
+              <tr><td>Legislação Previdenciária (Módulo II)</td><td>Aplicação prática da LAI e da LGPD na gestão de dados de segurados pela DATAPREV</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar os quadros de prazos (13).</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, anotando o artigo correspondente a cada erro.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para a Lei de Delitos Informáticos (Tópico 2).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Lei nº 12.527, de 18 de novembro de 2011 (Lei de Acesso à Informação) — texto integral, Presidência da República.</li>
+            <li>Decreto nº 7.724, de 16 de maio de 2012 — regulamenta a LAI no âmbito do Poder Executivo federal.</li>
+            <li>Decreto nº 7.845, de 14 de novembro de 2012 — credenciamento de segurança e Núcleo de Segurança e Credenciamento (NSC).</li>
+            <li>Constituição da República Federativa do Brasil de 1988 — art. 5º, XXXIII; art. 37, §3º, II; art. 216, §2º.</li>
+            <li>Controladoria-Geral da União (CGU) — Guia de Implementação da Lei de Acesso à Informação.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Legislação: Segurança da Informação e Proteção de Dados · Tópico 01/04</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_leg_t01";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual dispositivo constitucional a LAI regulamenta principalmente?", a:"O art. 5º, XXXIII, da Constituição Federal (direito de receber informações de órgãos públicos), além dos arts. 37, §3º, II, e 216, §2º."},
+    {q:"Qual é o princípio geral que norteia a LAI?", a:"A publicidade é a regra, e o sigilo é a exceção."},
+    {q:"A quem se aplica a LAI?", a:"À administração direta e indireta de todos os Poderes e esferas, e a entidades privadas sem fins lucrativos que recebem recursos públicos, quanto a esses recursos."},
+    {q:"O que é transparência ativa?", a:"Divulgação espontânea de informações de interesse coletivo, independentemente de solicitação."},
+    {q:"O que é transparência passiva?", a:"Resposta a pedidos específicos de acesso à informação formulados por qualquer pessoa."},
+    {q:"É necessário motivar um pedido de acesso à informação segundo a LAI?", a:"Não — a lei dispensa expressamente a necessidade de motivação do pedido."},
+    {q:"Qual é o prazo padrão de resposta a um pedido de acesso?", a:"Até 20 dias, prorrogável por mais 10 dias mediante justificativa expressa."},
+    {q:"Qual o prazo para a autoridade superior decidir um recurso contra negativa de acesso?", a:"Até 5 dias."},
+    {q:"Quais são as instâncias recursais finais no âmbito do Executivo federal?", a:"A CGU (Controladoria-Geral da União) e, por fim, a CMRI (Comissão Mista de Reavaliação de Informações)."},
+    {q:"Qual é o prazo máximo de sigilo para informação ultrassecreta?", a:"25 anos, prorrogável uma única vez por igual período."},
+    {q:"Qual é o prazo máximo de sigilo para informação secreta?", a:"15 anos."},
+    {q:"Qual é o prazo máximo de sigilo para informação reservada?", a:"5 anos."},
+    {q:"Qual é o prazo máximo de restrição de acesso a informações pessoais?", a:"100 anos, contados da data de produção da informação."},
+    {q:"Que sanções podem ser aplicadas a uma entidade privada que descumpre a LAI, tendo recebido recursos públicos?", a:"Advertência, multa, rescisão do vínculo, suspensão de participar de licitação por até 2 anos, e declaração de inidoneidade."},
+    {q:"O que o Decreto nº 7.724/2012 regulamenta?", a:"A LAI no âmbito do Poder Executivo federal, detalhando procedimentos de acesso e classificação de informações sigilosas."},
+    {q:"O que o Decreto nº 7.845/2012 regulamenta?", a:"Procedimentos de credenciamento de segurança e tratamento de informação classificada, dispondo sobre o Núcleo de Segurança e Credenciamento (NSC)."},
+    {q:"O acesso à informação é sempre gratuito segundo a LAI?", a:"Sim, exceto pelo custo dos serviços de reprodução de documentos, que pode ser cobrado."},
+    {q:"O que é o SIC?", a:"Serviço de Informação ao Cidadão — unidade física em todos os órgãos e entidades para atender e orientar o público sobre acesso a informações."},
+    {q:"A partir de quando se contam os prazos de sigilo previstos na LAI?", a:"A partir da data de produção do documento."},
+    {q:"Em que ano a LAI foi sancionada, e quando entrou em vigor?", a:"Sancionada em 18 de novembro de 2011; entrou em vigor 180 dias depois, em maio de 2012."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Princípio geral", texto:"—", enun:"O princípio geral que norteia a Lei de Acesso à Informação é:", alts:["O sigilo é a regra, e a publicidade é a exceção.","A publicidade é a regra, e o sigilo é a exceção.","Sigilo e publicidade têm o mesmo peso, sem prevalência.","Apenas informações econômicas são públicas por padrão.","A publicidade só se aplica a informações orçamentárias."], correta:1, coment:"O Capítulo I da LAI estabelece que a observância da publicidade como preceito geral e do sigilo como exceção é diretriz fundamental da lei."},
+    {tema:"Abrangência", texto:"—", enun:"A LAI se aplica a entidades privadas sem fins lucrativos:", alts:["Em nenhuma hipótese.","Integralmente, mesmo sem receber recursos públicos.","Quanto à parcela de recursos públicos recebidos, quando destinados a ações de interesse público.","Apenas se sediadas no Distrito Federal.","Apenas a partir de 2020."], correta:2, coment:"A LAI se aplica a entidades privadas sem fins lucrativos que recebam recursos públicos para realização de ações de interesse público, limitando-se à parcela dos recursos públicos recebidos."},
+    {tema:"Motivação do pedido", texto:"—", enun:"Segundo a LAI, um pedido de acesso à informação:", alts:["Deve ser sempre motivado, sob pena de indeferimento.","Dispensa motivação, podendo ser feito por qualquer pessoa, física ou jurídica.","Só pode ser feito por pessoas jurídicas.","Exige comprovação de interesse jurídico direto.","Só é aceito se protocolado presencialmente."], correta:1, coment:"A LAI dispensa expressamente a necessidade de motivação do pedido de acesso, que pode ser feito por qualquer interessado, pessoa física ou jurídica."},
+    {tema:"Prazo de resposta", texto:"—", enun:"O prazo padrão para resposta a um pedido de acesso à informação, quando o acesso imediato não for possível, é de:", alts:["10 dias, prorrogáveis por mais 20.","15 dias, sem possibilidade de prorrogação.","20 dias, prorrogáveis por mais 10 dias mediante justificativa.","30 dias, prorrogáveis por mais 30.","5 dias, improrrogáveis."], correta:2, coment:"O art. 11 da LAI estabelece prazo de até 20 dias para resposta, prorrogável por mais 10 dias mediante justificativa expressa."},
+    {tema:"Recurso", texto:"—", enun:"Em caso de negativa de acesso à informação, cabe recurso à autoridade hierarquicamente superior, que deve decidir em:", alts:["3 dias","5 dias","10 dias","15 dias","30 dias"], correta:1, coment:"A autoridade hierarquicamente superior àquela que negou o acesso deve se manifestar sobre o recurso em até 5 dias."},
+    {tema:"Prazos de sigilo", texto:"—", enun:"Assinale a alternativa que apresenta corretamente os prazos máximos de sigilo por grau de classificação:", alts:["Ultrassecreta: 15 anos; Secreta: 25 anos; Reservada: 5 anos.","Ultrassecreta: 25 anos; Secreta: 15 anos; Reservada: 5 anos.","Ultrassecreta: 5 anos; Secreta: 15 anos; Reservada: 25 anos.","Ultrassecreta: 25 anos; Secreta: 5 anos; Reservada: 15 anos.","Ultrassecreta: 30 anos; Secreta: 20 anos; Reservada: 10 anos."], correta:1, coment:"A ordem correta, do grau mais restritivo ao menos restritivo, é: Ultrassecreta 25 anos, Secreta 15 anos, Reservada 5 anos."},
+    {tema:"Informações pessoais", texto:"—", enun:"O prazo máximo de restrição de acesso a informações pessoais, segundo a LAI, é de:", alts:["25 anos","15 anos","5 anos","100 anos","Indefinido, sem prazo máximo"], correta:3, coment:"A proteção de informações pessoais tem prazo máximo de restrição de 100 anos, contados da data de produção — regime distinto do sigilo por segurança do Estado."},
+    {tema:"Gratuidade", texto:"—", enun:"Segundo a LAI, o acesso à informação é, em regra:", alts:["Sempre pago, com taxa fixa nacional.","Gratuito, ressalvado o custo de serviços de reprodução de documentos.","Gratuito apenas para pessoas físicas.","Pago apenas para pedidos formulados por entidades privadas.","Gratuito apenas em órgãos do Poder Executivo."], correta:1, coment:"O acesso à informação é gratuito, podendo ser cobrado apenas o custo dos serviços de reprodução de documentos (como cópias)."},
+    {tema:"Decreto 7.724/2012", texto:"—", enun:"O Decreto nº 7.724/2012 regulamenta a LAI:", alts:["Em todos os Poderes e esferas, sem distinção.","Exclusivamente no âmbito do Poder Executivo federal.","Apenas no Poder Judiciário.","Apenas em municípios com mais de 100 mil habitantes.","Apenas para entidades privadas sem fins lucrativos."], correta:1, coment:"O Decreto nº 7.724/2012 regulamenta a LAI especificamente no âmbito do Poder Executivo federal — não se aplica automaticamente aos demais Poderes ou entes federativos."},
+    {tema:"Decreto 7.845/2012", texto:"—", enun:"O Decreto nº 7.845/2012 dispõe sobre:", alts:["A criação da Controladoria-Geral da União.","Procedimentos de credenciamento de segurança e tratamento de informação classificada, incluindo o Núcleo de Segurança e Credenciamento.","O prazo de resposta padrão de pedidos de acesso.","A criação do Serviço de Informação ao Cidadão.","A LGPD e proteção de dados pessoais."], correta:1, coment:"O Decreto nº 7.845/2012 trata especificamente do credenciamento de segurança e do tratamento de informações classificadas, dispondo sobre o Núcleo de Segurança e Credenciamento (NSC)."},
+    {tema:"Responsabilidades", texto:"—", enun:"Assinale a sanção que NÃO está prevista na LAI para pessoa física ou entidade privada que descumpra suas obrigações, tendo recebido recursos públicos:", alts:["Advertência","Multa","Rescisão do vínculo com o poder público","Suspensão de participar de licitação por prazo não superior a 2 anos","Pena de reclusão automática, sem processo administrativo prévio"], correta:4, coment:"A LAI prevê sanções administrativas (advertência, multa, rescisão, suspensão de licitar, declaração de inidoneidade) — não prevê pena de reclusão automática sem processo, o que seria incompatível com o devido processo legal."},
+    {tema:"SIC", texto:"—", enun:"O Serviço de Informação ao Cidadão (SIC), previsto na LAI, tem como função:", alts:["Fiscalizar o cumprimento de metas orçamentárias.","Atender e orientar o público quanto ao acesso a informações, protocolar pedidos e informar sobre a tramitação de documentos.","Substituir o papel da Controladoria-Geral da União.","Classificar informações em grau de sigilo, com exclusividade.","Julgar recursos administrativos de última instância."], correta:1, coment:"O SIC é a unidade física, prevista em todos os órgãos e entidades, destinada a atender e orientar o público sobre acesso a informações e sobre a tramitação de documentos."},
+    {tema:"Transparência ativa", texto:"—", enun:"A obrigação de divulgar, em local de fácil acesso, informações de interesse coletivo, independentemente de requerimento, caracteriza:", alts:["Transparência passiva","Transparência ativa","Sigilo ultrassecreto","Restrição de acesso","Classificação reservada"], correta:1, coment:"Transparência ativa é a divulgação espontânea de informações, sem necessidade de pedido específico — diferente da transparência passiva, que depende de solicitação."},
+    {tema:"Instância recursal final", texto:"—", enun:"No âmbito do Poder Executivo federal, após esgotadas as instâncias recursais internas do órgão, o recurso pode ser dirigido, em regra, a:", alts:["Ao Supremo Tribunal Federal, diretamente.","À Controladoria-Geral da União (CGU) e, em última instância, à Comissão Mista de Reavaliação de Informações (CMRI).","Ao Ministério Público Federal, exclusivamente.","À Câmara dos Deputados.","Ao Tribunal de Contas da União, exclusivamente."], correta:1, coment:"No Executivo federal, após as instâncias internas, cabe recurso à CGU e, em última instância, à CMRI, especialmente em casos envolvendo classificação de sigilo."},
+    {tema:"Aplicação a cenário", texto:"—", enun:"Um cidadão solicita, sem apresentar justificativa, o acesso a um documento administrativo de um órgão federal. O órgão pode exigir a motivação do pedido antes de processá-lo?", alts:["Sim, sempre.","Não — a LAI dispensa expressamente a exigência de motivação.","Sim, mas apenas se o documento for sigiloso.","Sim, apenas para pessoas jurídicas.","Depende exclusivamente do regimento interno do órgão."], correta:1, coment:"A LAI estabelece que o requerente não é obrigado a informar os motivos determinantes da solicitação de informações de interesse público."},
+    {tema:"Classificação de sigilo — autoridade", texto:"—", enun:"No âmbito federal, a classificação de informação no grau ultrassecreto pode ser realizada, entre outras autoridades, por:", alts:["Qualquer servidor público, independentemente do cargo.","O Presidente da República, Ministros de Estado e autoridades com prerrogativas equivalentes.","Apenas o Congresso Nacional, mediante lei específica.","Qualquer cidadão que solicite a classificação.","O Supremo Tribunal Federal, exclusivamente."], correta:1, coment:"A classificação no grau ultrassecreto é reservada a autoridades de mais alto escalão, como o Presidente da República, Vice-Presidente, Ministros de Estado e autoridades com as mesmas prerrogativas."},
+    {tema:"Reavaliação de classificação", texto:"—", enun:"Os prazos de sigilo previstos na LAI (25, 15 e 5 anos) significam que a informação:", alts:["Nunca poderá ser divulgada, mesmo após o prazo.","Deverá se tornar automaticamente pública ao término do prazo máximo, salvo reclassificação nos termos da lei.","Poderá ser sigilosa indefinidamente, a critério do órgão.","Se torna pública apenas mediante decisão judicial.","É sempre pública desde sua produção, independentemente de classificação."], correta:1, coment:"Ao término do prazo de classificação, a informação se torna, em regra, de acesso público, exceto se houver nova classificação dentro dos limites legais (como a prorrogação única do grau ultrassecreto)."},
+    {tema:"Conceito de informação", texto:"—", enun:"Segundo a LAI, o conceito de 'informação' abrange:", alts:["Apenas documentos em papel, fisicamente arquivados.","Dados, processados ou não, que podem ser usados para produção e transmissão de conhecimento, em qualquer suporte ou formato.","Exclusivamente dados orçamentários e financeiros.","Apenas informações classificadas como sigilosas.","Apenas comunicações oficiais entre órgãos públicos."], correta:1, coment:"A LAI adota conceito amplo de informação, abrangendo dados processados ou não, em qualquer meio, suporte ou formato, aptos à produção e transmissão de conhecimento."},
+    {tema:"Cenário de sanção", texto:"—", enun:"Um agente público retarda deliberadamente e sem justificativa legal o fornecimento de uma informação solicitada. Essa conduta pode configurar:", alts:["Mera irregularidade sem qualquer consequência.","Infração disciplinar, podendo configurar improbidade administrativa em casos graves.","Crime hediondo, automaticamente.","Nulidade do próprio pedido de acesso.","Extinção automática do cargo, sem processo administrativo."], correta:1, coment:"Condutas de agentes públicos que retardam deliberadamente ou dificultam o acesso à informação configuram infração disciplinar, podendo, em casos graves, ser enquadradas como ato de improbidade administrativa."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Considerando os prazos estudados, se um pedido de acesso foi protocolado e o órgão, após analisar, decide negar o acesso por se tratar de informação classificada como secreta, essa informação poderá permanecer sob sigilo por, no máximo:", alts:["5 anos, contados da data do pedido de acesso.","15 anos, contados da data de produção do documento.","25 anos, contados da data do indeferimento do pedido.","100 anos, por se tratar de informação sigilosa.","Prazo indeterminado, a critério da autoridade que classificou."], correta:1, coment:"O grau secreto tem prazo máximo de sigilo de 15 anos, contados da data de produção do documento (não da data do pedido de acesso ou do indeferimento) — aplicação combinada da regra de contagem de prazo com o grau de classificação."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"A LAI regulamenta principalmente qual inciso constitucional?", alts:["Art. 5º, XXXIII","Art. 5º, X","Art. 37, caput","Art. 150, I","Art. 100, §1º"], correta:0},
+    {d:"Fácil", texto:"—", enun:"O princípio geral da LAI é:", alts:["Sigilo é regra","Publicidade é regra","Ambos têm peso igual","Só se aplica a dados financeiros","Não há princípio geral definido"], correta:1},
+    {d:"Fácil", texto:"—", enun:"É necessário motivar um pedido de acesso à informação?", alts:["Sim, sempre","Não","Apenas para pessoa jurídica","Apenas para documentos sigilosos","Apenas em órgãos municipais"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Prazo padrão de resposta a pedido de acesso:", alts:["10 dias","15 dias","20 dias","25 dias","30 dias"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Prazo de prorrogação do prazo de resposta:", alts:["5 dias","10 dias","15 dias","20 dias","30 dias"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Prazo para decisão de recurso pela autoridade superior:", alts:["3 dias","5 dias","10 dias","15 dias","20 dias"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Prazo máximo de sigilo — ultrassecreta:", alts:["5 anos","15 anos","25 anos","50 anos","100 anos"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Prazo máximo de sigilo — secreta:", alts:["5 anos","15 anos","25 anos","50 anos","100 anos"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Prazo máximo de sigilo — reservada:", alts:["5 anos","15 anos","25 anos","50 anos","100 anos"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Prazo máximo de restrição de informações pessoais:", alts:["5 anos","15 anos","25 anos","50 anos","100 anos"], correta:4},
+    {d:"Média", texto:"—", enun:"O acesso à informação é gratuito, exceto quanto:", alts:["Ao custo de reprodução de documentos","Aos pedidos de pessoa jurídica","Aos pedidos feitos por e-mail","Aos pedidos urgentes","Não há exceção; é sempre gratuito, sem exceção"], correta:0},
+    {d:"Média", texto:"—", enun:"O Decreto 7.724/2012 se aplica a:", alts:["Todos os Poderes igualmente","Apenas ao Poder Executivo federal","Apenas ao Poder Judiciário","Apenas a municípios","Apenas a entidades privadas"], correta:1},
+    {d:"Média", texto:"—", enun:"O Decreto 7.845/2012 trata de:", alts:["Prazos de resposta a pedidos","Credenciamento de segurança e NSC","Estrutura do SIC","Multas por descumprimento da LGPD","Criação da CGU"], correta:1},
+    {d:"Média", texto:"—", enun:"O SIC deve existir:", alts:["Apenas em órgãos federais","Em todos os órgãos e entidades abrangidos pela lei","Apenas em capitais estaduais","Apenas em órgãos com mais de 1000 servidores","Apenas no Poder Judiciário"], correta:1},
+    {d:"Média", texto:"—", enun:"A divulgação espontânea de informações de interesse coletivo, sem necessidade de pedido, é chamada de:", alts:["Transparência passiva","Transparência ativa","Sigilo reservado","Classificação ultrassecreta","Restrição de acesso"], correta:1},
+    {d:"Média", texto:"—", enun:"Após esgotadas as instâncias internas no Executivo federal, o recurso pode ser dirigido a:", alts:["CGU e, por fim, CMRI","STF diretamente","Congresso Nacional","Ministério Público, exclusivamente","TCU, exclusivamente"], correta:0},
+    {d:"Média", texto:"—", enun:"Entidades privadas sem fins lucrativos se submetem à LAI:", alts:["Nunca","Sempre, integralmente","Quanto à parcela de recursos públicos recebidos","Apenas se tiverem mais de 100 funcionários","Apenas se sediadas na União"], correta:2},
+    {d:"Média", texto:"—", enun:"Retardar deliberadamente o fornecimento de informação por agente público pode configurar:", alts:["Mera opinião pessoal","Infração disciplinar, podendo configurar improbidade","Elogio funcional","Direito legítimo do agente","Nenhuma consequência prevista"], correta:1},
+    {d:"Média", texto:"—", enun:"A suspensão de participar de licitação, para entidade privada infratora, tem prazo máximo de:", alts:["6 meses","1 ano","2 anos","5 anos","Indefinido"], correta:2},
+    {d:"Média", texto:"—", enun:"Os prazos de sigilo contam-se a partir de:", alts:["Data do pedido de acesso","Data de produção do documento","Data de classificação, se posterior à produção","Data da negativa de acesso","Data do recurso"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um documento classificado como ultrassecreto pode ter seu prazo de sigilo prorrogado:", alts:["Indefinidamente, a critério da autoridade","Uma única vez, por igual período","Duas vezes, por metade do período cada","Apenas mediante decisão judicial","Nunca pode ser prorrogado"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que diferencia corretamente sigilo por segurança do Estado e proteção de dados pessoais na LAI:", alts:["São exatamente o mesmo regime jurídico.","Sigilo por segurança do Estado vai até 25 anos; proteção de dados pessoais vai até 100 anos — regimes distintos.","Proteção de dados pessoais nunca tem prazo definido.","Sigilo por segurança do Estado é sempre de 100 anos.","Não há qualquer prazo para dados pessoais na LAI."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um cidadão protocola pedido de acesso em 1º de março. O órgão, sem justificar, ultrapassa o prazo de 20 dias sem resposta. Essa conduta é compatível com a LAI?", alts:["Sim, o prazo é apenas uma sugestão, sem consequência.","Não — o silêncio administrativo sem justificativa viola o dever legal de resposta no prazo estabelecido.","Sim, desde que o pedido seja retomado no ano seguinte.","Sim, pois o prazo só existe para pedidos de pessoa jurídica.","Não há prazo legal aplicável a esse cenário."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a competência que, no âmbito federal, é atribuída à classificação de informação no grau reservado:", alts:["Exclusivamente ao Presidente da República.","Autoridades de alto escalão e demais agentes públicos, conforme regulamento.","Apenas ao Congresso Nacional.","Apenas ao Supremo Tribunal Federal.","Qualquer cidadão pode classificar informação como reservada."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Sobre a proteção de informações pessoais na LAI, é correto afirmar que:", alts:["O acesso é sempre irrestrito, sem qualquer proteção.","O acesso é restrito, independentemente de classificação de sigilo, respeitando prazo de até 100 anos, salvo exceções legais.","Só há proteção se a informação for também classificada como ultrassecreta.","Informações pessoais nunca podem ser acessadas, nem pelo próprio titular.","A proteção se aplica apenas a informações financeiras pessoais."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa correta sobre a relação entre os Decretos 7.724/2012 e 7.845/2012:", alts:["São o mesmo decreto, com nomes diferentes.","Tratam do mesmo tema, sem qualquer distinção de escopo.","O primeiro regulamenta a LAI no Executivo federal de forma geral; o segundo trata especificamente de credenciamento de segurança e do NSC.","O 7.845/2012 revogou integralmente o 7.724/2012.","Nenhum dos dois tem relação com a LAI."], correta:2},
+    {d:"Difícil", texto:"—", enun:"Um órgão público federal nega acesso a uma informação alegando sigilo ultrassecreto, sem apresentar fundamentação específica da classificação. Essa conduta é compatível com a LAI?", alts:["Sim, a fundamentação é sempre dispensável.","Não — a negativa de acesso deve ser fundamentada, indicando a razão legal do sigilo.","Sim, desde que a informação seja realmente sigilosa, independentemente de fundamentação.","Não há exigência de fundamentação para informações ultrassecretas, apenas para as demais.","A fundamentação só é exigida em recursos, não na negativa inicial."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente o conceito amplo de 'informação' adotado pela LAI:", alts:["Apenas documentos físicos arquivados em papel.","Dados, processados ou não, em qualquer suporte ou formato, aptos à produção e transmissão de conhecimento.","Apenas dados classificados como sigilosos.","Apenas comunicações formais entre órgãos públicos.","Exclusivamente dados financeiros e orçamentários."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando toda a estrutura estudada (capítulos I a V), assinale a sequência lógica correta de um processo de negativa de acesso seguido de recurso, do início ao fim:", alts:["Pedido → negativa fundamentada → recurso à autoridade superior (até 5 dias) → eventual recurso à CGU → eventual recurso à CMRI.","Pedido → recurso direto ao STF → decisão final.","Pedido → multa automática ao requerente → arquivamento.","Negativa → pedido → recurso → nova negativa automática, sem análise.","Pedido → resposta em 100 anos → arquivamento definitivo."], correta:0},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Conhecer o fundamento constitucional da LAI",
+    "Compreender o princípio geral: publicidade é regra, sigilo é exceção",
+    "Dominar a estrutura dos Capítulos I a V da Lei nº 12.527/2011",
+    "Diferenciar transparência ativa de transparência passiva",
+    "Memorizar o prazo de resposta a pedidos (20+10 dias)",
+    "Memorizar o rito recursal (5 dias; CGU; CMRI)",
+    "Memorizar os prazos de sigilo por grau (25/15/5 anos)",
+    "Memorizar o prazo de proteção de informações pessoais (100 anos)",
+    "Conhecer as sanções para agentes públicos e para pessoas físicas/entidades privadas",
+    "Conhecer o objeto dos Decretos nº 7.724/2012 e nº 7.845/2012",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Trocar o prazo de 20 dias por outro número (15 ou 30 dias).",
+    "Inverter o prazo padrão (20 dias) com o prazo de prorrogação (10 dias).",
+    "Confundir os prazos de sigilo entre ultrassecreta, secreta e reservada.",
+    "Confundir o prazo de sigilo por segurança do Estado (máx. 25 anos) com o de dados pessoais (100 anos).",
+    "Exigir motivação do pedido de acesso, quando a lei dispensa essa exigência.",
+    "Confundir as competências da CGU com as da CMRI no rito recursal.",
+    "Achar que a LAI se aplica igualmente a todos os Poderes sem regulamentação própria de cada um.",
+    "Confundir o Decreto 7.724/2012 (regulamentação geral no Executivo) com o 7.845/2012 (credenciamento/NSC).",
+    "Não perceber que entidades privadas só se submetem à LAI quanto à parcela de recursos públicos recebidos.",
+    "Achar que o acesso à informação é sempre totalmente gratuito, sem qualquer custo possível.",
+    "Confundir transparência ativa com transparência passiva.",
+    "Não reconhecer o SIC como unidade obrigatória em todos os órgãos e entidades.",
+    "Achar que a classificação de sigilo é permanente e nunca reavaliada.",
+    "Ignorar que os prazos de sigilo contam-se da data de produção, não da data do pedido ou da negativa.",
+    "Confundir as sanções previstas para agentes públicos com as previstas para pessoas físicas/entidades privadas.",
+    "Achar que qualquer servidor pode classificar informação em qualquer grau de sigilo.",
+    "Não perceber que a prorrogação do grau ultrassecreto só pode ocorrer uma única vez.",
+    "Ignorar o fundamento constitucional da lei ao responder questões sobre seu propósito.",
+    "Confundir o conceito amplo de 'informação' da LAI com um conceito restrito a documentos físicos.",
+    "Negligenciar a leitura literal do texto legal, respondendo por 'lógica geral' sem checar o artigo específico.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Transparência ativa","Divulgação espontânea de informações de interesse coletivo, independentemente de solicitação."],
+    ["Transparência passiva","Fornecimento de informação mediante pedido específico de um interessado."],
+    ["SIC","Serviço de Informação ao Cidadão — unidade que atende e orienta o público sobre acesso a informações."],
+    ["CGU","Controladoria-Geral da União — instância recursal em matéria de acesso à informação no Executivo federal."],
+    ["CMRI","Comissão Mista de Reavaliação de Informações — última instância administrativa para reavaliação de classificação de sigilo."],
+    ["NSC","Núcleo de Segurança e Credenciamento — órgão responsável por credenciar pessoas e entidades para tratar informações sigilosas."],
+    ["Informação ultrassecreta","Grau de sigilo mais restritivo, com prazo máximo de 25 anos, prorrogável uma única vez."],
+    ["Informação secreta","Grau de sigilo intermediário, com prazo máximo de 15 anos."],
+    ["Informação reservada","Grau de sigilo mais brando, com prazo máximo de 5 anos."],
+    ["Informação pessoal","Dado relacionado à pessoa identificada ou identificável, com proteção de acesso restrito por até 100 anos."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

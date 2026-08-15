@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domínio dos Mecanismos de Coesão Textual | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Língua Portuguesa</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">04 - Domínio dos mecanismos de coesão textual</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Compreensão e interpretação de textos de gêneros variados.html">01 - Compreensão e interpretação de textos de gêneros variados</option>
+        <option value="02 - Reconhecimento de tipos e gêneros textuais.html">02 - Reconhecimento de tipos e gêneros textuais</option>
+        <option value="03 - Domínio da ortografia oficial.html">03 - Domínio da ortografia oficial</option>
+        <option value="04 - Domínio dos mecanismos de coesão textual.html" selected>04 - Domínio dos mecanismos de coesão textual</option>
+        <option value="05 - Domínio da estrutura morfossintática do período.html">05 - Domínio da estrutura morfossintática do período</option>
+        <option value="06 - Reescrita de frases e parágrafos do texto.html">06 - Reescrita de frases e parágrafos do texto</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Domínio dos Mecanismos de Coesão Textual</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…">
+    </div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadros / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">
+      Módulo I — Língua Portuguesa<br>
+      Tópico 04 de 08<br>
+      Material de estudo offline — DATAPREV 2026
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Domínio dos Mecanismos de Coesão Textual</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Língua Portuguesa</b> &nbsp;›&nbsp; Tópico 04 (inclui 4.1 e 4.2)</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">6h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média-alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 1, 2 e 3 (interpretação, gêneros, ortografia)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — base de questões de reescrita e interpretação avançada</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- ============ 1. OBJETIVOS ============ -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender a diferença entre <b>coesão</b> (mecanismos linguísticos de ligação) e <b>coerência</b> (sentido lógico global do texto).</li>
+            <li>Identificar mecanismos de <b>referenciação</b> (anáfora, catáfora, referenciação por sinônimos e hiperônimos) que garantem a progressão referencial do texto.</li>
+            <li>Reconhecer o emprego de <b>substituição</b> (pró-formas nominais, verbais e sentenciais) e de <b>repetição</b> como estratégias coesivas.</li>
+            <li>Classificar <b>conectores</b> (conjunções, advérbios, locuções) segundo a relação lógico-semântica que estabelecem entre partes do texto.</li>
+            <li>Identificar outros <b>elementos de sequenciação textual</b>, como marcadores de ordem, tempo e progressão argumentativa.</li>
+            <li>Reconhecer o <b>emprego adequado de tempos e modos verbais</b> na construção da coesão temporal e na expressão de certeza, dúvida, ordem ou hipótese.</li>
+            <li>Resolver questões FGV de reescrita e interpretação que dependem do reconhecimento preciso desses mecanismos coesivos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 2. RESUMO EXECUTIVO ============ -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Coesão textual</b> é o conjunto de mecanismos linguísticos explícitos que ligam as partes de um texto entre si, garantindo que ele seja lido como uma unidade, e não como frases soltas. Ela se distingue da <b>coerência</b>, que é o sentido lógico global construído pelo leitor — um texto pode ter poucos elementos coesivos explícitos e ainda ser coerente, mas a coesão facilita e orienta essa construção de sentido.</p>
+          <p>Existem dois grandes mecanismos: a <b>coesão referencial</b>, que recupera ou antecipa elementos do texto por meio de pronomes, sinônimos, hiperônimos ou elipses (referenciação), e por meio de pró-formas que substituem trechos inteiros (substituição); e a <b>coesão sequencial</b>, que articula a progressão lógica das ideias por meio de <b>conectores</b> (conjunções, advérbios, locuções) e outros marcadores de sequenciação (ordem, tempo, adição argumentativa).</p>
+          <p>A <b>repetição</b>, ao contrário do que se pensa intuitivamente, também é um mecanismo coesivo legítimo — quando usada estrategicamente (repetição de um termo-chave para reforçar a ideia central), embora o uso excessivo e não intencional seja considerado um vício de estilo.</p>
+          <p>O <b>emprego de tempos e modos verbais</b> integra a coesão porque a escolha entre pretérito, presente, futuro (tempos) e indicativo, subjuntivo, imperativo (modos) determina como o leitor percebe a temporalidade dos fatos narrados e o grau de certeza, ordem, dúvida ou hipótese comunicado pelo autor — erros de correlação verbal quebram a coesão temporal do texto.</p>
+        </div>
+      </section>
+
+      <!-- ============ 3. MAPA MENTAL ============ -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Mecanismos de<br>Coesão Textual</div>
+            <div class="mm-branches">
+              <div class="mm-node">
+                <h4>① Referenciação</h4>
+                <ul><li>Anáfora</li><li>Catáfora</li><li>Sinônimos/hiperônimos</li><li>Elipse</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>② Substituição</h4>
+                <ul><li>Pró-forma nominal ("isso", "aquilo")</li><li>Pró-forma verbal ("fazer")</li><li>Pró-forma sentencial ("assim")</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>③ Repetição</h4>
+                <ul><li>Estratégica (reforço)</li><li>Viciosa (a evitar)</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>④ Conectores</h4>
+                <ul><li>Adição, oposição</li><li>Causa, consequência</li><li>Condição, concessão</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑤ Sequenciação</h4>
+                <ul><li>Marcadores de ordem</li><li>Marcadores de tempo</li><li>Progressão argumentativa</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑥ Tempos e modos verbais</h4>
+                <ul><li>Indicativo (certeza)</li><li>Subjuntivo (dúvida/hipótese)</li><li>Imperativo (ordem)</li><li>Correlação temporal</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. EXPLICAÇÃO COMPLETA ============ -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Coesão x coerência: a base conceitual</h3>
+          <p><b>Coesão</b> é a "amarração" visível na superfície do texto — os elos linguísticos (pronomes, conectivos, repetições estratégicas) que ligam palavras, orações e parágrafos. <b>Coerência</b> é o sentido global, a lógica interna que o leitor reconstrói, apoiando-se na coesão, mas também em conhecimento de mundo e inferência.</p>
+          <div class="box info">
+            <div class="box-title">📘 Analogia para fixar</div>
+            <p>A coesão é como os parafusos e vigas visíveis de uma ponte; a coerência é a capacidade da ponte de efetivamente conectar as duas margens de forma estável. Uma ponte pode ter poucos parafusos aparentes e ainda ser sólida, mas parafusos bem colocados tornam a travessia mais segura e previsível — assim como bons elos coesivos tornam a leitura mais clara.</p>
+          </div>
+
+          <h3>4.2 Coesão referencial: anáfora, catáfora e retomada lexical</h3>
+          <p>A <b>referenciação</b> é o mecanismo pelo qual um termo do texto retoma (anáfora) ou antecipa (catáfora) outro elemento, criando uma cadeia referencial que o leitor deve rastrear.</p>
+          <table>
+            <thead><tr><th>Mecanismo</th><th>Definição</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Anáfora pronominal</td><td>Pronome retoma um referente já mencionado</td><td>"O relatório foi entregue. <u>Ele</u> continha 40 páginas."</td></tr>
+              <tr><td>Catáfora</td><td>Termo antecipa um referente que só aparece depois</td><td>"<u>Isto</u> é fundamental: o prazo não pode ser descumprido."</td></tr>
+              <tr><td>Anáfora por sinônimo</td><td>Retomada por palavra de sentido equivalente</td><td>"O documento foi arquivado. O <u>papel</u> ficou na gaveta."</td></tr>
+              <tr><td>Anáfora por hiperônimo</td><td>Retomada por termo mais genérico que engloba o anterior</td><td>"Comprou uma impressora nova. O <u>equipamento</u> custou caro."</td></tr>
+              <tr><td>Elipse</td><td>Omissão de um termo recuperável pelo contexto</td><td>"João assinou o contrato; Maria, [assinou] o aditivo."</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Questões de reescrita costumam trocar o referente de um pronome sem alterar visivelmente a frase — o candidato deve verificar se o pronome, após a reescrita, ainda aponta para o mesmo elemento do texto original. Trocar a ordem das orações pode fazer um pronome "perder" seu referente original ou apontar para outro, mudando o sentido.</p>
+          </div>
+
+          <h3>4.3 Substituição: pró-formas nominais, verbais e sentenciais</h3>
+          <p>A <b>substituição</b> ocorre quando um termo (pró-forma) substitui não apenas uma palavra, mas um sintagma ou até uma oração inteira, evitando repetição desnecessária.</p>
+          <table>
+            <thead><tr><th>Tipo de pró-forma</th><th>Função</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Nominal</td><td>Substitui um substantivo/sintagma nominal</td><td>"Precisamos de mais recursos. <u>Isso</u> é urgente."</td></tr>
+              <tr><td>Verbal</td><td>Substitui um verbo/sintagma verbal (verbo "fazer" como pró-verbo)</td><td>"Ele revisou o contrato antes de assinar; eu também <u>fiz</u> isso."</td></tr>
+              <tr><td>Sentencial</td><td>Substitui uma oração ou período inteiro</td><td>"O projeto foi aprovado sem ressalvas. <u>Assim</u>, a equipe pôde iniciar a execução."</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Repetição como mecanismo coesivo</h3>
+          <p>Diferentemente do que muitos candidatos supõem, a <b>repetição</b> de um termo não é sempre um erro — pode ser uma estratégia coesiva deliberada para reforçar a ideia central de um texto (comum em discursos, textos publicitários e jurídicos, que repetem termos técnicos para evitar ambiguidade). O problema surge apenas quando a repetição é <b>involuntária e empobrece o texto</b>, sem função de reforço.</p>
+
+          <div class="box tip">
+            <div class="box-title">✅ Como diferenciar repetição estratégica de repetição viciosa</div>
+            <p>Pergunte: a repetição do termo evita ambiguidade ou reforça a ideia central (estratégica) ou apenas revela pobreza vocabular, quando havia sinônimo ou pronome disponível sem risco de ambiguidade (viciosa)? Textos jurídicos e normativos costumam repetir termos técnicos propositalmente, para evitar que um sinônimo introduza ambiguidade interpretativa.</p>
+          </div>
+
+          <h3>4.5 Conectores e a coesão sequencial</h3>
+          <p>Os <b>conectores</b> (conjunções, advérbios, locuções conjuntivas/adverbiais) articulam logicamente as partes do texto. Já vistos no tópico de interpretação, aqui a ênfase recai sobre <b>como a troca de um conector por outro de sentido diferente altera a coesão e o sentido do texto</b> — foco central das questões de reescrita.</p>
+          <table>
+            <thead><tr><th>Relação lógica</th><th>Conectores típicos</th></tr></thead>
+            <tbody>
+              <tr><td>Adição</td><td>e, também, além disso, ainda, não só... mas também</td></tr>
+              <tr><td>Oposição/contraste</td><td>mas, porém, contudo, entretanto, todavia, no entanto</td></tr>
+              <tr><td>Causa</td><td>porque, já que, uma vez que, posto que, visto que</td></tr>
+              <tr><td>Consequência</td><td>portanto, logo, por conseguinte, de modo que, assim</td></tr>
+              <tr><td>Condição</td><td>se, caso, desde que, contanto que, a menos que</td></tr>
+              <tr><td>Concessão</td><td>embora, ainda que, apesar de, mesmo que, conquanto</td></tr>
+              <tr><td>Finalidade</td><td>para que, a fim de que, com o objetivo de</td></tr>
+              <tr><td>Conformidade</td><td>conforme, segundo, de acordo com</td></tr>
+              <tr><td>Proporção</td><td>à medida que, à proporção que, quanto mais... mais</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha: troca de conector aparentemente sinônima</div>
+            <p>Em reescrita, trocar "porque" (causa) por "portanto" (consequência) inverte completamente a relação lógica entre as orações, mesmo que a frase pareça "gramaticalmente correta". A FGV explora exatamente essa troca sutil, que exige atenção ao sentido, não apenas à sintaxe.</p>
+          </div>
+
+          <h3>4.6 Outros elementos de sequenciação textual</h3>
+          <p>Além dos conectores clássicos, a coesão sequencial se apoia em:</p>
+          <ul class="styled">
+            <li><b>Marcadores de ordem</b>: primeiramente, em seguida, por fim, posteriormente.</li>
+            <li><b>Marcadores de tempo</b>: atualmente, anteriormente, simultaneamente, desde então.</li>
+            <li><b>Marcadores de progressão argumentativa</b>: além disso, ademais, outrossim, por outro lado.</li>
+            <li><b>Paralelismo sintático</b>: repetição de estrutura gramatical entre orações coordenadas, reforçando a coesão (ex.: "não só reduziu custos, mas também aumentou a eficiência").</li>
+          </ul>
+
+          <h3>4.7 Emprego de tempos e modos verbais</h3>
+          <p>Os <b>tempos verbais</b> (presente, pretérito perfeito, pretérito imperfeito, futuro etc.) situam a ação no eixo temporal; os <b>modos verbais</b> (indicativo, subjuntivo, imperativo) expressam a atitude do falante em relação ao fato (certeza, dúvida/hipótese, ordem).</p>
+          <table>
+            <thead><tr><th>Modo verbal</th><th>Expressa</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Indicativo</td><td>Certeza, fato real</td><td>"O relatório foi entregue no prazo."</td></tr>
+              <tr><td>Subjuntivo</td><td>Dúvida, hipótese, desejo, possibilidade</td><td>"Espero que o relatório seja entregue no prazo."</td></tr>
+              <tr><td>Imperativo</td><td>Ordem, pedido, instrução</td><td>"Entregue o relatório no prazo."</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.8 Correlação verbal: coerência entre tempos em períodos compostos</h3>
+          <p>Um erro comum em textos institucionais é a <b>quebra de correlação verbal</b> — usar tempos verbais incompatíveis entre a oração principal e a subordinada, prejudicando a coesão temporal do texto.</p>
+          <table>
+            <thead><tr><th>Oração principal</th><th>Correlação esperada na subordinada</th><th>Exemplo correto</th></tr></thead>
+            <tbody>
+              <tr><td>Presente do indicativo</td><td>Presente do subjuntivo</td><td>"Exijo que ele <u>entregue</u> o relatório."</td></tr>
+              <tr><td>Pretérito perfeito/imperfeito do indicativo</td><td>Pretérito imperfeito do subjuntivo</td><td>"Exigi que ele <u>entregasse</u> o relatório."</td></tr>
+              <tr><td>Futuro do presente</td><td>Futuro do subjuntivo</td><td>"Se ele <u>entregar</u> o relatório, será elogiado."</td></tr>
+              <tr><td>Futuro do pretérito (condicional)</td><td>Pretérito imperfeito do subjuntivo</td><td>"Se ele <u>entregasse</u> o relatório, seria elogiado."</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma testar a correlação verbal dentro de frases de textos institucionais em questões de reescrita, alterando o tempo verbal de apenas uma das orações do período composto — o candidato deve verificar se a nova combinação de tempos ainda é gramaticalmente coerente, e não apenas se "soa bem".</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. COMO A FGV COBRA ============ -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A coesão textual raramente é cobrada como pergunta teórica isolada ("o que é anáfora?"). A FGV prefere testar a <b>aplicação prática</b>: pedir a identificação do referente de um pronome no texto, a classificação da relação lógica estabelecida por um conectivo, ou avaliar se uma reescrita manteve a coesão original.</p>
+
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>"No texto, o termo 'X' retoma..." — questão de referenciação direta.</li>
+            <li>"O conectivo 'Y' estabelece, no texto, uma relação de..." — classificação de conector.</li>
+            <li>Questões de reescrita que trocam um conector por outro de sentido diferente, exigindo que o candidato perceba a quebra de coerência.</li>
+            <li>Questões sobre correlação verbal em períodos compostos, testando a coesão temporal.</li>
+            <li>Dificuldade média-alta — exige atenção simultânea a gramática e a sentido.</li>
+          </ul>
+
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Identificação do referente de pronomes (anáfora)</td><td>Muito alta</td></tr>
+              <tr><td>Classificação de conectores por relação lógica</td><td>Muito alta</td></tr>
+              <tr><td>Correlação de tempos e modos verbais</td><td>Alta</td></tr>
+              <tr><td>Substituição por pró-formas em reescrita</td><td>Média-alta</td></tr>
+              <tr><td>Distinção entre repetição estratégica e viciosa</td><td>Média</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Palavras-chave que indicam o tipo de questão</h3>
+          <table>
+            <thead><tr><th>Expressão no enunciado</th><th>O que está sendo pedido</th></tr></thead>
+            <tbody>
+              <tr><td>"O termo 'X' retoma..."</td><td>Coesão referencial (anáfora/catáfora)</td></tr>
+              <tr><td>"O conectivo 'Y' estabelece relação de..."</td><td>Classificação lógico-semântica do conector</td></tr>
+              <tr><td>"Assinale a reescrita que preserva a coesão e o sentido original"</td><td>Avaliação de substituição/conectores/correlação verbal</td></tr>
+              <tr><td>"A forma verbal empregada está de acordo com a norma-padrão"</td><td>Correlação verbal e emprego de modos</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Trocar o <b>conector</b> por outro de sentido próximo, mas logicamente diferente (causa por consequência, condição por concessão).</li>
+            <li>Alterar a <b>ordem das orações</b> em uma reescrita, fazendo um pronome perder ou trocar seu referente original.</li>
+            <li>Quebrar a <b>correlação verbal</b> entre oração principal e subordinada em questões de reescrita.</li>
+            <li>Confundir <b>repetição estratégica</b> (correta, em textos técnicos) com erro de estilo a ser corrigido.</li>
+            <li>Trocar o modo verbal (indicativo por subjuntivo, ou vice-versa) alterando o grau de certeza expresso pela frase.</li>
+          </ol>
+
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV apresentar um texto institucional com um pronome ou conectivo destacado (em negrito ou sublinhado) e pedir a identificação de seu referente ou de sua relação lógica — e, em seguida, apresentar 4 a 5 opções de reescrita da mesma frase, sendo apenas uma capaz de preservar a coesão e o sentido original.</p>
+          </div>
+
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver um pronome destacado, releia a frase anterior para confirmar o referente antes de responder.</li>
+            <li>Ao ver um conectivo, pergunte: "essa relação é de causa, consequência, condição, concessão ou oposição?" antes de aceitar a alternativa.</li>
+            <li>Em questões de reescrita com verbos, verifique se a correlação entre os tempos da principal e da subordinada continua coerente.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 6. DECORE PARA A PROVA ============ -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip">
+            <div class="box-title">🧠 Mnemônico: R-S-R-C (coesão)</div>
+            <p><b>R</b>eferenciação, <b>S</b>ubstituição, <b>R</b>epetição (estratégica), <b>C</b>onectores — os quatro pilares da coesão textual cobrados pela FGV.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Macete do pronome retomado</div>
+            <p>Ao encontrar um pronome, pergunte imediatamente: "o quê ou quem está logo antes, no gênero e número compatíveis?" Esse é, na maioria dos casos, o referente correto.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Regra da correlação verbal básica</div>
+            <p>Presente pede presente do subjuntivo; passado pede passado do subjuntivo (imperfeito); futuro pede futuro do subjuntivo. "Tempo chama tempo" na oração subordinada.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Truque do conector trocado</div>
+            <p>Substitua mentalmente o conector por sua função ("porque" = "pois"; "portanto" = "por isso"; "embora" = "apesar de que") e veja se o sentido da frase de fato se mantém — se mudar o sentido, o conector foi trocado incorretamente.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. REVISÃO 5 MIN ============ -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Coesão</b> = elos linguísticos visíveis; <b>coerência</b> = sentido lógico global.</li>
+            <li>Referenciação: anáfora (retoma), catáfora (antecipa), sinônimo, hiperônimo, elipse.</li>
+            <li>Substituição: pró-forma nominal, verbal ou sentencial no lugar de um termo/oração inteira.</li>
+            <li>Repetição pode ser estratégica (reforço, evita ambiguidade) — não é sempre erro.</li>
+            <li>Conectores mudam completamente o sentido se trocados (causa ≠ consequência ≠ condição ≠ concessão).</li>
+            <li>Marcadores de ordem, tempo e progressão argumentativa também fazem parte da coesão sequencial.</li>
+            <li>Correlação verbal: presente → subjuntivo presente; passado → subjuntivo imperfeito; futuro → subjuntivo futuro.</li>
+            <li>Modo indicativo = certeza; subjuntivo = dúvida/hipótese; imperativo = ordem.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 8. FLASHCARDS ============ -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- ============ 9. QUESTÕES COMENTADAS ============ -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- ============ 10. SIMULADO ============ -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- ============ 11. CHECKLIST ============ -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- ============ 12. ERROS MAIS COMUNS ============ -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card">
+          <ol class="styled" id="errosList"></ol>
+        </div>
+      </section>
+
+      <!-- ============ 13. QUADROS / TÉCNICAS ============ -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadros e técnicas de resolução</h2></div>
+        <div class="card">
+          <div class="box info">
+            <div class="box-title">ℹ Observação</div>
+            <p>Este tópico não envolve fórmulas matemáticas. Em seu lugar, apresentamos o <b>quadro de correlação verbal completo</b>, ferramenta central para resolver questões de coesão temporal.</p>
+          </div>
+          <table>
+            <thead><tr><th>Se a oração principal está em...</th><th>A oração subordinada (com "que") deve estar em...</th></tr></thead>
+            <tbody>
+              <tr><td>Presente do indicativo (quero, exijo, espero)</td><td>Presente do subjuntivo (que ele entregue)</td></tr>
+              <tr><td>Pretérito perfeito/imperfeito do indicativo (quis, queria, exigi)</td><td>Pretérito imperfeito do subjuntivo (que ele entregasse)</td></tr>
+              <tr><td>Futuro do presente (exigirei, esperarei)</td><td>Presente ou futuro do subjuntivo, conforme o contexto</td></tr>
+              <tr><td>Futuro do pretérito / condicional (exigiria, gostaria)</td><td>Pretérito imperfeito do subjuntivo (que ele entregasse)</td></tr>
+              <tr><td>Oração condicional com "se" + futuro do subjuntivo</td><td>Futuro do presente na oração principal (se ele entregar, será elogiado)</td></tr>
+              <tr><td>Oração condicional com "se" + pretérito imperfeito do subjuntivo</td><td>Futuro do pretérito na oração principal (se ele entregasse, seria elogiado)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 14. TABELAS-RESUMO ============ -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Coesão referencial x coesão sequencial</h3>
+          <table>
+            <thead><tr><th>Coesão referencial</th><th>Coesão sequencial</th></tr></thead>
+            <tbody>
+              <tr><td>Liga elementos por retomada/antecipação (pronomes, sinônimos)</td><td>Liga partes do texto por relação lógica (conectores)</td></tr>
+              <tr><td>Foco: "a que/quem esse termo se refere?"</td><td>Foco: "que relação lógica esse conectivo estabelece?"</td></tr>
+            </tbody>
+          </table>
+          <h3>Modos verbais e seu efeito de sentido</h3>
+          <table>
+            <thead><tr><th>Modo</th><th>Efeito</th></tr></thead>
+            <tbody>
+              <tr><td>Indicativo</td><td>Certeza, fato realizado ou realizável</td></tr>
+              <tr><td>Subjuntivo</td><td>Dúvida, desejo, hipótese, possibilidade</td></tr>
+              <tr><td>Imperativo</td><td>Ordem, pedido, instrução direta</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 15. GLOSSÁRIO ============ -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card">
+          <dl class="gloss" id="glossList"></dl>
+        </div>
+      </section>
+
+      <!-- ============ 16. CURIOSIDADES ============ -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio">
+          <div class="box-title">🎓 Sobre a FGV</div>
+          <p>Por trabalhar frequentemente com textos institucionais e jurídicos em suas provas, a FGV valoriza a percepção da <b>repetição estratégica de termos técnicos</b> — um traço típico da linguagem jurídica e normativa, que evita sinônimos justamente para não introduzir ambiguidade interpretativa em contratos e leis.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">📚 Curiosidade histórica</div>
+          <p>Os estudos sistemáticos sobre coesão textual ganharam força a partir da obra <i>Cohesion in English</i>, de Halliday e Hasan (1976), que catalogou pela primeira vez os principais mecanismos coesivos do inglês — trabalho posteriormente adaptado e expandido para o português por linguistas como Ingedore Koch.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">🔬 Curiosidade acadêmica</div>
+          <p>Koch destaca que a coesão referencial pode ocorrer não apenas por retomada de palavras já ditas, mas também por <b>referenciação dêitica</b> (elementos que apontam para o contexto de enunciação, como "aqui", "agora", "este") — recurso frequente em comunicados institucionais que mencionam prazos e datas.</p>
+        </div>
+      </section>
+
+      <!-- ============ 17. LIGAÇÕES COM OUTROS TÓPICOS ============ -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Compreensão e interpretação de textos (Tópico 1)</td><td>Coesão referencial e conectores já foram introduzidos ali; aqui se aprofundam</td></tr>
+              <tr><td>Domínio da estrutura morfossintática (Tópico 5)</td><td>Classes de palavras (pronomes, conjunções) são a base gramatical dos mecanismos coesivos</td></tr>
+              <tr><td>Relações de coordenação e subordinação (Tópicos 5.2 e 5.3)</td><td>Conectores de coesão sequencial são também os elementos que ligam orações coordenadas/subordinadas</td></tr>
+              <tr><td>Reescrita de frases e parágrafos (Tópico 6)</td><td>Manter a coesão é o critério central de avaliação em questões de reescrita</td></tr>
+              <tr><td>Reorganização da estrutura de orações e períodos (Tópico 6.3)</td><td>Alterar a ordem das orações exige preservar os referentes e conectores corretos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 18. PLANO DE REVISÃO ============ -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar a tabela de conectores por relação lógica.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, sublinhando manualmente o referente de cada pronome destacado.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; para cada erro, identificar se foi falha de referenciação, de conector ou de correlação verbal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 19. REFERÊNCIAS ============ -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>KOCH, Ingedore G. Villaça. <i>A Coesão Textual</i>. São Paulo: Contexto.</li>
+            <li>KOCH, Ingedore G. Villaça; TRAVAGLIA, Luiz Carlos. <i>A Coerência Textual</i>. São Paulo: Contexto.</li>
+            <li>HALLIDAY, M. A. K.; HASAN, Ruqaiya. <i>Cohesion in English</i>. Londres: Longman.</li>
+            <li>CUNHA, Celso; CINTRA, Luís F. Lindley. <i>Nova Gramática do Português Contemporâneo</i>. Rio de Janeiro: Lexikon.</li>
+            <li>BECHARA, Evanildo. <i>Moderna Gramática Portuguesa</i>. Rio de Janeiro: Nova Fronteira.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Língua Portuguesa · Tópico 04/08</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_lp_t04";
+
+  function applyTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem(STORAGE_KEY+"_theme", t);
+  }
+  const savedTheme = localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light");
+  applyTheme(savedTheme);
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* ============ FLASHCARDS ============ */
+  const flashcards = [
+    {q:"Qual a diferença entre coesão e coerência?", a:"Coesão são os elos linguísticos visíveis do texto; coerência é o sentido lógico global construído pelo leitor a partir da coesão e do conhecimento de mundo."},
+    {q:"O que é anáfora?", a:"Mecanismo em que um termo retoma um referente já mencionado anteriormente no texto."},
+    {q:"O que é catáfora?", a:"Mecanismo em que um termo antecipa um referente que só aparece depois no texto."},
+    {q:"O que é uma pró-forma sentencial?", a:"Termo que substitui uma oração ou período inteiro, como 'isso' ou 'assim'."},
+    {q:"A repetição de um termo é sempre um erro de coesão?", a:"Não. Pode ser uma estratégia coesiva deliberada para reforçar a ideia central ou evitar ambiguidade, especialmente em textos técnicos e jurídicos."},
+    {q:"O que muda ao trocar 'porque' por 'portanto' em uma reescrita?", a:"A relação lógica passa de causa para consequência, invertendo o sentido da relação entre as orações."},
+    {q:"Cite três marcadores de ordem usados na coesão sequencial.", a:"'Primeiramente', 'em seguida' e 'por fim' (também 'posteriormente')."},
+    {q:"O que expressa o modo indicativo?", a:"Certeza, fato real ou realizável."},
+    {q:"O que expressa o modo subjuntivo?", a:"Dúvida, desejo, hipótese ou possibilidade."},
+    {q:"O que expressa o modo imperativo?", a:"Ordem, pedido ou instrução direta."},
+    {q:"Qual o tempo verbal da subordinada quando a principal está no presente do indicativo (ex.: 'exijo que...')?", a:"Presente do subjuntivo (ex.: 'exijo que ele entregue')."},
+    {q:"Qual o tempo verbal da subordinada quando a principal está no pretérito (ex.: 'exigi que...')?", a:"Pretérito imperfeito do subjuntivo (ex.: 'exigi que ele entregasse')."},
+    {q:"O que é elipse, como mecanismo de coesão?", a:"Omissão de um termo que é recuperável pelo contexto, evitando repetição desnecessária."},
+    {q:"O que é referenciação por hiperônimo?", a:"Retomada de um termo por uma palavra de sentido mais genérico que o engloba (ex.: 'impressora' retomada por 'equipamento')."},
+    {q:"O que caracteriza uma pró-forma verbal?", a:"Um termo (como o verbo 'fazer') que substitui um verbo ou sintagma verbal já mencionado."},
+    {q:"Como testar se um conectivo foi trocado corretamente em uma reescrita?", a:"Substituir mentalmente o conectivo por sua função equivalente (ex.: 'porque' = 'pois') e verificar se o sentido da frase se mantém."},
+    {q:"Cite dois autores de referência em estudos sobre coesão textual.", a:"Ingedore G. Villaça Koch (português) e Halliday e Hasan (inglês, obra pioneira 'Cohesion in English')."},
+    {q:"O que é paralelismo sintático?", a:"Repetição de estrutura gramatical entre orações coordenadas, reforçando a coesão do texto (ex.: 'não só... mas também')."},
+    {q:"Qual a correlação verbal correta para uma condicional com 'se' + futuro do subjuntivo?", a:"A oração principal deve estar no futuro do presente (ex.: 'se ele entregar, será elogiado')."},
+    {q:"Qual a correlação verbal correta para uma condicional com 'se' + pretérito imperfeito do subjuntivo?", a:"A oração principal deve estar no futuro do pretérito/condicional (ex.: 'se ele entregasse, seria elogiado')."},
+    {q:"Por que a linguagem jurídica costuma repetir termos técnicos em vez de usar sinônimos?", a:"Para evitar ambiguidade interpretativa que um sinônimo poderia introduzir em contratos e leis."},
+    {q:"O que é referenciação dêitica?", a:"Uso de elementos que apontam para o contexto de enunciação, como 'aqui', 'agora' e 'este', comuns em comunicados institucionais."},
+  ];
+
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* ============ QUESTÕES COMENTADAS (20) ============ */
+  const questoes = [
+    {tema:"Referenciação", texto:"“A Diretoria publicou o novo manual de controladoria. Ele entra em vigor no próximo mês.”", enun:"No trecho, o pronome 'Ele' retoma:", alts:["A Diretoria","O novo manual de controladoria","O próximo mês","A vigência","Nenhum dos anteriores"], correta:1, coment:"'Ele', pronome masculino singular, retoma 'o novo manual de controladoria' — anáfora pronominal clássica."},
+    {tema:"Conectores", texto:"“Os controles internos foram reforçados; contudo, o número de inconsistências ainda é significativo.”", enun:"O conectivo 'contudo' estabelece uma relação de:", alts:["Causa","Consequência","Oposição/contraste","Condição","Finalidade"], correta:2, coment:"'Contudo' é conectivo de oposição/contraste, relativizando a ideia anterior (reforço dos controles) diante do resultado ainda insatisfatório."},
+    {tema:"Correlação verbal", texto:"—", enun:"Assinale a alternativa com correlação verbal correta:", alts:["Se o relatório fosse entregue no prazo, o setor será elogiado.","Se o relatório for entregue no prazo, o setor será elogiado.","Se o relatório será entregue no prazo, o setor seria elogiado.","Se o relatório fosse entregue no prazo, o setor terá sido elogiado.","Se o relatório for entregue no prazo, o setor seria elogiado."], correta:1, coment:"'Se' + futuro do subjuntivo ('for entregue') pede futuro do presente na principal ('será elogiado') — correlação correta na alternativa B."},
+    {tema:"Substituição", texto:"“A equipe revisou os controles internos antes do fechamento; a auditoria também fez isso, de forma independente.”", enun:"No trecho, 'fez isso' é uma:", alts:["Anáfora pronominal simples","Pró-forma verbal, substituindo 'revisou os controles internos'","Elipse total do verbo","Catáfora","Repetição viciosa"], correta:1, coment:"'Fez isso' substitui o sintagma verbal 'revisou os controles internos', caracterizando uma pró-forma verbal — mecanismo de substituição."},
+    {tema:"Repetição estratégica", texto:"“O contrato deverá ser assinado pelas partes. As partes, uma vez cientes das cláusulas, não poderão alegar desconhecimento.”", enun:"A repetição de 'partes' no trecho é:", alts:["Um erro de estilo que deveria ser corrigido por um pronome.","Uma estratégia coesiva para evitar ambiguidade em texto jurídico.","Um caso de catáfora.","Um exemplo de elipse.","Um erro de concordância verbal."], correta:1, coment:"Em textos jurídicos, a repetição do termo técnico 'partes' evita a ambiguidade que um pronome poderia gerar sobre a quem se refere — repetição estratégica, não erro."},
+    {tema:"Conectores em reescrita", texto:"Texto original: “O investimento cresceu; portanto, a produtividade também aumentou.”", enun:"Assinale a reescrita que preserva a relação lógica original:", alts:["O investimento cresceu, embora a produtividade também tenha aumentado.","O investimento cresceu, e por isso a produtividade também aumentou.","O investimento cresceu, mas a produtividade também aumentou.","O investimento cresceu, caso a produtividade também aumentasse.","O investimento cresceu, a fim de que a produtividade aumentasse."], correta:1, coment:"'Portanto' indica consequência; 'e por isso' preserva essa mesma relação lógica. As demais alternativas trocam para concessão, oposição, condição ou finalidade, alterando o sentido original."},
+    {tema:"Modo verbal", texto:"—", enun:"Assinale a alternativa em que o verbo expressa dúvida/hipótese, e não certeza:", alts:["O relatório foi entregue no prazo.","Talvez o relatório seja entregue no prazo.","O relatório será entregue no prazo.","O relatório está sendo revisado.","O relatório é revisado mensalmente."], correta:1, coment:"'Seja' está no presente do subjuntivo, modo que expressa dúvida/hipótese ('talvez'); as demais alternativas empregam o indicativo, modo de certeza."},
+    {tema:"Referenciação por hiperônimo", texto:"“A empresa adquiriu uma nova impressora multifuncional. O equipamento foi instalado no setor financeiro.”", enun:"A retomada de 'impressora multifuncional' por 'equipamento' caracteriza:", alts:["Anáfora por sinônimo exato","Anáfora por hiperônimo","Catáfora","Elipse","Repetição viciosa"], correta:1, coment:"'Equipamento' é um termo mais genérico que engloba 'impressora multifuncional' — trata-se de anáfora por hiperônimo, não sinônimo exato."},
+    {tema:"Correlação verbal", texto:"—", enun:"Assinale a alternativa com correlação verbal correta:", alts:["Exijo que o relatório fosse entregue até sexta-feira.","Exigi que o relatório seja entregue até sexta-feira.","Exijo que o relatório seja entregue até sexta-feira.","Exigirei que o relatório tivesse sido entregue até sexta-feira.","Exigi que o relatório entregue até sexta-feira."], correta:2, coment:"Presente do indicativo ('exijo') pede presente do subjuntivo na subordinada ('seja entregue') — correlação correta apenas na alternativa C."},
+    {tema:"Elipse", texto:"“João revisou o contrato; Maria, o aditivo.”", enun:"No trecho, o mecanismo coesivo empregado é:", alts:["Anáfora pronominal","Catáfora","Elipse do verbo 'revisou'","Substituição por pró-forma sentencial","Repetição estratégica"], correta:2, coment:"O verbo 'revisou' foi omitido na segunda oração, mas é recuperável pelo contexto ('Maria [revisou] o aditivo') — trata-se de elipse."},
+    {tema:"Conectores - condição", texto:"“A revisão dos controles internos só será dispensada ___________ o setor já tiver passado por auditoria externa no último trimestre.”", enun:"Assinale o conectivo que completa corretamente a lacuna:", alts:["porque","embora","caso","portanto","conforme"], correta:2, coment:"'Caso' introduz uma condição para a dispensa da revisão — relação de condição, coerente com o sentido da frase."},
+    {tema:"Catáfora", texto:"“Isto é certo: nenhum relatório será aceito fora do prazo estabelecido.”", enun:"No trecho, 'Isto' é um exemplo de:", alts:["Anáfora","Catáfora","Elipse","Pró-forma verbal","Repetição viciosa"], correta:1, coment:"'Isto' antecipa a informação que será dada na sequência ('nenhum relatório será aceito fora do prazo') — trata-se de catáfora."},
+    {tema:"Reescrita e coesão", texto:"Texto original: “Embora os custos tenham subido, a margem líquida se manteve estável, pois a empresa reduziu despesas administrativas.”", enun:"Assinale a reescrita que preserva as relações lógicas do texto original:", alts:["Os custos subiram e, por isso, a margem líquida se manteve estável, já que a empresa reduziu despesas.","Mesmo com o aumento dos custos, a margem líquida se manteve estável, porque a empresa reduziu despesas administrativas.","Os custos subiram; portanto, a margem líquida caiu, embora a empresa tenha reduzido despesas.","Como os custos subiram, a margem líquida se manteve estável, mas a empresa não reduziu despesas.","Embora a margem líquida tenha se mantido estável, os custos subiram por causa da redução de despesas."], correta:1, coment:"A alternativa B preserva a concessão (mesmo com o aumento) e a causa (porque reduziu despesas), mantendo as duas relações lógicas do texto original."},
+    {tema:"Modo imperativo", texto:"—", enun:"Assinale a alternativa em que o verbo está no modo imperativo:", alts:["O relatório é entregue mensalmente.","Entregue o relatório até sexta-feira.","Se o relatório for entregue, tudo bem.","O relatório será entregue amanhã.","Espero que o relatório seja entregue."], correta:1, coment:"'Entregue' no sentido de ordem/instrução direta caracteriza o modo imperativo — diferente das demais alternativas, que empregam indicativo ou subjuntivo."},
+    {tema:"Conectores - concessão", texto:"“___________ o prazo tenha sido curto, a equipe conseguiu concluir o projeto dentro do previsto.”", enun:"Assinale o conectivo que completa corretamente a lacuna:", alts:["Porque","Embora","Portanto","Caso","Conforme"], correta:1, coment:"'Embora' introduz uma concessão (admite o prazo curto, mas mantém a conclusão do projeto) — relação de concessão, coerente com o sentido da frase."},
+    {tema:"Pró-forma sentencial", texto:"“O projeto foi aprovado sem ressalvas. Assim, a equipe pôde iniciar a execução imediatamente.”", enun:"No trecho, 'Assim' é uma:", alts:["Anáfora pronominal simples","Pró-forma sentencial, retomando toda a ideia anterior","Catáfora","Elipse","Repetição viciosa"], correta:1, coment:"'Assim' substitui e retoma toda a informação da oração anterior ('o projeto foi aprovado sem ressalvas'), funcionando como pró-forma sentencial."},
+    {tema:"Correlação verbal avançada", texto:"—", enun:"Assinale a alternativa com correlação verbal correta:", alts:["Se a proposta fosse aprovada, o orçamento será revisado.","Se a proposta for aprovada, o orçamento será revisado.","Se a proposta será aprovada, o orçamento seria revisado.","Se a proposta for aprovada, o orçamento seria revisado.","Se a proposta fosse aprovada, o orçamento terá sido revisado."], correta:1, coment:"'Se' + futuro do subjuntivo ('for aprovada') exige futuro do presente na principal ('será revisado') — correlação correta apenas na alternativa B."},
+    {tema:"Marcadores de sequenciação", texto:"“Primeiramente, a equipe levantou os dados. Em seguida, elaborou o relatório. Por fim, apresentou os resultados à diretoria.”", enun:"Os termos destacados no trecho são:", alts:["Conectores de causa e consequência","Marcadores de ordem/sequenciação temporal","Pró-formas sentenciais","Elementos de referenciação por hiperônimo","Repetições viciosas"], correta:1, coment:"'Primeiramente', 'em seguida' e 'por fim' organizam a sequência temporal das ações, caracterizando marcadores de ordem/sequenciação."},
+    {tema:"Coesão x coerência", texto:"—", enun:"Assinale a afirmação correta sobre coesão e coerência textual:", alts:["Coesão e coerência são sinônimos e podem ser usadas indistintamente.","Um texto sem nenhum elemento coesivo explícito nunca pode ser coerente.","A coesão é o conjunto de elos linguísticos visíveis; a coerência é o sentido lógico global construído pelo leitor.","A coerência depende exclusivamente dos conectivos empregados no texto.","A coesão é sempre suficiente para garantir a coerência de um texto."], correta:2, coment:"A alternativa C reflete corretamente a distinção: coesão são os elos explícitos; coerência é o sentido global, que pode depender também de conhecimento de mundo, não só de conectivos."},
+    {tema:"Conectores institucionais", texto:"“A proposta orçamentária foi enviada ___________ o regulamento interno estabelece, com prazo de trinta dias para análise.”", enun:"Assinale o conectivo que completa corretamente a lacuna (sentido de conformidade):", alts:["conforme","embora","caso","portanto","a fim de que"], correta:0, coment:"'Conforme' estabelece uma relação de conformidade com o que o regulamento determina — sentido coerente com o contexto institucional da frase."},
+  ];
+
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* ============ MINI SIMULADO (30) ============ */
+  const simulado = [
+    {d:"Fácil", texto:"“O contrato foi assinado ontem. Ele entra em vigor imediatamente.”", enun:"'Ele' retoma:", alts:["O contrato","Ontem","A vigência","A assinatura","Nenhum dos anteriores"], correta:0},
+    {d:"Fácil", texto:"“A equipe finalizou o relatório; mas o prazo já havia expirado.”", enun:"'Mas' estabelece relação de:", alts:["Causa","Consequência","Oposição","Condição","Finalidade"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale o verbo no modo imperativo:", alts:["Ele revisa o texto.","Revise o texto agora.","Ele revisará o texto.","Se ele revisar o texto...","Espero que ele revise."], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale o verbo no modo subjuntivo:", alts:["Ele entrega o relatório.","Ele entregou o relatório.","Talvez ele entregue o relatório.","Ele entregará o relatório.","Entregue o relatório."], correta:2},
+    {d:"Fácil", texto:"“O novo sistema foi implantado. O software já está em uso.”", enun:"'O software' retoma, por sinônimo/hiperônimo, o termo:", alts:["Implantado","O novo sistema","Em uso","Nenhum dos anteriores","A empresa"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale o conectivo de causa:", alts:["portanto","embora","porque","mas","para que"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale o conectivo de consequência:", alts:["porque","portanto","embora","caso","a fim de que"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale o conectivo de condição:", alts:["mas","porque","caso","portanto","embora"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale o conectivo de concessão:", alts:["embora","porque","portanto","caso","para que"], correta:0},
+    {d:"Fácil", texto:"“Isto é importante: o prazo não será prorrogado.”", enun:"'Isto' é um exemplo de:", alts:["Anáfora","Catáfora","Elipse","Repetição viciosa","Pró-forma verbal"], correta:1},
+    {d:"Média", texto:"“Exijo que o relatório ___________ entregue até amanhã.”", enun:"Complete com a forma verbal correta:", alts:["seja","fosse","é","será","tinha sido"], correta:0},
+    {d:"Média", texto:"“Exigi que o relatório ___________ entregue até amanhã.”", enun:"Complete com a forma verbal correta:", alts:["seja","fosse","é","será","tinha sido"], correta:1},
+    {d:"Média", texto:"“Se o projeto ___________ aprovado, o orçamento será liberado.”", enun:"Complete com a forma verbal correta:", alts:["for","fosse","será","seria","é"], correta:0},
+    {d:"Média", texto:"“Se o projeto ___________ aprovado, o orçamento seria liberado.”", enun:"Complete com a forma verbal correta:", alts:["for","fosse","será","é","seja"], correta:1},
+    {d:"Média", texto:"“João assinou o contrato; Maria, o aditivo.”", enun:"O mecanismo coesivo empregado é:", alts:["Catáfora","Elipse verbal","Repetição estratégica","Pró-forma sentencial","Anáfora por hiperônimo"], correta:1},
+    {d:"Média", texto:"“A empresa adquiriu uma nova frota de veículos. Os automóveis serão usados no setor de logística.”", enun:"'Os automóveis' retoma o termo anterior por:", alts:["Repetição exata","Anáfora por hiperônimo/sinônimo","Catáfora","Elipse","Pró-forma verbal"], correta:1},
+    {d:"Média", texto:"“O relatório foi revisado; a equipe também fez isso com o anexo.”", enun:"'Fez isso' substitui:", alts:["'O relatório'","'Revisado'","'Revisou' (o verbo)","'A equipe'","'O anexo'"], correta:2},
+    {d:"Média", texto:"“Primeiramente, os dados foram coletados. Em seguida, foram analisados. Por fim, apresentados à diretoria.”", enun:"Os termos destacados caracterizam:", alts:["Conectores de oposição","Marcadores de ordem/sequenciação","Pró-formas nominais","Repetição viciosa","Elipse"], correta:1},
+    {d:"Média", texto:"“As partes deverão cumprir o contrato. As partes que descumprirem estarão sujeitas a multa.”", enun:"A repetição de 'partes' é:", alts:["Erro de estilo a ser corrigido","Estratégia coesiva para evitar ambiguidade jurídica","Catáfora","Elipse","Pró-forma sentencial"], correta:1},
+    {d:"Média", texto:"“O investimento cresceu; ___________, a produtividade também aumentou.”", enun:"Assinale o conectivo que preserva a relação de consequência:", alts:["embora","por isso","mas","caso","a fim de que"], correta:1},
+    {d:"Difícil", texto:"“Embora os custos tenham subido, a margem se manteve estável, pois houve redução de despesas.”", enun:"Assinale a reescrita que preserva as duas relações lógicas do trecho:", alts:["Os custos subiram e a margem caiu, porque houve redução de despesas.","Mesmo com o aumento dos custos, a margem se manteve estável, porque houve redução de despesas.","Como os custos subiram, a margem se manteve estável, mas não houve redução de despesas.","A margem se manteve estável; portanto, os custos subiram.","Os custos subiram, a fim de que a margem se mantivesse estável."], correta:1},
+    {d:"Difícil", texto:"“Se a proposta ___________ aprovada no prazo, o cronograma ___________ mantido sem alterações.”", enun:"Complete corretamente as lacunas:", alts:["for / será","fosse / seria","será / for","seria / fosse","for / seria"], correta:0},
+    {d:"Difícil", texto:"“O parecer técnico recomenda a adoção da nova metodologia; ressalva, contudo, que os ganhos dependem de monitoramento contínuo.”", enun:"'Contudo', nesse trecho, tem função equivalente a:", alts:["portanto","porém","porque","caso","a fim de que"], correta:1},
+    {d:"Difícil", texto:"“Reduzir o quadro de analistas para 'enxugar custos' pode elevar o custo total, se a queda de qualidade gerar retrabalho.”", enun:"'Se', nesse trecho, introduz uma oração de:", alts:["Causa","Consequência","Condição","Concessão","Finalidade"], correta:2},
+    {d:"Difícil", texto:"“Os controles foram reforçados; as inconsistências, contudo, persistiram, exigindo nova revisão dos processos.”", enun:"A vírgula após 'inconsistências' marca a elipse de qual elemento?", alts:["Do sujeito 'as inconsistências'","Do verbo 'foram' (reforçadas)","Do conectivo 'contudo'","Do objeto direto","Não há elipse nesse trecho"], correta:1},
+    {d:"Difícil", texto:"“Ao afirmar que 'os números falam por si', o diretor evitou comentar as causas da queda de desempenho relatada no documento.”", enun:"'Que', no trecho, introduz uma oração subordinada substantiva, e sua retomada indireta reforça a coesão por meio de:", alts:["Elipse verbal","Referenciação catafórica interna à citação","Pró-forma nominal","Repetição viciosa","Conectivo de condição"], correta:1, },
+    {d:"Difícil", texto:"“Considerando os riscos identificados na auditoria, recomenda-se a revisão imediata dos controles internos do setor financeiro.”", enun:"A expressão 'considerando os riscos identificados' estabelece com a oração seguinte uma relação de:", alts:["Consequência/motivação para a recomendação","Oposição direta","Condição estrita","Finalidade exclusiva","Adição neutra"], correta:0},
+    {d:"Difícil", texto:"“Não só a diretoria aprovou o novo orçamento, mas também autorizou a contratação de mais analistas.”", enun:"A estrutura 'não só... mas também' exemplifica um recurso de:", alts:["Elipse","Paralelismo sintático, reforçando a coesão por adição","Catáfora simples","Pró-forma verbal","Repetição viciosa"], correta:1},
+    {d:"Difícil", texto:"“Gostaria que o relatório ___________ revisado antes da reunião de amanhã.”", enun:"Complete com a forma verbal correta:", alts:["seja","fosse","é","será","tinha sido"], correta:1},
+  ];
+
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* ============ CHECKLIST ============ */
+  const checklistItems = [
+    "Diferenciar coesão de coerência com precisão conceitual",
+    "Identificar anáfora e catáfora em qualquer texto",
+    "Reconhecer referenciação por sinônimo e por hiperônimo",
+    "Identificar pró-formas nominais, verbais e sentenciais",
+    "Diferenciar repetição estratégica de repetição viciosa",
+    "Classificar conectores por relação lógico-semântica (causa, consequência, condição, concessão etc.)",
+    "Reconhecer marcadores de ordem, tempo e progressão argumentativa",
+    "Aplicar corretamente a correlação verbal em períodos compostos",
+    "Diferenciar os efeitos de sentido dos modos indicativo, subjuntivo e imperativo",
+    "Resolver questões de reescrita que dependem da preservação da coesão original",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ============ ERROS MAIS COMUNS (20) ============ */
+  const erros = [
+    "Confundir coesão com coerência, tratando-as como sinônimos.",
+    "Não verificar o referente correto de um pronome antes de responder à questão.",
+    "Achar que toda repetição de palavra é erro, mesmo em contextos técnicos que exigem precisão terminológica.",
+    "Trocar mentalmente um conectivo por outro de sentido próximo, mas logicamente diferente (causa por consequência).",
+    "Ignorar a mudança de referente de um pronome ao avaliar uma reescrita com ordem de orações alterada.",
+    "Não aplicar a regra de correlação verbal ao avaliar frases com oração subordinada.",
+    "Confundir o modo subjuntivo com o indicativo, alterando o grau de certeza da frase.",
+    "Não perceber pró-formas sentenciais (como 'assim', 'isso') que substituem orações inteiras.",
+    "Ignorar marcadores de ordem e tempo como parte da coesão sequencial.",
+    "Não reconhecer elipse como mecanismo coesivo legítimo, estranhando frases com omissão de verbo.",
+    "Trocar 'se' condicional por 'caso' sem verificar se a correlação verbal continua correta.",
+    "Não diferenciar anáfora de catáfora quanto à direção da retomada (para trás x para frente).",
+    "Achar que hiperônimo e sinônimo são a mesma coisa na retomada referencial.",
+    "Ignorar o paralelismo sintático como recurso coesivo em estruturas como 'não só... mas também'.",
+    "Não perceber que um conectivo pode ter mais de uma função dependendo do contexto (ex.: 'que').",
+    "Confundir referenciação dêitica (aqui, agora) com anáfora tradicional.",
+    "Não revisar a frase completa antes de decidir a relação lógica de um conectivo isolado.",
+    "Achar que a coesão sequencial se resume a conjunções, ignorando advérbios e locuções.",
+    "Errar a correlação em orações condicionais (se + subjuntivo) por desatenção ao tempo da principal.",
+    "Ignorar que a mesma pergunta pode testar simultaneamente referenciação E correlação verbal em um único item.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{
+    const li = document.createElement("li");
+    li.textContent = e;
+    errosList.appendChild(li);
+  });
+
+  /* ============ GLOSSÁRIO ============ */
+  const glossario = [
+    ["Coesão","Conjunto de mecanismos linguísticos explícitos (pronomes, conectivos, repetições) que ligam as partes de um texto."],
+    ["Coerência","Sentido lógico e global do texto, construído pelo leitor a partir da coesão e do conhecimento de mundo."],
+    ["Anáfora","Retomada, por um termo, de algo já mencionado anteriormente no texto."],
+    ["Catáfora","Antecipação, por um termo, de algo que será mencionado posteriormente no texto."],
+    ["Referenciação","Mecanismo de coesão que recupera ou antecipa elementos do texto (anáfora, catáfora, sinônimos, hiperônimos)."],
+    ["Substituição","Mecanismo de coesão em que uma pró-forma substitui um termo, sintagma ou oração inteira."],
+    ["Pró-forma","Termo (nominal, verbal ou sentencial) que substitui outro elemento do texto para evitar repetição."],
+    ["Elipse","Omissão de um termo recuperável pelo contexto."],
+    ["Conector","Palavra ou expressão que articula logicamente partes do texto (causa, consequência, condição etc.)."],
+    ["Correlação verbal","Compatibilidade entre os tempos e modos verbais da oração principal e da subordinada."],
+    ["Modo indicativo","Modo verbal que expressa certeza ou fato real."],
+    ["Modo subjuntivo","Modo verbal que expressa dúvida, hipótese, desejo ou possibilidade."],
+    ["Modo imperativo","Modo verbal que expressa ordem, pedido ou instrução direta."],
+    ["Paralelismo sintático","Repetição de estrutura gramatical entre orações coordenadas, reforçando a coesão."],
+    ["Referenciação dêitica","Uso de elementos que apontam para o contexto de enunciação, como 'aqui', 'agora', 'este'."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

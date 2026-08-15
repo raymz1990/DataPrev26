@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domínio da Estrutura Morfossintática do Período | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Língua Portuguesa</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">05 - Domínio da estrutura morfossintática do período</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Compreensão e interpretação de textos de gêneros variados.html">01 - Compreensão e interpretação de textos de gêneros variados</option>
+        <option value="02 - Reconhecimento de tipos e gêneros textuais.html">02 - Reconhecimento de tipos e gêneros textuais</option>
+        <option value="03 - Domínio da ortografia oficial.html">03 - Domínio da ortografia oficial</option>
+        <option value="04 - Domínio dos mecanismos de coesão textual.html">04 - Domínio dos mecanismos de coesão textual</option>
+        <option value="05 - Domínio da estrutura morfossintática do período.html" selected>05 - Domínio da estrutura morfossintática do período</option>
+        <option value="06 - Reescrita de frases e parágrafos do texto.html">06 - Reescrita de frases e parágrafos do texto</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Domínio da Estrutura Morfossintática do Período</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadros / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Língua Portuguesa<br>Tópico 05 de 08 (inclui 5.1 a 5.8)<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Domínio da Estrutura Morfossintática do Período</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Língua Portuguesa</b> &nbsp;›&nbsp; Tópico 05 (5.1 a 5.8)</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">10h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 1 a 4 (interpretação, gêneros, ortografia, coesão)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Muito alto — maior bloco gramatical do edital</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Classificar corretamente as <b>10 classes de palavras</b> e reconhecer seu emprego em contexto (5.1).</li>
+            <li>Diferenciar <b>coordenação</b> (orações/termos de mesmo nível sintático) de <b>subordinação</b> (relação de dependência) entre orações e entre termos da oração (5.2 e 5.3).</li>
+            <li>Aplicar corretamente os <b>sinais de pontuação</b>, sobretudo a vírgula em suas funções sintáticas mais cobradas (5.4).</li>
+            <li>Resolver questões de <b>concordância verbal e nominal</b>, incluindo casos especiais e sujeitos complexos (5.5).</li>
+            <li>Aplicar corretamente a <b>regência verbal e nominal</b>, com atenção à regência de verbos e nomes mais cobrados em concursos (5.6).</li>
+            <li>Empregar corretamente o <b>sinal indicativo de crase</b>, dominando as regras e as exceções mais exploradas pela FGV (5.7).</li>
+            <li>Posicionar corretamente os <b>pronomes átonos</b> (próclise, mesóclise, ênclise) conforme a norma-padrão (5.8).</li>
+            <li>Resolver questões FGV que combinam mais de um desses subtópicos em uma única questão de análise sintática ou de reescrita.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Este é o maior e mais denso bloco gramatical do edital de Português, reunindo oito subtópicos que, juntos, respondem pela análise da <b>estrutura interna do período</b> — como palavras se agrupam em orações e como orações se agrupam em períodos compostos.</p>
+          <p>O estudo começa pelas <b>classes de palavras</b> (substantivo, adjetivo, verbo, advérbio, pronome, preposição, conjunção, artigo, numeral, interjeição), base para todo o restante. Em seguida, avança para as <b>relações entre orações</b>: coordenação (orações independentes entre si, ligadas por conjunções coordenativas) e subordinação (uma oração depende sintaticamente da outra, funcionando como um termo dela).</p>
+          <p>A <b>pontuação</b>, especialmente a vírgula, tem função sintática precisa — separa termos, isola explicações, marca elipses — e seu uso incorreto é um dos erros mais comuns e mais cobrados em concursos. <b>Concordância</b> (verbal e nominal) e <b>regência</b> (verbal e nominal) tratam da compatibilidade gramatical entre os termos da oração — número/pessoa no primeiro caso, uso de preposições exigidas por verbos e nomes no segundo.</p>
+          <p>O <b>emprego da crase</b> é historicamente um dos temas mais temidos em provas de concurso, exigindo domínio da regra geral (fusão da preposição "a" com o artigo feminino "a/as") e de uma série de casos especiais. Por fim, a <b>colocação dos pronomes átonos</b> (próclise, mesóclise, ênclise) trata do posicionamento de "me, te, se, o, lhe" etc. em relação ao verbo, conforme fatores atrativos na oração.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Estrutura Morfossintática<br>do Período</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>5.1 Classes de palavras</h4><ul><li>Variáveis (subst., adj., verbo, pronome, artigo, numeral)</li><li>Invariáveis (adv., prep., conj., interjeição)</li></ul></div>
+              <div class="mm-node"><h4>5.2 Coordenação</h4><ul><li>Sindética (5 tipos)</li><li>Assindética</li></ul></div>
+              <div class="mm-node"><h4>5.3 Subordinação</h4><ul><li>Substantivas</li><li>Adjetivas</li><li>Adverbiais</li></ul></div>
+              <div class="mm-node"><h4>5.4 Pontuação</h4><ul><li>Vírgula (funções)</li><li>Ponto e vírgula</li><li>Dois-pontos</li></ul></div>
+              <div class="mm-node"><h4>5.5 Concordância</h4><ul><li>Verbal</li><li>Nominal</li><li>Casos especiais</li></ul></div>
+              <div class="mm-node"><h4>5.6 Regência</h4><ul><li>Verbal (transitividade)</li><li>Nominal (preposição exigida)</li></ul></div>
+              <div class="mm-node"><h4>5.7 Crase</h4><ul><li>Regra geral</li><li>Casos obrigatórios</li><li>Casos proibidos</li></ul></div>
+              <div class="mm-node"><h4>5.8 Pronomes átonos</h4><ul><li>Próclise</li><li>Mesóclise</li><li>Ênclise</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>5.1 Emprego das classes de palavras</h3>
+          <p>As dez classes gramaticais dividem-se em <b>variáveis</b> (flexionam em gênero, número, grau ou pessoa/tempo/modo) e <b>invariáveis</b> (não flexionam).</p>
+          <table>
+            <thead><tr><th>Classe</th><th>Variável?</th><th>Função central</th><th>Pegadinha comum</th></tr></thead>
+            <tbody>
+              <tr><td>Substantivo</td><td>Sim</td><td>Nomeia seres, objetos, conceitos</td><td>Substantivação de outras classes ("o certo", "o comer")</td></tr>
+              <tr><td>Adjetivo</td><td>Sim</td><td>Caracteriza o substantivo</td><td>Confundir com advérbio ("fala bonito" = advérbio, não adjetivo)</td></tr>
+              <tr><td>Artigo</td><td>Sim</td><td>Determina o substantivo (definido/indefinido)</td><td>Uso de crase com artigo indevido</td></tr>
+              <tr><td>Numeral</td><td>Sim</td><td>Indica quantidade, ordem, fração, múltiplo</td><td>Confundir numeral com pronome indefinido ("alguns" x "um")</td></tr>
+              <tr><td>Pronome</td><td>Sim</td><td>Substitui ou acompanha o substantivo</td><td>Classificar erroneamente pronome relativo como conjunção</td></tr>
+              <tr><td>Verbo</td><td>Sim</td><td>Expressa ação, estado ou fenômeno</td><td>Confundir verbo de ligação com verbo transitivo/intransitivo</td></tr>
+              <tr><td>Advérbio</td><td>Não</td><td>Modifica verbo, adjetivo ou outro advérbio</td><td>Confundir com adjetivo em função adverbial</td></tr>
+              <tr><td>Preposição</td><td>Não</td><td>Liga termos, estabelecendo relação de regência</td><td>Combinação/contração com artigo (à, do, na)</td></tr>
+              <tr><td>Conjunção</td><td>Não</td><td>Liga orações ou termos de mesma função</td><td>Confundir conjunção integrante com pronome relativo (ambos "que")</td></tr>
+              <tr><td>Interjeição</td><td>Não</td><td>Expressa emoções, sensações, apelos</td><td>Rara em concursos, mas pode aparecer em textos publicitários</td></tr>
+            </tbody>
+          </table>
+
+          <h3>5.2 Relações de coordenação entre orações e entre termos da oração</h3>
+          <p>Orações <b>coordenadas</b> são sintaticamente independentes entre si (nenhuma exerce função sintática dentro da outra), mas semanticamente relacionadas por conjunções coordenativas.</p>
+          <table>
+            <thead><tr><th>Tipo</th><th>Conjunções típicas</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Aditiva</td><td>e, nem, não só... mas também</td><td>"A empresa cresceu e ampliou o quadro de pessoal."</td></tr>
+              <tr><td>Adversativa</td><td>mas, porém, contudo, todavia, entretanto</td><td>"Investiu em tecnologia, mas não obteve o retorno esperado."</td></tr>
+              <tr><td>Alternativa</td><td>ou, ou... ou, ora... ora</td><td>"Ou reduz custos, ou aumenta receitas."</td></tr>
+              <tr><td>Conclusiva</td><td>logo, portanto, por conseguinte, assim</td><td>"Os controles falharam; logo, houve inconsistências."</td></tr>
+              <tr><td>Explicativa</td><td>pois (antes do verbo), que, porque</td><td>"Revise o relatório, pois há erros a corrigir."</td></tr>
+            </tbody>
+          </table>
+          <p>A coordenação também ocorre entre <b>termos</b> da oração (não apenas entre orações inteiras): "Comprou canetas, cadernos e grampeadores" — três objetos diretos coordenados entre si.</p>
+
+          <h3>5.3 Relações de subordinação entre orações e entre termos da oração</h3>
+          <p>Orações <b>subordinadas</b> exercem função sintática dentro da oração principal (sujeito, objeto, adjunto etc.), sendo dependentes dela.</p>
+          <table>
+            <thead><tr><th>Tipo</th><th>Função</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Substantivas</td><td>Exercem função de substantivo (sujeito, objeto, predicativo, complemento nominal, apositivo)</td><td>"É importante <u>que os prazos sejam cumpridos</u>." (subjetiva)</td></tr>
+              <tr><td>Adjetivas (restritivas/explicativas)</td><td>Exercem função de adjetivo, qualificando um substantivo antecedente</td><td>"O relatório <u>que foi entregue ontem</u> contém erros." (restritiva, sem vírgula)</td></tr>
+              <tr><td>Adverbiais</td><td>Exercem função de advérbio (causa, consequência, condição, concessão, tempo, finalidade, comparação, conformidade, proporção)</td><td>"A revisão foi feita <u>porque houve reclamações</u>." (causal)</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Orações adjetivas <b>restritivas</b> (sem vírgula, delimitam o sentido do antecedente) e <b>explicativas</b> (com vírgula, acrescentam informação não essencial) mudam o sentido da frase quando a vírgula é inserida ou removida indevidamente: "Os servidores que fizeram o curso foram promovidos" (só os que fizeram) x "Os servidores, que fizeram o curso, foram promovidos" (todos, e todos fizeram o curso).</p>
+          </div>
+
+          <h3>5.4 Emprego dos sinais de pontuação</h3>
+          <table>
+            <thead><tr><th>Sinal</th><th>Função sintática principal</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Vírgula</td><td>Separa termos coordenados; isola aposto/vocativo; marca elipse do verbo; isola adjunto adverbial deslocado</td><td>"Em 2025, a empresa cresceu." (adjunto deslocado)</td></tr>
+              <tr><td>Ponto e vírgula</td><td>Separa orações coordenadas longas; separa itens de uma enumeração complexa</td><td>"O primeiro item trata de custos; o segundo, de receitas."</td></tr>
+              <tr><td>Dois-pontos</td><td>Anuncia enumeração, citação ou explicação</td><td>"A pauta previa três itens: orçamento, custos e metas."</td></tr>
+              <tr><td>Ponto final</td><td>Encerra período declarativo</td><td>—</td></tr>
+              <tr><td>Travessão</td><td>Isola aposto/explicação com maior destaque; introduz fala em diálogo</td><td>"O relatório — já revisado — foi enviado."</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Vírgula <b>entre sujeito e verbo</b> ou entre <b>verbo e complemento</b> é sempre incorreta na norma-padrão, salvo quando isola um elemento intercalado (aposto, expressão explicativa). Ex.: "Os servidores, que participaram do curso, foram promovidos" — a vírgula aqui está correta porque isola uma oração intercalada (explicativa), não porque separa sujeito de verbo.</p>
+          </div>
+
+          <h3>5.5 Concordância verbal e nominal</h3>
+          <table>
+            <thead><tr><th>Caso</th><th>Regra</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Sujeito composto anteposto ao verbo</td><td>Verbo no plural</td><td>"O diretor e o gerente aprovaram o projeto."</td></tr>
+              <tr><td>Sujeito composto posposto ao verbo</td><td>Verbo pode concordar com o núcleo mais próximo ou ir para o plural</td><td>"Aprovaram (ou aprovou) o projeto o diretor e o gerente."</td></tr>
+              <tr><td>Sujeito coletivo singular</td><td>Verbo no singular</td><td>"A equipe apresentou o relatório."</td></tr>
+              <tr><td>Expressões partitivas (a maioria de, grande parte de)</td><td>Verbo no singular ou no plural (concordância com o núcleo ou com o especificador)</td><td>"A maioria dos servidores aprovou/aprovaram a proposta."</td></tr>
+              <tr><td>Sujeito "um dos que"</td><td>Verbo da oração adjetiva no plural</td><td>"Ele é um dos servidores que mais se destacam."</td></tr>
+              <tr><td>Verbo "haver" impessoal (existir)</td><td>Sempre na 3ª pessoa do singular</td><td>"Havia muitos relatórios pendentes." (nunca "haviam")</td></tr>
+              <tr><td>Concordância nominal — adjetivo com dois substantivos</td><td>Pode concordar com o mais próximo ou ir para o plural</td><td>"Comprou material e equipamento novo/novos."</td></tr>
+              <tr><td>"É proibido/necessário/bom" + substantivo sem determinante</td><td>Fica invariável no masculino singular</td><td>"É proibido entrada." x "A entrada é proibida." (com determinante, concorda)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>5.6 Regência verbal e nominal</h3>
+          <table>
+            <thead><tr><th>Verbo/nome</th><th>Regência correta</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Assistir (ver)</td><td>Transitivo indireto — assistir A algo</td><td>"Assisti ao debate sobre o orçamento."</td></tr>
+              <tr><td>Assistir (ajudar)</td><td>Transitivo direto</td><td>"O médico assistiu o paciente."</td></tr>
+              <tr><td>Preferir</td><td>Preferir algo A outra coisa (sem "do que")</td><td>"Prefiro investir em capacitação a cortar despesas."</td></tr>
+              <tr><td>Obedecer/desobedecer</td><td>Transitivo indireto — obedecer A algo</td><td>"O setor obedece às normas internas."</td></tr>
+              <tr><td>Chegar/ir</td><td>Regência com "a" (não "em")</td><td>"Cheguei ao escritório às 8h." (não "no escritório")</td></tr>
+              <tr><td>Aspirar (desejar)</td><td>Transitivo indireto — aspirar A algo</td><td>"Aspiramos a um orçamento mais equilibrado."</td></tr>
+              <tr><td>Implicar (acarretar)</td><td>Transitivo direto, sem preposição</td><td>"O atraso implica multa contratual." (não "implica em multa")</td></tr>
+              <tr><td>Nome "obediente"</td><td>Regência nominal com "a"</td><td>"Servidor obediente às normas internas."</td></tr>
+              <tr><td>Nome "favorável/desfavorável"</td><td>Regência nominal com "a"</td><td>"Parecer favorável ao pedido de reembolso."</td></tr>
+            </tbody>
+          </table>
+
+          <h3>5.7 Emprego do sinal indicativo de crase</h3>
+          <p>A crase é a fusão da preposição "a" com o artigo feminino "a/as", ou com o "a" inicial de pronomes demonstrativos (aquele/aquela/aquilo).</p>
+          <table>
+            <thead><tr><th>Situação</th><th>Regra</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Regra geral</td><td>Crase quando o verbo/nome exige "a" e o termo seguinte aceita artigo "a" feminino</td><td>"Refiro-me à proposta apresentada." (referir-se A + A proposta)</td></tr>
+              <tr><td>Antes de palavra masculina</td><td>Não há crase</td><td>"Andou a cavalo." (nunca "à cavalo")</td></tr>
+              <tr><td>Antes de verbo no infinitivo</td><td>Não há crase</td><td>"Está disposto a negociar." (nunca "à negociar")</td></tr>
+              <tr><td>Locuções adverbiais femininas de instrumento/modo</td><td>Sem crase (regra tradicional), embora uso variável em "moda/maneira"</td><td>"Escreveu a lápis."</td></tr>
+              <tr><td>Locuções adverbiais femininas de tempo/lugar consagradas</td><td>Com crase</td><td>"Chegou à noite."; "Foi à escola."</td></tr>
+              <tr><td>Antes de "casa" (sem especificador) e "terra" (sentido de chão)</td><td>Sem crase</td><td>"Voltou a casa."; "O avião chegou a terra."</td></tr>
+              <tr><td>Antes de "casa" (especificada) e "terra" (sentido de país/pátria)</td><td>Com crase</td><td>"Voltou à casa dos pais."; "Retornou à terra natal."</td></tr>
+              <tr><td>Antes de pronomes demonstrativos aquele/aquela/aquilo</td><td>Com crase, se o verbo exigir "a"</td><td>"Refiro-me àquele processo."</td></tr>
+              <tr><td>Antes de nomes de lugares femininos (regra do "para a")</td><td>Crase se aceitar "para a" no lugar de "para"</td><td>"Foi à Bahia." (vai para a Bahia — aceita "a")</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box tip">
+            <div class="box-title">✅ Macete da crase: teste do masculino</div>
+            <p>Substitua a palavra feminina por uma equivalente masculina. Se aparecer "ao" no lugar de "à", há crase; se aparecer apenas "a", não há. Ex.: "Foi à reunião" → "Foi ao encontro" (aparece "ao") → há crase.</p>
+          </div>
+
+          <h3>5.8 Colocação dos pronomes átonos</h3>
+          <table>
+            <thead><tr><th>Posição</th><th>Quando usar</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Próclise</b> (antes do verbo)</td><td>Com palavras atrativas: negação, advérbios, pronomes relativos/indefinidos/interrogativos, conjunções subordinativas, em orações exclamativas/optativas</td><td>"Não me entregaram o relatório."; "Quando me avisaram, já era tarde."</td></tr>
+              <tr><td><b>Mesóclise</b> (no meio do verbo)</td><td>Com verbo no futuro do presente ou futuro do pretérito, sem palavra atrativa antes</td><td>"Entregar-me-ão o relatório amanhã."</td></tr>
+              <tr><td><b>Ênclise</b> (depois do verbo)</td><td>Regra geral, quando não há fator de próclise nem verbo no futuro (início de frase, ou depois de pausa)</td><td>"Entregaram-me o relatório."</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Início de frase não admite ênclise na norma-padrão culta europeia rígida, mas é amplamente aceito no português brasileiro contemporâneo em registro formal — bancas como a FGV costumam seguir a norma tradicional: evitar iniciar período com pronome oblíquo átono ("Me entregaram o relatório" é evitado; prefere-se "Entregaram-me" ou reformular com sujeito antes).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>Este é o bloco em que a FGV mais aproxima a prova de uma "prova de gramática tradicional", mas sempre aplicada a um texto-base ou a frases de contexto institucional — raramente pergunta regras "secas" sem exemplo aplicado.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões de reescrita que testam simultaneamente concordância, regência e pontuação em uma mesma frase.</li>
+            <li>Identificação da classificação sintática de uma oração destacada no texto (substantiva, adjetiva, adverbial; coordenada ou subordinada).</li>
+            <li>Itens específicos sobre emprego correto (ou incorreto) da crase em frases de contexto administrativo.</li>
+            <li>Dificuldade alta — é o bloco que mais separa candidatos bem preparados dos demais.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Concordância verbal com sujeitos complexos</td><td>Muito alta</td></tr>
+              <tr><td>Emprego da crase</td><td>Muito alta</td></tr>
+              <tr><td>Regência de verbos como "assistir", "preferir", "aspirar", "implicar"</td><td>Alta</td></tr>
+              <tr><td>Diferenciação entre oração coordenada e subordinada</td><td>Alta</td></tr>
+              <tr><td>Vírgula entre sujeito e verbo (erro clássico a evitar)</td><td>Alta</td></tr>
+              <tr><td>Colocação pronominal em início de frase</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Inserir vírgula indevida entre sujeito e verbo, mascarada como "pausa natural" da leitura.</li>
+            <li>Trocar regência de verbo (usar preposição errada, como "implicar em" em vez de "implicar").</li>
+            <li>Aplicar crase antes de palavra masculina ou verbo no infinitivo.</li>
+            <li>Confundir oração adjetiva restritiva (sem vírgula) com explicativa (com vírgula), alterando o sentido.</li>
+            <li>Usar concordância no singular quando o sujeito composto anteposto exige plural, e vice-versa.</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV apresentar cinco versões de uma mesma frase institucional, cada uma com uma pequena alteração gramatical (concordância, regência, crase, pontuação ou colocação pronominal), pedindo a única versão inteiramente correta segundo a norma-padrão.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver vírgula logo após o sujeito (antes do verbo), desconfie — raramente está correta, salvo aposto/explicação intercalada.</li>
+            <li>Ao ver "a" antes de substantivo feminino, teste mentalmente a substituição pelo masculino para verificar a crase.</li>
+            <li>Ao ver início de frase com pronome oblíquo átono ("Me disseram..."), desconfie — pode ser marcado como inadequado à norma-padrão.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Macete da crase</div><p>Troque a palavra feminina por uma masculina equivalente: se virar "ao", há crase; se ficar só "a", não há.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete da vírgula entre sujeito e verbo</div><p>Regra de ouro: "sujeito e verbo não se separam por vírgula" — exceto quando há um aposto ou oração intercalada entre eles.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Mnemônico da próclise: NA-PRA</div><p><b>N</b>egação, <b>A</b>dvérbio, <b>P</b>ronome (relativo/indefinido/interrogativo), <b>R</b>elativas e conjunções subordinativas, <b>A</b> frase exclamativa/optativa — todos atraem o pronome para antes do verbo.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regência do "assistir"</div><p>Assistir <b>a</b> (ver, transitivo indireto) x assistir (ajudar, transitivo direto, sem preposição).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Truque do "haver" impessoal</div><p>Quando "haver" significa "existir", fica sempre na 3ª pessoa do singular — nunca "haviam muitos problemas", e sim "havia muitos problemas".</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Coordenação = orações independentes; Subordinação = uma oração depende sintaticamente da outra.</li>
+            <li>Oração adjetiva restritiva (sem vírgula) delimita sentido; explicativa (com vírgula) apenas acrescenta informação.</li>
+            <li>Vírgula nunca separa sujeito de verbo, salvo aposto/oração intercalada.</li>
+            <li>Sujeito composto anteposto → verbo no plural. "Haver" impessoal (existir) → sempre singular.</li>
+            <li>Assistir A (ver) x Assistir (ajudar); Implicar sem preposição; Preferir A, não "do que".</li>
+            <li>Crase: teste do masculino (vira "ao"? → crase). Nunca antes de masculino ou verbo no infinitivo.</li>
+            <li>Próclise: negação, advérbio, pronome relativo/indefinido/interrogativo, conjunção subordinativa atraem o pronome.</li>
+            <li>Mesóclise: só com futuro do presente/pretérito, sem palavra atrativa antes.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADROS/TÉCNICAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadros e técnicas de resolução</h2></div>
+        <div class="card">
+          <div class="box info"><div class="box-title">ℹ Observação</div><p>Apresentamos o <b>protocolo de checagem sintática</b>, aplicável a qualquer questão deste bloco.</p></div>
+          <table>
+            <thead><tr><th>Passo</th><th>Verificação</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Identifique o verbo principal e seu sujeito — confira a concordância verbal.</td></tr>
+              <tr><td>2</td><td>Verifique se há vírgula separando sujeito e verbo indevidamente.</td></tr>
+              <tr><td>3</td><td>Cheque a regência do verbo principal — ele exige preposição? Qual?</td></tr>
+              <tr><td>4</td><td>Se há "a" antes de palavra feminina, aplique o teste do masculino para crase.</td></tr>
+              <tr><td>5</td><td>Se há pronome átono, identifique fator de próclise antes de aceitar a colocação apresentada.</td></tr>
+              <tr><td>6</td><td>Classifique orações subordinadas/coordenadas destacadas antes de responder.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS-RESUMO -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Coordenadas x Subordinadas</h3>
+          <table>
+            <thead><tr><th>Coordenadas</th><th>Subordinadas</th></tr></thead>
+            <tbody>
+              <tr><td>Independentes sintaticamente</td><td>Dependem sintaticamente da principal</td></tr>
+              <tr><td>Ligadas por conjunções coordenativas</td><td>Ligadas por conjunções subordinativas ou pronomes relativos</td></tr>
+            </tbody>
+          </table>
+          <h3>Próclise x Mesóclise x Ênclise</h3>
+          <table>
+            <thead><tr><th>Posição</th><th>Contexto</th></tr></thead>
+            <tbody>
+              <tr><td>Próclise</td><td>Fator atrativo antes do verbo</td></tr>
+              <tr><td>Mesóclise</td><td>Futuro do presente/pretérito, sem fator atrativo</td></tr>
+              <tr><td>Ênclise</td><td>Regra geral, sem fator atrativo, verbo não futuro</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>A FGV é conhecida por embutir questões de crase e regência dentro de textos de conteúdo técnico (econômico, jurídico, administrativo), testando simultaneamente a compreensão do conteúdo e o domínio gramatical.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>O sinal de crase (acento grave) começou a ser usado sistematicamente no português apenas no século XIX, para desfazer ambiguidades entre a preposição "a" e o artigo feminino "a" em textos formais.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>Gramáticos como Evanildo Bechara destacam que a norma-padrão brasileira já aceita, em registro formal, o início de período com pronome oblíquo átono ("Me disseram que..."), embora bancas de concurso tradicionalmente ainda cobrem a regra mais rígida da norma europeia.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Domínio dos mecanismos de coesão textual (Tópico 4)</td><td>Conectores de coesão sequencial são as mesmas conjunções coordenativas/subordinativas deste tópico</td></tr>
+              <tr><td>Reescrita de frases e parágrafos (Tópico 6)</td><td>Concordância, regência, crase e pontuação são os critérios centrais de avaliação em reescrita</td></tr>
+              <tr><td>Reorganização da estrutura de orações e períodos (Tópico 6.3)</td><td>Depende diretamente do domínio de coordenação e subordinação</td></tr>
+              <tr><td>Compreensão e interpretação de textos (Tópico 1)</td><td>A pontuação e a estrutura sintática afetam diretamente o sentido interpretado</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar as tabelas de crase e regência verbal.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, justificando por escrito cada classificação sintática exigida.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; mapear por subtópico (5.1 a 5.8) onde estão concentrados os erros.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>CUNHA, Celso; CINTRA, Luís F. Lindley. <i>Nova Gramática do Português Contemporâneo</i>. Rio de Janeiro: Lexikon.</li>
+            <li>BECHARA, Evanildo. <i>Moderna Gramática Portuguesa</i>. Rio de Janeiro: Nova Fronteira.</li>
+            <li>CEGALLA, Domingos Paschoal. <i>Novíssima Gramática da Língua Portuguesa</i>. São Paulo: Companhia Editora Nacional.</li>
+            <li>ROCHA LIMA, Carlos Henrique da. <i>Gramática Normativa da Língua Portuguesa</i>. Rio de Janeiro: José Olympio.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Língua Portuguesa · Tópico 05/08</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_lp_t05";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Quais são as classes de palavras variáveis?", a:"Substantivo, adjetivo, artigo, numeral, pronome e verbo."},
+    {q:"Quais são as classes de palavras invariáveis?", a:"Advérbio, preposição, conjunção e interjeição."},
+    {q:"O que caracteriza uma oração coordenada?", a:"É sintaticamente independente das demais, ligada por conjunção coordenativa."},
+    {q:"O que caracteriza uma oração subordinada?", a:"Exerce função sintática dentro da oração principal, dependendo dela."},
+    {q:"Diferencie oração adjetiva restritiva de explicativa.", a:"Restritiva (sem vírgula) delimita o sentido do antecedente; explicativa (com vírgula) apenas acrescenta informação não essencial."},
+    {q:"A vírgula pode separar sujeito e verbo?", a:"Não, salvo quando isola um aposto ou oração intercalada entre eles."},
+    {q:"Como concorda o verbo com sujeito composto anteposto?", a:"Vai para o plural."},
+    {q:"Como concorda o verbo 'haver' no sentido de existir?", a:"Sempre na 3ª pessoa do singular, sendo impessoal (nunca 'haviam')."},
+    {q:"Qual a regência do verbo 'assistir' no sentido de 'ver'?", a:"Transitivo indireto, com a preposição 'a' (assistir ao jogo)."},
+    {q:"Qual a regência do verbo 'assistir' no sentido de 'ajudar'?", a:"Transitivo direto, sem preposição (assistir o paciente)."},
+    {q:"Qual a regência do verbo 'implicar' no sentido de 'acarretar'?", a:"Transitivo direto, sem preposição (implica multa, não 'implica em multa')."},
+    {q:"Qual a regência do verbo 'preferir'?", a:"Preferir algo A outra coisa, sem usar 'do que'."},
+    {q:"Qual o macete para testar a crase?", a:"Substituir a palavra feminina por uma masculina equivalente; se virar 'ao', há crase."},
+    {q:"Há crase antes de palavra masculina?", a:"Não, nunca."},
+    {q:"Há crase antes de verbo no infinitivo?", a:"Não, nunca."},
+    {q:"Quando ocorre próclise?", a:"Quando há palavra atrativa antes do verbo: negação, advérbio, pronome relativo/indefinido/interrogativo, conjunção subordinativa, frase exclamativa/optativa."},
+    {q:"Quando ocorre mesóclise?", a:"Com verbo no futuro do presente ou futuro do pretérito, sem palavra atrativa antes."},
+    {q:"Quando ocorre ênclise?", a:"Regra geral, quando não há fator de próclise nem verbo no futuro, geralmente em início de oração."},
+    {q:"O que são orações substantivas?", a:"Orações subordinadas que exercem função de substantivo (sujeito, objeto, predicativo, complemento nominal, apositivo)."},
+    {q:"O que são orações adverbiais?", a:"Orações subordinadas que exercem função de advérbio, expressando causa, consequência, condição, concessão, tempo, finalidade, entre outras."},
+    {q:"Qual a função do ponto e vírgula?", a:"Separar orações coordenadas longas ou itens de uma enumeração complexa que já contém vírgulas internas."},
+    {q:"Qual a função dos dois-pontos?", a:"Anunciar uma enumeração, uma citação ou uma explicação."},
+    {q:"Como concorda o adjetivo que qualifica dois substantivos?", a:"Pode concordar com o substantivo mais próximo ou ir para o plural."},
+    {q:"Como fica a concordância de 'é proibido' sem determinante no substantivo?", a:"Fica invariável no masculino singular (ex.: 'entrada é proibido')."},
+    {q:"Qual a regência do verbo 'obedecer'?", a:"Transitivo indireto, com a preposição 'a' (obedece às normas)."},
+    {q:"Qual a regência do verbo 'aspirar' no sentido de 'desejar'?", a:"Transitivo indireto, com a preposição 'a' (aspira a um cargo)."},
+    {q:"Há crase antes de 'casa' sem especificador?", a:"Não (voltou a casa); mas há crase se 'casa' for especificada (voltou à casa dos pais)."},
+    {q:"O que são conjunções coordenativas conclusivas?", a:"Logo, portanto, por conseguinte, assim — indicam uma conclusão decorrente do que foi dito antes."},
+    {q:"O que são conjunções coordenativas explicativas?", a:"Pois (antes do verbo), porque, que — introduzem uma justificativa/explicação."},
+    {q:"Início de período pode ter pronome oblíquo átono na norma tradicional cobrada em concursos?", a:"Não é recomendado pela norma tradicional rígida — bancas costumam evitar essa construção."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Concordância verbal", texto:"—", enun:"Assinale a alternativa com concordância verbal correta:", alts:["O diretor e o gerente aprovou o projeto.","Fazem dois anos que o projeto foi aprovado.","Haviam muitos relatórios pendentes.","A maioria dos servidores aprovou a proposta.","Existe muitos problemas a resolver."], correta:3, coment:"'A maioria dos servidores aprovou' está correto (concordância com o núcleo 'maioria', singular). As demais têm erros: sujeito composto pede plural (A); 'fazer' tempo é impessoal, singular (B); 'haver' existir é impessoal, singular (C); 'existir' concorda com o sujeito plural 'problemas' (E)."},
+    {tema:"Regência verbal", texto:"—", enun:"Assinale a alternativa com regência verbal correta:", alts:["Assisti o jogo pela televisão.","Prefiro trabalhar em equipe do que sozinho.","O atraso implica em multa contratual.","Aspiramos a um orçamento mais equilibrado.","Cheguei no escritório às 8h."], correta:3, coment:"'Aspirar a' (desejar) está correto. 'Assistir' (ver) exige preposição 'a' (A errado); 'preferir' não usa 'do que' (B errado); 'implicar' não usa preposição (C errado); 'chegar' exige 'a', não 'em' (E errado)."},
+    {tema:"Crase", texto:"—", enun:"Assinale a alternativa com emprego correto da crase:", alts:["Entreguei o relatório à ela.","Cheguei à uma hora da tarde.","Refiro-me à proposta apresentada ontem.","O documento foi enviado à Paris.","Ele estava disposto à negociar."], correta:2, coment:"'Refiro-me à proposta' está correto (referir-se A + A proposta = à). As demais têm erros: crase indevida antes de pronome pessoal (A), antes de numeral 'uma hora' sem artigo determinado no sentido de tempo específico é caso à parte mas mal empregado no contexto (B, forma correta seria 'à uma hora' apenas se referindo a hora do relógio, aqui está mal aplicado por ambiguidade), 'Paris' sem artigo não aceita crase salvo uso consagrado (D), e nunca há crase antes de verbo no infinitivo (E)."},
+    {tema:"Pontuação", texto:"—", enun:"Assinale a alternativa com pontuação correta:", alts:["Os servidores, que fizeram o curso, foram promovidos.","Os servidores que fizeram o curso, foram promovidos.","Os servidores, que fizeram o curso foram promovidos.","Os servidores que, fizeram o curso, foram promovidos.","Os servidores que fizeram, o curso foram promovidos."], correta:0, coment:"A alternativa A usa corretamente a vírgula dupla para isolar a oração explicativa 'que fizeram o curso' (todos os servidores fizeram o curso). As demais rompem a estrutura da oração intercalada ou separam indevidamente sujeito e verbo."},
+    {tema:"Coordenação x subordinação", texto:"“Revise o relatório, pois há erros a corrigir.”", enun:"A oração destacada ('pois há erros a corrigir') classifica-se como:", alts:["Subordinada adverbial causal","Coordenada sindética explicativa","Subordinada substantiva objetiva direta","Coordenada sindética conclusiva","Subordinada adjetiva restritiva"], correta:1, coment:"'Pois', antes do verbo, com sentido de explicação/justificativa, caracteriza conjunção coordenativa explicativa — a oração é coordenada sindética explicativa, não subordinada."},
+    {tema:"Pronomes átonos", texto:"—", enun:"Assinale a alternativa com colocação pronominal correta segundo a norma-padrão tradicional:", alts:["Me entregaram o relatório ontem.","Não me entregaram o relatório ontem.","Entregar-me-ão o relatório amanhã, se necessário.","Entregaram me o relatório ontem.","Nunca entregaram-me o relatório."], correta:1, coment:"'Não me entregaram' emprega corretamente a próclise, atraída pela negação 'não'. A alternativa A inicia período com pronome oblíquo, evitado pela norma tradicional; D está sem hífen; E deveria usar próclise após 'nunca' (advérbio), não ênclise."},
+    {tema:"Concordância nominal", texto:"—", enun:"Assinale a alternativa com concordância nominal correta:", alts:["A entrada é proibido no local de obras.","É proibido a entrada de pessoas não autorizadas.","É proibida a entrada de pessoas não autorizadas.","A entrada são proibidas no local de obras.","É proibido entrada no local de obras (correto sem determinante)."], correta:2, coment:"Com o substantivo determinado por artigo ('a entrada'), o adjetivo concorda normalmente: 'é proibida a entrada'. A alternativa E estaria correta apenas sem determinante ('é proibido entrada'), mas como enunciada com o restante da frase, a C é a única plenamente correta com determinante."},
+    {tema:"Classes de palavras", texto:"“O relatório certo foi entregue; o errado, arquivado.”", enun:"A palavra 'certo', no trecho, classifica-se como:", alts:["Advérbio","Substantivo","Adjetivo","Conjunção","Pronome"], correta:2, coment:"'Certo' qualifica o substantivo 'relatório' (o relatório certo), funcionando como adjetivo."},
+    {tema:"Regência nominal", texto:"—", enun:"Assinale a alternativa com regência nominal correta:", alts:["Parecer favorável do pedido de reembolso.","Servidor obediente com as normas internas.","Parecer favorável ao pedido de reembolso.","Servidor obediente para as normas internas.","Parecer favorável sobre o pedido de reembolso."], correta:2, coment:"'Favorável a' é a regência nominal correta ('favorável ao pedido'). As demais empregam preposições incorretas para os nomes 'favorável' e 'obediente' (que exige 'a', não 'com' ou 'para')."},
+    {tema:"Oração subordinada substantiva", texto:"“É importante que os prazos sejam cumpridos.”", enun:"A oração destacada classifica-se como subordinada substantiva:", alts:["Objetiva direta","Subjetiva","Predicativa","Completiva nominal","Apositiva"], correta:1, coment:"A oração 'que os prazos sejam cumpridos' é o sujeito da oração principal ('é importante [isso]') — trata-se de subordinada substantiva subjetiva."},
+    {tema:"Crase avançada", texto:"—", enun:"Assinale a alternativa com emprego correto da crase:", alts:["Voltou a casa depois do expediente.","Voltou à casa dos pais depois do expediente.","Retornou a terra natal após anos fora.","Chegou a noite mais cedo que o previsto.","Foi a Bahia visitar a família."], correta:1, coment:"'À casa dos pais' está correto, pois 'casa' está especificada (aceita artigo). As demais estão incorretas: 'casa' sem especificador não tem crase (A); 'terra natal' no sentido de pátria pede crase, 'à terra natal' (C errado sem crase); 'à noite' pede crase por ser locução consagrada (D errado sem crase); 'à Bahia' pede crase, nome de lugar feminino que aceita 'a' (E errado sem crase)."},
+    {tema:"Pontuação avançada", texto:"—", enun:"Assinale a alternativa com emprego correto do ponto e vírgula:", alts:["O relatório trata de três temas: custos, receitas e prazos.","O primeiro item trata de custos; o segundo, de receitas.","O relatório; foi entregue no prazo estabelecido.","Custos, receitas; e prazos foram analisados.","O relatório foi entregue; no prazo estabelecido."], correta:1, coment:"O ponto e vírgula separa corretamente dois segmentos coordenados extensos de uma enumeração ('o primeiro item... o segundo...'), com elipse do verbo no segundo segmento — uso clássico e correto."},
+    {tema:"Concordância verbal avançada", texto:"—", enun:"Assinale a alternativa com concordância verbal correta:", alts:["Ele é um dos servidores que mais se destaca.","Ele é um dos servidores que mais se destacam.","Ele são um dos servidores que se destacam.","Ele é um dos servidor que se destacam.","Ele é um dos servidores que mais se destacaram (incoerência temporal)."], correta:1, coment:"Na estrutura 'um dos que', o verbo da oração adjetiva concorda no plural com 'servidores' (antecedente do 'que'): 'que mais se destacam'."},
+    {tema:"Regência verbal avançada", texto:"—", enun:"Assinale a alternativa com regência verbal correta:", alts:["O setor obedece as normas internas.","O setor obedece às normas internas.","O setor obedece de acordo as normas internas.","O setor obedece sobre as normas internas.","O setor obedece com as normas internas."], correta:1, coment:"'Obedecer a' é a regência correta (transitivo indireto); com artigo feminino plural, ocorre a crase: 'obedece às normas internas'."},
+    {tema:"Coordenação x subordinação avançada", texto:"“O setor cresceu; contudo, a produtividade não acompanhou o ritmo.”", enun:"A oração destacada classifica-se como:", alts:["Coordenada sindética adversativa","Subordinada adverbial concessiva","Subordinada substantiva objetiva direta","Coordenada sindética aditiva","Subordinada adjetiva explicativa"], correta:0, coment:"'Contudo' é conjunção coordenativa adversativa, ligando duas orações independentes de sentido contrastante — coordenada sindética adversativa."},
+    {tema:"Pronomes átonos avançado", texto:"—", enun:"Assinale a alternativa com colocação pronominal correta:", alts:["Entregar-me-ão o relatório amanhã.","Me entregarão o relatório amanhã.","Entregarão-me o relatório amanhã.","Ão me entregar o relatório amanhã.","Entregar me-ão o relatório amanhã."], correta:0, coment:"Com verbo no futuro do presente ('entregarão') sem palavra atrativa antes, emprega-se mesóclise: 'entregar-me-ão', com hífen dividindo o radical e a terminação do futuro."},
+    {tema:"Concordância nominal avançada", texto:"—", enun:"Assinale a alternativa com concordância nominal correta:", alts:["Comprou material e equipamento novo.","Comprou material e equipamento novos.","Comprou material novo e equipamento novos (mistura incoerente).","Comprou material e equipamento nova.","Comprou material e equipamentos novo."], correta:1, coment:"Quando um único adjetivo qualifica dois substantivos, pode concordar com o mais próximo (singular) ou ir para o plural — 'novos' no plural está correto e é a opção mais recomendada em textos formais."},
+    {tema:"Crase com pronome demonstrativo", texto:"—", enun:"Assinale a alternativa com emprego correto da crase:", alts:["Refiro-me aquele processo.","Refiro-me àquele processo.","Refiro-me a aquele processo.","Refiro-me aquele, processo.","Refiro-me á aquele processo."], correta:1, coment:"'Referir-se a' exige a preposição 'a', que se funde com o 'a' inicial de 'aquele', formando a crase: 'àquele processo'."},
+    {tema:"Oração adjetiva restritiva x explicativa", texto:"—", enun:"Assinale a alternativa em que a ausência de vírgula altera corretamente o sentido para 'apenas alguns servidores fizeram o curso':", alts:["Os servidores, que fizeram o curso, foram promovidos.","Os servidores que fizeram o curso foram promovidos.","Os servidores foram promovidos, que fizeram o curso.","Os servidores que, fizeram o curso, foram promovidos.","Os servidores foram, que fizeram o curso, promovidos."], correta:1, coment:"Sem vírgula, a oração 'que fizeram o curso' é restritiva, delimitando que apenas os servidores que fizeram o curso foram promovidos — sentido diferente da versão com vírgula (explicativa, todos fizeram o curso)."},
+    {tema:"Regência combinada", texto:"—", enun:"Assinale a alternativa integralmente correta quanto à regência e à crase:", alts:["Assisti à palestra e aspirei ao cargo de gerente.","Assisti a palestra e aspirei o cargo de gerente.","Assisti à palestra e aspirei o cargo de gerente.","Assisti a palestra e aspirei ao cargo de gerente.","Assisti a palestra e aspirei à cargo de gerente."], correta:0, coment:"'Assistir a' (ver) exige preposição, que se funde com o artigo feminino 'a palestra' formando crase: 'à palestra'. 'Aspirar a' (desejar) também exige preposição: 'ao cargo' (masculino, sem crase, mas com contração 'a'+'o'=ao). A alternativa A combina corretamente as duas regências."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Assinale o exemplo de oração coordenada aditiva:", alts:["A empresa cresceu, mas não lucrou.","A empresa cresceu e ampliou a equipe.","A empresa cresceu, logo contratou mais gente.","A empresa cresceu, pois investiu bem.","A empresa cresceu, ou fechou uma filial."], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale o exemplo de oração coordenada adversativa:", alts:["Investiu, mas não obteve retorno.","Investiu e obteve retorno.","Investiu, portanto obteve retorno.","Investiu, pois precisava crescer.","Investiu ou não investiu."], correta:0},
+    {d:"Fácil", texto:"—", enun:"Assinale a classe de palavra invariável:", alts:["Substantivo","Adjetivo","Advérbio","Verbo","Pronome"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale a alternativa com concordância verbal correta:", alts:["Havia muitos problemas.","Haviam muitos problemas.","Houveram muitos problemas.","Hão de haver muitos problema.","Havia muitos problema."], correta:0},
+    {d:"Fácil", texto:"—", enun:"Assinale a regência correta do verbo 'chegar':", alts:["Cheguei no escritório.","Cheguei ao escritório.","Cheguei o escritório.","Cheguei do escritório para trabalhar.","Cheguei em escritório."], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale a alternativa com crase corretamente empregada:", alts:["Foi à pé até o trabalho.","Entregou à Maria o documento (nome próprio sem artigo).","Chegou à noite.","Estava disposta à ajudar.","Voltou à casa (sem especificador)."], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale o exemplo correto de próclise:", alts:["Entregaram-me o relatório no início da reunião.","Não me entregaram o relatório.","Entregar-me-ão o relatório.","Me entregaram o relatório (início de frase).","Entregaram me o relatório (sem hífen)."], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale a alternativa com pontuação correta:", alts:["O relatório, foi entregue no prazo.","O relatório foi, entregue no prazo.","O relatório foi entregue no prazo.","O relatório foi entregue, no prazo.","O, relatório foi entregue no prazo."], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale o exemplo de oração subordinada adjetiva:", alts:["Espero que o prazo seja cumprido.","O relatório que foi entregue ontem contém erros.","Revise o relatório porque há erros.","Se o prazo for cumprido, tudo bem.","Ele trabalha para que o prazo seja cumprido."], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale a regência correta do verbo 'preferir':", alts:["Prefiro café a chá.","Prefiro café do que chá.","Prefiro café que chá.","Prefiro café sobre chá.","Prefiro café com chá (regência incorreta)."], correta:0},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com concordância nominal correta:", alts:["Seguem anexo os documentos solicitados.","Seguem anexos os documentos solicitados.","Segue anexos os documentos solicitados.","Seguem anexas os documentos solicitados (concordância incorreta de gênero).","Segue anexo os documento solicitado."], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com regência nominal correta:", alts:["Servidor obediente às normas.","Servidor obediente das normas.","Servidor obediente sobre as normas.","Servidor obediente com as normas.","Servidor obediente para as normas."], correta:0},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com crase corretamente empregada:", alts:["Refiro-me àquilo que foi dito.","Refiro-me aquilo que foi dito.","Refiro-me á aquilo que foi dito.","Refiro-me a aquilo, que foi dito.","Refiro-me àaquilo que foi dito."], correta:0},
+    {d:"Média", texto:"—", enun:"Assinale o exemplo correto de mesóclise:", alts:["Dar-lhe-ei o relatório amanhã.","Lhe darei o relatório amanhã (início de frase).","Darei-lhe o relatório amanhã.","Dar lhe-ei o relatório amanhã.","Darei lhe o relatório amanhã."], correta:0},
+    {d:"Média", texto:"“Os servidores, que fizeram o curso, foram promovidos.”", enun:"Nessa frase, a oração entre vírgulas é:", alts:["Restritiva, informando que só alguns foram promovidos","Explicativa, informando que todos os servidores fizeram o curso","Subordinada substantiva","Coordenada aditiva","Coordenada adversativa"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com concordância verbal correta:", alts:["Fazem três anos que ele trabalha aqui.","Faz três anos que ele trabalha aqui.","Fazem três ano que ele trabalha aqui.","Faziam três anos que ele trabalha aqui (incoerência temporal).","Fez três anos, que ele trabalha aqui (pontuação incorreta)."], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a regência correta do verbo 'implicar' (acarretar):", alts:["O atraso implica em multa.","O atraso implica multa.","O atraso implica sobre multa.","O atraso implica com multa.","O atraso implica à multa."], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com pontuação correta (ponto e vírgula):", alts:["O primeiro tópico trata de custos; o segundo, de receitas.","O primeiro tópico; trata de custos, o segundo de receitas.","O primeiro tópico trata; de custos o segundo de receitas.","O primeiro tópico trata de custos, o segundo; de receitas.","O primeiro; tópico trata de custos o segundo de receitas."], correta:0},
+    {d:"Média", texto:"—", enun:"Assinale o exemplo de oração subordinada adverbial condicional:", alts:["Espero que o prazo seja cumprido.","Se o prazo for cumprido, o projeto avançará.","O relatório que foi entregue contém erros.","Revise o relatório porque há erros.","Ele trabalha para que o prazo seja cumprido."], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com regência correta do verbo 'aspirar' (desejar):", alts:["Aspiramos um cargo mais alto.","Aspiramos a um cargo mais alto.","Aspiramos para um cargo mais alto.","Aspiramos com um cargo mais alto.","Aspiramos sobre um cargo mais alto."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com concordância verbal correta em caso de sujeito composto posposto:", alts:["Aprovou o projeto o diretor e o gerente (concorda no singular, com o núcleo mais próximo — aceito).","Aprovaram o projeto o diretor e o gerente (concorda no plural — também aceito).","Aprova o projeto os diretores (incoerência de número).","Aprovarão o projeto o diretor e o gerente amanhã (verbo no futuro; ambas as formas ainda seriam aceitas nesse padrão).","Todas as três primeiras opções (A, B e C) estão corretas simultaneamente."], correta:1, },
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com todas as regências corretas:", alts:["Assisti à reunião e aspirei ao cargo.","Assisti a reunião e aspirei o cargo.","Assisti à reunião e aspirei o cargo.","Assisti a reunião e aspirei ao cargo.","Assisti à reunião e aspirei à cargo."], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com crase corretamente empregada em contexto de lugar (verbo de movimento + retorno):", alts:["Foi à Bahia e voltou a Bahia.","Foi a Bahia e voltou à Bahia.","Foi à Bahia e voltou à Bahia.","Foi a Bahia e voltou a Bahia.","Foi Bahia e voltou à Bahia."], correta:2},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com colocação pronominal correta em oração optativa (desejo):", alts:["Deus te abençoe.","Deus abençoe-te.","Deus abençoe te.","Te Deus abençoe.","Deus-te abençoe."], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com concordância nominal correta para 'é necessário' sem determinante:", alts:["É necessária cautela na análise.","É necessário cautela na análise.","É necessárias cautela na análise.","É necessário a cautela na análise.","São necessário cautela na análise."], correta:0, },
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa em que a oração destacada é subordinada substantiva completiva nominal:", alts:["Tenho certeza de que o prazo será cumprido.","O relatório que foi entregue contém erros.","Espero que o prazo seja cumprido.","Se o prazo for cumprido, tudo bem.","Revise, pois há erros."], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com regência nominal correta para 'favorável':", alts:["Parecer favorável do pedido.","Parecer favorável sobre o pedido.","Parecer favorável ao pedido.","Parecer favorável com o pedido.","Parecer favorável para o pedido."], correta:2},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com pontuação correta, isolando aposto explicativo:", alts:["O diretor João Silva aprovou o projeto.","O diretor, João Silva, aprovou o projeto.","O diretor João, Silva aprovou o projeto.","O diretor João Silva, aprovou o projeto.","O diretor, João Silva aprovou, o projeto."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com colocação pronominal correta em oração iniciada por pronome relativo:", alts:["O relatório que se entregou ontem contém erros.","O relatório que entregou-se ontem contém erros.","O relatório que entregou se ontem contém erros.","O relatório, que entregou-se, ontem contém erros.","O relatório que se-entregou ontem contém erros."], correta:0},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Classificar corretamente as 10 classes de palavras",
+    "Diferenciar oração coordenada de subordinada",
+    "Classificar orações subordinadas substantivas, adjetivas e adverbiais",
+    "Diferenciar oração adjetiva restritiva de explicativa",
+    "Aplicar corretamente a vírgula (nunca separar sujeito e verbo, salvo intercalação)",
+    "Resolver concordância verbal com sujeitos compostos, coletivos e partitivos",
+    "Aplicar corretamente a concordância nominal em casos especiais",
+    "Dominar a regência de verbos clássicos de concurso (assistir, preferir, implicar, aspirar, obedecer)",
+    "Aplicar o teste do masculino para identificar a crase",
+    "Reconhecer casos obrigatórios e proibidos de crase",
+    "Posicionar corretamente pronomes átonos (próclise, mesóclise, ênclise)",
+    "Resolver questões de reescrita que combinam mais de um subtópico deste bloco",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Confundir oração coordenada com subordinada, ignorando a dependência sintática.",
+    "Colocar vírgula entre sujeito e verbo sem que haja aposto ou oração intercalada.",
+    "Remover ou adicionar vírgula em oração adjetiva sem perceber a mudança de sentido (restritiva x explicativa).",
+    "Errar a concordância verbal com sujeito composto anteposto (deveria ser plural).",
+    "Usar 'haviam' no sentido de existir, quando o correto é sempre 'havia' (impessoal).",
+    "Confundir a regência de 'assistir' (ver, com preposição) e 'assistir' (ajudar, sem preposição).",
+    "Usar 'implicar em' quando o correto é 'implicar', sem preposição.",
+    "Usar 'do que' após 'preferir', quando o correto é apenas 'a'.",
+    "Aplicar crase antes de palavra masculina.",
+    "Aplicar crase antes de verbo no infinitivo.",
+    "Esquecer a crase em locuções consagradas como 'à noite', 'à tarde'.",
+    "Não aplicar o teste do masculino antes de decidir sobre a crase.",
+    "Iniciar frase com pronome oblíquo átono em contexto formal de concurso.",
+    "Confundir mesóclise com ênclise em verbos no futuro.",
+    "Não identificar palavras atrativas (negação, advérbio, pronome relativo) que exigem próclise.",
+    "Errar a concordância nominal em expressões como 'é proibido/necessário' sem determinante.",
+    "Confundir substantivo, adjetivo e advérbio quando a mesma palavra pode assumir mais de uma função.",
+    "Não perceber que 'que' pode ser conjunção integrante ou pronome relativo, conforme o contexto.",
+    "Ignorar a regência nominal de adjetivos como 'obediente' e 'favorável', que exigem a preposição 'a'.",
+    "Tentar resolver questões de reescrita sem checar simultaneamente concordância, regência, crase e pontuação.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Classes de palavras","As dez categorias gramaticais em que se dividem as palavras da língua portuguesa."],
+    ["Oração coordenada","Oração sintaticamente independente das demais, ligada por conjunção coordenativa."],
+    ["Oração subordinada","Oração que exerce função sintática dentro da oração principal, dependendo dela."],
+    ["Oração adjetiva restritiva","Oração subordinada adjetiva sem vírgula, que delimita o sentido do antecedente."],
+    ["Oração adjetiva explicativa","Oração subordinada adjetiva com vírgula, que acrescenta informação não essencial."],
+    ["Concordância verbal","Compatibilidade de número e pessoa entre sujeito e verbo."],
+    ["Concordância nominal","Compatibilidade de gênero e número entre substantivo e seus determinantes/qualificadores."],
+    ["Regência verbal","Relação de dependência entre um verbo e seu complemento, com ou sem preposição exigida."],
+    ["Regência nominal","Relação de dependência entre um nome (substantivo/adjetivo) e seu complemento, geralmente com preposição."],
+    ["Crase","Fusão da preposição 'a' com o artigo feminino 'a/as' ou com o 'a' de pronomes demonstrativos."],
+    ["Próclise","Colocação do pronome átono antes do verbo."],
+    ["Mesóclise","Colocação do pronome átono no meio do verbo, em formas do futuro."],
+    ["Ênclise","Colocação do pronome átono depois do verbo."],
+    ["Sujeito impessoal","Verbo sem sujeito determinado, usado sempre na 3ª pessoa do singular (ex.: haver no sentido de existir)."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

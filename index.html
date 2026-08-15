@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Trilha de Estudos FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.6;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+
+  .topbar{
+    display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--ink-950);color:#fff;
+    position:sticky;top:0;z-index:50;flex-wrap:wrap;
+  }
+  .topbar .brand{font-family:var(--serif);font-size:15px;color:#fff;}
+  .topbar .brand b{color:var(--gold-light);}
+  .topbar .spacer{flex:1;}
+  .btn{
+    border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;
+    border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);
+  }
+  .topbar .btn{background:transparent;color:#fff;border-color:#3d4a6b;}
+  .topbar .btn:hover{border-color:var(--gold-light);color:var(--gold-light);}
+  .search-box input{
+    width:100%;max-width:320px;padding:8px 12px;border-radius:8px;border:1px solid var(--ink-600);
+    background:var(--ink-900);color:#eef0f6;font-size:13px;
+  }
+  .search-box input::placeholder{color:#8996b3;}
+
+  .hero{
+    background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 55%,var(--ink-700) 100%);
+    color:#f2efe4;padding:44px 24px 34px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;
+    background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);
+  }
+  .hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(26px,4vw,38px);margin:8px 0 10px;max-width:820px;}
+  .hero p.lead{color:#c7cee3;max-width:680px;font-size:15px;}
+
+  .progress-wrap{display:flex;align-items:center;gap:16px;margin-top:22px;flex-wrap:wrap;}
+  .progress-ring{position:relative;width:88px;height:88px;flex:none;}
+  .progress-ring svg{transform:rotate(-90deg);}
+  .progress-ring .bg{fill:none;stroke:rgba(255,255,255,.12);stroke-width:8;}
+  .progress-ring .fg{fill:none;stroke:var(--gold-light);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .6s ease;}
+  .progress-ring .label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:17px;font-weight:700;color:#fff;}
+  .progress-stats{font-size:13.5px;color:#c7cee3;}
+  .progress-stats b{color:#fff;font-size:16px;}
+
+  main{max-width:1100px;margin:0 auto;padding:30px 20px 90px;}
+
+  .toolbar-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:22px;}
+  .toolbar-row .search-box input{background:var(--card-bg);color:var(--text-main);border:1px solid var(--border-soft);max-width:360px;}
+  .toolbar-row .search-box input::placeholder{color:var(--text-soft);}
+  .filter-chip{
+    border:1px solid var(--border-soft);background:var(--card-bg);padding:6px 12px;border-radius:20px;font-size:12.5px;
+    cursor:pointer;color:var(--text-soft);
+  }
+  .filter-chip.active{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+
+  .module{margin-bottom:34px;}
+  .module-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--ink-900);color:#fff;border-radius:10px 10px 0 0;
+    cursor:pointer;
+  }
+  .module-head h2{color:#fff;margin:0;font-size:18px;}
+  .module-head .chev{margin-left:auto;transition:transform .2s;color:var(--gold-light);}
+  .module.open .module-head .chev{transform:rotate(90deg);}
+  .module-badge{font-size:11px;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:20px;color:var(--gold-light);}
+  .module-body{display:none;border:1px solid var(--border-soft);border-top:none;border-radius:0 0 10px 10px;background:var(--card-bg);}
+  .module.open .module-body{display:block;}
+
+  .materia{border-bottom:1px solid var(--border-soft);}
+  .materia:last-child{border-bottom:none;}
+  .materia-head{
+    display:flex;align-items:center;gap:10px;padding:12px 18px;cursor:pointer;background:var(--paper-2);
+  }
+  .materia-head h3{margin:0;font-size:15px;color:var(--ink-900);}
+  [data-theme="dark"] .materia-head h3{color:#f1eee2;}
+  .materia-head .chev{margin-left:auto;transition:transform .2s;color:var(--gold-dark);font-size:13px;}
+  .materia.open .materia-head .chev{transform:rotate(90deg);}
+  .materia-progress{font-size:11.5px;color:var(--text-soft);white-space:nowrap;}
+  .materia-body{display:none;padding:6px 10px 12px;}
+  .materia.open .materia-body{display:block;}
+
+  .topic-row{
+    display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:8px;margin:2px 4px;
+  }
+  .topic-row:hover{background:var(--paper-2);}
+  .topic-row input[type=checkbox]{margin-top:3px;width:15px;height:15px;accent-color:var(--gold-dark);flex:none;}
+  .topic-row .num{font-family:var(--mono);font-size:11.5px;color:var(--gold-dark);flex:none;min-width:32px;padding-top:1px;}
+  .topic-row .name{flex:1;font-size:13.8px;}
+  .topic-row a.name{color:var(--text-main);text-decoration:none;}
+  .topic-row a.name:hover{color:var(--gold-dark);text-decoration:underline;}
+  .topic-row.pending .name{color:var(--text-soft);}
+  .topic-row.done input:checked ~ .name{text-decoration:line-through;color:var(--text-soft);}
+  .status-tag{font-size:10.5px;padding:2px 8px;border-radius:20px;flex:none;white-space:nowrap;}
+  .status-tag.ready{background:#eef6ef;color:var(--green-ok);border:1px solid #bfe0c6;}
+  [data-theme="dark"] .status-tag.ready{background:#0f2318;border-color:#1f4a2e;}
+  .status-tag.soon{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+
+  .aux-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px;}
+  .aux-card{
+    background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:16px 18px;display:flex;flex-direction:column;gap:6px;
+  }
+  .aux-card .icon{font-size:22px;}
+  .aux-card h4{margin:2px 0 0;font-size:14.5px;}
+  .aux-card p{margin:0;font-size:12.5px;color:var(--text-soft);}
+  .aux-card .status-tag{align-self:flex-start;margin-top:4px;}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text-soft);margin:14px 0 6px;}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .legend .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .legend .dot.ready{background:var(--green-ok);}
+  .legend .dot.soon{background:var(--border-soft);}
+
+  .section-title{font-size:19px;margin:38px 0 6px;padding-top:10px;border-top:2px solid var(--gold);}
+  .section-sub{color:var(--text-soft);font-size:13.5px;margin-bottom:14px;}
+
+  footer{max-width:1100px;margin:0 auto;padding:20px 20px 60px;font-size:12.5px;color:var(--text-soft);border-top:1px solid var(--border-soft);}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  .no-results{padding:24px;text-align:center;color:var(--text-soft);font-size:13.5px;display:none;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand"><b>DATAPREV 2026</b> · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+  <span class="spacer"></span>
+  <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="kicker">Trilha oficial de estudos</span>
+    <h1>Todo o edital, organizado em capítulos-livro</h1>
+    <p class="lead">Navegue por módulo, matéria e conteúdo. Cada tópico é um capítulo completo, no padrão da banca FGV, com teoria, flashcards, questões comentadas, simulado e checklist. Seu progresso é salvo automaticamente neste navegador.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-ring">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle class="bg" cx="44" cy="44" r="38"></circle>
+          <circle class="fg" id="ringFg" cx="44" cy="44" r="38" stroke-dasharray="238.76" stroke-dashoffset="238.76"></circle>
+        </svg>
+        <div class="label" id="ringLabel">0%</div>
+      </div>
+      <div class="progress-stats">
+        <b id="statDone">0</b> de <span id="statTotal">0</span> conteúdos concluídos<br>
+        <span id="statReady">0</span> conteúdos já disponíveis para estudo agora
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="toolbar-row">
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar um conteúdo, matéria ou módulo…"></div>
+    <button class="filter-chip active" data-filter="all">Todos</button>
+    <button class="filter-chip" data-filter="ready">Disponíveis</button>
+    <button class="filter-chip" data-filter="pending">Em breve</button>
+    <span style="flex:1"></span>
+    <button class="btn" id="expandAllBtn">⤢ Expandir tudo</button>
+    <button class="btn" id="collapseAllBtn">⤡ Recolher tudo</button>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot ready"></span> Disponível para estudo</span>
+    <span><span class="dot soon"></span> Em breve</span>
+  </div>
+
+  <div id="treeRoot"></div>
+  <div class="no-results" id="noResults">Nenhum conteúdo encontrado para essa busca.</div>
+
+  <h2 class="section-title">Simulados e revisão geral</h2>
+  <p class="section-sub">Simulados combinando várias matérias, no formato mais próximo da prova real.</p>
+  <div class="aux-grid" id="simuladosGrid"></div>
+
+  <h2 class="section-title">Recursos de apoio</h2>
+  <p class="section-sub">Materiais transversais que ajudam em qualquer matéria do edital.</p>
+  <div class="aux-grid" id="recursosGrid"></div>
+
+</main>
+
+<footer>
+  DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV — Material de estudo offline, hospedado no GitHub Pages.<br>
+  Estrutura de pastas: <code>Módulo → Matéria → Conteúdo</code>. Cada arquivo HTML é autocontido (funciona sem internet).
+</footer>
+
+<script>
+(function(){
+"use strict";
+const STORAGE_KEY = "dataprev_p10_hub_progress";
+
+/* ================= THEME ================= */
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+  localStorage.setItem(STORAGE_KEY+"_theme", t);
+}
+applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"));
+document.getElementById("themeToggle").addEventListener("click", function(){
+  applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");
+});
+
+/* ================= DATA: MÓDULO > MATÉRIA > CONTEÚDO =================
+   status: "ready" (arquivo já existe, com link) | "pending" (ainda não gerado)
+   Para adicionar um novo tópico já pronto: mude status para "ready" e preencha "file".
+====================================================================== */
+const DATA = [
+  {
+    modulo: "Módulo I — Conhecimentos Gerais",
+    materias: [
+      {
+        nome: "Língua Portuguesa",
+        pasta: "Modulo I - Conhecimentos Gerais/Lingua Portuguesa",
+        topicos: [
+          {n:"1", t:"Compreensão e interpretação de textos de gêneros variados", status:"ready", file:"01 - Compreensão e interpretação de textos de gêneros variados.html"},
+          {n:"2", t:"Reconhecimento de tipos e gêneros textuais", status:"ready", file:"02 - Reconhecimento de tipos e gêneros textuais.html"},
+          {n:"3", t:"Domínio da ortografia oficial", status:"ready", file:"03 - Domínio da ortografia oficial.html"},
+          {n:"4", t:"Domínio dos mecanismos de coesão textual", status:"ready", file:"04 - Domínio dos mecanismos de coesão textual.html"},
+          {n:"4.1", t:"Referenciação, substituição, repetição, conectores e sequenciação textual", status:"ready", file:"04 - Domínio dos mecanismos de coesão textual.html"},
+          {n:"4.2", t:"Emprego de tempos e modos verbais", status:"ready", file:"04 - Domínio dos mecanismos de coesão textual.html"},
+          {n:"5", t:"Domínio da estrutura morfossintática do período", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.1", t:"Emprego das classes de palavras", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.2", t:"Relações de coordenação entre orações e entre termos da oração", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.3", t:"Relações de subordinação entre orações e entre termos da oração", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.4", t:"Emprego dos sinais de pontuação", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.5", t:"Concordância verbal e nominal", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.6", t:"Regência verbal e nominal", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.7", t:"Emprego do sinal indicativo de crase", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"5.8", t:"Colocação dos pronomes átonos", status:"ready", file:"05 - Domínio da estrutura morfossintática do período.html"},
+          {n:"6", t:"Reescrita de frases e parágrafos do texto", status:"ready", file:"06 - Reescrita de frases e parágrafos do texto.html"},
+          {n:"6.1", t:"Significação das palavras", status:"ready", file:"06 - Reescrita de frases e parágrafos do texto.html"},
+          {n:"6.2", t:"Substituição de palavras ou de trechos de texto", status:"ready", file:"06 - Reescrita de frases e parágrafos do texto.html"},
+          {n:"6.3", t:"Reorganização da estrutura de orações e de períodos do texto", status:"ready", file:"06 - Reescrita de frases e parágrafos do texto.html"},
+          {n:"6.4", t:"Reescrita de textos de diferentes gêneros e níveis de formalidade", status:"ready", file:"06 - Reescrita de frases e parágrafos do texto.html"},
+        ]
+      },
+      {
+        nome: "Língua Inglesa",
+        pasta: "Modulo I - Conhecimentos Gerais/Lingua Inglesa",
+        topicos: [
+          {n:"1", t:"Compreensão de textos em língua inglesa e itens gramaticais relevantes para o entendimento dos sentidos dos textos", status:"ready", file:"01 - Compreensão de textos em língua inglesa.html"},
+        ]
+      },
+      {
+        nome: "Raciocínio Lógico",
+        pasta: "Modulo I - Conhecimentos Gerais/Raciocinio Logico",
+        topicos: [
+          {n:"1", t:"Estruturas lógicas", status:"ready", file:"01 - Estruturas lógicas.html"},
+          {n:"2", t:"Lógica de argumentação: analogias, inferências, deduções e conclusões", status:"ready", file:"02 - Lógica de argumentação.html"},
+          {n:"3", t:"Lógica sentencial (ou proposicional)", status:"ready", file:"03 - Lógica sentencial.html"},
+          {n:"3.1", t:"Proposições simples e compostas", status:"ready", file:"03 - Lógica sentencial.html"},
+          {n:"3.2", t:"Tabelas-verdade", status:"ready", file:"03 - Lógica sentencial.html"},
+          {n:"3.3", t:"Equivalências", status:"ready", file:"03 - Lógica sentencial.html"},
+          {n:"3.4", t:"Diagramas lógicos", status:"ready", file:"03 - Lógica sentencial.html"},
+          {n:"4", t:"Lógica de primeira ordem", status:"ready", file:"04 - Lógica de primeira ordem.html"},
+          {n:"5", t:"Raciocínio lógico envolvendo problemas aritméticos, geométricos e matriciais", status:"ready", file:"05 - Raciocínio aritmético, geométrico e matricial.html"},
+        ]
+      },
+      {
+        nome: "Atualidades e Inteligência Artificial",
+        pasta: "Modulo I - Conhecimentos Gerais/Atualidades e Inteligencia Artificial",
+        topicos: [
+          {n:"1", t:"Tópicos relevantes e atuais: segurança, transportes, política, economia, sociedade, educação, saúde, cultura, tecnologia, energia, relações internacionais, desenvolvimento sustentável e ecologia", status:"ready", file:"01 - Tópicos relevantes e atuais.html"},
+          {n:"2", t:"Inteligência Artificial: fundamentos e aplicações (conceitos, aprendizado de máquina, modelos generativos e de linguagem, ética, governança e privacidade em IA)", status:"ready", file:"02 - Inteligência Artificial - fundamentos e aplicações.html"},
+        ]
+      },
+      {
+        nome: "Legislação — Segurança da Informação e Proteção de Dados",
+        pasta: "Modulo I - Conhecimentos Gerais/Legislacao Seguranca da Informacao e Protecao de Dados",
+        topicos: [
+          {n:"1", t:"Lei nº 12.527/2011 (Lei de Acesso à Informação): capítulos I a V; Decretos nº 7.724 e nº 7.845", status:"ready", file:"01 - Lei de Acesso à Informação.html"},
+          {n:"2", t:"Lei nº 12.737/2012 (Lei de Delitos Informáticos): art. 2º", status:"pending"},
+          {n:"3", t:"Lei nº 12.965/2014 (Marco Civil da Internet): Cap. II Seção I; Cap. III Seções I e II", status:"pending"},
+          {n:"4", t:"Lei nº 13.709/2018 (LGPD): capítulos I, II, III, IV, VII, VIII e IX", status:"pending"},
+        ]
+      },
+    ]
+  },
+  {
+    modulo: "Módulo II — Conhecimentos Específicos (Perfil 10: Gestão Econômico-Financeira)",
+    materias: [
+      {
+        nome: "Administração Financeira",
+        pasta: "Modulo II - Conhecimentos Especificos/Administracao Financeira",
+        topicos: [
+          {n:"1", t:"Conceitos básicos de administração financeira", status:"pending"},
+          {n:"2", t:"Finanças corporativas: índices de endividamento, fontes de financiamento, estrutura de capital, fusões e aquisições", status:"pending"},
+          {n:"3", t:"Princípios gerais de alavancagem operacional e financeira", status:"pending"},
+          {n:"4", t:"Planejamento financeiro de curto prazo: capital de giro, disponibilidades, relacionamento bancário, contas a receber, contas a pagar e tesouraria", status:"pending"},
+          {n:"5", t:"Planejamento financeiro de longo prazo", status:"pending"},
+          {n:"6", t:"Valor do dinheiro no tempo", status:"pending"},
+          {n:"7", t:"Risco x retorno", status:"pending"},
+          {n:"8", t:"Fontes de financiamento a longo prazo", status:"pending"},
+          {n:"9", t:"Estratégias de investimentos", status:"pending"},
+          {n:"10", t:"Valuation: valor de uma empresa, valor intrínseco, riscos, estrutura e custo de capital, fluxo de caixa, crescimento, valor patrimonial, valor relativo e múltiplos", status:"pending"},
+        ]
+      },
+      {
+        nome: "Avaliações Econômicas de Projetos",
+        pasta: "Modulo II - Conhecimentos Especificos/Avaliacoes Economicas de Projetos",
+        topicos: [
+          {n:"1", t:"Conceito de projeto de investimento", status:"pending"},
+          {n:"2", t:"Importância, características e limitações da elaboração e análise de projetos", status:"pending"},
+          {n:"3", t:"Etapas na elaboração de projetos", status:"pending"},
+          {n:"4", t:"Metodologias de avaliação e seleção de projetos", status:"pending"},
+          {n:"5", t:"Taxa mínima de atratividade", status:"pending"},
+          {n:"6", t:"Parâmetros para análise de projetos (vida econômica, depreciação, valor residual, capital de giro)", status:"pending"},
+          {n:"7", t:"Indicadores econômicos de projetos: VPL, TIR, payback", status:"pending"},
+          {n:"8", t:"Análise de sensibilidade e cenários", status:"pending"},
+          {n:"9", t:"Incorporação da análise de risco e incerteza na avaliação e seleção de projetos", status:"pending"},
+          {n:"10", t:"Análise de projetos sociais", status:"pending"},
+          {n:"11", t:"Modelagem de estrutura a termo de taxa de juros, duration e prazo médio", status:"pending"},
+          {n:"12", t:"Noções de administração de risco de mercado (VAR)", status:"pending"},
+        ]
+      },
+      {
+        nome: "Contabilidade Empresarial",
+        pasta: "Modulo II - Conhecimentos Especificos/Contabilidade Empresarial",
+        topicos: [
+          {n:"1", t:"Noções básicas de contabilidade", status:"pending"},
+          {n:"2", t:"Análise das demonstrações contábeis (BP, DRE, DOAR, DFC) e indicadores de liquidez, endividamento, atividade e rentabilidade", status:"pending"},
+          {n:"3", t:"Excel avançado", status:"pending"},
+          {n:"4", t:"Linguagem R", status:"pending"},
+          {n:"5", t:"Investimentos em coligadas e controladas", status:"pending"},
+        ]
+      },
+      {
+        nome: "Orçamento",
+        pasta: "Modulo II - Conhecimentos Especificos/Orcamento",
+        topicos: [
+          {n:"1", t:"Princípios básicos de orçamento", status:"pending"},
+          {n:"2", t:"Elaboração de proposta orçamentária de empresa estatal", status:"pending"},
+          {n:"3", t:"Realização orçamentária: planejamento, acompanhamento e controle", status:"pending"},
+          {n:"4", t:"Análises da execução orçamentária, com relatórios, tabelas e gráficos", status:"pending"},
+          {n:"5", t:"Indicadores orçamentários", status:"pending"},
+          {n:"6", t:"Orçamento governamental", status:"pending"},
+        ]
+      },
+      {
+        nome: "Custos",
+        pasta: "Modulo II - Conhecimentos Especificos/Custos",
+        topicos: [
+          {n:"1", t:"Métodos de custeio", status:"pending"},
+          {n:"2", t:"Contabilidade de custos e integração com a contabilidade convencional", status:"pending"},
+          {n:"3", t:"Margem de contribuição", status:"pending"},
+          {n:"4", t:"Ponto de equilíbrio", status:"pending"},
+          {n:"5", t:"Gestão operacional de centros de custo", status:"pending"},
+          {n:"6", t:"Custos para gestão comercial — markup e margem líquida", status:"pending"},
+          {n:"7", t:"Análise comparativa de custos e preços", status:"pending"},
+        ]
+      },
+      {
+        nome: "Matemática Financeira",
+        pasta: "Modulo II - Conhecimentos Especificos/Matematica Financeira",
+        topicos: [
+          {n:"1", t:"Cálculo de prestações fixas e variáveis", status:"pending"},
+          {n:"2", t:"Avaliação de projetos pelo VPL e TIR", status:"pending"},
+          {n:"3", t:"Sistema de Amortização Constante (SAC)", status:"pending"},
+          {n:"4", t:"Sistema de Amortização Francês (SAF) — Tabela Price", status:"pending"},
+          {n:"5", t:"Sistema de Amortização Misto (SAM)", status:"pending"},
+          {n:"6", t:"Juros simples e compostos: capitalização e desconto", status:"pending"},
+          {n:"7", t:"Taxas de juros: nominal, efetiva, equivalente, real e aparente", status:"pending"},
+          {n:"8", t:"Cálculo de indicadores econômicos e financeiros", status:"pending"},
+          {n:"9", t:"Análise de fluxo de caixa", status:"pending"},
+        ]
+      },
+      {
+        nome: "Legislação Previdenciária e Trabalhista",
+        pasta: "Modulo II - Conhecimentos Especificos/Legislacao Previdenciaria e Trabalhista",
+        topicos: [
+          {n:"1", t:"Regime Geral de Previdência Social", status:"pending"},
+          {n:"1.1", t:"Segurados obrigatórios", status:"pending"},
+          {n:"1.2", t:"Filiação e inscrição", status:"pending"},
+          {n:"1.3", t:"Conceito, características e abrangência: empregado, doméstico, contribuinte individual, avulso, especial", status:"pending"},
+          {n:"1.4", t:"Segurado facultativo: conceito, características, filiação e inscrição", status:"pending"},
+          {n:"1.5", t:"Trabalhadores excluídos do Regime Geral", status:"pending"},
+          {n:"2", t:"Financiamento da Seguridade Social", status:"pending"},
+          {n:"3", t:"Arrecadação e recolhimento das contribuições à seguridade social", status:"pending"},
+          {n:"3.1", t:"Competência do INSS e da Secretaria da Receita Federal do Brasil", status:"pending"},
+          {n:"3.2", t:"Obrigações da empresa e demais contribuintes", status:"pending"},
+          {n:"3.3", t:"Prazo de recolhimento", status:"pending"},
+          {n:"3.4", t:"Recolhimento fora do prazo: juros, multa e atualização monetária", status:"pending"},
+          {n:"3.5", t:"Decadência e prescrição", status:"pending"},
+          {n:"4", t:"Crimes contra a seguridade social", status:"pending"},
+          {n:"5", t:"Recurso das decisões administrativas", status:"pending"},
+          {n:"6", t:"Legislação do FGTS", status:"pending"},
+          {n:"7", t:"Noções da legislação de segurança e saúde do trabalho", status:"pending"},
+        ]
+      },
+    ]
+  }
+];
+
+const SIMULADOS = [
+  {icon:"🏁", nome:"Simuladão Geral DATAPREV", desc:"Simulado combinando todas as matérias dos dois módulos, no formato e proporção da prova real.", status:"pending"},
+  {icon:"📘", nome:"Simulado — Bloco Língua Portuguesa", desc:"Todas as questões de Português reunidas, dos 6 conteúdos do edital, em uma prova só.", status:"pending"},
+  {icon:"💰", nome:"Simulado — Bloco Gestão Econômico-Financeira", desc:"Questões de Administração Financeira, Contabilidade, Custos, Orçamento e Matemática Financeira combinadas.", status:"pending"},
+  {icon:"⏱", nome:"Simulado cronometrado tipo prova (4h)", desc:"Simulado único, na duração real do certame, com todas as matérias na proporção do edital.", status:"pending"},
+];
+
+const RECURSOS = [
+  {icon:"🧮", nome:"Formulário geral de Matemática e Estatística Financeira", desc:"Todas as fórmulas do edital reunidas em uma única página de consulta rápida.", status:"pending"},
+  {icon:"📖", nome:"Glossário geral do edital", desc:"Todos os termos técnicos de todas as matérias, em ordem alfabética.", status:"pending"},
+  {icon:"⚖️", nome:"Linha do tempo da legislação cobrada", desc:"LAI, Marco Civil, LGPD, Lei de Delitos Informáticos e legislação previdenciária organizadas cronologicamente.", status:"pending"},
+  {icon:"🗂️", nome:"Plano de estudos semanal (cronograma sugerido)", desc:"Cronograma de estudo distribuindo os conteúdos ao longo das semanas até a prova.", status:"pending"},
+  {icon:"🤖", nome:"Guia rápido de Inteligência Artificial para concursos", desc:"Conceitos essenciais de IA, aprendizado de máquina e modelos de linguagem cobrados em Atualidades.", status:"pending"},
+  {icon:"📝", nome:"Banco de redações e reescritas comentadas", desc:"Exercícios extras de reescrita de frases e parágrafos, no padrão do item 6 do edital de Português.", status:"pending"},
+];
+
+/* ================= RENDER ================= */
+const root = document.getElementById("treeRoot");
+let allTopicRows = []; // for search + progress
+
+function slug(s){ return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-"); }
+
+DATA.forEach((mod, mi)=>{
+  const modEl = document.createElement("div");
+  modEl.className = "module";
+  modEl.id = "mod-"+mi;
+
+  const totalTopicos = mod.materias.reduce((a,m)=>a+m.topicos.length,0);
+  const readyTopicos = mod.materias.reduce((a,m)=>a+m.topicos.filter(t=>t.status==="ready").length,0);
+
+  const head = document.createElement("div");
+  head.className = "module-head";
+  head.innerHTML = `<h2>${mod.modulo}</h2><span class="module-badge">${readyTopicos}/${totalTopicos} disponíveis</span><span class="chev">▶</span>`;
+  head.addEventListener("click", ()=>modEl.classList.toggle("open"));
+  modEl.appendChild(head);
+
+  const body = document.createElement("div");
+  body.className = "module-body";
+
+  mod.materias.forEach((mat, mai)=>{
+    const matEl = document.createElement("div");
+    matEl.className = "materia";
+    matEl.id = "mat-"+mi+"-"+mai;
+
+    const matReady = mat.topicos.filter(t=>t.status==="ready").length;
+    const mHead = document.createElement("div");
+    mHead.className = "materia-head";
+    mHead.innerHTML = `<h3>${mat.nome}</h3><span class="materia-progress">${matReady}/${mat.topicos.length}</span><span class="chev">▶</span>`;
+    mHead.addEventListener("click", ()=>matEl.classList.toggle("open"));
+    matEl.appendChild(mHead);
+
+    const mBody = document.createElement("div");
+    mBody.className = "materia-body";
+
+    mat.topicos.forEach((top, ti)=>{
+      const id = slug(mod.modulo+"-"+mat.nome+"-"+top.n+"-"+top.t);
+      const row = document.createElement("div");
+      row.className = "topic-row " + (top.status==="ready" ? "done":"pending");
+      row.dataset.status = top.status;
+      row.dataset.searchtext = (mod.modulo+" "+mat.nome+" "+top.n+" "+top.t).toLowerCase();
+
+      const href = top.status==="ready" ? `${mat.pasta}/${top.file}` : null;
+      row.innerHTML = `
+        <input type="checkbox" data-id="${id}" ${top.status!=="ready"?"disabled":""}>
+        <span class="num">${top.n}</span>
+        ${href ? `<a class="name" href="${href}">${top.t}</a>` : `<span class="name">${top.t}</span>`}
+        <span class="status-tag ${top.status==="ready"?"ready":"soon"}">${top.status==="ready"?"Disponível":"Em breve"}</span>
+      `;
+      mBody.appendChild(row);
+      allTopicRows.push({id, status: top.status, el: row});
+    });
+
+    matEl.appendChild(mBody);
+    body.appendChild(matEl);
+  });
+
+  modEl.appendChild(body);
+  root.appendChild(modEl);
+});
+
+/* open first module by default */
+if(root.firstElementChild) root.firstElementChild.classList.add("open");
+
+/* ================= AUX GRIDS ================= */
+function renderAux(list, container){
+  list.forEach(item=>{
+    const card = document.createElement("div");
+    card.className = "aux-card";
+    card.innerHTML = `
+      <span class="icon">${item.icon}</span>
+      <h4>${item.nome}</h4>
+      <p>${item.desc}</p>
+      <span class="status-tag ${item.status==="ready"?"ready":"soon"}">${item.status==="ready"?"Disponível":"Em breve"}</span>
+    `;
+    container.appendChild(card);
+  });
+}
+renderAux(SIMULADOS, document.getElementById("simuladosGrid"));
+renderAux(RECURSOS, document.getElementById("recursosGrid"));
+
+/* ================= PROGRESS (checkboxes, localStorage) ================= */
+let doneState = {};
+try{ doneState = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ doneState = {}; }
+
+function updateProgress(){
+  const readyRows = allTopicRows.filter(r=>r.status==="ready");
+  const total = allTopicRows.length;
+  const doneCount = readyRows.filter(r=>doneState[r.id]).length;
+  document.getElementById("statDone").textContent = doneCount;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statReady").textContent = readyRows.length;
+  const pct = readyRows.length ? Math.round(doneCount/readyRows.length*100) : 0;
+  const circumference = 238.76;
+  const offset = circumference - (pct/100*circumference);
+  document.getElementById("ringFg").style.strokeDashoffset = offset;
+  document.getElementById("ringLabel").textContent = pct+"%";
+}
+
+allTopicRows.forEach(r=>{
+  const cb = r.el.querySelector("input[type=checkbox]");
+  if(r.status==="ready"){
+    cb.checked = !!doneState[r.id];
+    cb.addEventListener("change", function(){
+      doneState[r.id] = this.checked;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(doneState));
+      updateProgress();
+    });
+  }
+});
+updateProgress();
+
+/* ================= SEARCH + FILTER ================= */
+let currentFilter = "all";
+function applyFilters(){
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  let anyVisible = false;
+  allTopicRows.forEach(r=>{
+    const matchesFilter = currentFilter==="all" || r.status===currentFilter;
+    const matchesSearch = !q || r.el.dataset.searchtext.includes(q);
+    const visible = matchesFilter && matchesSearch;
+    r.el.style.display = visible ? "flex":"none";
+    if(visible){
+      anyVisible = true;
+      // auto-open parent module/materia when searching
+      if(q){
+        r.el.closest(".materia").classList.add("open");
+        r.el.closest(".module").classList.add("open");
+      }
+    }
+  });
+  document.getElementById("noResults").style.display = anyVisible ? "none":"block";
+}
+document.getElementById("searchInput").addEventListener("input", applyFilters);
+document.querySelectorAll(".filter-chip").forEach(chip=>{
+  chip.addEventListener("click", function(){
+    document.querySelectorAll(".filter-chip").forEach(c=>c.classList.remove("active"));
+    this.classList.add("active");
+    currentFilter = this.dataset.filter;
+    applyFilters();
+  });
+});
+
+document.getElementById("expandAllBtn").addEventListener("click", ()=>{
+  document.querySelectorAll(".module,.materia").forEach(e=>e.classList.add("open"));
+});
+document.getElementById("collapseAllBtn").addEventListener("click", ()=>{
+  document.querySelectorAll(".module,.materia").forEach(e=>e.classList.remove("open"));
+});
+
+})();
+</script>
+</body>
+</html>

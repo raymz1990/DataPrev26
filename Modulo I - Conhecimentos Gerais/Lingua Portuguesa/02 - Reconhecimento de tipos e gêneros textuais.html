@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reconhecimento de Tipos e Gêneros Textuais | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220;
+    --ink-900:#101a2e;
+    --ink-800:#16223b;
+    --ink-700:#1e2d4d;
+    --ink-600:#2c3e63;
+    --paper:#f6f4ee;
+    --paper-2:#efece2;
+    --gold:#b8892b;
+    --gold-light:#e0b563;
+    --gold-dark:#8a6520;
+    --green-ok:#2f7a4f;
+    --red-err:#a63d3d;
+    --blue-info:#2a5b8a;
+    --text-main:#1b2333;
+    --text-soft:#4a5468;
+    --border-soft:#dcd7c8;
+    --card-bg:#ffffff;
+    --shadow:0 2px 10px rgba(16,26,46,.08);
+    --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424;
+    --paper-2:#101a2e;
+    --text-main:#e8e6dc;
+    --text-soft:#a7aec2;
+    --border-soft:#26314f;
+    --card-bg:#131d33;
+    --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text-main);
+    font-family:var(--sans);
+    line-height:1.65;
+    transition:background .25s ease,color .25s ease;
+  }
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+
+  .sidebar{
+    background:var(--ink-950);
+    color:#dfe3ee;
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:20px 16px 40px;
+    border-right:1px solid var(--ink-700);
+    z-index:40;
+  }
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{
+    width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);
+    background:var(--ink-900);color:#eef0f6;font-size:13px;
+  }
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{
+    display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;
+    margin-bottom:2px;border-left:2px solid transparent;
+  }
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+
+  .topbar{
+    display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;
+    padding:10px 14px;align-items:center;justify-content:space-between;
+  }
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+
+  .hero{
+    background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);
+    color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);
+  }
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);
+  }
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);
+    border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;
+  }
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{
+    border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;
+    border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);
+  }
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;}
+  .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;}
+  .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;}
+  .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);}
+  .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;}
+  .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+
+  .collapsible .coll-head{cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .collapsible .coll-body{display:none;margin-top:10px;}
+  .collapsible.open .coll-body{display:block;}
+  .collapsible .chev{transition:transform .2s;}
+  .collapsible.open .chev{transform:rotate(90deg);}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{
+    background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;
+    box-shadow:var(--shadow);position:relative;
+  }
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;
+    display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);
+  }
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{
+    display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;
+    margin-bottom:7px;cursor:pointer;font-size:13.5px;
+  }
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+
+  #backtop{
+    position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);
+    border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);
+  }
+  #backtop.show{display:flex;}
+
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Língua Portuguesa</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">02 - Reconhecimento de tipos e gêneros textuais</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Compreensão e interpretação de textos de gêneros variados.html">01 - Compreensão e interpretação de textos de gêneros variados</option>
+        <option value="02 - Reconhecimento de tipos e gêneros textuais.html" selected>02 - Reconhecimento de tipos e gêneros textuais</option>
+        <option value="03 - Domínio da ortografia oficial.html">03 - Domínio da ortografia oficial</option>
+        <option value="04 - Domínio dos mecanismos de coesão textual.html">04 - Domínio dos mecanismos de coesão textual</option>
+        <option value="05 - Domínio da estrutura morfossintática do período.html">05 - Domínio da estrutura morfossintática do período</option>
+        <option value="06 - Reescrita de frases e parágrafos do texto.html">06 - Reescrita de frases e parágrafos do texto</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Reconhecimento de Tipos e Gêneros Textuais</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…">
+    </div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">
+      Módulo I — Língua Portuguesa<br>
+      Tópico 02 de 08<br>
+      Material de estudo offline — DATAPREV 2026
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Reconhecimento de Tipos e Gêneros Textuais</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Língua Portuguesa</b> &nbsp;›&nbsp; Tópico 02</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">5h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Compreensão e interpretação de textos (Tópico 01)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio-alto — costuma abrir o bloco de Português</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- ============ 1. OBJETIVOS ============ -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Diferenciar <b>tipo textual</b> (narração, descrição, dissertação, exposição, injunção) de <b>gênero textual</b> (notícia, e-mail, edital, charge, receita, contrato etc.).</li>
+            <li>Reconhecer as marcas linguísticas típicas de cada tipo textual (verbos de ação, presente atemporal, imperativo, conectivos argumentativos).</li>
+            <li>Classificar corretamente um texto dado quanto ao gênero, identificando função social, suporte e esfera de circulação.</li>
+            <li>Reconhecer <b>textos híbridos</b>, que mesclam mais de um tipo textual em um único gênero (ex.: reportagem com trechos narrativos e dissertativos).</li>
+            <li>Identificar gêneros digitais e institucionais contemporâneos (e-mail corporativo, post institucional, chat, memorando eletrônico) e suas convenções de registro.</li>
+            <li>Resolver questões FGV que pedem a classificação de um texto quanto ao gênero ou que exploram a confusão entre tipo e gênero como pegadinha.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 2. RESUMO EXECUTIVO ============ -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Tipo textual</b> é uma categoria linguística, definida por sua estrutura interna e por marcas gramaticais recorrentes (tempo verbal predominante, presença de conectivos específicos, foco em ações ou em características). Existem cinco tipos textuais clássicos: <b>narrativo, descritivo, dissertativo (argumentativo/expositivo), injuntivo</b> (instrucional) e, para alguns autores, <b>preditivo</b>.</p>
+          <p><b>Gênero textual</b>, por sua vez, é uma categoria sócio-histórica e funcional: é a forma como um texto circula socialmente, vinculada a um suporte, a uma função comunicativa e a um contexto de uso — notícia, bula de remédio, contrato, e-mail, charge, edital, ata de reunião, currículo, receita culinária, entre inúmeros outros. Os gêneros são, em princípio, ilimitados e mudam com a sociedade (surgem gêneros digitais como post, chat, e-mail corporativo).</p>
+          <p>O ponto central cobrado pela FGV é que <b>um único gênero pode conter mais de um tipo textual</b>. Uma reportagem (gênero) pode ter trechos narrativos (relato dos fatos), descritivos (cenário) e dissertativos (análise/opinião de especialista citado) — o texto é <b>predominantemente</b> de um tipo, mas não exclusivamente.</p>
+          <p>Cada gênero carrega convenções de <b>registro</b> (formal/informal), <b>estrutura composicional</b> (partes fixas, como saudação e fecho em um e-mail) e <b>estilo</b> (vocabulário técnico, jurídico, coloquial). Reconhecer o gênero orienta a leitura: um edital exige leitura literal e atenção a prazos; uma charge exige leitura de ironia; um e-mail institucional exige atenção ao registro e ao objetivo comunicativo.</p>
+        </div>
+      </section>
+
+      <!-- ============ 3. MAPA MENTAL ============ -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Tipos e Gêneros<br>Textuais</div>
+            <div class="mm-branches">
+              <div class="mm-node">
+                <h4>① Tipos textuais</h4>
+                <ul><li>Narrativo</li><li>Descritivo</li><li>Dissertativo</li><li>Injuntivo</li><li>Preditivo</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>② Marcas linguísticas</h4>
+                <ul><li>Verbos de ação (narrativo)</li><li>Adjetivos (descritivo)</li><li>Conectivos argumentativos (dissertativo)</li><li>Imperativo (injuntivo)</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>③ Gêneros textuais</h4>
+                <ul><li>Notícia, editorial</li><li>E-mail, memorando</li><li>Charge, tirinha</li><li>Edital, contrato</li><li>Receita, manual</li><li>Post institucional</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>④ Critérios do gênero</h4>
+                <ul><li>Função social</li><li>Suporte</li><li>Esfera de circulação</li><li>Estrutura composicional</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑤ Textos híbridos</h4>
+                <ul><li>Reportagem c/ narração+dissertação</li><li>Bula c/ descrição+injunção</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑥ Pegadinhas FGV</h4>
+                <ul><li>Confundir tipo com gênero</li><li>Ignorar tipo predominante</li><li>Gênero digital mal classificado</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. EXPLICAÇÃO COMPLETA ============ -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Tipo textual x gênero textual: a distinção fundamental</h3>
+          <p>Essa é, disparadamente, a distinção mais cobrada pela FGV neste tópico. <b>Tipo textual</b> é uma sequência linguística com características estruturais e gramaticais próprias — um número finito e estável de categorias (5, para a maioria dos autores). <b>Gênero textual</b> é uma forma de texto que circula socialmente, vinculada a uma função e a um suporte — um número praticamente infinito e em constante renovação de categorias.</p>
+
+          <div class="box info">
+            <div class="box-title">📘 Analogia para fixar</div>
+            <p>Pense no tipo textual como o "material de construção" (tijolo, madeira, vidro) e no gênero textual como a "edificação pronta" (casa, escola, hospital). Uma edificação (gênero) pode combinar vários materiais (tipos); o material sozinho não é uma edificação.</p>
+          </div>
+
+          <table>
+            <thead><tr><th>Critério</th><th>Tipo textual</th><th>Gênero textual</th></tr></thead>
+            <tbody>
+              <tr><td>Natureza</td><td>Categoria linguística/estrutural</td><td>Categoria sócio-histórica/funcional</td></tr>
+              <tr><td>Quantidade</td><td>Finita (cerca de 5 tipos)</td><td>Praticamente ilimitada</td></tr>
+              <tr><td>Estabilidade</td><td>Estável ao longo do tempo</td><td>Muda e se multiplica com a sociedade (ex.: post, chat)</td></tr>
+              <tr><td>Exemplo</td><td>Narração, dissertação, descrição</td><td>Notícia, e-mail, contrato, charge, receita</td></tr>
+              <tr><td>Reconhecimento</td><td>Pelas marcas linguísticas internas</td><td>Pela função social e pelo suporte de circulação</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.2 Os cinco tipos textuais e suas marcas linguísticas</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Função</th><th>Marcas linguísticas típicas</th></tr></thead>
+            <tbody>
+              <tr><td><b>Narrativo</b></td><td>Relatar fatos/eventos em sequência temporal, com personagens</td><td>Verbos de ação no pretérito, marcadores temporais (então, depois), progressão cronológica</td></tr>
+              <tr><td><b>Descritivo</b></td><td>Caracterizar seres, objetos, cenários, ambientes</td><td>Predominância de adjetivos, verbos de estado (ser, estar, parecer), organização espacial</td></tr>
+              <tr><td><b>Dissertativo (expositivo)</b></td><td>Expor informações e conceitos de forma objetiva, sem defender tese</td><td>Presente atemporal, linguagem técnica/neutra, definições, dados</td></tr>
+              <tr><td><b>Dissertativo (argumentativo)</b></td><td>Defender um ponto de vista com argumentos</td><td>Conectivos argumentativos (portanto, contudo, pois), verbos de opinião, tese explícita</td></tr>
+              <tr><td><b>Injuntivo</b></td><td>Instruir, orientar, dar ordens ou conselhos</td><td>Verbos no imperativo ou infinitivo, sequência de passos, numeração</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>A FGV costuma apresentar um gênero (por exemplo, uma <b>bula de remédio</b> ou um <b>manual de instruções</b>) e perguntar qual é o <b>tipo textual predominante</b>. O candidato erra ao responder "manual" ou "bula" (que são gêneros, não tipos) — a resposta correta seria "injuntivo" (tipo).</p>
+          </div>
+
+          <h3>4.3 Critérios de definição de um gênero textual</h3>
+          <p>Um gênero se define por quatro critérios combinados:</p>
+          <table>
+            <thead><tr><th>Critério</th><th>Explicação</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Função social</td><td>Para que o texto serve na vida social</td><td>Convencer (editorial), informar (notícia), instruir (manual)</td></tr>
+              <tr><td>Suporte</td><td>Meio físico ou digital em que o texto circula</td><td>Jornal, e-mail, outdoor, aplicativo de mensagens</td></tr>
+              <tr><td>Esfera de circulação</td><td>Contexto social/institucional onde o gênero é usado</td><td>Esfera jornalística, jurídica, publicitária, escolar, digital</td></tr>
+              <tr><td>Estrutura composicional</td><td>Partes fixas ou recorrentes do gênero</td><td>E-mail: saudação + corpo + fecho; receita: ingredientes + modo de preparo</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Principais gêneros cobrados em concursos institucionais (perfil DATAPREV)</h3>
+          <table>
+            <thead><tr><th>Gênero</th><th>Esfera</th><th>Tipo textual predominante</th></tr></thead>
+            <tbody>
+              <tr><td>Notícia / reportagem</td><td>Jornalística</td><td>Narrativo, com trechos dissertativo-expositivos</td></tr>
+              <tr><td>Artigo de opinião / editorial</td><td>Jornalística/opinativa</td><td>Dissertativo-argumentativo</td></tr>
+              <tr><td>Charge / cartum</td><td>Jornalística/humorística</td><td>Narrativo/descritivo (com forte carga argumentativa implícita)</td></tr>
+              <tr><td>Edital / lei / portaria</td><td>Jurídico-normativa</td><td>Injuntivo (predomínio de normas) e dissertativo-expositivo</td></tr>
+              <tr><td>Contrato</td><td>Jurídica</td><td>Injuntivo/dissertativo-expositivo</td></tr>
+              <tr><td>E-mail corporativo</td><td>Institucional/administrativa</td><td>Varia conforme o objetivo (informativo, injuntivo, argumentativo)</td></tr>
+              <tr><td>Memorando / ofício / ata</td><td>Administrativa</td><td>Dissertativo-expositivo</td></tr>
+              <tr><td>Manual / bula / receita</td><td>Instrucional</td><td>Injuntivo</td></tr>
+              <tr><td>Publicidade / propaganda</td><td>Publicitária</td><td>Dissertativo-argumentativo, com recursos descritivos</td></tr>
+              <tr><td>Currículo</td><td>Profissional</td><td>Descritivo</td></tr>
+              <tr><td>Post institucional / rede social</td><td>Digital</td><td>Híbrido — varia conforme o objetivo do post</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.5 Textos híbridos: quando um gênero mistura tipos</h3>
+          <p>Na prática, poucos textos são "puros". Uma <b>reportagem</b> (gênero) costuma abrir com um relato dos fatos (tipo narrativo), descrever o cenário ou os envolvidos (tipo descritivo) e incluir a fala de um especialista com análise crítica (tipo dissertativo). O candidato deve identificar o <b>tipo predominante</b>, não exigir pureza absoluta.</p>
+
+          <div class="box tip">
+            <div class="box-title">✅ Como identificar o tipo predominante</div>
+            <p>Pergunte: qual é a função central do texto? Se é contar uma sequência de fatos → narrativo. Se é defender uma tese → dissertativo-argumentativo. Se é orientar passo a passo → injuntivo. O tipo predominante é aquele que organiza a maior parte do texto e sustenta seu propósito comunicativo central.</p>
+          </div>
+
+          <h3>4.6 Gêneros digitais e institucionais contemporâneos</h3>
+          <p>Concursos recentes, especialmente para empresas de tecnologia e dados como a DATAPREV, têm ampliado a cobrança de <b>gêneros digitais</b>: e-mail corporativo, chat institucional, post em rede social oficial, comunicado interno via intranet. Esses gêneros mesclam convenções da escrita formal tradicional com dinâmicas de comunicação mais ágil, exigindo atenção ao <b>registro adequado ao contexto</b> (um e-mail institucional não deve ser tão informal quanto uma mensagem de chat entre colegas, mesmo digital).</p>
+
+          <table>
+            <thead><tr><th>Gênero digital</th><th>Registro esperado</th><th>Estrutura típica</th></tr></thead>
+            <tbody>
+              <tr><td>E-mail corporativo</td><td>Formal a semiformal</td><td>Saudação, objetivo claro no primeiro parágrafo, fecho cortês</td></tr>
+              <tr><td>Comunicado interno (intranet)</td><td>Formal</td><td>Título, corpo objetivo, data, setor responsável</td></tr>
+              <tr><td>Post institucional em rede social</td><td>Semiformal, adaptado ao público externo</td><td>Frase de impacto, informação central, chamada à ação</td></tr>
+              <tr><td>Chat/mensagem instantânea de trabalho</td><td>Informal a semiformal, conforme a cultura da equipe</td><td>Mensagens curtas, sem estrutura fixa obrigatória</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.7 Função social como critério decisivo de classificação</h3>
+          <p>Quando dois gêneros parecem estruturalmente próximos (ex.: um comunicado e um memorando), o critério decisivo de diferenciação costuma ser a <b>função social</b> e o <b>público-alvo</b>: um memorando geralmente circula entre setores de uma mesma organização; um comunicado pode ser dirigido a um público mais amplo, incluindo externo.</p>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma apresentar um texto real (recorte de jornal, trecho de edital, tirinha) e pedir a classificação quanto ao gênero, associando-a a uma justificativa baseada na função social e no suporte — não bastando "decorar nomes de gêneros" sem entender o critério de classificação.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. COMO A FGV COBRA ============ -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV apresenta um texto autêntico (charge, notícia, e-mail, trecho de lei) e pede que o candidato classifique corretamente o <b>gênero</b> e/ou o <b>tipo textual predominante</b>, frequentemente associando essa classificação a uma justificativa sobre função social ou marcas linguísticas.</p>
+
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões de múltipla escolha pedindo "o gênero textual do trecho é" ou "o tipo textual predominante é".</li>
+            <li>Questões que comparam dois textos de gêneros diferentes sobre o mesmo tema, pedindo diferenciação de função e registro.</li>
+            <li>Assertivas certo/errado sobre a classificação de determinado trecho.</li>
+            <li>Dificuldade média — a armadilha está na confusão terminológica (tipo x gênero), não na complexidade do texto em si.</li>
+          </ul>
+
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Distinção tipo x gênero textual</td><td>Muito alta</td></tr>
+              <tr><td>Identificação do tipo predominante em texto híbrido</td><td>Alta</td></tr>
+              <tr><td>Classificação de gêneros institucionais/administrativos</td><td>Alta (crescente em perfis de gestão)</td></tr>
+              <tr><td>Registro adequado a gêneros digitais</td><td>Média-alta</td></tr>
+              <tr><td>Função social como critério de classificação</td><td>Média</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Palavras-chave que indicam o tipo de questão</h3>
+          <table>
+            <thead><tr><th>Expressão no enunciado</th><th>O que está sendo pedido</th></tr></thead>
+            <tbody>
+              <tr><td>"O gênero textual do trecho é..."</td><td>Classificação de gênero (categoria sócio-funcional)</td></tr>
+              <tr><td>"O tipo textual predominante é..."</td><td>Classificação de tipo (categoria linguístico-estrutural)</td></tr>
+              <tr><td>"O texto tem como função social..."</td><td>Identificação da função social do gênero</td></tr>
+              <tr><td>"É adequado ao gênero e ao contexto..."</td><td>Avaliação de adequação de registro</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li><b>Confundir tipo com gênero</b>: responder "notícia" (gênero) quando a pergunta pede o tipo textual ("narrativo").</li>
+            <li><b>Ignorar o tipo predominante</b>: marcar um tipo textual presente apenas em um trecho secundário do texto.</li>
+            <li><b>Classificar gênero digital pela informalidade aparente</b>, ignorando que e-mails e comunicados institucionais mantêm registro formal mesmo em suporte digital.</li>
+            <li><b>Confundir suporte com gênero</b>: "jornal" é suporte, não é o gênero (que seria "notícia", "editorial" etc., publicados no jornal).</li>
+            <li><b>Ignorar a função social</b> ao classificar textos estruturalmente parecidos (ex.: memorando x comunicado x ofício).</li>
+          </ol>
+
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV apresentar dois textos curtos sobre o mesmo tema, mas de gêneros diferentes (ex.: uma notícia e um editorial sobre o mesmo fato), pedindo que o candidato aponte a diferença de função social e de tipo textual predominante entre eles.</p>
+          </div>
+
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Se a pergunta usa a palavra "tipo", a resposta deve ser uma das cinco categorias linguísticas (narrativo, descritivo, dissertativo, injuntivo, preditivo) — nunca o nome comercial do texto.</li>
+            <li>Se a pergunta usa a palavra "gênero", a resposta deve nomear a forma social do texto (notícia, edital, e-mail etc.) — nunca uma categoria linguística genérica.</li>
+            <li>Desconfie de alternativas que classificam o gênero pelo suporte (jornal, internet) em vez da função social.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 6. DECORE PARA A PROVA ============ -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip">
+            <div class="box-title">🧠 Mnemônico dos 5 tipos: N-D-D-I-P</div>
+            <p><b>N</b>arrativo, <b>D</b>escritivo, <b>D</b>issertativo, <b>I</b>njuntivo, <b>P</b>reditivo. Frase de fixação: "Nem Draga Deixa Ir Pro fundo" (associação livre para memorizar a ordem).</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Regra de ouro tipo x gênero</div>
+            <p>Se a categoria é uma entre apenas 5 possíveis → é <b>tipo</b>. Se a categoria tem nome próprio e circula socialmente (notícia, contrato, receita) → é <b>gênero</b>.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Macete do imperativo</div>
+            <p>Verbo no imperativo ou infinitivo instrucional ("misture", "adicionar", "não ultrapassar") = tipo <b>injuntivo</b>, quase sempre em gêneros como manual, bula, receita ou norma.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Truque da função social</div>
+            <p>Ao classificar um gênero, pergunte: "para que esse texto existe socialmente?" Informar = notícia/reportagem; convencer = editorial/artigo de opinião/propaganda; instruir = manual/receita/bula; registrar formalmente = ata/contrato/ofício.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. REVISÃO 5 MIN ============ -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Tipo textual</b> = categoria linguística finita (5 tipos); <b>gênero textual</b> = categoria sócio-funcional, praticamente ilimitada.</li>
+            <li>Cinco tipos: <b>narrativo, descritivo, dissertativo (expositivo/argumentativo), injuntivo, preditivo</b>.</li>
+            <li>Um gênero pode combinar vários tipos — identifique sempre o <b>tipo predominante</b>.</li>
+            <li>Gênero se define por: <b>função social + suporte + esfera de circulação + estrutura composicional</b>.</li>
+            <li>Suporte (jornal, e-mail, internet) <b>não é</b> o gênero — é apenas o meio de circulação.</li>
+            <li>Verbo no imperativo/infinitivo instrucional → forte indício de tipo <b>injuntivo</b>.</li>
+            <li>Gêneros digitais institucionais mantêm registro formal, mesmo em suporte digital ágil.</li>
+            <li>Pegadinha nº1: responder o nome do gênero quando a pergunta pede o tipo (e vice-versa).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 8. FLASHCARDS ============ -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- ============ 9. QUESTÕES COMENTADAS ============ -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- ============ 10. SIMULADO ============ -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- ============ 11. CHECKLIST ============ -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- ============ 12. ERROS MAIS COMUNS ============ -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card">
+          <ol class="styled" id="errosList"></ol>
+        </div>
+      </section>
+
+      <!-- ============ 13. FÓRMULAS / TÉCNICAS ============ -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e técnicas de resolução</h2></div>
+        <div class="card">
+          <div class="box info">
+            <div class="box-title">ℹ Observação</div>
+            <p>Este tópico não envolve fórmulas matemáticas. Em seu lugar, apresentamos o <b>protocolo de classificação</b> a ser seguido em toda questão de tipo/gênero textual.</p>
+          </div>
+          <table>
+            <thead><tr><th>Passo</th><th>Ação</th><th>Objetivo</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Leia o texto e identifique o suporte (onde ele circula: jornal, e-mail, edital etc.)</td><td>Ter uma hipótese inicial de gênero</td></tr>
+              <tr><td>2</td><td>Identifique a função social predominante (informar, convencer, instruir, registrar)</td><td>Confirmar/ajustar a hipótese de gênero</td></tr>
+              <tr><td>3</td><td>Observe as marcas linguísticas dominantes (verbos, conectivos, adjetivos, imperativos)</td><td>Determinar o tipo textual predominante</td></tr>
+              <tr><td>4</td><td>Verifique se há mistura de tipos (texto híbrido) e identifique qual é majoritário</td><td>Evitar resposta baseada em trecho secundário</td></tr>
+              <tr><td>5</td><td>Releia o comando da questão: ele pede "tipo" ou "gênero"?</td><td>Evitar a pegadinha de troca de categoria</td></tr>
+              <tr><td>6</td><td>Confirme a resposta cruzando função social + marcas linguísticas</td><td>Validação final antes de marcar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 14. TABELAS-RESUMO ============ -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Tipo x Gênero — resumo comparativo</h3>
+          <table>
+            <thead><tr><th>Pergunta da questão</th><th>Categoria de resposta esperada</th></tr></thead>
+            <tbody>
+              <tr><td>"Qual o tipo textual predominante?"</td><td>Narrativo / Descritivo / Dissertativo / Injuntivo / Preditivo</td></tr>
+              <tr><td>"Qual o gênero textual do trecho?"</td><td>Notícia / E-mail / Edital / Charge / Contrato / etc.</td></tr>
+            </tbody>
+          </table>
+          <h3>Marcas linguísticas por tipo</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Marca principal</th></tr></thead>
+            <tbody>
+              <tr><td>Narrativo</td><td>Verbos de ação no passado, sequência temporal</td></tr>
+              <tr><td>Descritivo</td><td>Adjetivos, verbos de estado</td></tr>
+              <tr><td>Dissertativo</td><td>Conectivos argumentativos, presente atemporal</td></tr>
+              <tr><td>Injuntivo</td><td>Imperativo/infinitivo instrucional</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 15. GLOSSÁRIO ============ -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card">
+          <dl class="gloss" id="glossList"></dl>
+        </div>
+      </section>
+
+      <!-- ============ 16. CURIOSIDADES ============ -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio">
+          <div class="box-title">🎓 Sobre a FGV</div>
+          <p>Bancas como a FGV frequentemente recorrem a charges e tirinhas de veículos consagrados (como cartunistas de jornais de grande circulação) justamente por esses gêneros exigirem leitura combinada de tipo narrativo, descritivo e argumentativo implícito em poucas linhas.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">📚 Curiosidade histórica</div>
+          <p>A classificação clássica dos tipos textuais (narração, descrição, dissertação) remonta à retórica clássica greco-romana, mas o conceito moderno de "gênero textual" como categoria sócio-histórica só se consolidou com estudos de linguística textual do século XX, especialmente a partir dos trabalhos de Mikhail Bakhtin sobre gêneros do discurso.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">🔬 Curiosidade acadêmica</div>
+          <p>Segundo Marcuschi, os gêneros textuais são "entidades sócio-discursivas e formas de ação social" incontáveis, pois nascem, transformam-se e desaparecem conforme as necessidades comunicativas da sociedade — é por isso que gêneros como "post" e "story" sequer existiam há poucas décadas.</p>
+        </div>
+      </section>
+
+      <!-- ============ 17. LIGAÇÕES COM OUTROS TÓPICOS ============ -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Compreensão e interpretação de textos (Tópico 01)</td><td>Pré-requisito direto — reconhecer o gênero orienta a estratégia de leitura</td></tr>
+              <tr><td>Coesão e coerência textual</td><td>Cada tipo textual usa recursos coesivos característicos (ex.: conectivos argumentativos no dissertativo)</td></tr>
+              <tr><td>Redação de correspondências oficiais</td><td>Aplicação prática da estrutura composicional de gêneros administrativos</td></tr>
+              <tr><td>Legislação institucional (DATAPREV)</td><td>Textos normativos como gênero de leitura literal e injuntiva</td></tr>
+              <tr><td>Comunicação institucional e atendimento</td><td>Adequação de registro a gêneros digitais institucionais</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 18. PLANO DE REVISÃO ============ -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar a tabela dos 5 tipos textuais com suas marcas linguísticas.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas classificando cada texto-base quanto a tipo E gênero, mesmo quando a questão pede só um deles.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; para cada erro, identificar se foi confusão tipo x gênero ou desconhecimento do gênero específico.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 19. REFERÊNCIAS ============ -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>MARCUSCHI, Luiz Antônio. <i>Produção Textual, Análise de Gêneros e Compreensão</i>. São Paulo: Parábola Editorial.</li>
+            <li>MARCUSCHI, Luiz Antônio. <i>Gêneros Textuais: Definição e Funcionalidade</i>. In: DIONÍSIO, A. P.; MACHADO, A. R.; BEZERRA, M. A. (Orgs.). <i>Gêneros Textuais e Ensino</i>. Rio de Janeiro: Lucerna.</li>
+            <li>BAKHTIN, Mikhail. <i>Estética da Criação Verbal</i>. São Paulo: Martins Fontes.</li>
+            <li>KOCH, Ingedore G. Villaça; ELIAS, Vanda Maria. <i>Ler e Compreender: os Sentidos do Texto</i>. São Paulo: Contexto.</li>
+            <li>CEREJA, William Roberto; MAGALHÃES, Thereza Cochar. <i>Gramática Reflexiva: Texto, Semântica e Interação</i>. São Paulo: Atual.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Língua Portuguesa · Tópico 02/08</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_lp_t02";
+
+  function applyTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem(STORAGE_KEY+"_theme", t);
+  }
+  const savedTheme = localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light");
+  applyTheme(savedTheme);
+  function toggleTheme(){
+    applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark");
+  }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+
+    let current = sections[0];
+    for(const s of sections){
+      if(s.getBoundingClientRect().top - 90 <= 0) current = s;
+    }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* ============ FLASHCARDS ============ */
+  const flashcards = [
+    {q:"Qual a diferença central entre tipo e gênero textual?", a:"Tipo é categoria linguística finita (5 tipos); gênero é categoria sócio-funcional, praticamente ilimitada e vinculada a suporte e função social."},
+    {q:"Quais são os cinco tipos textuais clássicos?", a:"Narrativo, descritivo, dissertativo (expositivo/argumentativo), injuntivo e preditivo."},
+    {q:"Qual marca linguística caracteriza o tipo injuntivo?", a:"Verbos no imperativo ou infinitivo instrucional, organizando passos ou ordens."},
+    {q:"Qual marca linguística caracteriza o tipo descritivo?", a:"Predominância de adjetivos e verbos de estado (ser, estar, parecer)."},
+    {q:"Qual marca linguística caracteriza o tipo dissertativo-argumentativo?", a:"Conectivos argumentativos (portanto, contudo, pois) e defesa explícita de uma tese."},
+    {q:"O que é um texto híbrido?", a:"Um texto que mescla mais de um tipo textual em um único gênero, tendo um tipo predominante."},
+    {q:"Cite um exemplo de gênero cujo tipo predominante é injuntivo.", a:"Bula de remédio, manual de instruções ou receita culinária."},
+    {q:"Cite um exemplo de gênero cujo tipo predominante é dissertativo-argumentativo.", a:"Artigo de opinião ou editorial."},
+    {q:"Quais são os quatro critérios que definem um gênero textual?", a:"Função social, suporte, esfera de circulação e estrutura composicional."},
+    {q:"O suporte de um texto (jornal, e-mail) é o mesmo que o gênero?", a:"Não. Suporte é apenas o meio físico/digital de circulação; o gênero é a forma social do texto (ex.: notícia, publicada no suporte jornal)."},
+    {q:"Como identificar o tipo textual predominante em um texto híbrido?", a:"Verificando qual função organiza a maior parte do texto e sustenta seu propósito comunicativo central."},
+    {q:"Por que os gêneros textuais são considerados praticamente ilimitados?", a:"Porque surgem, transformam-se e desaparecem conforme as necessidades comunicativas da sociedade (ex.: gêneros digitais recentes como post e chat)."},
+    {q:"Qual autor é referência nos estudos sobre gêneros do discurso?", a:"Mikhail Bakhtin."},
+    {q:"Qual é a principal pegadinha da FGV neste tópico?", a:"Confundir tipo com gênero — responder o nome do gênero quando a pergunta pede o tipo, ou vice-versa."},
+    {q:"Um e-mail corporativo deve manter que tipo de registro, mesmo sendo digital?", a:"Registro formal a semiformal, conforme convenção institucional, mesmo em suporte digital ágil."},
+    {q:"O que caracteriza o tipo narrativo?", a:"Verbos de ação no passado e progressão cronológica de fatos, geralmente com personagens."},
+    {q:"O que diferencia dissertativo expositivo de dissertativo argumentativo?", a:"O expositivo apenas expõe informações de forma objetiva; o argumentativo defende explicitamente um ponto de vista com argumentos."},
+    {q:"Qual é a função social de um contrato?", a:"Registrar formalmente direitos e obrigações entre partes, com força jurídica."},
+    {q:"Cite dois gêneros da esfera administrativa institucional.", a:"Memorando e ofício (também ata de reunião)."},
+    {q:"Por que uma charge costuma exigir leitura de mais de um tipo textual?", a:"Porque combina elementos narrativos/descritivos (a cena representada) com carga argumentativa implícita (a crítica social)."},
+  ];
+
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* ============ QUESTÕES COMENTADAS (20) ============ */
+  const questoes = [
+    {tema:"Tipo x gênero", texto:"“Ferva a água. Adicione o macarrão e mexa por 30 segundos. Deixe cozinhar por 8 minutos, escorra e sirva imediatamente.”", enun:"O tipo textual predominante no trecho é:", alts:["Narrativo","Descritivo","Dissertativo","Injuntivo","Preditivo"], correta:3, coment:"Sequência de verbos no imperativo ('ferva', 'adicione', 'deixe') orientando passos — marca típica do tipo injuntivo, presente no gênero receita."},
+    {tema:"Tipo x gênero", texto:"O mesmo texto do item anterior (receita culinária).", enun:"O gênero textual do trecho é:", alts:["Notícia","Receita culinária","Editorial","Contrato","Currículo"], correta:1, coment:"O gênero é a forma social do texto — trata-se de uma receita culinária, esfera doméstica/gastronômica, suporte livro de receitas ou site."},
+    {tema:"Marcas linguísticas", texto:"“O prédio, de fachada azulada e janelas estreitas, erguia-se solitário no fim da rua deserta.”", enun:"O tipo textual predominante no trecho é:", alts:["Narrativo","Descritivo","Injuntivo","Dissertativo-argumentativo","Preditivo"], correta:1, coment:"Predominância de adjetivos ('azulada', 'estreitas', 'deserta') e verbo de estado ('erguia-se') caracteriza o tipo descritivo."},
+    {tema:"Marcas linguísticas", texto:"“João acordou cedo, tomou café rapidamente e correu para não perder o ônibus das sete horas.”", enun:"O tipo textual predominante no trecho é:", alts:["Descritivo","Dissertativo","Narrativo","Injuntivo","Preditivo"], correta:2, coment:"Verbos de ação no passado ('acordou', 'tomou', 'correu') em sequência temporal caracterizam o tipo narrativo."},
+    {tema:"Gênero institucional", texto:"“Prezados colaboradores, informamos que o sistema de ponto eletrônico passará por manutenção neste sábado, das 8h às 12h. Agradecemos a compreensão. Atenciosamente, Recursos Humanos.”", enun:"O gênero textual do trecho é:", alts:["Ofício externo","Comunicado interno institucional","Editorial","Charge","Contrato de trabalho"], correta:1, coment:"Estrutura de saudação + informação objetiva + fecho, dirigida a 'colaboradores' e assinada por um setor interno, caracteriza um comunicado interno institucional."},
+    {tema:"Função social", texto:"“Este documento estabelece as obrigações e direitos das partes, com vigência de 12 meses a partir da assinatura.”", enun:"A função social predominante do gênero ao qual pertence esse trecho é:", alts:["Informar fatos jornalísticos","Registrar formalmente direitos e obrigações entre partes","Instruir o preparo de um produto","Criticar ironicamente uma situação","Descrever uma paisagem"], correta:1, coment:"Trata-se de um contrato — função social de registro formal de direitos e obrigações entre partes, com força jurídica."},
+    {tema:"Suporte x gênero", texto:"—", enun:"Assinale a alternativa correta sobre a relação entre suporte e gênero textual:", alts:["Suporte e gênero são sinônimos e podem ser usados indistintamente.","O suporte é o meio físico ou digital de circulação; o gênero é a forma social do texto que nele circula.","Todo suporte comporta apenas um único gênero textual.","O gênero determina obrigatoriamente o suporte, sem exceções.","Suporte é sinônimo de tipo textual."], correta:1, coment:"Suporte (jornal, e-mail, outdoor) é apenas o meio de circulação; o gênero (notícia, comunicado, propaganda) é a forma social do texto — um mesmo suporte pode veicular vários gêneros."},
+    {tema:"Texto híbrido", texto:"“O prefeito anunciou ontem o novo plano de mobilidade urbana. Segundo especialistas ouvidos pela reportagem, a medida pode reduzir o tempo médio de deslocamento em até 15%, embora dependa de investimentos ainda não confirmados.”", enun:"Esse trecho de reportagem combina, predominantemente, os tipos:", alts:["Apenas narrativo, sem nenhum outro tipo presente.","Narrativo (o anúncio) e dissertativo-expositivo (a análise dos especialistas).","Apenas injuntivo.","Apenas descritivo.","Apenas preditivo, sem nenhum outro tipo."], correta:1, coment:"O texto relata um fato (narrativo: 'o prefeito anunciou') e expõe uma análise técnica (dissertativo-expositivo: dados e opinião de especialistas) — exemplo clássico de texto híbrido em reportagem."},
+    {tema:"Gênero digital", texto:"“Bom dia, time! Só um lembrete rápido: a entrega do relatório mensal foi antecipada para quinta-feira. Qualquer dúvida, me chamem aqui mesmo. Abraço!”", enun:"Quanto ao registro, essa mensagem, publicada em um chat institucional de equipe, pode ser classificada como:", alts:["Estritamente formal, idêntica a um ofício.","Semiformal, adequada ao contexto de comunicação ágil entre uma equipe, sem deixar de ser profissional.","Inadequada para qualquer ambiente de trabalho.","Idêntica, em registro, a uma lei ou portaria.","Um gênero jornalístico."], correta:1, coment:"Chats institucionais de equipe costumam adotar registro semiformal — mais ágil que um ofício, mas ainda profissional, adequado ao contexto e ao público (colegas de trabalho)."},
+    {tema:"Charge/tipo", texto:"Charge (descrita): um funcionário aponta para um relatório impresso enquanto, na legenda, lê-se 'Aqui está a prova de que trabalhamos duro. 200 páginas ninguém vai ler.'", enun:"Além do tipo narrativo/descritivo da cena representada, a charge carrega um forte componente:", alts:["Preditivo, anunciando eventos futuros.","Argumentativo implícito, com crítica irônica ao excesso de burocracia.","Apenas informativo, sem qualquer crítica.","Estritamente injuntivo, dando instruções.","Nenhum componente argumentativo."], correta:1, coment:"A legenda revela ironia sobre o volume excessivo de páginas que 'ninguém vai ler' — crítica implícita à burocracia, caracterizando componente argumentativo dentro do gênero charge."},
+    {tema:"Classificação de gênero", texto:"“Aos quinze dias do mês de março, reuniram-se os membros do comitê para deliberar sobre o orçamento do próximo exercício. Ficou decidido, por unanimidade, aprovar a proposta apresentada.”", enun:"O gênero textual do trecho é:", alts:["Notícia","Ata de reunião","Propaganda","Bula de remédio","Poema"], correta:1, coment:"Estrutura de registro formal de uma reunião, com data, deliberação e decisão, caracteriza uma ata de reunião — gênero da esfera administrativa."},
+    {tema:"Tipo predominante em texto normativo", texto:"“Art. 5º Os servidores deverão registrar o ponto eletrônico no início e no término da jornada, sendo vedado o registro por terceiros.”", enun:"O tipo textual predominante nesse trecho normativo é:", alts:["Narrativo","Descritivo","Injuntivo","Preditivo","Dissertativo-argumentativo com defesa de opinião pessoal"], correta:2, coment:"O verbo modal 'deverão' associado a uma norma de conduta obrigatória caracteriza o tipo injuntivo, comum em textos normativos e legais."},
+    {tema:"Publicidade", texto:"“Sua rotina merece mais leveza. Conheça o novo aplicativo que organiza suas tarefas em segundos.”", enun:"O tipo textual predominante no texto publicitário acima é:", alts:["Narrativo puro, sem qualquer apelo persuasivo","Dissertativo-argumentativo, com apelo persuasivo ao leitor","Apenas descritivo, sem intenção de convencer","Apenas injuntivo, sem qualquer avaliação","Preditivo, apenas anunciando o futuro"], correta:1, coment:"O texto busca convencer o leitor a usar o aplicativo, com apelo emocional ('merece mais leveza') — tipo dissertativo-argumentativo aplicado ao gênero publicitário."},
+    {tema:"Função social - currículo", texto:"—", enun:"Um currículo profissional é predominantemente do tipo textual:", alts:["Narrativo","Descritivo","Injuntivo","Dissertativo-argumentativo","Preditivo"], correta:1, coment:"Um currículo apresenta características, formação e experiências do candidato — função essencialmente descritiva, ainda que organizada cronologicamente."},
+    {tema:"Distinção tipo/gênero avançada", texto:"—", enun:"Assinale a afirmação correta sobre tipos e gêneros textuais:", alts:["Um gênero textual só pode conter um único tipo textual em toda a sua extensão.","O número de tipos textuais é praticamente ilimitado, assim como o de gêneros.","Um gênero pode combinar mais de um tipo textual, havendo geralmente um tipo predominante.","Tipo e gênero são sinônimos na literatura linguística.","Somente textos escritos possuem tipo e gênero; textos orais não se classificam dessa forma."], correta:2, coment:"A alternativa C reflete a distinção correta: gêneros costumam ser híbridos, combinando tipos, com um predominante — os tipos são finitos (cerca de 5), diferentemente dos gêneros."},
+    {tema:"Gênero jurídico", texto:"“As partes, de comum acordo, estabelecem que o pagamento será efetuado em parcela única, no prazo de trinta dias após a assinatura deste instrumento.”", enun:"O gênero textual do trecho é:", alts:["Notícia","Charge","Contrato","Currículo","Poema"], correta:2, coment:"Cláusulas que regulam obrigações entre partes, com linguagem jurídica formal, caracterizam o gênero contrato."},
+    {tema:"Preditivo", texto:"“Se as tendências atuais se mantiverem, a taxa de digitalização de processos deverá atingir 90% dos setores públicos até 2030.”", enun:"O tipo textual que melhor caracteriza esse trecho, centrado em uma projeção futura, é:", alts:["Narrativo","Descritivo","Injuntivo","Preditivo","Dissertativo-expositivo, sem qualquer projeção"], correta:3, coment:"O texto projeta um cenário futuro condicionado ('se... deverá atingir'), característica central do tipo preditivo."},
+    {tema:"Adequação de registro", texto:"“E aí, beleza? Aquele relatório fica pra amanhã, pode ser? Vlw!”", enun:"Se essa mensagem fosse enviada por um servidor à Diretoria, em canal oficial de comunicação institucional, o principal problema identificável seria:", alts:["O uso de vírgulas incorretas.","A inadequação do registro informal ao contexto institucional formal esperado.","A ausência de verbo no imperativo.","O uso excessivo de conectivos argumentativos.","A ausência de elementos descritivos."], correta:1, coment:"Independentemente do suporte (mensagem instantânea), a comunicação com a Diretoria em canal oficial exige registro mais formal — a informalidade da mensagem é inadequada ao contexto institucional hierárquico."},
+    {tema:"Esfera de circulação", texto:"—", enun:"A esfera de circulação de um gênero textual refere-se a:", alts:["O número de páginas do texto.","O contexto social/institucional em que o gênero costuma ser usado (jornalística, jurídica, escolar, digital etc.).","A quantidade de leitores do texto.","O tipo de papel usado na impressão.","A data de publicação do texto."], correta:1, coment:"Esfera de circulação é um dos quatro critérios de definição de gênero, referindo-se ao contexto social/institucional de uso — não à extensão, público numérico ou suporte físico."},
+    {tema:"Aplicação combinada", texto:"“Diante do exposto, requer-se o deferimento do pedido, nos termos do artigo citado, sob pena de nulidade do ato administrativo.”", enun:"Quanto ao tipo e ao gênero, esse trecho pode ser classificado, respectivamente, como:", alts:["Narrativo; notícia jornalística","Dissertativo-argumentativo/injuntivo; petição ou requerimento administrativo","Descritivo; receita culinária","Preditivo; previsão do tempo","Narrativo; charge"], correta:1, coment:"O trecho argumenta com base legal ('nos termos do artigo') e impõe uma exigência formal ('sob pena de nulidade') — combina dissertativo-argumentativo e injuntivo, típico do gênero requerimento/petição administrativa."},
+  ];
+
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Texto-base:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* ============ MINI SIMULADO (30) ============ */
+  const simulado = [
+    {d:"Fácil", texto:"“Misture os ingredientes secos. Acrescente os ovos. Bata por 3 minutos.”", enun:"O tipo textual predominante é:", alts:["Narrativo","Descritivo","Injuntivo","Dissertativo","Preditivo"], correta:2},
+    {d:"Fácil", texto:"“Ontem, a equipe finalizou o projeto e entregou o relatório final ao cliente.”", enun:"O tipo textual predominante é:", alts:["Narrativo","Injuntivo","Preditivo","Dissertativo-argumentativo","Descritivo"], correta:0},
+    {d:"Fácil", texto:"“A sala era ampla, iluminada por grandes janelas e decorada em tons neutros.”", enun:"O tipo textual predominante é:", alts:["Narrativo","Descritivo","Injuntivo","Preditivo","Dissertativo"], correta:1},
+    {d:"Fácil", texto:"“É fundamental investir em capacitação, pois isso reduz erros operacionais e aumenta a produtividade.”", enun:"O tipo textual predominante é:", alts:["Descritivo","Narrativo","Dissertativo-argumentativo","Injuntivo","Preditivo"], correta:2},
+    {d:"Fácil", texto:"“Prezado cliente, seu pedido foi confirmado e será entregue em até 5 dias úteis.”", enun:"O gênero textual do trecho é:", alts:["Charge","E-mail de confirmação de pedido","Poema","Ata de reunião","Editorial"], correta:1},
+    {d:"Fácil", texto:"“Se a demanda continuar crescendo, a empresa deverá abrir novas vagas até o fim do ano.”", enun:"O tipo textual predominante é:", alts:["Narrativo","Descritivo","Preditivo","Injuntivo","Dissertativo-expositivo neutro"], correta:2},
+    {d:"Fácil", texto:"—", enun:"O suporte de um texto é:", alts:["Sinônimo de gênero textual","O meio físico ou digital em que o texto circula","O tipo textual predominante","A tese defendida pelo autor","O público-alvo do texto"], correta:1},
+    {d:"Fácil", texto:"“Currículo: Formação em Administração, experiência de 5 anos em controladoria, domínio de Excel avançado.”", enun:"O tipo textual predominante nesse gênero é:", alts:["Narrativo","Descritivo","Injuntivo","Dissertativo-argumentativo","Preditivo"], correta:1},
+    {d:"Fácil", texto:"—", enun:"São exemplos de gêneros textuais:", alts:["Narração e descrição","Notícia e contrato","Presente e pretérito","Sujeito e predicado","Fonema e grafema"], correta:1},
+    {d:"Fácil", texto:"“Aperte o botão vermelho para desligar o equipamento imediatamente.”", enun:"O tipo textual predominante é:", alts:["Narrativo","Descritivo","Dissertativo","Injuntivo","Preditivo"], correta:3},
+    {d:"Média", texto:"“O relatório trouxe dados alarmantes: houve aumento de 20% nas reclamações. Diante disso, a diretoria decidiu revisar o processo de atendimento.”", enun:"O trecho combina predominantemente os tipos:", alts:["Apenas narrativo","Dissertativo-expositivo (dados) e narrativo (decisão relatada)","Apenas descritivo","Apenas injuntivo","Apenas preditivo"], correta:1},
+    {d:"Média", texto:"“Este manual orienta, passo a passo, a instalação do software, sendo vedado pular etapas.”", enun:"O gênero e o tipo predominante são, respectivamente:", alts:["Notícia; narrativo","Manual de instruções; injuntivo","Contrato; dissertativo","Currículo; descritivo","Editorial; argumentativo"], correta:1},
+    {d:"Média", texto:"“Aos vinte dias do mês de abril, reuniu-se o Conselho Fiscal para apreciar as contas do trimestre, tendo sido aprovadas por unanimidade.”", enun:"O gênero textual do trecho é:", alts:["Notícia","Ata de reunião","Publicidade","Charge","Bula"], correta:1},
+    {d:"Média", texto:"“Reduzir custos sem qualificar a equipe é como podar uma árvore pela raiz: parece economia, mas compromete o crescimento futuro.”", enun:"O tipo textual predominante, marcado pelo uso de analogia para defender uma tese, é:", alts:["Narrativo","Descritivo","Dissertativo-argumentativo","Injuntivo","Preditivo"], correta:2},
+    {d:"Média", texto:"“Comunicado interno: a partir de segunda-feira, o uso do crachá será obrigatório em todas as dependências.”", enun:"O tipo textual predominante nesse comunicado é:", alts:["Narrativo","Descritivo","Injuntivo","Preditivo","Dissertativo-argumentativo com opinião pessoal"], correta:2},
+    {d:"Média", texto:"“Care team, quick heads up: hoje a reunião foi remarcada para as 15h. Confirmem presença por aqui.”", enun:"Esse gênero, uma mensagem em chat institucional de equipe, deve manter um registro:", alts:["Idêntico ao de um ofício formal impresso","Semiformal, ágil, mas ainda profissional","Estritamente jurídico","Idêntico ao de um poema","Sem qualquer adequação ao contexto institucional"], correta:1},
+    {d:"Média", texto:"“O texto abaixo, publicado em jornal de grande circulação, relata o aumento do desemprego no setor de serviços, citando dados do IBGE e a opinião de dois economistas.”", enun:"O gênero textual descrito é:", alts:["Charge","Reportagem jornalística","Receita culinária","Contrato","Poema"], correta:1},
+    {d:"Média", texto:"“Considerando os riscos identificados na auditoria, recomenda-se a revisão imediata dos controles internos do setor financeiro.”", enun:"O tipo textual predominante combina:", alts:["Apenas narrativo","Dissertativo-expositivo com componente injuntivo (recomendação)","Apenas descritivo","Apenas preditivo","Apenas narrativo com preditivo"], correta:1},
+    {d:"Média", texto:"—", enun:"Um edital de concurso público, quanto ao tipo textual predominante, é majoritariamente:", alts:["Narrativo","Descritivo","Injuntivo, com trechos dissertativo-expositivos","Preditivo","Dissertativo-argumentativo com opinião do órgão"], correta:2},
+    {d:"Média", texto:"“Bom trabalho, equipe! Fechamos o trimestre com resultado acima da meta. Parabéns a todos!”", enun:"O gênero textual desse comunicado, voltado à motivação da equipe, tem como função social predominante:", alts:["Instruir passos técnicos","Reconhecer e motivar a equipe institucionalmente","Registrar formalmente uma obrigação jurídica","Criticar ironicamente um resultado","Apresentar dados estatísticos neutros"], correta:1},
+    {d:"Difícil", texto:"“Dizer que o processo está 'em análise' há seis meses é, na prática, uma forma elegante de dizer que ninguém quer assumir a decisão.”", enun:"O tipo textual predominante, que sustenta uma crítica por meio de reformulação irônica de uma expressão institucional, é:", alts:["Narrativo, sem qualquer crítica implícita","Descritivo, sem carga avaliativa","Dissertativo-argumentativo, com ironia como recurso persuasivo","Injuntivo, dando uma ordem direta","Preditivo, apenas projetando o futuro"], correta:2},
+    {d:"Difícil", texto:"“Editorial: A decisão do governo de ampliar os investimentos em digitalização, embora tardia, representa um passo relevante — desde que venha acompanhada de fiscalização rigorosa do uso dos recursos.”", enun:"Quanto ao tipo e à função social, esse trecho de editorial é:", alts:["Narrativo puro, apenas relatando um fato sem avaliação","Dissertativo-argumentativo, pois o autor avalia e condiciona seu apoio à decisão relatada","Descritivo, apenas caracterizando a decisão do governo","Injuntivo, dando ordens diretas ao governo","Preditivo, apenas projetando cenários futuros sem avaliação presente"], correta:1},
+    {d:"Difícil", texto:"“Memorando nº 12/2026: Solicita-se a todos os setores o envio dos relatórios de despesas até o dia 30, sob pena de bloqueio do próximo repasse orçamentário.”", enun:"O tipo textual predominante do memorando combina:", alts:["Apenas narrativo","Injuntivo (solicitação com prazo) e dissertativo-expositivo (justificativa da consequência)","Apenas descritivo","Apenas preditivo","Apenas narrativo com descritivo"], correta:1},
+    {d:"Difícil", texto:"“Chamar de 'ajuste de rota' uma mudança completa de estratégia é, no mínimo, uma escolha cuidadosa de palavras por parte da diretoria.”", enun:"O recurso predominante nesse trecho, que sustenta uma crítica implícita à linguagem institucional, é característico do tipo:", alts:["Narrativo, com foco em sequência de eventos","Dissertativo-argumentativo, com crítica por meio da análise da escolha lexical do emissor original","Descritivo, sem qualquer julgamento","Injuntivo, dando instruções à diretoria","Preditivo, projetando resultados futuros"], correta:1},
+    {d:"Difícil", texto:"“Requerimento: Vem o abaixo-assinado requerer, com fundamento no artigo 15 do regulamento interno, a revisão do indeferimento anteriormente proferido.”", enun:"O gênero e a combinação de tipos textuais mais adequados para esse trecho são:", alts:["Notícia; apenas narrativo","Requerimento administrativo; dissertativo-argumentativo combinado a injuntivo","Receita; apenas injuntivo","Currículo; apenas descritivo","Charge; apenas narrativo com ironia"], correta:1},
+    {d:"Difícil", texto:"“Relatório de auditoria: Observou-se que 30% dos processos analisados apresentaram inconsistências documentais, sendo recomendável a revisão dos fluxos de aprovação.”", enun:"O gênero relatório de auditoria combina, predominantemente, os tipos:", alts:["Narrativo e preditivo","Dissertativo-expositivo (constatação dos dados) e injuntivo (recomendação)","Apenas descritivo","Apenas narrativo","Apenas preditivo"], correta:1},
+    {d:"Difícil", texto:"“Ao afirmar que 'não há recursos disponíveis no momento', o comunicado evita explicar por que o orçamento previsto para o projeto foi remanejado para outra área.”", enun:"A observação sobre o comunicado institucional revela uma leitura crítica que aponta para:", alts:["Uma descrição neutra do orçamento, sem qualquer questionamento.","Uma possível omissão de informação relevante por trás da justificativa apresentada.","Um erro de digitação no comunicado.","A total transparência do comunicado.","A ausência de qualquer intenção comunicativa no texto."], correta:1, },
+    {d:"Difícil", texto:"“Portaria nº 08/2026: Fica instituído o teletrabalho parcial para os servidores do setor de controladoria, nos termos do Anexo I, ressalvadas as atividades que exijam presença física obrigatória.”", enun:"Quanto ao gênero e ao tipo textual predominante, esse trecho de portaria classifica-se como:", alts:["Notícia; narrativo","Texto normativo; injuntivo, com estrutura de regra geral e exceção","Charge; narrativo com ironia","Currículo; descritivo","Editorial; dissertativo-argumentativo com opinião pessoal do redator"], correta:1},
+    {d:"Difícil", texto:"“Dizer que os resultados 'ficaram dentro do esperado' quando a meta não foi atingida é uma forma de suavizar, pela escolha das palavras, um desempenho abaixo do previsto.”", enun:"Esse comentário crítico sobre um relatório institucional exemplifica a análise de qual recurso, típico do tipo dissertativo-argumentativo?", alts:["Uso de dados estatísticos precisos, sem qualquer viés de linguagem.","Escolha lexical (eufemismo) como estratégia para atenuar uma informação desfavorável.","Uso exclusivo de linguagem técnica neutra, sem intenção persuasiva.","Ausência total de intenção comunicativa por parte do autor do relatório original.","Uso de verbos no imperativo para dar ordens."], correta:1},
+  ];
+
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Texto-base:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* ============ CHECKLIST ============ */
+  const checklistItems = [
+    "Diferenciar tipo textual de gênero textual com precisão conceitual",
+    "Nomear os cinco tipos textuais clássicos e suas marcas linguísticas",
+    "Reconhecer a marca do tipo injuntivo (imperativo/infinitivo instrucional)",
+    "Reconhecer a marca do tipo descritivo (adjetivos, verbos de estado)",
+    "Reconhecer a marca do tipo narrativo (verbos de ação, progressão temporal)",
+    "Reconhecer a marca do tipo dissertativo-argumentativo (conectivos, tese)",
+    "Identificar o tipo predominante em textos híbridos",
+    "Classificar gêneros institucionais (memorando, ofício, ata, comunicado)",
+    "Diferenciar suporte de gênero textual",
+    "Avaliar adequação de registro em gêneros digitais institucionais",
+    "Identificar função social como critério de classificação de gênero",
+    "Resolver questões que cobram simultaneamente tipo e gênero de um mesmo texto",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ============ ERROS MAIS COMUNS (20) ============ */
+  const erros = [
+    "Confundir tipo textual com gênero textual, respondendo um pelo outro.",
+    "Achar que gênero textual é uma categoria fixa e finita, como o tipo.",
+    "Classificar o gênero pelo suporte (jornal, internet) em vez da função social.",
+    "Ignorar o tipo predominante em texto híbrido, marcando um tipo presente só em trecho secundário.",
+    "Não reconhecer verbos no imperativo como marca do tipo injuntivo.",
+    "Confundir descrição com narração quando o texto tem poucos verbos de ação.",
+    "Tratar todo texto argumentativo como puramente informativo, ignorando a intenção persuasiva.",
+    "Não perceber que e-mails e chats institucionais exigem registro formal, mesmo em suporte ágil.",
+    "Classificar erroneamente um memorando como notícia por desconhecer a esfera administrativa.",
+    "Ignorar a função social ao diferenciar gêneros estruturalmente parecidos (ofício x memorando).",
+    "Achar que charge e tirinha são apenas humor, sem reconhecer a carga argumentativa implícita.",
+    "Não identificar o tipo preditivo em textos que projetam cenários futuros condicionados.",
+    "Confundir gênero jurídico (contrato) com gênero administrativo (ofício) pela formalidade semelhante.",
+    "Deixar de observar conectivos condicionais em textos normativos, essenciais à leitura injuntiva.",
+    "Supor que um texto só pode ter um tipo textual, ignorando textos híbridos.",
+    "Ignorar o comando da questão (se pede 'tipo' ou 'gênero') e responder a categoria errada.",
+    "Classificar currículo como narrativo, quando na verdade é predominantemente descritivo.",
+    "Achar que 'suporte' e 'gênero' são sinônimos.",
+    "Não reconhecer gêneros digitais recentes (post institucional, chat) como objeto de cobrança válido.",
+    "Ler apenas o início do texto e não confirmar o tipo predominante com o restante do conteúdo.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{
+    const li = document.createElement("li");
+    li.textContent = e;
+    errosList.appendChild(li);
+  });
+
+  /* ============ GLOSSÁRIO ============ */
+  const glossario = [
+    ["Tipo textual","Categoria linguística finita definida por estrutura e marcas gramaticais (narrativo, descritivo, dissertativo, injuntivo, preditivo)."],
+    ["Gênero textual","Forma de texto que circula socialmente, definida por função social, suporte, esfera de circulação e estrutura composicional."],
+    ["Suporte","Meio físico ou digital em que um texto circula (jornal, e-mail, outdoor, aplicativo)."],
+    ["Esfera de circulação","Contexto social/institucional em que um gênero costuma ser utilizado (jornalística, jurídica, digital etc.)."],
+    ["Função social","Propósito comunicativo de um gênero na vida social (informar, convencer, instruir, registrar)."],
+    ["Texto híbrido","Texto que combina mais de um tipo textual, com um tipo geralmente predominante."],
+    ["Registro linguístico","Nível de formalidade adotado em um texto, adequado ao contexto de comunicação."],
+    ["Estrutura composicional","Partes fixas ou recorrentes que compõem um gênero (ex.: saudação e fecho em um e-mail)."],
+    ["Injuntivo","Tipo textual que instrui, orienta ou dá ordens, com marcas de imperativo/infinitivo."],
+    ["Preditivo","Tipo textual centrado em projeções ou previsões futuras."],
+    ["Eufemismo","Recurso de escolha lexical que suaviza uma informação desfavorável ou desagradável."],
+    ["Gênero digital","Gênero textual próprio dos ambientes digitais contemporâneos (post, chat, e-mail corporativo)."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

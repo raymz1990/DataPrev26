@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compreensão e Interpretação de Textos | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220;
+    --ink-900:#101a2e;
+    --ink-800:#16223b;
+    --ink-700:#1e2d4d;
+    --ink-600:#2c3e63;
+    --paper:#f6f4ee;
+    --paper-2:#efece2;
+    --gold:#b8892b;
+    --gold-light:#e0b563;
+    --gold-dark:#8a6520;
+    --green-ok:#2f7a4f;
+    --red-err:#a63d3d;
+    --blue-info:#2a5b8a;
+    --text-main:#1b2333;
+    --text-soft:#4a5468;
+    --border-soft:#dcd7c8;
+    --card-bg:#ffffff;
+    --shadow:0 2px 10px rgba(16,26,46,.08);
+    --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424;
+    --paper-2:#101a2e;
+    --text-main:#e8e6dc;
+    --text-soft:#a7aec2;
+    --border-soft:#26314f;
+    --card-bg:#131d33;
+    --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text-main);
+    font-family:var(--sans);
+    line-height:1.65;
+    transition:background .25s ease,color .25s ease;
+  }
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+
+  /* ===== LAYOUT SHELL ===== */
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    background:var(--ink-950);
+    color:#dfe3ee;
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:20px 16px 40px;
+    border-right:1px solid var(--ink-700);
+    z-index:40;
+  }
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{
+    width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);
+    background:var(--ink-900);color:#eef0f6;font-size:13px;
+  }
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{
+    display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;
+    margin-bottom:2px;border-left:2px solid transparent;
+  }
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+
+  /* ===== TOPBAR (mobile) ===== */
+  .topbar{
+    display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;
+    padding:10px 14px;align-items:center;justify-content:space-between;
+  }
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+
+  /* ===== PROGRESS BAR ===== */
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+
+  /* ===== MAIN ===== */
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+
+  /* ===== HEADER / CAPA ===== */
+  .hero{
+    background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);
+    color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);
+  }
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);
+  }
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);
+    border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;
+  }
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{
+    border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;
+    border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);
+  }
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+
+  /* ===== CARDS / BOXES ===== */
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;}
+  .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;}
+  .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;}
+  .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);}
+  .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;}
+  .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+
+  .collapsible .coll-head{cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .collapsible .coll-body{display:none;margin-top:10px;}
+  .collapsible.open .coll-body{display:block;}
+  .collapsible .chev{transition:transform .2s;}
+  .collapsible.open .chev{transform:rotate(90deg);}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+
+  /* ===== MIND MAP ===== */
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{
+    background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;
+    box-shadow:var(--shadow);position:relative;
+  }
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+
+  /* ===== FLASHCARDS ===== */
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{
+    perspective:1200px;height:150px;cursor:pointer;
+  }
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;
+    display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);
+  }
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+
+  /* ===== QUESTOES ===== */
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{
+    display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;
+    margin-bottom:7px;cursor:pointer;font-size:13.5px;
+  }
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .q-check{margin-top:4px;}
+
+  /* ===== SIMULADO ===== */
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+
+  /* ===== CHECKLIST ===== */
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+
+  /* ===== GLOSSARY ===== */
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+
+  /* ===== BACK TO TOP ===== */
+  #backtop{
+    position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);
+    border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);
+  }
+  #backtop.show{display:flex;}
+
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Língua Portuguesa</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Compreensão e interpretação de textos de gêneros variados</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Compreensão e interpretação de textos de gêneros variados.html" selected>01 - Compreensão e interpretação de textos de gêneros variados</option>
+        <option value="02 - Reconhecimento de tipos e gêneros textuais.html">02 - Reconhecimento de tipos e gêneros textuais</option>
+        <option value="03 - Domínio da ortografia oficial.html">03 - Domínio da ortografia oficial</option>
+        <option value="04 - Domínio dos mecanismos de coesão textual.html">04 - Domínio dos mecanismos de coesão textual</option>
+        <option value="05 - Domínio da estrutura morfossintática do período.html">05 - Domínio da estrutura morfossintática do período</option>
+        <option value="06 - Reescrita de frases e parágrafos do texto.html">06 - Reescrita de frases e parágrafos do texto</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Compreensão e Interpretação de Textos</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…">
+    </div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">
+      Módulo I — Língua Portuguesa<br>
+      Tópico 01 de 08<br>
+      Material de estudo offline — DATAPREV 2026
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Compreensão e Interpretação de Textos de Gêneros Variados</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Língua Portuguesa</b> &nbsp;›&nbsp; Tópico 01</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">6h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Leitura fluente; noções de coesão/coerência</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — base de ~30% dos itens de Português FGV</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- ============ 1. OBJETIVOS ============ -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Identificar a <b>ideia central</b> e as <b>ideias secundárias</b> de textos de gêneros variados (notícia, artigo de opinião, charge, tirinha, texto publicitário, texto normativo/jurídico, e-mail corporativo, gráfico, infográfico, poema, crônica).</li>
+            <li>Distinguir <b>informações explícitas</b> (literais) de <b>informações inferidas</b> (implícitas), sem extrapolar o que o texto autoriza.</li>
+            <li>Reconhecer a <b>tese do autor</b>, os <b>argumentos</b> que a sustentam e os <b>recursos de persuasão</b> empregados.</li>
+            <li>Analisar a <b>coesão referencial e sequencial</b> (pronomes, conectivos, elipses) para recuperar a que — ou a quem — um termo remete no texto.</li>
+            <li>Perceber <b>ironia, humor, ambiguidade e pressupostos</b> em textos verbais e não verbais (charges, tirinhas, memes institucionais).</li>
+            <li>Diferenciar <b>interpretação do texto</b> de <b>opinião pessoal</b> do candidato — pilar central da cobrança FGV.</li>
+            <li>Resolver, sob banca FGV, questões de <b>assertivas certo/errado</b>, <b>múltipla escolha com "julgue os itens"</b> e <b>reescrita/paráfrase</b> mantendo o sentido original.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 2. RESUMO EXECUTIVO ============ -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Interpretação de texto é a disciplina que testa a capacidade de o candidato <b>extrair sentido exatamente daquilo que o texto diz</b> — nem mais, nem menos. A FGV não cobra decoreba de gramática pura nesse eixo: cobra <b>leitura atenta, raciocínio sobre o dito e o não dito, e resistência a armadilhas de generalização</b>.</p>
+          <p>Todo texto possui uma <b>ideia central</b> (o que ele defende ou informa), <b>ideias secundárias</b> que sustentam a central, e uma <b>estrutura</b> (introdução, desenvolvimento, conclusão — ou, em gêneros não narrativos, categorização diferente, como lide + corpo em notícias). O candidato deve mapear essa arquitetura antes de responder qualquer questão.</p>
+          <p>Três operações cognitivas são cobradas: <b>decodificação</b> (entender o que está escrito literalmente), <b>inferência</b> (concluir o que está implícito, mas é logicamente sustentado pelo texto) e <b>avaliação crítica</b> (julgar a validade dos argumentos e identificar recursos persuasivos, sem incluir a opinião pessoal do candidato).</p>
+          <p>A armadilha mais comum em provas FGV é a <b>extrapolação</b>: uma alternativa aparentemente coerente com o "espírito" do texto, mas que <b>acrescenta informação que o texto não contém ou não permite concluir</b>. A segunda armadilha mais frequente é a <b>inversão ou distorção de sentido</b> por meio de trocas sutis de palavras (substituição de um termo por um quase-sinônimo que muda o sentido, inversão de causa e consequência, negação mascarada).</p>
+          <p>Gêneros textuais variam a forma de leitura exigida: um <b>texto normativo</b> (lei, portaria, edital) exige leitura literal e atenção a conectores condicionais e restritivos ("desde que", "salvo", "exceto"); uma <b>charge ou tirinha</b> exige leitura da linguagem não verbal associada ao verbal, com foco em ironia e crítica social; um <b>texto publicitário</b> exige identificar o público-alvo e a estratégia persuasiva; um <b>gráfico/infográfico</b> exige leitura numérica associada à legenda e ao texto de apoio.</p>
+        </div>
+      </section>
+
+      <!-- ============ 3. MAPA MENTAL ============ -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Compreensão e Interpretação<br>de Textos</div>
+            <div class="mm-branches">
+              <div class="mm-node">
+                <h4>① Níveis de leitura</h4>
+                <ul><li>Literal (decodificação)</li><li>Inferencial (implícito)</li><li>Crítica (avaliação)</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>② Elementos do texto</h4>
+                <ul><li>Ideia central</li><li>Ideias secundárias</li><li>Tese e argumentos</li><li>Conectivos</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>③ Gêneros cobrados</h4>
+                <ul><li>Notícia / reportagem</li><li>Artigo de opinião</li><li>Charge / tirinha</li><li>Texto normativo</li><li>Publicidade</li><li>Gráfico / infográfico</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>④ Coesão</h4>
+                <ul><li>Referencial (pronomes)</li><li>Sequencial (conectivos)</li><li>Elipse</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑤ Armadilhas FGV</h4>
+                <ul><li>Extrapolação</li><li>Inversão de sentido</li><li>Generalização indevida</li><li>Opinião do candidato</li><li>Ironia não percebida</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑥ Formato de cobrança</h4>
+                <ul><li>Certo/Errado</li><li>Múltipla escolha</li><li>Reescrita/paráfrase</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. EXPLICAÇÃO COMPLETA ============ -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 O que é, de fato, "interpretar um texto"</h3>
+          <p>Interpretar não é resumir, não é opinar e não é "achar" o que o texto quis dizer. Interpretar é <b>reconstruir o sentido que o autor construiu com as palavras que escolheu, na ordem em que as escolheu, no contexto em que o texto circula</b>. Isso significa que a resposta certa está sempre <b>ancorada no texto</b> — mesmo quando a questão pede uma inferência, essa inferência precisa ser a única (ou a mais razoável) leitura possível a partir do que está escrito.</p>
+
+          <div class="box info">
+            <div class="box-title">📘 Analogia para fixar</div>
+            <p>Pense no texto como uma cena de crime e no candidato como perito: o perito só pode concluir aquilo que as evidências (o texto) permitem. Ele não pode "supor" um motivo que não há evidência nenhuma. Toda conclusão precisa ser rastreável a uma pista concreta do texto.</p>
+          </div>
+
+          <h3>4.2 Os três níveis de leitura</h3>
+          <table>
+            <thead><tr><th>Nível</th><th>O que exige</th><th>Exemplo de comando de questão</th></tr></thead>
+            <tbody>
+              <tr><td><b>Literal</b></td><td>Localizar informação explícita, sem interpretação adicional</td><td>"De acordo com o texto, o autor afirma que..."</td></tr>
+              <tr><td><b>Inferencial</b></td><td>Concluir algo não dito diretamente, mas decorrente logicamente do texto</td><td>"É possível inferir do texto que..." / "Depreende-se que..."</td></tr>
+              <tr><td><b>Crítico/avaliativo</b></td><td>Julgar argumentos, identificar recursos persuasivos, tom, intenção</td><td>"O autor utiliza qual recurso para convencer o leitor de que...?"</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>A banca frequentemente cobra questão de nível <b>literal</b>, mas com uma alternativa que parece inferencial e "razoável" — o candidato marca por achar que "está implícito", quando na verdade o texto <b>não afirma isso</b>. Regra de ouro: se a questão pedir "de acordo com o texto", a resposta tem que estar escrita ou ser paráfrase direta — não pode ser dedução do candidato.</p>
+          </div>
+
+          <h3>4.3 Estrutura textual e arquitetura da argumentação</h3>
+          <p>Todo texto dissertativo-argumentativo (o gênero mais cobrado em provas de nível superior) segue, em geral, uma lógica de <b>tese → argumentação → conclusão</b>. Já a <b>notícia</b> segue a lógica da pirâmide invertida: <b>lide</b> (o quê, quem, quando, onde, como, por quê) no primeiro parágrafo, seguido de detalhamento em ordem decrescente de importância.</p>
+
+          <table>
+            <thead><tr><th>Gênero</th><th>Estrutura típica</th><th>O que a FGV costuma perguntar</th></tr></thead>
+            <tbody>
+              <tr><td>Notícia/reportagem</td><td>Lide + desenvolvimento + fontes</td><td>Fato central, agentes envolvidos, atribuição de declarações a quem as fez</td></tr>
+              <tr><td>Artigo de opinião / editorial</td><td>Tese + argumentos + conclusão</td><td>Identificação da tese, tipo de argumento, posicionamento do autor</td></tr>
+              <tr><td>Charge / tirinha</td><td>Cena + elemento de ruptura/ironia</td><td>Crítica social implícita, contraste entre imagem e texto</td></tr>
+              <tr><td>Texto normativo (lei, portaria, edital)</td><td>Caput + incisos + parágrafos + exceções</td><td>Condições, exceções, hierarquia entre regra geral e exceção</td></tr>
+              <tr><td>Publicitário</td><td>Apelo + argumento + chamada à ação</td><td>Público-alvo, estratégia de persuasão, conotação x denotação</td></tr>
+              <tr><td>Gráfico/infográfico</td><td>Dado numérico + legenda + texto de apoio</td><td>Leitura correta do dado; alternativa que distorce o número</td></tr>
+              <tr><td>E-mail corporativo/institucional</td><td>Saudação + objetivo + fecho</td><td>Registro (formal/informal), objetivo comunicativo, adequação</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Coesão referencial e sequencial</h3>
+          <p>A <b>coesão referencial</b> ocorre quando um termo (geralmente pronome) retoma ou antecipa outro termo do texto (referente). Exemplo: <i>"O relatório foi entregue ontem. <u>Ele</u> continha 40 páginas."</i> — "Ele" retoma "relatório" (anáfora). Quando o termo antecipa algo que ainda vai aparecer, chama-se catáfora.</p>
+          <p>A <b>coesão sequencial</b> é feita por conectivos (conjunções, advérbios, locuções) que articulam a progressão lógica das ideias: adição, oposição, causa, consequência, condição, finalidade, conclusão.</p>
+
+          <table>
+            <thead><tr><th>Relação lógica</th><th>Conectivos típicos</th><th>Efeito na interpretação</th></tr></thead>
+            <tbody>
+              <tr><td>Adição</td><td>e, além disso, também, ainda</td><td>Soma de ideias no mesmo sentido</td></tr>
+              <tr><td>Oposição/contraste</td><td>mas, porém, contudo, entretanto, no entanto</td><td>Sinaliza mudança de direção argumentativa — muito cobrado</td></tr>
+              <tr><td>Causa</td><td>porque, já que, uma vez que, visto que</td><td>Introduz justificativa/motivo</td></tr>
+              <tr><td>Consequência</td><td>portanto, logo, por isso, de modo que</td><td>Introduz resultado/efeito</td></tr>
+              <tr><td>Condição</td><td>se, caso, desde que, contanto que</td><td>Restringe a validade de uma afirmação — crucial em textos normativos</td></tr>
+              <tr><td>Concessão</td><td>embora, ainda que, apesar de, mesmo que</td><td>Admite um fato, mas mantém a tese principal</td></tr>
+              <tr><td>Finalidade</td><td>para que, a fim de que, com o objetivo de</td><td>Indica propósito/intenção</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha: conectivo de oposição ignorado</div>
+            <p>Quando o texto usa "mas/porém/contudo", a informação que vem <b>depois</b> do conectivo normalmente é a que prevalece no argumento do autor. Muitas questões erradas induzem o candidato a marcar a ideia que vem <b>antes</b> do conectivo como se fosse a tese central — quando na verdade ela foi apenas concedida/relativizada.</p>
+          </div>
+
+          <h3>4.5 Explícito x implícito x pressuposto x subentendido</h3>
+          <table>
+            <thead><tr><th>Categoria</th><th>Definição</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Explícito</b></td><td>Está escrito literalmente no texto</td><td>"João chegou às 10h" → João chegou às 10h.</td></tr>
+              <tr><td><b>Pressuposto</b></td><td>Ideia subjacente, ligada a uma palavra ou estrutura, assumida como verdadeira</td><td>"João <u>ainda</u> não chegou" → pressupõe que ele era esperado antes.</td></tr>
+              <tr><td><b>Subentendido</b></td><td>Sugerido indiretamente; depende do contexto e pode ser negado pelo emissor</td><td>"Já são 10h e João não chegou..." → sugere crítica ao atraso, sem afirmá-la.</td></tr>
+              <tr><td><b>Inferência válida</b></td><td>Conclusão logicamente decorrente das informações dadas</td><td>Se "todos os servidores do setor X fizeram o curso" e "Maria é servidora do setor X", infere-se que Maria fez o curso.</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Ironia, humor e crítica social em charges e tirinhas</h3>
+          <p>A FGV usa charges e tirinhas para testar leitura de <b>linguagem não verbal associada ao verbal</b>. A ironia se constrói por um <b>contraste entre o que é dito/mostrado e o que se quer efetivamente comunicar</b> — muitas vezes o oposto literal. O candidato deve identificar o <b>alvo da crítica</b> (uma instituição, um comportamento, um discurso oficial) e o <b>recurso usado</b> (exagero/hipérbole, contraste visual, trocadilho, referência a fato notório).</p>
+
+          <div class="box tip">
+            <div class="box-title">✅ Método de leitura de charge/tirinha</div>
+            <p>1) Leia todo o texto verbal (balões, legendas). 2) Observe a cena e o contraste entre quadros (se houver). 3) Identifique quem é o "alvo" da crítica. 4) Pergunte: "o que seria dito literalmente aqui, e isso bate com a expressão/situação desenhada?" Se não bate, há ironia.</p>
+          </div>
+
+          <h3>4.7 Denotação x conotação e função persuasiva</h3>
+          <p>Em textos publicitários e artigos de opinião, a escolha lexical carrega <b>conotação</b> (sentido figurado, carregado de valor) diferente da <b>denotação</b> (sentido literal, dicionarizado). A FGV cobra a identificação do <b>efeito de sentido</b> pretendido por uma escolha de palavra específica, geralmente perguntando "por que o autor optou pelo termo X em vez de um sinônimo neutro?".</p>
+
+          <h3>4.8 Textos normativos: leitura jurídica aplicada à interpretação textual</h3>
+          <p>Textos normativos (leis, portarias, editais, regulamentos internos) exigem leitura extremamente literal, com atenção redobrada a:</p>
+          <ul class="styled">
+            <li><b>Verbos modais</b>: "deverá" (obrigação) x "poderá" (faculdade) x "poderá, a critério de..." (discricionariedade condicionada).</li>
+            <li><b>Conectores restritivos</b>: "salvo", "exceto", "ressalvado", "desde que", "contanto que" — delimitam o alcance da regra geral.</li>
+            <li><b>Numerais e prazos</b>: trocas de "5 dias úteis" por "5 dias corridos" são armadilhas literais clássicas.</li>
+            <li><b>Sujeito da obrigação</b>: identificar precisamente quem deve cumprir o quê — é comum a banca trocar o sujeito na alternativa incorreta.</li>
+          </ul>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV é reconhecida por elaborar itens em que a alternativa errada muda <b>uma única palavra</b> em relação ao texto original — geralmente um conectivo, um verbo modal ou um numeral — mantendo o restante da frase quase idêntico ao texto-base. Isso exige leitura atenta e comparação item a item, não apenas "sensação geral" de que a alternativa parece correta.</p>
+          </div>
+
+          <h3>4.9 Leitura de gráficos e infográficos</h3>
+          <p>Nos concursos que envolvem perfil de dados/gestão (como Perfil 10 da DATAPREV), é comum a FGV combinar um texto verbal curto com um gráfico ou tabela, pedindo que o candidato <b>compare a informação textual com o dado numérico</b> e identifique se há coerência ou contradição entre eles.</p>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha numérica</div>
+            <p>Alternativas costumam trocar "aumento" por "redução", inverter os anos comparados, ou confundir <b>variação percentual</b> com <b>variação em pontos percentuais</b>. Releia sempre a legenda dos eixos antes de responder.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. COMO A FGV COBRA ============ -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV é reconhecida por elaborar textos-base <b>autênticos e atuais</b> (retirados de jornais, revistas, sites institucionais, textos normativos reais), evitando textos "fabricados" artificialmente para a prova. O comando de questão mais recorrente é <b>"assinale a alternativa correta"</b> combinado com afirmações do tipo <b>"segundo o texto"</b>, <b>"é correto afirmar que"</b> e <b>"depreende-se do texto que"</b>.</p>
+
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Predomínio de <b>múltipla escolha</b> com 5 alternativas (A–E), sendo 4 incorretas por distorção sutil e 1 correta por paráfrase fiel.</li>
+            <li>Uso de <b>assertivas combinadas</b> ("I, II e III" com julgamento de veracidade) em provas de nível superior.</li>
+            <li>Textos de tamanho médio (10 a 25 linhas), às vezes acompanhados de gráfico ou charge.</li>
+            <li>Nível de dificuldade médio a alto — a dificuldade não está no vocabulário, mas na <b>precisão da leitura</b> exigida.</li>
+          </ul>
+
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Ideia central x ideias secundárias</td><td>Muito alta</td></tr>
+              <tr><td>Coesão referencial (a que o pronome se refere)</td><td>Alta</td></tr>
+              <tr><td>Inferência válida x extrapolação</td><td>Muito alta</td></tr>
+              <tr><td>Conectivos de oposição e condição</td><td>Alta</td></tr>
+              <tr><td>Reescrita mantendo o sentido original</td><td>Média-alta</td></tr>
+              <tr><td>Interpretação de texto normativo/legal</td><td>Média (crescente em perfis técnicos)</td></tr>
+              <tr><td>Charge/ironia</td><td>Média</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Palavras-chave que indicam o tipo de questão</h3>
+          <table>
+            <thead><tr><th>Expressão no enunciado</th><th>Tipo de leitura exigida</th></tr></thead>
+            <tbody>
+              <tr><td>"De acordo com o texto..."</td><td>Literal — resposta deve estar escrita/parafraseada</td></tr>
+              <tr><td>"É possível inferir / depreende-se que..."</td><td>Inferencial — conclusão lógica, não extrapolada</td></tr>
+              <tr><td>"O autor utiliza X para..."</td><td>Crítico/avaliativo — função do recurso linguístico</td></tr>
+              <tr><td>"Assinale a alternativa que reescreve corretamente..."</td><td>Paráfrase — manutenção de sentido, troca de estrutura</td></tr>
+              <tr><td>"Assinale a única alternativa incorreta..."</td><td>Atenção: inverte a lógica de busca — procurar o erro</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li><b>Extrapolação</b>: alternativa plausível, mas com informação que o texto não contém.</li>
+            <li><b>Inversão de sentido</b>: troca de antônimo disfarçado de sinônimo ("aumentar" por "diminuir", "obrigatório" por "facultativo").</li>
+            <li><b>Troca de sujeito/agente</b>: atribui a ação a pessoa/instituição diferente da mencionada no texto.</li>
+            <li><b>Generalização indevida</b>: transforma um caso específico em regra geral ("um servidor relatou" vira "todos os servidores").</li>
+            <li><b>Opinião do candidato</b>: alternativa correta segundo senso comum, mas não sustentada pelo texto.</li>
+            <li><b>Negação mascarada</b>: inserção de "não" que inverte o sentido de uma frase quase idêntica ao texto.</li>
+            <li><b>Ambiguidade lexical explorada</b>: uso de palavra polissêmica em sentido diferente do empregado no texto-base.</li>
+            <li><b>Ironia tomada ao pé da letra</b>: em charges/artigos irônicos, considerar o sentido literal como se fosse a intenção do autor.</li>
+          </ol>
+
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>Em provas FGV para bancas técnicas e institucionais, é recorrente o uso de textos jornalísticos sobre economia, tecnologia, gestão pública ou temas sociais, seguidos de 2 a 4 questões que progridem do nível literal para o crítico. A última questão do bloco costuma exigir reconhecimento do posicionamento do autor (crítico, favorável, neutro/informativo).</p>
+          </div>
+
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Se uma alternativa "parece óbvia demais" e reforça uma opinião comum sobre o tema — desconfie, pode ser distrator por opinião pessoal.</li>
+            <li>Se uma alternativa usa um número, data ou nome próprio diferente do texto — releia o trecho correspondente antes de descartar.</li>
+            <li>Se o enunciado pede "EXCETO" ou "INCORRETA" — grife essa palavra antes de ler as alternativas, para não inverter a lógica.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 6. DECORE PARA A PROVA ============ -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip">
+            <div class="box-title">🧠 Mnemônico: L.I.C. (Literal, Inferencial, Crítico)</div>
+            <p>Antes de responder, pergunte: essa questão é <b>L</b>iteral (está escrito?), <b>I</b>nferencial (dá pra concluir?) ou <b>C</b>rítica (avalia a estratégia do autor?). Isso já elimina metade das alternativas erradas.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Macete: "Se eu não aponto a linha, eu não marco"</div>
+            <p>Toda resposta correta em nível literal/inferencial deve ser "apontável" — você deve conseguir apontar a linha exata do texto que sustenta a alternativa. Se não conseguir apontar, é armadilha de extrapolação.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Mnemônico dos conectivos: A-COCA-COFI</div>
+            <p><b>A</b>dição, <b>CO</b>ntraste (oposição), <b>CA</b>usa, <b>CO</b>nsequência, <b>CO</b>ndição, <b>FI</b>nalidade — os seis blocos de relação lógica mais cobrados.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Regra dos "verbos-armadilha" em texto normativo</div>
+            <p><b>DEVE</b> = obrigação · <b>PODE</b> = faculdade · <b>DEVE, SALVO</b> = obrigação com exceção. Sempre sublinhe mentalmente esses verbos.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Truque da reescrita/paráfrase</div>
+            <p>Na questão de reescrita, ignore a beleza da frase e cheque apenas: (1) o sujeito continua o mesmo? (2) a relação lógica entre as orações (causa, condição etc.) foi mantida? (3) nenhuma palavra trocou a polaridade (afirmativa→negativa)?</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. REVISÃO 5 MIN ============ -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Resposta certa = <b>rastreável no texto</b>. Se não dá pra apontar a linha, é armadilha.</li>
+            <li>3 níveis de leitura: <b>literal → inferencial → crítico</b>.</li>
+            <li>Pegadinha nº1 da FGV: <b>extrapolação</b> (informação nova, não contida no texto).</li>
+            <li>Pegadinha nº2: <b>inversão de sentido</b> por troca de uma palavra (verbo modal, conectivo, numeral).</li>
+            <li>Conectivo de oposição (<i>mas/porém/contudo</i>) → prevalece o que vem <b>depois</b> dele.</li>
+            <li>Texto normativo: atenção a <b>deve x pode</b> e a conectores restritivos (<i>salvo, exceto, desde que</i>).</li>
+            <li>Charge/ironia: compare o dito literal com a cena — se não bate, há crítica implícita.</li>
+            <li>Nunca marque pela sua opinião sobre o tema — marque pelo que o texto autoriza concluir.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 8. FLASHCARDS ============ -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- ============ 9. QUESTÕES COMENTADAS ============ -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- ============ 10. SIMULADO ============ -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- ============ 11. CHECKLIST ============ -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- ============ 12. ERROS MAIS COMUNS ============ -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card">
+          <ol class="styled" id="errosList"></ol>
+        </div>
+      </section>
+
+      <!-- ============ 13. FÓRMULAS / TÉCNICAS ============ -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e técnicas de resolução</h2></div>
+        <div class="card">
+          <div class="box info">
+            <div class="box-title">ℹ Observação</div>
+            <p>Este tópico não envolve fórmulas matemáticas. Em seu lugar, apresentamos o <b>protocolo de resolução passo a passo</b> que substitui a "fórmula" em questões de interpretação — método a ser seguido item por item em toda questão de prova.</p>
+          </div>
+          <table>
+            <thead><tr><th>Passo</th><th>Ação</th><th>Objetivo</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Leia o texto por completo, sem parar nas questões</td><td>Capturar ideia central e estrutura geral</td></tr>
+              <tr><td>2</td><td>Identifique o gênero textual e sua função (informar, convencer, criticar, normatizar)</td><td>Calibrar o tipo de leitura exigida</td></tr>
+              <tr><td>3</td><td>Grife mentalmente (ou fisicamente, se em papel) conectivos de oposição, condição e negação</td><td>Mapear pontos de virada lógica</td></tr>
+              <tr><td>4</td><td>Leia o comando da questão e classifique-o: literal, inferencial ou crítico</td><td>Saber que tipo de evidência buscar</td></tr>
+              <tr><td>5</td><td>Volte ao texto e localize o trecho correspondente a cada alternativa</td><td>Rastreabilidade da resposta</td></tr>
+              <tr><td>6</td><td>Elimine alternativas com extrapolação, inversão ou generalização indevida</td><td>Reduzir para 1–2 candidatas</td></tr>
+              <tr><td>7</td><td>Confirme a alternativa restante lendo-a lado a lado com o trecho do texto</td><td>Validação final antes de marcar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 14. TABELAS-RESUMO ============ -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Explícito x Implícito</h3>
+          <table>
+            <thead><tr><th>Explícito</th><th>Implícito (inferência válida)</th><th>Extrapolação (ERRADO)</th></tr></thead>
+            <tbody>
+              <tr><td>Está escrito literalmente</td><td>Decorre logicamente do texto</td><td>Acrescenta dado inexistente no texto</td></tr>
+              <tr><td>Localizável em uma linha</td><td>Combinação de 2+ informações do texto</td><td>Baseia-se em senso comum ou conhecimento externo</td></tr>
+            </tbody>
+          </table>
+          <h3>Comandos de questão x nível de leitura</h3>
+          <table>
+            <thead><tr><th>Comando</th><th>Nível</th></tr></thead>
+            <tbody>
+              <tr><td>"O texto afirma que..."</td><td>Literal</td></tr>
+              <tr><td>"Depreende-se / infere-se que..."</td><td>Inferencial</td></tr>
+              <tr><td>"O autor pretende, ao usar X, ..."</td><td>Crítico</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 15. GLOSSÁRIO ============ -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card">
+          <dl class="gloss" id="glossList"></dl>
+        </div>
+      </section>
+
+      <!-- ============ 16. CURIOSIDADES ============ -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio">
+          <div class="box-title">🎓 Sobre a FGV</div>
+          <p>A Fundação Getulio Vargas é também uma das principais escolas de jornalismo, direito e economia do Brasil — por isso seus textos-base de interpretação costumam ter <b>qualidade editorial de veículo de imprensa séria</b>, e não textos artificialmente simplificados.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">📚 Curiosidade histórica</div>
+          <p>O conceito de "lide" jornalístico (quem, o quê, quando, onde, como, por quê) vem do modelo da pirâmide invertida, popularizado nos EUA durante a Guerra de Secessão, quando jornais precisavam garantir que a informação essencial chegasse ao leitor mesmo que a transmissão por telégrafo fosse interrompida.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">🔬 Curiosidade acadêmica</div>
+          <p>Estudos de linguística textual (como os de Ingedore Koch) mostram que a coesão não é condição suficiente para a coerência: um texto pode ter poucos conectivos explícitos e ainda assim ser plenamente coerente, desde que o leitor consiga reconstruir a lógica implícita — é exatamente essa reconstrução que as questões inferenciais testam.</p>
+        </div>
+      </section>
+
+      <!-- ============ 17. LIGAÇÕES COM OUTROS TÓPICOS ============ -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Coesão e coerência textual</td><td>Base direta — mesma competência de leitura de conectivos e referentes</td></tr>
+              <tr><td>Tipologia e gêneros textuais</td><td>Pré-requisito conceitual — reconhecer o gênero direciona a leitura</td></tr>
+              <tr><td>Ortografia, acentuação e pontuação</td><td>A pontuação altera diretamente o sentido interpretado (ex.: vírgula que muda o referente)</td></tr>
+              <tr><td>Redação de correspondências oficiais</td><td>Aplica a leitura de registro formal/informal na produção textual</td></tr>
+              <tr><td>Legislação institucional (DATAPREV)</td><td>Mesma técnica de leitura literal aplicada a normativos internos</td></tr>
+              <tr><td>Raciocínio Lógico</td><td>Inferência válida em texto usa a mesma lógica de premissas e conclusão</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 18. PLANO DE REVISÃO ============ -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar todos os flashcards uma vez, sem pressa.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas sem olhar o gabarito antes; anotar os erros na seção "Erros mais comuns".</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado completo cronometrado e comparar o percentual de acerto com a primeira tentativa; revisar exclusivamente os itens do checklist ainda não marcados.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 19. REFERÊNCIAS ============ -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>KOCH, Ingedore G. Villaça. <i>A Coesão Textual</i>. São Paulo: Contexto.</li>
+            <li>KOCH, Ingedore G. Villaça; TRAVAGLIA, Luiz Carlos. <i>A Coerência Textual</i>. São Paulo: Contexto.</li>
+            <li>MARCUSCHI, Luiz Antônio. <i>Produção Textual, Análise de Gêneros e Compreensão</i>. São Paulo: Parábola Editorial.</li>
+            <li>CEREJA, William Roberto; MAGALHÃES, Thereza Cochar. <i>Gramática Reflexiva: Texto, Semântica e Interação</i>. São Paulo: Atual.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+            <li>Constituição da República Federativa do Brasil de 1988 — quando aplicável à leitura de textos normativos correlatos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Língua Portuguesa · Tópico 01/08</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_lp_t01";
+
+  /* ============ THEME ============ */
+  function applyTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem(STORAGE_KEY+"_theme", t);
+  }
+  const savedTheme = localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light");
+  applyTheme(savedTheme);
+  function toggleTheme(){
+    applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark");
+  }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  /* ============ SIDEBAR MOBILE ============ */
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  /* ============ TOC ACTIVE + READ PROGRESS ============ */
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+
+    let current = sections[0];
+    for(const s of sections){
+      if(s.getBoundingClientRect().top - 90 <= 0) current = s;
+    }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  /* ============ READING TIME ============ */
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  /* ============ SEARCH ============ */
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+
+  /* ============ COLLAPSIBLES (boxes wrapped as collapsible if class added) ============ */
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* ================================================================
+     CONTENT DATA
+  ================================================================= */
+
+  const flashcards = [
+    {q:"O que significa 'nível literal' de leitura?", a:"Informação está explicitamente escrita no texto, sem necessidade de dedução."},
+    {q:"O que é 'extrapolação' em interpretação de texto?", a:"Marcar como correta uma informação que o texto não contém nem permite concluir — a principal armadilha da FGV."},
+    {q:"Qual a diferença entre pressuposto e subentendido?", a:"Pressuposto é assumido como verdade ligada a uma palavra (ex.: 'ainda'); subentendido é sugerido pelo contexto e pode ser negado pelo emissor."},
+    {q:"O que é anáfora?", a:"Recurso de coesão em que um termo retoma um referente já mencionado anteriormente no texto."},
+    {q:"O que é catáfora?", a:"Recurso de coesão em que um termo antecipa um referente que só será mencionado depois no texto."},
+    {q:"Após um conectivo de oposição (mas/porém/contudo), qual ideia costuma prevalecer no argumento do autor?", a:"A ideia que vem depois do conectivo."},
+    {q:"Em texto normativo, qual a diferença entre 'deverá' e 'poderá'?", a:"'Deverá' indica obrigação; 'poderá' indica faculdade/discricionariedade."},
+    {q:"O que caracteriza a estrutura de 'lide' em uma notícia?", a:"Resposta às perguntas: quem, o quê, quando, onde, como e por quê, concentradas no primeiro parágrafo."},
+    {q:"O que é conotação?", a:"Sentido figurado, subjetivo, que uma palavra assume dependendo do contexto — comum em textos publicitários e opinativos."},
+    {q:"O que é denotação?", a:"Sentido literal, objetivo e dicionarizado de uma palavra."},
+    {q:"Como identificar ironia em uma charge?", a:"Comparando o sentido literal do que é dito/mostrado com a situação representada; se há contraste, há ironia."},
+    {q:"O que é generalização indevida?", a:"Transformar um caso específico do texto em regra geral, sem que o texto autorize essa ampliação."},
+    {q:"Qual pergunta o candidato deve fazer antes de marcar uma alternativa em nível literal?", a:"'Consigo apontar a linha exata do texto que sustenta essa alternativa?'"},
+    {q:"O que a expressão 'depreende-se do texto que...' sinaliza?", a:"Que a questão exige leitura inferencial, não apenas localização literal."},
+    {q:"Cite dois conectivos de condição.", a:"'Se' e 'desde que' (também 'caso', 'contanto que')."},
+    {q:"Cite dois conectivos de concessão.", a:"'Embora' e 'ainda que' (também 'apesar de', 'mesmo que')."},
+    {q:"O que é coesão sequencial?", a:"Articulação lógica entre as partes do texto por meio de conectivos (causa, consequência, condição etc.)."},
+    {q:"Por que a FGV usa textos autênticos de jornais e revistas?", a:"Porque busca testar leitura crítica de material real, evitando textos artificialmente simplificados."},
+    {q:"O que fazer ao ver o comando 'assinale a alternativa INCORRETA'?", a:"Inverter a lógica de busca: procurar a única alternativa que contraria o texto, não a que confirma."},
+    {q:"O que é uma 'inferência válida'?", a:"Conclusão que decorre logicamente da combinação de informações presentes no texto, sem acrescentar dado externo."},
+    {q:"Em gráfico, qual erro comum a FGV explora sobre percentuais?", a:"Confundir variação percentual com variação em pontos percentuais, ou inverter os períodos comparados."},
+    {q:"Qual é a diferença central entre interpretar e opinar?", a:"Interpretar se baseia no que o texto autoriza concluir; opinar reflete o julgamento pessoal do leitor, que pode não ter base no texto."},
+    {q:"O que caracteriza um texto dissertativo-argumentativo?", a:"Estrutura de tese, argumentação e conclusão, com objetivo de convencer o leitor de um ponto de vista."},
+    {q:"Cite um verbo modal que indica obrigação em texto normativo.", a:"'Deverá' (ou 'deve')."},
+    {q:"O que verificar em uma questão de reescrita/paráfrase?", a:"Se o sujeito permanece o mesmo, se a relação lógica entre as orações é mantida e se não houve inversão de polaridade (afirmativa/negativa)."},
+    {q:"Qual é o alvo típico de crítica em charges usadas em concursos?", a:"Instituições, comportamentos sociais ou discursos oficiais, geralmente com crítica irônica indireta."},
+    {q:"Por que 'salvo' e 'exceto' são palavras de atenção redobrada?", a:"Porque delimitam exceções à regra geral, alterando o alcance da norma ou afirmação."},
+    {q:"O que é a 'ideia central' de um texto?", a:"A informação ou tese que resume o propósito principal do texto, à qual todas as demais ideias se conectam."},
+    {q:"O que são 'ideias secundárias'?", a:"Informações que sustentam, exemplificam ou detalham a ideia central, sem substituí-la."},
+    {q:"Qual é o primeiro passo do protocolo de resolução de questões de interpretação?", a:"Ler o texto por completo antes de olhar as questões, para capturar a ideia central e a estrutura geral."},
+  ];
+
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); fcGrid.insertBefore(arr[j],arr[i]); arr.splice(arr.indexOf(arr[j]),0); }
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* ============ QUESTÕES COMENTADAS (20) ============ */
+  const questoes = [
+    {tema:"Literal", texto:"“A Diretoria de Controladoria informou, em comunicado interno, que os relatórios mensais de reconciliação contábil deverão ser entregues até o quinto dia útil de cada mês, salvo nos períodos de fechamento anual, quando o prazo será antecipado em três dias.”", enun:"De acordo com o comunicado, em períodos de fechamento anual, o prazo de entrega dos relatórios:", alts:["É eliminado, não havendo mais obrigatoriedade de entrega.","É mantido exatamente igual ao dos demais meses.","É antecipado em três dias em relação ao prazo padrão.","É estendido em três dias úteis adicionais.","Passa a ser de responsabilidade exclusiva da Diretoria Executiva."], correta:2, coment:"O texto afirma literalmente que, em fechamento anual, 'o prazo será antecipado em três dias' — leitura literal direta, sem necessidade de inferência."},
+    {tema:"Inferencial", texto:"“Apesar de os investimentos em automação terem crescido 40% no último ano, a produtividade média das equipes de controladoria permaneceu estável.”", enun:"É possível inferir do trecho que:", alts:["A automação não trouxe nenhum benefício para a empresa.","O crescimento do investimento não se traduziu, isoladamente, em ganho de produtividade no período.","A produtividade caiu por causa da automação.","As equipes de controladoria foram reduzidas.","O investimento em automação foi interrompido."], correta:1, coment:"O conectivo 'apesar de' indica concessão: mesmo com aumento do investimento, a produtividade não acompanhou — isso permite inferir que o investimento, isoladamente, não gerou o ganho esperado, sem afirmar que não houve benefício algum (extrapolação da alternativa A)."},
+    {tema:"Extrapolação", texto:"“O relatório anual destacou avanços na governança corporativa da companhia, com a criação de um comitê de riscos independente.”", enun:"Assinale a alternativa que NÃO pode ser concluída a partir do texto:", alts:["A companhia criou um comitê de riscos.","O comitê de riscos é independente.","O relatório é anual.","O comitê de riscos eliminou totalmente os riscos financeiros da empresa.","O texto trata de governança corporativa."], correta:3, coment:"A alternativa D extrapola: o texto fala em 'avanços' e criação de comitê, mas não afirma eliminação total de riscos — clássica pegadinha de extrapolação."},
+    {tema:"Conectivos", texto:"“O sistema apresentou falhas recorrentes; contudo, a equipe técnica conseguiu manter a operação sem impacto perceptível aos usuários.”", enun:"O conectivo 'contudo' estabelece, entre as duas orações, uma relação de:", alts:["Causa","Adição","Oposição/contraste","Condição","Finalidade"], correta:2, coment:"'Contudo' é conectivo de oposição/contraste, introduzindo uma ideia que relativiza a primeira (falhas x operação mantida)."},
+    {tema:"Coesão referencial", texto:"“A controladoria publicou o novo manual de reconciliação. Ele substitui a versão anterior, de 2019.”", enun:"No trecho, o pronome 'Ele' retoma:", alts:["A controladoria","O novo manual de reconciliação","A versão anterior","O ano de 2019","Nenhum dos anteriores"], correta:1, coment:"Trata-se de anáfora: 'Ele' retoma 'o novo manual de reconciliação', substantivo masculino singular mais próximo e coerente semanticamente."},
+    {tema:"Texto normativo", texto:"“Os servidores poderão, a critério da chefia imediata, solicitar afastamento para capacitação, desde que o requerimento seja protocolado com trinta dias de antecedência.”", enun:"Segundo o texto, a solicitação de afastamento para capacitação é:", alts:["Obrigatória para todos os servidores.","Uma faculdade condicionada à antecedência do requerimento e à avaliação da chefia.","Vedada em qualquer hipótese.","Automática após o protocolo do requerimento.","Válida independentemente do prazo de antecedência."], correta:1, coment:"'Poderão... a critério... desde que' configura faculdade condicionada — não obrigação (elimina A), não vedação (elimina C), e depende de prazo (elimina D e E)."},
+    {tema:"Ironia/charge", texto:"Charge (descrita): um gestor observa uma pilha enorme de relatórios impressos sobre sua mesa, sob o título 'Transformação Digital 2026', enquanto ao fundo um computador permanece desligado.", enun:"O recurso central utilizado pela charge para produzir crítica é:", alts:["A comparação direta entre dois países.","O contraste entre o discurso de modernização e a prática ainda analógica.","A citação de dados estatísticos oficiais.","A defesa explícita da automação total.","A ausência de qualquer elemento visual irônico."], correta:1, coment:"A ironia nasce do contraste entre o título 'Transformação Digital' e a cena analógica (papéis, computador desligado) — crítica implícita à distância entre discurso e prática."},
+    {tema:"Reescrita/paráfrase", texto:"Texto original: “Embora os custos operacionais tenham subido, a margem líquida da empresa se manteve estável.”", enun:"Assinale a reescrita que preserva o sentido original:", alts:["Como os custos operacionais subiram, a margem líquida da empresa também aumentou.","Mesmo com o aumento dos custos operacionais, a margem líquida não se alterou significativamente.","Os custos operacionais caíram, o que manteve a margem líquida estável.","A margem líquida da empresa subiu por causa do aumento dos custos.","Não houve alteração nos custos operacionais nem na margem líquida."], correta:1, coment:"A relação de concessão ('embora') deve ser preservada: apesar do aumento de custos, a margem se manteve — a alternativa B é a única que mantém essa relação sem inverter causa/efeito."},
+    {tema:"Ideia central", texto:"“A digitalização de processos contábeis reduz retrabalho, mas exige investimento inicial em treinamento e revisão de controles internos, sob pena de gerar inconsistências nos primeiros meses de operação.”", enun:"A ideia central do trecho é:", alts:["A digitalização é sempre prejudicial no curto prazo.","A digitalização traz benefícios, mas requer preparação adequada para não gerar problemas iniciais.","O treinamento de equipes é dispensável em processos digitais.","Os controles internos tornam-se desnecessários após a digitalização.","A digitalização elimina totalmente o retrabalho contábil."], correta:1, coment:"O texto pondera benefício (redução de retrabalho) e condição necessária (investimento em treinamento/controles) — isso define a ideia central, sem os extremos das demais alternativas."},
+    {tema:"Gráfico/dado numérico", texto:"Texto de apoio: “Entre 2024 e 2025, a taxa de inadimplência caiu de 8% para 6%.”", enun:"A variação da taxa de inadimplência entre os dois anos foi de:", alts:["Redução de 2 pontos percentuais.","Redução de 25 pontos percentuais.","Aumento de 2 pontos percentuais.","Redução de 2%.","Aumento de 25%."], correta:0, coment:"De 8% para 6% há uma queda de 2 pontos percentuais (não confundir com variação percentual relativa, que seria de 25% de redução: 2/8=25%). A alternativa correta usa a unidade certa: pontos percentuais."},
+    {tema:"Pressuposto", texto:"“A empresa ainda não implementou o novo sistema de reconciliação automática.”", enun:"A palavra 'ainda' pressupõe que:", alts:["A empresa nunca pretende implementar o sistema.","Havia uma expectativa de que o sistema já tivesse sido implementado.","O sistema já foi implementado parcialmente.","A empresa desistiu do projeto.","O sistema é obrigatório por lei."], correta:1, coment:"'Ainda não' pressupõe uma expectativa prévia de que a ação já teria ocorrido — pressuposição típica dessa partícula, sem afirmar desistência ou impossibilidade futura."},
+    {tema:"Distinção interpretação x opinião", texto:"“O relatório trimestral apontou queda de 3% na receita, atribuída pela diretoria à sazonalidade do setor.”", enun:"Assinale a alternativa que reflete apenas o que o texto informa, sem opinião do leitor:", alts:["A queda de receita foi um erro grave de gestão.","A diretoria atribuiu a queda de 3% na receita à sazonalidade do setor.","A empresa está em crise financeira irreversível.","A sazonalidade é sempre uma desculpa infundada.","O relatório trimestral é pouco confiável."], correta:1, coment:"Apenas a alternativa B reproduz fielmente o que o texto afirma (atribuição da diretoria), sem juízo de valor adicional do leitor."},
+    {tema:"Assertiva C/E", texto:"“O comitê de auditoria interna reporta-se diretamente ao Conselho de Administração, e não à Diretoria Executiva, para preservar sua independência.”", enun:"Julgue: 'Segundo o texto, o comitê de auditoria interna subordina-se à Diretoria Executiva.'", alts:["Certo","Errado"], correta:1, coment:"O texto afirma o oposto: o comitê se reporta ao Conselho de Administração, e explicitamente 'não à Diretoria Executiva' — a assertiva está errada."},
+    {tema:"Assertiva C/E", texto:"“Todos os documentos fiscais devem ser arquivados por, no mínimo, cinco anos, conforme normativo interno vigente.”", enun:"Julgue: 'O normativo estabelece prazo mínimo, podendo a empresa optar por arquivar por período superior a cinco anos.'", alts:["Certo","Errado"], correta:0, coment:"'No mínimo cinco anos' estabelece piso, não teto — a empresa pode, sim, arquivar por período maior. A assertiva está certa."},
+    {tema:"Múltipla escolha - argumento", texto:"“Investir em capacitação da equipe de controladoria não é custo, é proteção contra retrabalho e erros de reconciliação.”", enun:"O recurso argumentativo predominante no trecho é:", alts:["Comparação estatística.","Reformulação de um conceito (custo) por outro de valor mais positivo (proteção).","Citação de autoridade.","Exemplificação numérica.","Definição técnica neutra."], correta:1, coment:"O autor reformula 'custo' (conotação negativa) como 'proteção' (conotação positiva) — estratégia de persuasão por ressignificação lexical, sem uso de dados ou citações."},
+    {tema:"Múltipla escolha - gênero", texto:"“Prezados, informamos que o fechamento contábil de julho foi concluído. Eventuais divergências devem ser reportadas até sexta-feira. Atenciosamente, Controladoria.”", enun:"O gênero textual do trecho é:", alts:["Artigo de opinião","E-mail corporativo/institucional","Notícia jornalística","Texto publicitário","Poema"], correta:1, coment:"Saudação, comunicação objetiva de um fato institucional e fecho formal caracterizam um e-mail corporativo."},
+    {tema:"Coesão sequencial", texto:"“Os controles internos foram reforçados; por conseguinte, o número de inconsistências caiu significativamente.”", enun:"'Por conseguinte' introduz uma relação de:", alts:["Causa","Consequência","Condição","Concessão","Finalidade"], correta:1, coment:"'Por conseguinte' é conectivo de consequência, indicando o resultado do fato anterior (reforço dos controles)."},
+    {tema:"Extrapolação em texto normativo", texto:"“É vedado o acúmulo de funções de conciliação bancária e aprovação de pagamentos pelo mesmo colaborador, salvo autorização expressa da Diretoria Financeira em casos excepcionais.”", enun:"Segundo o texto, é correto afirmar que:", alts:["O acúmulo dessas funções é sempre proibido, sem exceções.","O acúmulo é permitido livremente a qualquer colaborador.","Há vedação geral, com possibilidade de exceção mediante autorização expressa da Diretoria Financeira.","A autorização, quando concedida, é válida permanentemente para o colaborador.","A vedação se aplica apenas a colaboradores temporários."], correta:2, coment:"O texto estabelece regra geral (vedação) com exceção expressa ('salvo autorização...'). A alternativa A ignora a exceção; a C reproduz fielmente a estrutura regra+exceção."},
+    {tema:"Ideia central x secundária", texto:"“A reconciliação bancária automatizada reduziu o tempo médio de fechamento de 5 para 2 dias. Além disso, passou a gerar logs de auditoria automáticos, facilitando rastreabilidade.”", enun:"Em relação ao texto, é correto afirmar que a redução do tempo de fechamento é apresentada como:", alts:["A única vantagem mencionada no texto.","A ideia central, sendo a geração de logs uma informação secundária que a complementa.","Uma informação secundária a um argumento sobre auditoria.","Um dado irrelevante para o texto.","Uma consequência da geração de logs de auditoria."], correta:1, coment:"A primeira frase apresenta o benefício central (redução de tempo); 'além disso' introduz informação secundária (logs de auditoria) que soma, mas não substitui, a ideia principal."},
+    {tema:"Interpretação avançada", texto:"“Reduzir o prazo de fechamento contábil parece, à primeira vista, apenas uma questão de eficiência operacional. Mas, na prática, envolve renegociar prioridades com todas as áreas que alimentam os dados — compras, RH, comercial — o que torna o projeto muito mais complexo do que uma simples mudança de cronograma.”", enun:"O autor do texto sustenta que a redução do prazo de fechamento contábil é, na verdade:", alts:["Uma tarefa simples que depende apenas da área contábil.","Um processo predominantemente técnico, sem impacto em outras áreas.","Um projeto complexo, pois exige articulação com múltiplas áreas da empresa.","Uma iniciativa que deve ser abandonada por ser inviável.","Uma mudança que não traz benefícios reais para a empresa."], correta:2, coment:"O conectivo 'mas, na prática' marca a virada argumentativa: o autor rejeita a visão simplificada inicial e defende a complexidade multissetorial do projeto — leitura crítica da tese central."},
+  ];
+
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      <p class="q-stmt"><b>Texto-base:</b> ${q.texto}</p>
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+      <div class="q-feedback" data-idx="${i}"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* ============ MINI SIMULADO (30 questões) ============ */
+  const simulado = [
+    {d:"Fácil", texto:"“O setor de contas a pagar concluiu o pagamento de todos os fornecedores cadastrados até o dia 28.”", enun:"De acordo com o texto, os pagamentos foram concluídos:", alts:["Antes do dia 28","Até o dia 28","Após o dia 28","Em data não informada","Apenas parcialmente"], correta:1},
+    {d:"Fácil", texto:"“A equipe de controladoria migrou as planilhas para um sistema integrado de gestão.”", enun:"O texto trata de uma:", alts:["Redução de equipe","Migração tecnológica","Falência da empresa","Auditoria externa","Greve de funcionários"], correta:1},
+    {d:"Fácil", texto:"“Apesar do aumento de demanda, o prazo de entrega dos relatórios não foi alterado.”", enun:"O conectivo 'apesar de' indica:", alts:["Causa","Consequência","Concessão/contraste","Finalidade","Adição"], correta:2},
+    {d:"Fácil", texto:"“Os dados foram enviados por e-mail à Diretoria Financeira na sexta-feira.”", enun:"Quem recebeu os dados, segundo o texto?", alts:["A equipe de TI","A Diretoria Financeira","O Conselho Fiscal","Os fornecedores","Os acionistas"], correta:1},
+    {d:"Fácil", texto:"“O manual de procedimentos foi atualizado; ele agora inclui um capítulo sobre gestão de riscos.”", enun:"O pronome 'ele' se refere a:", alts:["O capítulo","O manual de procedimentos","A gestão de riscos","A atualização","Nenhuma das anteriores"], correta:1},
+    {d:"Fácil", texto:"“A reconciliação bancária de junho apresentou divergência de R$ 1.200,00, já identificada e corrigida.”", enun:"Segundo o texto, a divergência identificada foi:", alts:["Ignorada","Corrigida","Ampliada","Transferida para julho","Anulada sem análise"], correta:1},
+    {d:"Fácil", texto:"“Novo normativo interno: relatórios deverão ser assinados digitalmente a partir de outubro.”", enun:"A partir de outubro, a assinatura digital dos relatórios é:", alts:["Facultativa","Proibida","Obrigatória","Opcional para gerentes","Válida apenas para auditoria externa"], correta:2},
+    {d:"Fácil", texto:"“O gráfico mostra aumento de receita de R$ 10 milhões para R$ 12 milhões entre os trimestres.”", enun:"A receita, entre os trimestres analisados:", alts:["Diminuiu","Permaneceu estável","Aumentou","Não foi informada","Foi zerada"], correta:2},
+    {d:"Fácil", texto:"“Charge: um funcionário aponta para um gráfico ascendente enquanto seu superior olha apenas para o celular.”", enun:"A charge sugere uma crítica relacionada a:", alts:["Excesso de reuniões","Falta de atenção da liderança aos resultados apresentados","Aumento salarial","Qualidade do gráfico","Uso excessivo de tecnologia pelos funcionários"], correta:1},
+    {d:"Fácil", texto:"“O prazo para entrega da declaração é de 30 dias corridos, contados da data de publicação do edital.”", enun:"O prazo mencionado é contado a partir:", alts:["Da data de inscrição","Da data de publicação do edital","Da data da prova","Do último dia útil do mês","Da data de posse"], correta:1},
+    {d:"Média", texto:"“Embora o novo sistema tenha reduzido erros manuais, sua implementação exigiu retrabalho temporário nas equipes durante o período de transição.”", enun:"O texto estabelece uma relação de:", alts:["Causa e efeito direto, sem ressalvas","Benefício líquido acompanhado de um custo temporário reconhecido pelo autor","Fracasso total da implementação","Ausência de qualquer impacto negativo","Substituição completa da equipe humana"], correta:1},
+    {d:"Média", texto:"“A diretoria não descarta rever o cronograma, caso os indicadores de julho confirmem a tendência observada em junho.”", enun:"A revisão do cronograma está condicionada a:", alts:["Uma decisão automática, independentemente dos indicadores","A confirmação da tendência de junho pelos indicadores de julho","A aprovação do Conselho Fiscal","Uma auditoria externa obrigatória","Nenhuma condição, sendo já certa a revisão"], correta:1},
+    {d:"Média", texto:"“Mais do que reduzir custos, a automação de processos contábeis busca aumentar a confiabilidade das informações geradas.”", enun:"Segundo o texto, o objetivo prioritário da automação é:", alts:["Exclusivamente reduzir custos","Aumentar a confiabilidade das informações, sendo a redução de custos um objetivo secundário no texto","Eliminar toda a equipe contábil","Cumprir exigência legal","Reduzir o número de sistemas utilizados"], correta:1},
+    {d:"Média", texto:"“Apenas parte dos colaboradores relatou dificuldades com o novo sistema, segundo pesquisa interna aplicada em outubro.”", enun:"É correto afirmar, com base no texto, que:", alts:["Todos os colaboradores relataram dificuldades.","Nenhum colaborador relatou dificuldades.","Uma parcela, não a totalidade, dos colaboradores relatou dificuldades.","A pesquisa foi aplicada em novembro.","O sistema foi cancelado após a pesquisa."], correta:2, },
+    {d:"Média", texto:"“O relatório indica melhora na eficiência do setor; contudo, os prazos legais de entrega continuam sendo descumpridos em parte dos casos.”", enun:"O uso de 'contudo' no texto tem a função de:", alts:["Reforçar a ideia anterior sem alterá-la","Introduzir uma ressalva que relativiza a melhora mencionada","Encerrar o assunto definitivamente","Anular completamente a informação anterior","Indicar uma relação de causa e efeito"], correta:1},
+    {d:"Média", texto:"“Texto normativo: 'As solicitações de reembolso deverão ser protocoladas em até 15 dias úteis, contados da data da despesa, sob pena de indeferimento automático.'”", enun:"Segundo o texto, uma solicitação protocolada no 16º dia útil após a despesa deve ser:", alts:["Aceita normalmente","Indeferida automaticamente, conforme a regra estabelecida","Analisada por instância superior obrigatoriamente","Reembolsada em dobro","Adiada para o mês seguinte"], correta:1},
+    {d:"Média", texto:"“Mesmo com a queda no volume de vendas, o lucro líquido da companhia cresceu, impulsionado pela redução de despesas administrativas.”", enun:"Segundo o texto, o crescimento do lucro líquido decorreu principalmente de:", alts:["Aumento do volume de vendas","Redução de despesas administrativas","Elevação de preços dos produtos","Aporte de capital externo","Redução da carga tributária"], correta:1},
+    {d:"Média", texto:"“Publicidade institucional: 'Simplifique sua rotina contábil. Menos planilhas, mais decisões.'”", enun:"O recurso persuasivo predominante no slogan é:", alts:["Citação de dado estatístico","Contraposição de ideias (menos x mais) para valorizar o produto","Uso de linguagem técnica especializada","Apelo ao medo do consumidor","Referência histórica"], correta:1},
+    {d:"Média", texto:"“Apesar de tecnicamente correto, o relatório foi considerado de difícil compreensão pelos gestores não especializados em contabilidade.”", enun:"Segundo o texto, o problema do relatório está relacionado a:", alts:["Erros técnicos de conteúdo","Acessibilidade da linguagem para público não especializado","Ausência de dados numéricos","Atraso na entrega","Falta de assinatura responsável"], correta:1},
+    {d:"Média", texto:"“Todos os setores que apresentaram economia superior a 10% no trimestre receberão reconhecimento formal da diretoria.”", enun:"Se o setor de Controladoria apresentou economia de 12% no trimestre, é correto concluir que:", alts:["Não receberá reconhecimento, pois o texto não menciona esse setor especificamente.","Receberá reconhecimento formal, pois atende ao critério estabelecido no texto.","Receberá reconhecimento apenas se autorizado pelo Conselho.","O reconhecimento dependerá de nova votação.","Não é possível saber, pois falta informação."], correta:1},
+    {d:"Difícil", texto:"“A alegada 'simplificação' trazida pelo novo formulário, na verdade, adicionou três campos obrigatórios que não existiam na versão anterior.”", enun:"O uso das aspas em 'simplificação' sugere que o autor:", alts:["Concorda plenamente com a simplificação anunciada.","Questiona, de forma irônica, se a mudança representa de fato uma simplificação.","Está citando um estudo técnico independente.","Elogia sem ressalvas o novo formulário.","Está se referindo a um termo técnico neutro, sem carga avaliativa."], correta:1},
+    {d:"Difícil", texto:"“Não é incomum que projetos de digitalização, apresentados como capazes de eliminar erros, apenas transfiram a origem do erro do papel para a tela.”", enun:"A tese central defendida pelo autor é:", alts:["A digitalização elimina totalmente os erros.","A digitalização pode não eliminar erros, apenas mudar sua origem, contrariando o discurso comum sobre o tema.","Os erros em papel são piores que os erros digitais.","A digitalização deve ser abandonada.","Os erros são exclusivamente humanos, independentemente do meio."], correta:1},
+    {d:"Difícil", texto:"“Dizer que 'a área não teve tempo' para revisar os controles é, no limite, admitir que a prioridade dada ao tema foi insuficiente.”", enun:"O autor estabelece, no trecho, uma relação entre:", alts:["Falta de tempo e incompetência técnica da equipe.","A justificativa de falta de tempo e uma crítica implícita à priorização dada ao assunto pela gestão.","Falta de tempo e ausência de recursos financeiros.","Revisão de controles e obrigação legal.","Prioridade e aumento de orçamento."], correta:1},
+    {d:"Difícil", texto:"“O parecer técnico recomenda a adoção da nova metodologia, ressalvando, contudo, que os ganhos só se sustentam mediante monitoramento contínuo — o que, por ora, a equipe não tem estrutura para realizar.”", enun:"Diante do exposto no parecer, é correto inferir que a adoção imediata da metodologia, sem ajustes adicionais:", alts:["Garantirá ganhos permanentes e automáticos.","Pode não sustentar os ganhos esperados, dada a ausência de estrutura para monitoramento contínuo.","É expressamente proibida pelo parecer.","Depende apenas de aprovação orçamentária.","Não tem qualquer relação com a estrutura da equipe."], correta:1},
+    {d:"Difícil", texto:"“Reduzir o quadro de analistas para 'enxugar custos' pode, paradoxalmente, elevar o custo total da operação, se a queda de qualidade gerar retrabalho.”", enun:"O termo 'paradoxalmente' no texto sinaliza que o autor:", alts:["Concorda integralmente com a lógica de redução de custos.","Aponta uma contradição entre a intenção (reduzir custos) e um possível efeito prático (aumento do custo total).","Está descrevendo um fato sem qualquer avaliação.","Defende o aumento imediato do quadro de analistas.","Nega que o retrabalho tenha qualquer custo."], correta:1},
+    {d:"Difícil", texto:"“Texto normativo: 'Fica vedada a delegação da competência de aprovação final de pagamentos, ressalvados os casos de afastamento legal do titular superiores a 15 dias, mediante ato formal de designação.'”", enun:"Segundo o normativo, a delegação da competência de aprovação final de pagamentos é:", alts:["Sempre proibida, sem qualquer exceção.","Permitida livremente a qualquer servidor.","Vedada como regra geral, admitindo exceção formalizada em caso de afastamento legal do titular por mais de 15 dias.","Permitida apenas para afastamentos inferiores a 15 dias.","Automática, independentemente de ato formal."], correta:2},
+    {d:"Difícil", texto:"“Ao afirmar que 'os números falam por si', o diretor evitou comentar as causas da queda de desempenho relatada no próprio documento que apresentava.”", enun:"A observação do autor do texto sugere uma crítica relacionada a:", alts:["A precisão dos números apresentados.","Uma possível omissão do diretor quanto à análise das causas do problema, escondida atrás da frase feita.","O uso excessivo de gráficos na apresentação.","A qualidade da impressão do documento.","O tempo de duração da apresentação."], correta:1},
+    {d:"Difícil", texto:"“Mais do que uma ferramenta, o novo painel de indicadores tornou-se, para muitos gestores, um substituto do próprio julgamento — o número virou resposta antes de virar pergunta.”", enun:"A crítica implícita do autor recai sobre:", alts:["A precisão técnica do painel de indicadores.","O uso do painel como substituto da análise crítica, e não como apoio a ela.","A obsolescência da ferramenta.","O custo de implementação do painel.","A ausência de treinamento para uso do painel."], correta:1},
+    {d:"Difícil", texto:"“Quando o relatório diz que 'não houve tempo hábil' para auditar certas contas, cabe perguntar por que essas contas, especificamente, ficaram de fora da priorização.”", enun:"O autor do texto sugere que a justificativa apresentada no relatório:", alts:["É plenamente satisfatória e não exige questionamento.","Pode estar encobrindo uma escolha de priorização que merece ser esclarecida.","Comprova que a auditoria foi malfeita tecnicamente.","Indica fraude comprovada nas contas não auditadas.","É irrelevante para a análise do relatório."], correta:1},
+    {d:"Difícil", texto:"“Publicar o dado isoladamente — 'lucro recorde' — sem mencionar o aumento proporcional da dívida no mesmo período é uma forma de contar apenas metade da história.”", enun:"A crítica do autor está relacionada a:", alts:["A veracidade do dado de lucro recorde, que estaria incorreto.","A omissão de uma informação relevante (aumento da dívida) que contextualizaria o dado divulgado.","O uso de gráficos incorretos na divulgação.","A ilegalidade da divulgação do lucro.","O atraso na publicação dos resultados."], correta:1},
+  ];
+
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      <p class="q-stmt"><b>Texto-base:</b> ${q.texto}</p>
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* ============ CHECKLIST ============ */
+  const checklistItems = [
+    "Diferenciar leitura literal, inferencial e crítica",
+    "Identificar ideia central e ideias secundárias em qualquer gênero textual",
+    "Reconhecer extrapolação como principal armadilha da FGV",
+    "Reconhecer inversão de sentido por troca de uma única palavra",
+    "Analisar coesão referencial (pronomes e seus referentes)",
+    "Analisar coesão sequencial (conectivos de causa, consequência, condição, concessão)",
+    "Interpretar corretamente verbos modais em textos normativos (deve x pode)",
+    "Identificar exceções em textos normativos (salvo, exceto, ressalvado)",
+    "Reconhecer ironia e crítica implícita em charges e tirinhas",
+    "Diferenciar denotação de conotação",
+    "Resolver questões de reescrita/paráfrase sem alterar o sentido original",
+    "Interpretar corretamente dados de gráficos e infográficos associados a texto",
+    "Diferenciar interpretação de texto de opinião pessoal",
+    "Resolver assertivas certo/errado no padrão FGV",
+    "Aplicar o protocolo de 7 passos de resolução de questões de interpretação",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ============ ERROS MAIS COMUNS (20) ============ */
+  const erros = [
+    "Responder com base no conhecimento de mundo, ignorando o que o texto efetivamente diz.",
+    "Marcar alternativa por concordar pessoalmente com a ideia, e não por ela estar no texto.",
+    "Não reler o trecho correspondente antes de marcar a resposta.",
+    "Confundir o sujeito de uma ação com outro agente mencionado no texto.",
+    "Ignorar o efeito do conectivo de oposição ('mas', 'porém', 'contudo') sobre a ideia seguinte.",
+    "Transformar um caso específico citado no texto em regra geral aplicável a todos.",
+    "Interpretar ironia ao pé da letra, tomando o sentido literal como a intenção do autor.",
+    "Confundir pressuposto com informação explícita.",
+    "Não perceber a diferença entre 'deve' (obrigação) e 'pode' (faculdade) em texto normativo.",
+    "Ignorar exceções introduzidas por 'salvo', 'exceto' ou 'ressalvado'.",
+    "Trocar 'aumento' por 'redução' (ou vice-versa) na leitura de dados numéricos.",
+    "Confundir variação percentual relativa com variação em pontos percentuais.",
+    "Não perceber a inversão de polaridade (afirmativa para negativa) em questões de reescrita.",
+    "Selecionar a alternativa mais 'bonita' ou bem escrita, em vez da mais fiel ao texto.",
+    "Não observar a palavra 'EXCETO' ou 'INCORRETA' no comando da questão, invertendo a lógica de busca.",
+    "Achar que toda inferência é válida, sem checar se decorre logicamente do texto.",
+    "Deixar de identificar o gênero textual antes de responder, perdendo pistas de leitura específicas.",
+    "Confundir a tese do autor com uma ideia secundária apresentada apenas como exemplo.",
+    "Gerenciar mal o tempo de prova, respondendo às pressas sem revisar o texto-base.",
+    "Ignorar aspas ou grifos no texto, que costumam sinalizar ironia ou distanciamento crítico do autor.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{
+    const li = document.createElement("li");
+    li.textContent = e;
+    errosList.appendChild(li);
+  });
+
+  /* ============ GLOSSÁRIO ============ */
+  const glossario = [
+    ["Coesão","Conjunto de mecanismos linguísticos (pronomes, conectivos) que ligam as partes do texto entre si."],
+    ["Coerência","Sentido lógico e global do texto, construído pelo leitor a partir da coesão e do contexto."],
+    ["Anáfora","Retomada, por um termo, de algo já mencionado anteriormente no texto."],
+    ["Catáfora","Antecipação, por um termo, de algo que será mencionado posteriormente no texto."],
+    ["Denotação","Sentido literal e objetivo de uma palavra."],
+    ["Conotação","Sentido figurado e subjetivo assumido por uma palavra em determinado contexto."],
+    ["Pressuposto","Ideia assumida como verdadeira, ligada a uma palavra ou estrutura da frase."],
+    ["Subentendido","Sentido sugerido indiretamente pelo contexto, sem afirmação explícita."],
+    ["Extrapolação","Erro de interpretação em que se conclui algo não contido nem autorizado pelo texto."],
+    ["Inferência","Conclusão logicamente decorrente das informações explícitas do texto."],
+    ["Lide","Estrutura inicial de uma notícia que responde quem, o quê, quando, onde, como e por quê."],
+    ["Tese","Ideia central que o autor defende em um texto argumentativo."],
+    ["Conectivo","Palavra ou expressão que articula logicamente partes do texto (conjunções, advérbios)."],
+    ["Registro linguístico","Nível de formalidade da linguagem, adequado ao contexto de comunicação."],
+    ["Gênero textual","Categoria de texto reconhecida socialmente por sua forma e função (notícia, e-mail, charge etc.)."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

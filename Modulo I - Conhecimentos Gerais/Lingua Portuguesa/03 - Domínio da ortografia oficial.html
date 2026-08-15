@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domínio da Ortografia Oficial | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Língua Portuguesa</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">03 - Domínio da ortografia oficial</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Compreensão e interpretação de textos de gêneros variados.html">01 - Compreensão e interpretação de textos de gêneros variados</option>
+        <option value="02 - Reconhecimento de tipos e gêneros textuais.html">02 - Reconhecimento de tipos e gêneros textuais</option>
+        <option value="03 - Domínio da ortografia oficial.html" selected>03 - Domínio da ortografia oficial</option>
+        <option value="04 - Domínio dos mecanismos de coesão textual.html">04 - Domínio dos mecanismos de coesão textual</option>
+        <option value="05 - Domínio da estrutura morfossintática do período.html">05 - Domínio da estrutura morfossintática do período</option>
+        <option value="06 - Reescrita de frases e parágrafos do texto.html">06 - Reescrita de frases e parágrafos do texto</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Domínio da Ortografia Oficial</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…">
+    </div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Regras / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">
+      Módulo I — Língua Portuguesa<br>
+      Tópico 03 de 08<br>
+      Material de estudo offline — DATAPREV 2026
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Domínio da Ortografia Oficial</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Língua Portuguesa</b> &nbsp;›&nbsp; Tópico 03</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">4h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — pode ser estudado desde o início</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio — cobrado sobretudo dentro de questões de reescrita</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- ============ 1. OBJETIVOS ============ -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Aplicar corretamente as regras do <b>Acordo Ortográfico da Língua Portuguesa de 1990</b>, vigente no Brasil desde 2016.</li>
+            <li>Diferenciar palavras homônimas e parônimas que geram confusão ortográfica (ex.: <i>mas/mais</i>, <i>censo/senso</i>, <i>cessão/sessão/seção</i>).</li>
+            <li>Aplicar corretamente o uso de <b>maiúsculas e minúsculas</b> em nomes próprios, cargos, instituições e títulos.</li>
+            <li>Empregar corretamente o <b>hífen</b> após o Acordo Ortográfico de 1990, inclusive em palavras compostas e prefixadas.</li>
+            <li>Diferenciar o uso de <b>por que, porque, por quê e porquê</b> em diferentes contextos.</li>
+            <li>Aplicar corretamente <b>então/entao</b> (grafia correta), <b>mal/mau</b>, <b>a fim/afim</b>, <b>ao encontro de/de encontro a</b>, e demais pares ortográficos clássicos de concurso.</li>
+            <li>Resolver questões FGV que exploram a ortografia dentro de textos de reescrita e de interpretação, não apenas em questões isoladas de "assinale a grafia correta".</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 2. RESUMO EXECUTIVO ============ -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A ortografia oficial da língua portuguesa no Brasil é regida pelo <b>Acordo Ortográfico da Língua Portuguesa de 1990</b>, plenamente vigente desde 1º de janeiro de 2016, que unificou regras entre os países de língua portuguesa e alterou principalmente: o uso do <b>trema</b> (eliminado, salvo em nomes próprios estrangeiros e seus derivados), o uso do <b>hífen</b> em palavras compostas e prefixadas, a acentuação de <b>ditongos abertos</b> em paroxítonas (ex.: "ideia" sem acento) e o uso de letras maiúsculas/minúsculas.</p>
+          <p>A FGV raramente cobra ortografia de forma isolada e "decoreba"; a cobrança mais comum ocorre <b>dentro de questões de reescrita e revisão textual</b>, em que uma das alternativas contém um erro ortográfico sutil (troca de parônimo, hífen mal empregado, letra maiúscula/minúscula incorreta).</p>
+          <p>Os principais focos de cobrança são: <b>parônimos e homônimos</b> (palavras foneticamente semelhantes com sentidos e grafias diferentes), o <b>uso do hífen</b> pós-1990, os casos de <b>por que/porque/por quê/porquê</b>, e o emprego de <b>maiúsculas em nomes próprios, cargos e instituições</b>.</p>
+          <p>Diferente de bancas que cobram ortografia "pura" (ex.: "assinale a grafia correta"), a FGV prefere embutir o erro ortográfico em um contexto de frase ou texto maior, testando se o candidato identifica o deslize em meio a um conteúdo mais complexo — a atenção deve ser constante, não pontual.</p>
+        </div>
+      </section>
+
+      <!-- ============ 3. MAPA MENTAL ============ -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Ortografia<br>Oficial</div>
+            <div class="mm-branches">
+              <div class="mm-node">
+                <h4>① Acordo de 1990</h4>
+                <ul><li>Fim do trema</li><li>Novo uso do hífen</li><li>Acentuação de ditongos abertos</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>② Parônimos/homônimos</h4>
+                <ul><li>Cessão/sessão/seção</li><li>Mas/mais</li><li>Censo/senso</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>③ Maiúsculas/minúsculas</h4>
+                <ul><li>Nomes próprios</li><li>Cargos e instituições</li><li>Meses e estações (minúscula)</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>④ Porquês</h4>
+                <ul><li>Por que (pergunta/relativo)</li><li>Porque (explicação)</li><li>Por quê (final de frase)</li><li>Porquê (substantivo)</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑤ Pares clássicos</h4>
+                <ul><li>Mal/mau</li><li>A fim/afim</li><li>Ao encontro/de encontro</li></ul>
+              </div>
+              <div class="mm-node">
+                <h4>⑥ Hífen pós-1990</h4>
+                <ul><li>Prefixos vogal igual → hífen</li><li>Prefixos consoante igual → hífen (r/s dobra)</li><li>Sem hífen na maioria dos demais casos</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. EXPLICAÇÃO COMPLETA ============ -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 O Acordo Ortográfico de 1990: o que mudou</h3>
+          <p>O Acordo Ortográfico da Língua Portuguesa, assinado em 1990 e plenamente vigente no Brasil desde 2016, buscou unificar a grafia entre os países lusófonos. As principais mudanças relevantes para concursos são:</p>
+          <table>
+            <thead><tr><th>Mudança</th><th>Regra atual</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Trema</td><td>Eliminado no português do Brasil, exceto em nomes próprios estrangeiros e seus derivados</td><td>"lingüiça" → "linguiça"; mas mantém-se em "Müller"</td></tr>
+              <tr><td>Acentuação de ditongos abertos EI/OI em paroxítonas</td><td>Deixam de ser acentuados</td><td>"idéia" → "ideia"; "jibóia" → "jiboia"</td></tr>
+              <tr><td>Acento diferencial</td><td>Eliminado na maioria dos casos</td><td>"pára" (verbo) → "para"; mantém-se em "pôde/pode" (diferencia tempos verbais)</td></tr>
+              <tr><td>Hífen em palavras compostas/prefixadas</td><td>Regras reformuladas conforme a letra final do prefixo e inicial do segundo elemento</td><td>"anti-higiênico" (h + prefixo terminado em consoante); "antissocial" (sem hífen, dobra-se o s)</td></tr>
+              <tr><td>Alfabeto oficial</td><td>Passa a incluir formalmente K, W, Y</td><td>Usados em nomes próprios, siglas e palavras estrangeiras</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Questões de reescrita costumam apresentar a grafia antiga (pré-1990) como se fosse "mais formal" ou "mais correta" — o candidato deve reconhecer que, hoje, a forma sem trema e sem acento em ditongos abertos é a <b>oficialmente correta</b>, mesmo quando "parece estranha" a quem estudou antes da reforma.</p>
+          </div>
+
+          <h3>4.2 Uso do hífen pós-Acordo de 1990</h3>
+          <p>A regra do hífen é o ponto mais temido da ortografia pós-reforma. A lógica central: compara-se a <b>letra final do prefixo</b> com a <b>letra inicial da palavra seguinte</b>.</p>
+          <table>
+            <thead><tr><th>Situação</th><th>Regra</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Prefixo termina em vogal + palavra começa com a mesma vogal</td><td>Usa-se hífen</td><td>anti-inflamatório, micro-ondas</td></tr>
+              <tr><td>Prefixo termina em vogal + palavra começa com vogal diferente</td><td>Não se usa hífen (junta-se)</td><td>autoescola, extraoficial</td></tr>
+              <tr><td>Prefixo termina em consoante + palavra começa com a mesma consoante</td><td>Usa-se hífen</td><td>inter-regional, sub-bibliotecário</td></tr>
+              <tr><td>Prefixo termina em consoante + palavra começa com vogal</td><td>Não se usa hífen (junta-se)</td><td>hiperativo, interestadual</td></tr>
+              <tr><td>Prefixo termina em vogal + palavra começa com "r" ou "s"</td><td>Não se usa hífen; dobra-se a consoante</td><td>antirreligioso, contrassenso</td></tr>
+              <tr><td>Prefixo termina em "b" + palavra começa com "h"</td><td>Mantém-se o hífen (exceção)</td><td>sub-hepático</td></tr>
+              <tr><td>Prefixos "pré-", "pró-", "pós-" (tônicos, valor próprio)</td><td>Sempre com hífen</td><td>pré-natal, pós-graduação</td></tr>
+              <tr><td>Prefixo "sem", "além", "aquém", "recém", "ex-" (sentido de estado anterior)</td><td>Sempre com hífen</td><td>sem-terra, ex-diretor, recém-nascido</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box tip">
+            <div class="box-title">✅ Macete do hífen</div>
+            <p>Compare apenas a <b>última letra do prefixo</b> com a <b>primeira letra da palavra seguinte</b>. Se forem iguais → hífen (exceto quando a letra é "r" ou "s" após prefixo terminado em vogal, caso em que se dobra a consoante). Se forem diferentes → geralmente junta-se sem hífen.</p>
+          </div>
+
+          <h3>4.3 Parônimos e homônimos mais cobrados em concursos</h3>
+          <p><b>Homônimos</b> têm mesma pronúncia (ou grafia) mas sentidos diferentes; <b>parônimos</b> têm grafia e pronúncia parecidas, mas não idênticas, e sentidos diferentes. Esses pares são armadilha constante em questões de reescrita e revisão textual.</p>
+          <table>
+            <thead><tr><th>Par</th><th>Diferença de sentido</th></tr></thead>
+            <tbody>
+              <tr><td>Cessão / Sessão / Seção</td><td>Cessão = ato de ceder; Sessão = período de uma reunião/atividade; Seção = divisão, setor</td></tr>
+              <tr><td>Censo / Senso</td><td>Censo = recenseamento, contagem; Senso = juízo, percepção</td></tr>
+              <tr><td>Concerto / Conserto</td><td>Concerto = apresentação musical; Conserto = reparo</td></tr>
+              <tr><td>Discricionário / Discriminatório</td><td>Discricionário = de acordo com o critério de quem decide; Discriminatório = que discrimina</td></tr>
+              <tr><td>Emergir / Imergir</td><td>Emergir = vir à tona; Imergir = mergulhar, afundar</td></tr>
+              <tr><td>Incerto / Inserto</td><td>Incerto = duvidoso; Inserto = inserido, incluído</td></tr>
+              <tr><td>Tráfego / Tráfico</td><td>Tráfego = trânsito, movimento; Tráfico = comércio ilícito</td></tr>
+              <tr><td>Ratificar / Retificar</td><td>Ratificar = confirmar; Retificar = corrigir</td></tr>
+              <tr><td>Comprimento / Cumprimento</td><td>Comprimento = extensão, medida; Cumprimento = saudação, ato de cumprir</td></tr>
+              <tr><td>Descrição / Discrição</td><td>Descrição = ato de descrever; Discrição = qualidade de discreto</td></tr>
+              <tr><td>Flagrante / Fragrante</td><td>Flagrante = evidente, no ato; Fragrante = perfumado</td></tr>
+              <tr><td>Cavaleiro / Cavalheiro</td><td>Cavaleiro = que anda a cavalo; Cavalheiro = homem educado, gentil</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Por que, porque, por quê e porquê</h3>
+          <table>
+            <thead><tr><th>Forma</th><th>Uso</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Por que</b> (separado, sem acento)</td><td>Em perguntas diretas/indiretas; equivale a "pelo qual/pela qual" em orações relativas</td><td>"Por que você chegou atrasado?" / "Não sei por que isso aconteceu."</td></tr>
+              <tr><td><b>Porque</b> (junto, sem acento)</td><td>Em respostas e explicações; conectivo de causa</td><td>"Cheguei atrasado porque houve trânsito."</td></tr>
+              <tr><td><b>Por quê</b> (separado, com acento)</td><td>No final de frases interrogativas ou como pergunta isolada</td><td>"Você chegou atrasado por quê?" / "Por quê?"</td></tr>
+              <tr><td><b>Porquê</b> (junto, com acento)</td><td>Como substantivo, geralmente precedido de artigo/determinante</td><td>"Ninguém entendeu o porquê da demissão."</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box tip">
+            <div class="box-title">✅ Macete dos porquês</div>
+            <p>Se puder substituir por "pois" → <b>porque</b> (junto, sem acento). Se estiver no final da frase ou puder ser substituído por "qual motivo" → <b>por quê</b> (separado, com acento). Se vier com artigo (o/os/um) → <b>porquê</b> (substantivo).</p>
+          </div>
+
+          <h3>4.5 Maiúsculas e minúsculas</h3>
+          <table>
+            <thead><tr><th>Situação</th><th>Regra</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Nomes próprios (pessoas, lugares, instituições)</td><td>Maiúscula</td><td>DATAPREV, Curitiba, Ministério da Fazenda</td></tr>
+              <tr><td>Cargos e títulos em uso genérico</td><td>Minúscula</td><td>"o presidente da empresa", "o diretor financeiro"</td></tr>
+              <tr><td>Cargos em documentos formais/oficiais, quando personalizados</td><td>Pode-se usar maiúscula por tradição documental (uso variável, mas aceito em contextos formais)</td><td>"o Presidente da República" (uso tradicional em textos oficiais)</td></tr>
+              <tr><td>Meses, estações do ano, dias da semana</td><td>Minúscula</td><td>"em janeiro", "no outono", "na segunda-feira"</td></tr>
+              <tr><td>Pontos cardeais como substantivo próprio geográfico</td><td>Maiúscula</td><td>"a região Sul do Brasil"</td></tr>
+              <tr><td>Pontos cardeais como direção genérica</td><td>Minúscula</td><td>"o carro seguiu para o sul"</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Outros pares ortográficos clássicos de concurso</h3>
+          <table>
+            <thead><tr><th>Par</th><th>Diferença de sentido</th></tr></thead>
+            <tbody>
+              <tr><td>Mal / Mau</td><td>Mal = advérbio (oposto de "bem") ou substantivo ("o mal"); Mau = adjetivo (oposto de "bom")</td></tr>
+              <tr><td>A fim de / Afim</td><td>"A fim de" = com o objetivo de; "Afim" = que tem afinidade, semelhante</td></tr>
+              <tr><td>Ao encontro de / De encontro a</td><td>"Ao encontro de" = em direção favorável, de acordo com; "De encontro a" = em oposição, contra</td></tr>
+              <tr><td>Onde / Aonde</td><td>"Onde" = lugar em que (permanência); "Aonde" = lugar para onde (movimento, com verbos de deslocamento)</td></tr>
+              <tr><td>Mas / Mais</td><td>"Mas" = conectivo de oposição; "Mais" = quantidade, comparação</td></tr>
+              <tr><td>Se não / Senão</td><td>"Se não" = condicional negativa (separável); "Senão" = do contrário, exceto</td></tr>
+              <tr><td>Há / A (tempo)</td><td>"Há" = verbo haver, tempo decorrido; "A" = preposição, tempo futuro</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV raramente pergunta "assinale a grafia correta da palavra X" isoladamente. O mais comum é inserir esses pares dentro de frases de textos institucionais ou jornalísticos em questões de reescrita, exigindo que o candidato perceba o erro em meio a um conteúdo mais denso — a leitura atenta da ortografia deve ser constante durante toda a prova, não apenas em um bloco específico.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. COMO A FGV COBRA ============ -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV integra a ortografia a questões de reescrita, revisão textual e, ocasionalmente, a itens isolados de "assinale a alternativa em que todas as palavras estão grafadas corretamente". O texto-base costuma ser institucional ou jornalístico, com o erro ortográfico embutido em uma frase mais longa.</p>
+
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões de múltipla escolha com frases contendo erro ortográfico sutil em uma das alternativas.</li>
+            <li>Questões de reescrita em que a nova versão altera indevidamente a grafia de uma palavra (paronímia).</li>
+            <li>Assertivas certo/errado sobre a grafia de um trecho específico.</li>
+            <li>Dificuldade média — não exige memorização de regras raras, mas atenção constante aos pares clássicos.</li>
+          </ul>
+
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Por que / porque / por quê / porquê</td><td>Muito alta</td></tr>
+              <tr><td>Parônimos institucionais (cessão/sessão/seção; ratificar/retificar)</td><td>Alta</td></tr>
+              <tr><td>Uso do hífen pós-Acordo de 1990</td><td>Alta</td></tr>
+              <tr><td>Mal/mau, a fim/afim, ao encontro/de encontro</td><td>Média-alta</td></tr>
+              <tr><td>Maiúsculas em nomes de cargos e instituições</td><td>Média</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Palavras-chave que indicam o tipo de questão</h3>
+          <table>
+            <thead><tr><th>Expressão no enunciado</th><th>O que está sendo pedido</th></tr></thead>
+            <tbody>
+              <tr><td>"Assinale a alternativa em que todas as palavras estão corretamente grafadas"</td><td>Identificação direta de erro ortográfico</td></tr>
+              <tr><td>"A reescrita abaixo mantém a correção gramatical e ortográfica"</td><td>Ortografia embutida em questão de reescrita</td></tr>
+              <tr><td>"Assinale o erro de grafia presente no texto"</td><td>Localização do erro específico no texto-base</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Trocar um <b>parônimo institucional</b> (ex.: "sessão" por "seção") em contexto que parece plausível à primeira leitura.</li>
+            <li>Usar a grafia <b>pré-Acordo de 1990</b> (com trema ou acento em ditongo aberto) como se ainda fosse válida.</li>
+            <li>Empregar hífen de forma incorreta em palavras prefixadas, seguindo a regra antiga (pré-1990).</li>
+            <li>Confundir <b>por que/porque/por quê/porquê</b> em frases mais longas, onde o contexto sintático dificulta a identificação rápida.</li>
+            <li>Usar maiúscula desnecessária em meses, estações do ano ou cargos genéricos.</li>
+          </ol>
+
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É recorrente a FGV apresentar cinco frases (ou cinco alternativas de reescrita de um mesmo texto-base institucional), sendo que apenas uma está integralmente correta quanto à ortografia — as demais alternativas contêm exatamente um erro cada, geralmente de paronímia ou de hífen.</p>
+          </div>
+
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Desconfie de palavras parecidas foneticamente com outras de sentido diferente (parônimos) — releia o contexto para confirmar qual encaixa.</li>
+            <li>Ao ver "por que" no meio ou fim de frase, pare e classifique: pergunta, explicação, substantivo ou final de frase interrogativa?</li>
+            <li>Ao ver palavra com prefixo (anti-, sub-, super-, inter- etc.), verifique mentalmente a regra do hífen antes de aceitar a grafia apresentada.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 6. DECORE PARA A PROVA ============ -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip">
+            <div class="box-title">🧠 Mnemônico dos porquês: P-P-P-P</div>
+            <p><b>P</b>ergunta = "por que" (separado, sem acento) · <b>P</b>orque explica (junto, sem acento) · <b>P</b>onto final de pergunta = "por quê" (separado, com acento) · <b>P</b>recedido de artigo = "porquê" (junto, com acento, é substantivo).</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Macete do hífen: "letra igual gruda com traço, diferente junta sem traço"</div>
+            <p>Última letra do prefixo = primeira letra da palavra seguinte → hífen (exceto r/s, que dobram a consoante e não usam hífen). Letras diferentes → normalmente junta-se sem hífen.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Truque do "mal/mau"</div>
+            <p>Troque mentalmente por "bem/bom": se a frase aceitar "bem" (advérbio), é <b>mal</b>; se aceitar "bom" (adjetivo), é <b>mau</b>. "Ele se saiu mal" (bem) x "Ele é um mau funcionário" (bom).</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Truque do "onde/aonde"</div>
+            <p>Se o verbo indica movimento/destino ("ir", "chegar"), use <b>aonde</b>. Se indica permanência ("estar", "morar"), use <b>onde</b>.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">🧠 Parônimos institucionais: decore em trio</div>
+            <p><b>Cessão</b> (ceder) / <b>Sessão</b> (reunião) / <b>Seção</b> (setor) — muito cobrado em textos administrativos, editais e atas.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. REVISÃO 5 MIN ============ -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Acordo Ortográfico de 1990: fim do trema (exceto nomes estrangeiros), fim do acento em ditongos abertos EI/OI em paroxítonas.</li>
+            <li>Hífen: compare a última letra do prefixo com a primeira da palavra seguinte — iguais (exceto r/s) → hífen; diferentes → geralmente sem hífen.</li>
+            <li><b>Por que</b> (pergunta) · <b>Porque</b> (explica) · <b>Por quê</b> (fim de frase) · <b>Porquê</b> (substantivo, com artigo).</li>
+            <li>Parônimos institucionais mais cobrados: cessão/sessão/seção; ratificar/retificar; censo/senso.</li>
+            <li>Mal (advérbio, "bem") x Mau (adjetivo, "bom").</li>
+            <li>Onde (permanência) x Aonde (movimento).</li>
+            <li>Meses, estações e dias da semana: minúscula. Nomes próprios e instituições: maiúscula.</li>
+            <li>A FGV raramente cobra ortografia isolada — o erro costuma estar embutido em questões de reescrita e revisão textual.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 8. FLASHCARDS ============ -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- ============ 9. QUESTÕES COMENTADAS ============ -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- ============ 10. SIMULADO ============ -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- ============ 11. CHECKLIST ============ -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- ============ 12. ERROS MAIS COMUNS ============ -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card">
+          <ol class="styled" id="errosList"></ol>
+        </div>
+      </section>
+
+      <!-- ============ 13. REGRAS / TÉCNICAS ============ -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Regras e técnicas de resolução</h2></div>
+        <div class="card">
+          <div class="box info">
+            <div class="box-title">ℹ Observação</div>
+            <p>Este tópico não envolve fórmulas matemáticas. Em seu lugar, apresentamos a <b>regra completa do hífen pós-Acordo de 1990</b>, o ponto mais técnico da ortografia cobrada em concursos.</p>
+          </div>
+          <table>
+            <thead><tr><th>Passo</th><th>Pergunta a fazer</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>A palavra tem prefixo (anti-, sub-, super-, inter-, hiper-, extra- etc.)?</td><td>Se não, a regra do hífen não se aplica; siga para verificação de parônimos/homônimos</td></tr>
+              <tr><td>2</td><td>Qual a última letra do prefixo e a primeira da palavra seguinte?</td><td>Compare as duas letras</td></tr>
+              <tr><td>3</td><td>São iguais e são vogais?</td><td>Usa-se hífen (ex.: anti-inflamatório)</td></tr>
+              <tr><td>4</td><td>São iguais e são consoantes (exceto r/s)?</td><td>Usa-se hífen (ex.: inter-regional*, sub-bibliotecário) — *exceção ver próxima linha</td></tr>
+              <tr><td>5</td><td>A letra igual é "r" ou "s" após prefixo terminado em vogal?</td><td>Não se usa hífen; dobra-se a consoante (ex.: antirreligioso, contrassenso)</td></tr>
+              <tr><td>6</td><td>São diferentes?</td><td>Geralmente junta-se sem hífen (ex.: autoescola, hiperativo)</td></tr>
+              <tr><td>7</td><td>O prefixo é pré-, pró-, pós-, sem-, além-, aquém-, recém-, ex- (estado anterior)?</td><td>Hífen sempre, independentemente da letra seguinte (ex.: pré-natal, ex-diretor)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 14. TABELAS-RESUMO ============ -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Resumo dos porquês</h3>
+          <table>
+            <thead><tr><th>Forma</th><th>Substituível por</th></tr></thead>
+            <tbody>
+              <tr><td>Por que</td><td>"por qual motivo" (em perguntas)</td></tr>
+              <tr><td>Porque</td><td>"pois"</td></tr>
+              <tr><td>Por quê</td><td>"por qual motivo" (final de frase, com acento)</td></tr>
+              <tr><td>Porquê</td><td>"o motivo" (substantivo, com artigo)</td></tr>
+            </tbody>
+          </table>
+          <h3>Resumo do hífen</h3>
+          <table>
+            <thead><tr><th>Letras finais/iniciais</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>Vogal = vogal</td><td>Hífen</td></tr>
+              <tr><td>Consoante = consoante (exceto r/s)</td><td>Hífen</td></tr>
+              <tr><td>Vogal + r/s</td><td>Sem hífen, dobra a consoante</td></tr>
+              <tr><td>Letras diferentes</td><td>Sem hífen (geralmente)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 15. GLOSSÁRIO ============ -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card">
+          <dl class="gloss" id="glossList"></dl>
+        </div>
+      </section>
+
+      <!-- ============ 16. CURIOSIDADES ============ -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio">
+          <div class="box-title">🎓 Sobre a FGV</div>
+          <p>Como a FGV frequentemente usa textos institucionais e jornalísticos reais como base de suas questões, os erros ortográficos "plantados" nas alternativas costumam ser os mesmos que aparecem em erros reais de comunicação corporativa — por isso, prestar atenção à redação profissional do dia a dia também ajuda a fixar essas regras.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">📚 Curiosidade histórica</div>
+          <p>O Acordo Ortográfico de 1990 foi assinado por Angola, Brasil, Cabo Verde, Guiné-Bissau, Moçambique, Portugal e São Tomé e Príncipe (Timor-Leste aderiu depois), mas sua implementação levou mais de duas décadas para se completar no Brasil, com período de transição até 2016.</p>
+        </div>
+        <div class="box curio">
+          <div class="box-title">🔬 Curiosidade acadêmica</div>
+          <p>Estudos de linguística apontam que grande parte dos "erros de ortografia" mais comuns no Brasil não decorrem de desconhecimento da regra, mas de <b>interferência da oralidade</b> na escrita — como a confusão entre "mas" e "mais", que se pronunciam de forma semelhante em muitas variedades do português falado.</p>
+        </div>
+      </section>
+
+      <!-- ============ 17. LIGAÇÕES COM OUTROS TÓPICOS ============ -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Reescrita de frases e parágrafos (Tópico 6)</td><td>A ortografia é frequentemente testada dentro de questões de reescrita e substituição de palavras</td></tr>
+              <tr><td>Significação das palavras (Tópico 6.1)</td><td>Parônimos exigem domínio simultâneo de ortografia e semântica</td></tr>
+              <tr><td>Domínio da estrutura morfossintática (Tópico 5)</td><td>Emprego correto de classes de palavras depende também da grafia correta</td></tr>
+              <tr><td>Compreensão e interpretação de textos (Tópico 1)</td><td>Erros ortográficos plantados aparecem dentro de textos-base maiores</td></tr>
+              <tr><td>Redação de correspondências oficiais</td><td>Aplicação prática da ortografia correta em documentos institucionais</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 18. PLANO DE REVISÃO ============ -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar a tabela de parônimos institucionais e a regra do hífen.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, escrevendo à mão os pares de palavras que ainda geram dúvida.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; para cada erro, identificar se foi falha de regra (hífen, porquês) ou de vocabulário (parônimos desconhecidos).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 19. REFERÊNCIAS ============ -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Decreto nº 6.583/2008 e Decreto nº 7.875/2012 — promulgam e ajustam o cronograma do Acordo Ortográfico da Língua Portuguesa no Brasil.</li>
+            <li>ACADEMIA BRASILEIRA DE LETRAS. <i>Vocabulário Ortográfico da Língua Portuguesa (VOLP)</i>.</li>
+            <li>CEGALLA, Domingos Paschoal. <i>Novíssima Gramática da Língua Portuguesa</i>. São Paulo: Companhia Editora Nacional.</li>
+            <li>CUNHA, Celso; CINTRA, Luís F. Lindley. <i>Nova Gramática do Português Contemporâneo</i>. Rio de Janeiro: Lexikon.</li>
+            <li>BECHARA, Evanildo. <i>Moderna Gramática Portuguesa</i>. Rio de Janeiro: Nova Fronteira.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Língua Portuguesa · Tópico 03/08</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_lp_t03";
+
+  function applyTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem(STORAGE_KEY+"_theme", t);
+  }
+  const savedTheme = localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light");
+  applyTheme(savedTheme);
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* ============ FLASHCARDS ============ */
+  const flashcards = [
+    {q:"Desde quando o Acordo Ortográfico de 1990 está plenamente vigente no Brasil?", a:"Desde 1º de janeiro de 2016."},
+    {q:"O trema foi eliminado do português do Brasil em quais casos?", a:"Em todos, exceto em nomes próprios estrangeiros e seus derivados (ex.: Müller)."},
+    {q:"Ditongos abertos EI/OI em paroxítonas ainda são acentuados?", a:"Não. Ex.: 'ideia' e 'jiboia', sem acento, após o Acordo de 1990."},
+    {q:"Qual a regra geral do hífen quando prefixo e palavra seguinte começam/terminam com a mesma vogal?", a:"Usa-se hífen (ex.: anti-inflamatório, micro-ondas)."},
+    {q:"O que acontece quando o prefixo termina em vogal e a palavra seguinte começa com 'r' ou 's'?", a:"Não se usa hífen; dobra-se a consoante (ex.: antirreligioso, contrassenso)."},
+    {q:"Quais prefixos sempre levam hífen, independentemente da letra seguinte?", a:"Pré-, pró-, pós-, sem-, além-, aquém-, recém- e ex- (sentido de estado anterior)."},
+    {q:"Diferencie cessão, sessão e seção.", a:"Cessão = ato de ceder; Sessão = período de uma reunião/atividade; Seção = divisão, setor."},
+    {q:"Quando se usa 'por que' (separado, sem acento)?", a:"Em perguntas diretas ou indiretas, e em orações relativas equivalentes a 'pelo qual'."},
+    {q:"Quando se usa 'porque' (junto, sem acento)?", a:"Em respostas e explicações, como conectivo de causa (substituível por 'pois')."},
+    {q:"Quando se usa 'por quê' (separado, com acento)?", a:"No final de frases interrogativas ou como pergunta isolada."},
+    {q:"Quando se usa 'porquê' (junto, com acento)?", a:"Como substantivo, geralmente precedido de artigo ou determinante (ex.: 'o porquê da decisão')."},
+    {q:"Diferencie mal e mau.", a:"Mal é advérbio (oposto de 'bem') ou substantivo ('o mal'); Mau é adjetivo (oposto de 'bom')."},
+    {q:"Diferencie onde e aonde.", a:"'Onde' indica permanência (lugar em que); 'aonde' indica movimento/destino (lugar para onde)."},
+    {q:"Diferencie 'a fim de' e 'afim'.", a:"'A fim de' significa 'com o objetivo de'; 'afim' significa 'que tem afinidade, semelhante'."},
+    {q:"Diferencie 'ao encontro de' e 'de encontro a'.", a:"'Ao encontro de' indica direção favorável, concordância; 'de encontro a' indica oposição, choque."},
+    {q:"Nomes de meses, estações e dias da semana são grafados com maiúscula ou minúscula?", a:"Minúscula (ex.: 'em janeiro', 'no outono', 'na segunda-feira')."},
+    {q:"Diferencie ratificar e retificar.", a:"Ratificar = confirmar, validar; Retificar = corrigir, emendar."},
+    {q:"Diferencie tráfego e tráfico.", a:"Tráfego = trânsito, movimento de veículos; Tráfico = comércio ilícito."},
+    {q:"Diferencie censo e senso.", a:"Censo = recenseamento, contagem oficial; Senso = juízo, percepção, capacidade de julgar."},
+    {q:"Diferencie descrição e discrição.", a:"Descrição = ato de descrever; Discrição = qualidade de ser discreto, reservado."},
+    {q:"Como a FGV costuma cobrar ortografia nas provas?", a:"Raramente de forma isolada; geralmente embutida em questões de reescrita e revisão textual, com erro sutil em uma das alternativas."},
+    {q:"Qual truque ajuda a lembrar a regra do 'mal/mau'?", a:"Substituir mentalmente por 'bem' (aceita = mal) ou por 'bom' (aceita = mau)."},
+    {q:"O alfabeto oficial da língua portuguesa passou a incluir quais letras após o Acordo de 1990?", a:"K, W e Y, usadas em nomes próprios, siglas e palavras estrangeiras."},
+    {q:"Diferencie comprimento e cumprimento.", a:"Comprimento = extensão, medida; Cumprimento = saudação, ato de cumprir algo."},
+    {q:"Diferencie 'se não' e 'senão'.", a:"'Se não' é condicional negativa (separável); 'senão' significa 'do contrário' ou 'exceto'."},
+  ];
+
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* ============ QUESTÕES COMENTADAS (20) ============ */
+  const questoes = [
+    {tema:"Hífen", texto:"“A campanha de vacinação será realizada em caráter ___________, atendendo toda a população da região metropolitana.”", enun:"Assinale a alternativa que preenche corretamente a lacuna:", alts:["ante-regional","antirregional","anti-regional","antiregional","ante regional"], correta:1, coment:"Prefixo 'anti-' termina em vogal e a palavra seguinte começa com 'r' — não se usa hífen, dobra-se a consoante: 'antirregional'."},
+    {tema:"Porquês", texto:"—", enun:"Assinale a alternativa em que o emprego do 'porquê' está correto:", alts:["Não sei por quê você chegou atrasado.","Ninguém entendeu o porque da demissão.","Ele não compareceu à reunião, por que estava doente.","Ninguém entendeu o porquê da demissão.","Por que você não respondeu, ainda não sei."], correta:3, coment:"Antecedido de artigo ('o'), 'porquê' é substantivo e deve ser grafado junto e com acento: 'o porquê da demissão'."},
+    {tema:"Parônimos", texto:"“O documento foi encaminhado à ___________ de recursos humanos para análise, sendo aprovada, por unanimidade, a ___________ do imóvel à nova unidade.”", enun:"Assinale a alternativa que preenche corretamente as lacunas:", alts:["sessão / cessão","seção / cessão","seção / sessão","cessão / seção","sessão / seção"], correta:1, coment:"'Seção' = divisão/setor (seção de recursos humanos); 'cessão' = ato de ceder (cessão do imóvel) — combinação correta: seção / cessão."},
+    {tema:"Acordo Ortográfico", texto:"—", enun:"Segundo as regras vigentes após o Acordo Ortográfico de 1990, a grafia correta da palavra é:", alts:["idéia","jibóia","heróico","ideia","apóio"], correta:3, coment:"Ditongos abertos EI/OI em paroxítonas deixaram de ser acentuados após o Acordo de 1990: 'ideia' é a forma correta (as demais mantêm grafia antiga, incorreta hoje)."},
+    {tema:"Mal/mau", texto:"“O relatório apontou que o ___________ desempenho do setor decorreu de um planejamento ___________ elaborado.”", enun:"Assinale a alternativa que preenche corretamente as lacunas:", alts:["mau / mau","mal / mal","mau / mal","mal / mau","mau / mau (repetido)"], correta:2, coment:"'Mau desempenho' (adjetivo, oposto de bom) e 'planejamento mal elaborado' (advérbio, oposto de bem) — combinação correta: mau / mal."},
+    {tema:"Hífen", texto:"—", enun:"Assinale a alternativa com grafia correta quanto ao uso do hífen:", alts:["micro-ondas","extra-oficial","auto-escola","super-mercado","ante-sala"], correta:0, coment:"Prefixo 'micro-' termina em vogal e a palavra seguinte começa com a mesma vogal 'o' — usa-se hífen: 'micro-ondas'. As demais estão incorretas (deveriam ser: extraoficial, autoescola, supermercado, antessala)."},
+    {tema:"Onde/aonde", texto:"—", enun:"Assinale a alternativa com emprego correto de 'onde'/'aonde':", alts:["Aonde você mora?","Não sei onde você vai estudar amanhã.","Aonde fica a sede da empresa?","Onde vamos nessa viagem?","Você sabe aonde ele nasceu?"], correta:1, coment:"'Onde você vai estudar' indica permanência no local de estudo, não deslocamento contínuo — usa-se 'onde'. As demais deveriam usar 'onde' (permanência: mora, fica, nasceu) e não 'aonde'."},
+    {tema:"Parônimos", texto:"“A diretoria decidiu ___________ o contrato anterior, corrigindo os valores que haviam sido lançados incorretamente na planilha.”", enun:"Assinale a alternativa que preenche corretamente a lacuna:", alts:["ratificar","retificar","rarificar","retificar (repetido)","ratificar (repetido)"], correta:1, coment:"O contexto indica correção de um erro ('valores lançados incorretamente'), o que corresponde a 'retificar' (corrigir), e não 'ratificar' (confirmar)."},
+    {tema:"Maiúsculas/minúsculas", texto:"—", enun:"Assinale a alternativa com o emprego correto de maiúsculas e minúsculas:", alts:["A reunião ocorrerá em Janeiro, na sede da empresa.","A reunião ocorrerá em janeiro, na sede da Empresa DATAPREV.","A reunião ocorrerá em Janeiro, na Segunda-feira.","A reunião ocorrerá em janeiro, na segunda-feira.","A Reunião ocorrerá em janeiro, na segunda-Feira."], correta:3, coment:"Meses e dias da semana são grafados com minúscula: 'em janeiro', 'na segunda-feira' — apenas nomes próprios/institucionais (como 'DATAPREV') levam maiúscula."},
+    {tema:"Por que/porque", texto:"—", enun:"Assinale a alternativa com emprego correto do 'porquê':", alts:["Não entendi por que motivo você não veio.","O gestor perguntou por quê o prazo não foi cumprido.","O gestor perguntou porque o prazo não foi cumprido.","Ninguém sabe por que o sistema falhou ontem.","O prazo não foi cumprido, por quê houve um imprevisto."], correta:3, coment:"'Por que o sistema falhou' é pergunta indireta (equivale a 'por qual motivo') — separado e sem acento. As demais trocam indevidamente a forma correta pelo contexto (pergunta indireta usa 'por que', não 'por quê' nem 'porque')."},
+    {tema:"Hífen", texto:"—", enun:"Assinale a alternativa com grafia correta:", alts:["pré-natal","pósgraduação","recemnascido","exdiretor","semterra"], correta:0, coment:"'Pré-' é prefixo tônico que sempre exige hífen: 'pré-natal'. As demais estão incorretas (deveriam ser: pós-graduação, recém-nascido, ex-diretor, sem-terra)."},
+    {tema:"Parônimos", texto:"“A empresa realizou um ___________ minucioso sobre a percepção dos clientes quanto à qualidade do atendimento, revelando bom ___________ crítico da equipe entrevistada.”", enun:"Assinale a alternativa que preenche corretamente as lacunas:", alts:["censo / senso","senso / censo","censo / censo","senso / senso","cesso / senso"], correta:0, coment:"'Censo' = levantamento/pesquisa (censo sobre percepção); 'senso' = juízo, capacidade de julgar (bom senso crítico) — combinação correta: censo / senso."},
+    {tema:"A fim/afim", texto:"—", enun:"Assinale a alternativa com emprego correto de 'a fim de' / 'afim':", alts:["Reunimos a equipe afim de discutir o orçamento.","Buscamos profissionais com formação a fim à área financeira.","Reunimos a equipe a fim de discutir o orçamento.","A proposta é afim de aprovação imediata.","Buscamos profissionais com objetivo a fim à vaga."], correta:2, coment:"'A fim de discutir' equivale a 'com o objetivo de discutir' — grafado separado. 'Afim', junto, significa 'que tem afinidade/semelhança', sentido diferente do exigido nas demais alternativas."},
+    {tema:"Ao encontro/de encontro", texto:"—", enun:"Assinale a alternativa com emprego correto:", alts:["A nova política vai ao encontro dos interesses dos servidores, pois amplia benefícios.","A nova política vai de encontro aos interesses dos servidores, pois amplia benefícios.","A nova política vai ao encontro contra os interesses dos servidores.","A nova política vai de encontro favorável aos servidores.","A nova política vai a favor de encontro aos servidores."], correta:0, coment:"'Ir ao encontro de' indica convergência/apoio, coerente com 'amplia benefícios' — sentido favorável. 'De encontro a' indicaria oposição, incompatível com o contexto positivo da frase."},
+    {tema:"Hífen com r/s", texto:"—", enun:"Assinale a alternativa com grafia correta:", alts:["ante-sala","contra-senso","antirreligioso","semi-real","supersônico (incorreto propositalmente)"], correta:2, coment:"Prefixo 'anti-' termina em vogal e a palavra seguinte começa com 'r' — não se usa hífen, dobra-se a consoante: 'antirreligioso'. As demais estão incorretas nas formas apresentadas (correto seria: antessala, contrassenso, semirreal)."},
+    {tema:"Reescrita e ortografia", texto:"Texto original: “O setor de controladoria identificou uma discrepância nos valores lançados na planilha de custos.”", enun:"Assinale a reescrita que mantém a correção ortográfica do texto original:", alts:["O setor de controladoria identificou uma discrepância nos valores lançados na planilha de custos, o que gerou mal-estar entre as equipes.","O setor de controladoria identificou uma discrepância nos valores lançados na plani-lha de custos.","O setor de controladoria identificou uma discrepânsia nos valores lançados na planilha de custos.","O setor de controladoria identificou uma descrepância nos valores lançados na planilha de custos.","O setor de controladoria indentificou uma discrepância nos valores lançados na planilha de custos."], correta:0, coment:"A alternativa A mantém a grafia correta de todas as palavras e ainda emprega corretamente 'mal-estar' (substantivo composto com hífen). As demais contêm erros de grafia (discrepânsia, descrepância, indentificou) ou hifenização indevida."},
+    {tema:"Maiúsculas em cargos", texto:"—", enun:"Assinale a alternativa com emprego adequado de maiúsculas/minúsculas em contexto institucional formal:", alts:["O diretor financeiro da empresa aprovou o novo orçamento.","O Diretor Financeiro Da Empresa aprovou o novo orçamento.","O diretor Financeiro da empresa aprovou o novo Orçamento.","O DIRETOR financeiro da empresa aprovou o Novo orçamento.","O diretor financeiro Da empresa aprovou o novo orçamento."], correta:0, coment:"Cargos em uso genérico (não como título de tratamento direto e formal) são grafados com minúscula: 'o diretor financeiro' — a alternativa A é a única sem maiúsculas indevidas."},
+    {tema:"Parônimos avançado", texto:"“O laudo técnico foi ___________ nos autos do processo, conforme exigido pelo regulamento interno.”", enun:"Assinale a alternativa que preenche corretamente a lacuna:", alts:["inserto","incerto","insertos (concordância incorreta proposital)","incertos (concordância incorreta proposital)","insento"], correta:0, coment:"'Inserto' significa 'inserido, incluído' — sentido adequado ao contexto ('inserido nos autos'). 'Incerto' significa 'duvidoso', sentido incompatível com a frase."},
+    {tema:"Trema/acentuação pós-1990", texto:"—", enun:"Assinale a alternativa com grafia correta segundo o Acordo Ortográfico vigente:", alts:["tranquilo","tranqüilo","lingüiça","freqüência","eloqüente"], correta:0, coment:"O trema foi eliminado do português do Brasil (exceto em nomes próprios estrangeiros): a forma correta é 'tranquilo', sem trema. As demais mantêm a grafia antiga, hoje incorreta."},
+    {tema:"Se não/senão", texto:"—", enun:"Assinale a alternativa com emprego correto:", alts:["Revise o relatório, senão o prazo será perdido.","Revise o relatório, se não o prazo será perdido.","Revise o relatório se não, o prazo será perdido.","Revise o relatório; se não revisar, senão o prazo será perdido.","Revise o relatório sem não o prazo será perdido."], correta:0, coment:"'Senão', junto, no sentido de 'do contrário/caso contrário', é a forma correta na frase: 'revise o relatório, senão (do contrário) o prazo será perdido'."},
+  ];
+
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* ============ MINI SIMULADO (30) ============ */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Assinale a grafia correta:", alts:["ideia","idéia","ideea","iddeia","ideia (repetido)"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Assinale a grafia correta:", alts:["tranqüilo","tranquilo","tranquilho","tranquillo","trankilo"], correta:1},
+    {d:"Fácil", texto:"“Ele chegou atrasado ___ houve um imprevisto no trânsito.”", enun:"Complete corretamente:", alts:["por que","porque","por quê","porquê","por qué"], correta:1},
+    {d:"Fácil", texto:"“Você não vai à reunião ___?”", enun:"Complete corretamente:", alts:["porque","por que","por quê","porquê","por quêm"], correta:2},
+    {d:"Fácil", texto:"“Ninguém sabe o ___ da demissão.”", enun:"Complete corretamente:", alts:["por que","porque","por quê","porquê","porque(sem artigo)"], correta:3},
+    {d:"Fácil", texto:"—", enun:"Assinale a forma correta:", alts:["mau humor","mal humor (adjetivo incorreto)","mau-humor","mal-humor","mau umor"], correta:0},
+    {d:"Fácil", texto:"“Ele se saiu ___ na prova.”", enun:"Complete corretamente:", alts:["mau","mal","mau (repetido)","máu","mall"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale a grafia correta quanto ao hífen:", alts:["micro-ondas","microondas","micro ondas","micro-onda","micrôondas"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Assinale a grafia correta quanto ao hífen:", alts:["auto-escola","autoescola","auto escola","autoescolla","auto-eskola"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale a grafia correta:", alts:["pre-natal","pré natal","pré-natal","prenatal","prénatal"], correta:2},
+    {d:"Média", texto:"“A ___________ de recursos humanos convocou uma ___________ extraordinária para tratar do assunto.”", enun:"Complete corretamente:", alts:["seção / sessão","sessão / seção","cessão / sessão","seção / cessão","sessão / cessão"], correta:0},
+    {d:"Média", texto:"“O documento foi ___________ com base em novos dados apresentados pela auditoria.”", enun:"Complete corretamente (sentido de corrigir):", alts:["ratificado","retificado","ratificado (repetido)","retido","ratificando"], correta:1},
+    {d:"Média", texto:"“A diretoria decidiu ___________ o acordo firmado anteriormente com o fornecedor.”", enun:"Complete corretamente (sentido de confirmar):", alts:["retificar","ratificar","retificando","ratificando","retificado"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a grafia correta quanto ao hífen (prefixo + r):", alts:["ante-rregional","antirregional","anti-regional","antiregional","antirregional (repetido, mas grafado diferente)"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a grafia correta quanto ao hífen (prefixo pré-):", alts:["preestabelecido (errado propositalmente)","pré-estabelecido","préestabelecido","pre-estabelecido","pré estabelecido"], correta:1},
+    {d:"Média", texto:"“Ele ___ mora no bairro há dez anos, mas trabalha em outra cidade.”", enun:"Complete corretamente:", alts:["aonde","onde","donde","aonde que","onde que"], correta:1},
+    {d:"Média", texto:"“Você sabe ___ fica a nova sede da empresa? Preciso ir até lá amanhã.”", enun:"Complete corretamente:", alts:["onde","aonde","donde","onde que","para onde que"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa com emprego correto de maiúscula/minúscula:", alts:["A reunião foi marcada para Terça-feira, no mês de Março.","A reunião foi marcada para terça-feira, no mês de março.","A Reunião foi marcada para terça-feira, no mês de março.","A reunião foi marcada para terça-Feira, no mês de Março.","A reunião foi Marcada para terça-feira, no mês de março."], correta:1},
+    {d:"Média", texto:"“O relatório apresentou dados ___________, sem qualquer manipulação estatística.”", enun:"Complete corretamente (sentido de claro, evidente):", alts:["flagrantes","fragrantes","flagrante","fragrante","flagrantemente incorreto"], correta:0},
+    {d:"Média", texto:"“Buscamos candidatos com formação ___________ à área de controladoria.”", enun:"Complete corretamente (sentido de semelhança):", alts:["a fim","afim","a fim de","afins de","a fins"], correta:1},
+    {d:"Difícil", texto:"“A proposta apresentada pela diretoria vai ___________ os interesses dos colaboradores, pois reduz benefícios sem contrapartida.”", enun:"Complete corretamente (sentido de oposição):", alts:["ao encontro de","ao encontro dos","de encontro a","de encontro aos (repetido)","ao encontro contra"], correta:2, },
+    {d:"Difícil", texto:"“O laudo técnico foi ___________ no processo administrativo antes da decisão final.”", enun:"Complete corretamente (sentido de inserido):", alts:["incerto","inserto","insertado","encerto","inserido incorretamente"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa em que todas as palavras estão corretamente grafadas segundo o Acordo Ortográfico vigente:", alts:["ideia, tranquilo, antirreligioso, pré-natal","idéia, tranqüilo, anti-religioso, prenatal","ideia, tranquilo, anti-rreligioso, pré natal","idéia, tranquilo, antirreligioso, pré-natal","ideia, tranqüilo, antireligioso, pré-natal"], correta:0},
+    {d:"Difícil", texto:"“O comitê de auditoria realizou um ___________ minucioso sobre os processos internos, identificando bom ___________ técnico entre os avaliadores.”", enun:"Complete corretamente:", alts:["censo / senso","senso / censo","censo / censo","senso / senso","cesso / cesso"], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa com hífen corretamente empregado:", alts:["sub-hepático","sub-hepatico","subhepático","sub hepático","sub-hepáticoo"], correta:0},
+    {d:"Difícil", texto:"“Revise cuidadosamente o relatório, ___________ o prazo de entrega será perdido novamente.”", enun:"Complete corretamente:", alts:["se não","senão","se-não","sem não","se não que"], correta:1},
+    {d:"Difícil", texto:"“O ___________ de servidores da empresa cresceu 8% em relação ao ano anterior, segundo o último ___________ interno.”", enun:"Complete corretamente:", alts:["quadro / censo","quadro / senso","censo / quadro","senso / quadro","censo / senso"], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa em que o uso de maiúscula é desnecessário, segundo a norma-padrão:", alts:["A empresa DATAPREV está localizada em Brasília.","A reunião com o Diretor-Presidente foi marcada para Segunda-feira.","O relatório foi enviado ao Ministério da Economia.","O evento ocorrerá na região Sul do país.","A proposta foi aprovada pelo Conselho de Administração."], correta:1},
+    {d:"Difícil", texto:"“Os documentos comprobatórios foram ___________ ao processo, conforme determina o regulamento, restando ___________ apenas o prazo final de análise.”", enun:"Complete corretamente:", alts:["insertos / incerto","incertos / inserto","insertos / insertos","incertos / incertos","insertos / incertos (repetido)"], correta:0},
+  ];
+
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">
+        ${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}
+      </div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* ============ CHECKLIST ============ */
+  const checklistItems = [
+    "Dominar as principais mudanças do Acordo Ortográfico de 1990 (trema, acentuação, hífen)",
+    "Aplicar corretamente a regra do hífen em palavras prefixadas",
+    "Diferenciar por que, porque, por quê e porquê em qualquer contexto",
+    "Reconhecer parônimos institucionais mais cobrados (cessão/sessão/seção, ratificar/retificar, censo/senso)",
+    "Diferenciar mal e mau em qualquer contexto",
+    "Diferenciar onde e aonde conforme permanência ou movimento",
+    "Diferenciar a fim de e afim",
+    "Diferenciar ao encontro de e de encontro a",
+    "Aplicar corretamente maiúsculas e minúsculas em nomes próprios, cargos e meses",
+    "Identificar erros ortográficos embutidos em questões de reescrita e revisão textual",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ============ ERROS MAIS COMUNS (20) ============ */
+  const erros = [
+    "Usar grafia pré-Acordo de 1990 (trema, acento em ditongo aberto) como se ainda fosse correta.",
+    "Errar a regra do hífen ao comparar apenas 'de cabeça', sem checar letra final do prefixo e inicial da palavra seguinte.",
+    "Confundir 'por que' (pergunta) com 'porque' (explicação) em frases mais longas.",
+    "Esquecer o acento em 'por quê' quando está no final de uma frase interrogativa.",
+    "Grafar 'porquê' junto quando o contexto pede 'por que' separado (pergunta), ou vice-versa.",
+    "Trocar 'sessão' por 'seção' (ou vice-versa) em textos institucionais e atas.",
+    "Confundir 'cessão' com 'sessão' pela semelhança sonora.",
+    "Usar 'ratificar' quando o sentido correto é 'retificar' (corrigir), e vice-versa.",
+    "Confundir 'censo' (levantamento) com 'senso' (juízo).",
+    "Errar 'mal/mau' em frases mais complexas, sem aplicar o teste de substituição por 'bem/bom'.",
+    "Usar 'aonde' em contexto de permanência, quando o correto seria 'onde'.",
+    "Não aplicar a regra de dobrar a consoante (r/s) ao usar prefixos terminados em vogal.",
+    "Esquecer o hífen obrigatório em prefixos como pré-, pró-, pós-, ex-, recém-.",
+    "Grafar meses e dias da semana com maiúscula desnecessária.",
+    "Não perceber o erro ortográfico plantado dentro de uma questão de reescrita mais longa.",
+    "Confundir 'a fim de' com 'afim' pela semelhança sonora.",
+    "Confundir 'ao encontro de' (favorável) com 'de encontro a' (oposição), invertendo o sentido da frase.",
+    "Usar 'se não' quando o correto seria 'senão' (do contrário), ou vice-versa.",
+    "Ignorar o contexto semântico ao decidir entre parônimos, focando apenas na semelhança sonora.",
+    "Achar que ortografia não é cobrada pela FGV por não aparecer em questões isoladas — ignorando que está embutida em reescrita.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{
+    const li = document.createElement("li");
+    li.textContent = e;
+    errosList.appendChild(li);
+  });
+
+  /* ============ GLOSSÁRIO ============ */
+  const glossario = [
+    ["Acordo Ortográfico de 1990","Tratado que unificou regras ortográficas entre países de língua portuguesa, plenamente vigente no Brasil desde 2016."],
+    ["Trema","Sinal gráfico eliminado do português do Brasil, exceto em nomes próprios estrangeiros e seus derivados."],
+    ["Ditongo aberto","Encontro vocálico de pronúncia aberta (ex.: EI, OI) que deixou de ser acentuado em paroxítonas após 1990."],
+    ["Parônimos","Palavras de grafia e pronúncia semelhantes, mas de sentidos diferentes (ex.: cessão/sessão/seção)."],
+    ["Homônimos","Palavras de mesma pronúncia ou grafia, mas sentidos diferentes."],
+    ["Hífen","Sinal gráfico usado para unir elementos de palavras compostas ou prefixadas, conforme regras específicas pós-1990."],
+    ["Prefixo","Elemento que se antepõe a um radical para formar uma nova palavra (ex.: anti-, sub-, super-)."],
+    ["Acento diferencial","Acento usado para distinguir palavras homógrafas de sentidos diferentes, hoje quase eliminado (ex.: pôde/pode)."],
+    ["Substantivo","Classe de palavra que nomeia seres, objetos ou conceitos — relevante para reconhecer 'porquê' como substantivo."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estruturas Lógicas | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  td.center, th.center{text-align:center;}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Raciocínio Lógico</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Estruturas lógicas</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Estruturas lógicas.html" selected>01 - Estruturas lógicas</option>
+        <option value="02 - Lógica de argumentação.html">02 - Lógica de argumentação</option>
+        <option value="03 - Lógica sentencial.html">03 - Lógica sentencial</option>
+        <option value="04 - Lógica de primeira ordem.html">04 - Lógica de primeira ordem</option>
+        <option value="05 - Raciocínio aritmético, geométrico e matricial.html">05 - Raciocínio aritmético, geométrico e matricial</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Estruturas Lógicas</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Raciocínio Lógico<br>Tópico 01 de 05<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Estruturas Lógicas</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Raciocínio Lógico</b> &nbsp;›&nbsp; Tópico 01</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">5h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — base de toda a disciplina de Raciocínio Lógico</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — fundamenta todos os demais tópicos da disciplina</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender o que é uma <b>estrutura lógica</b> e como ela organiza o raciocínio em premissas e conclusão.</li>
+            <li>Diferenciar <b>proposição</b> de frases que não são proposições (perguntas, ordens, exclamações, paradoxos).</li>
+            <li>Reconhecer os <b>princípios fundamentais da lógica clássica</b>: identidade, não contradição e terceiro excluído.</li>
+            <li>Identificar a <b>estrutura de um argumento</b>: premissas, conclusão, e a relação de sustentação entre elas.</li>
+            <li>Diferenciar <b>validade</b> (estrutura correta) de <b>verdade material</b> (conteúdo verdadeiro), reconhecendo que um argumento pode ser válido mesmo com premissas falsas.</li>
+            <li>Reconhecer os padrões estruturais básicos de raciocínio (dedutivo, indutivo, por analogia) que serão aprofundados nos tópicos seguintes.</li>
+            <li>Resolver questões FGV que testam a identificação da estrutura lógica de um texto ou argumento, sem necessidade de simbolização formal complexa.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Estrutura lógica</b> é a organização formal de um raciocínio: um conjunto de <b>premissas</b> (afirmações tomadas como ponto de partida) que sustentam uma <b>conclusão</b> (afirmação que se pretende demonstrar). O estudo das estruturas lógicas é a porta de entrada para toda a disciplina de Raciocínio Lógico, pois define os conceitos que serão usados em lógica sentencial, lógica de primeira ordem e lógica de argumentação.</p>
+          <p>O objeto básico da lógica é a <b>proposição</b>: uma sentença declarativa à qual se pode atribuir um valor de verdade (verdadeiro ou falso), mas nunca ambos ao mesmo tempo. Perguntas, ordens, exclamações e frases sem sentido definido não são proposições, pois não podem ser classificadas como verdadeiras ou falsas.</p>
+          <p>Três <b>princípios fundamentais</b> regem a lógica clássica (a que é cobrada em concursos): o <b>princípio da identidade</b> (toda proposição é idêntica a si mesma), o <b>princípio da não contradição</b> (uma proposição não pode ser verdadeira e falsa ao mesmo tempo) e o <b>princípio do terceiro excluído</b> (toda proposição é verdadeira ou falsa, não havendo uma terceira opção).</p>
+          <p>Um ponto central e frequentemente mal compreendido é a distinção entre <b>validade</b> e <b>verdade material</b>: um argumento é <b>válido</b> quando sua estrutura garante que, se as premissas forem verdadeiras, a conclusão necessariamente também será — independentemente de as premissas serem, de fato, verdadeiras no mundo real. Isso significa que um argumento pode ter estrutura válida mesmo partindo de premissas falsas, e pode ser inválido mesmo com premissas e conclusão verdadeiras.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Estruturas<br>Lógicas</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Proposição</h4><ul><li>Valor verdadeiro/falso</li><li>Nunca ambos</li><li>Não é pergunta/ordem</li></ul></div>
+              <div class="mm-node"><h4>Princípios fundamentais</h4><ul><li>Identidade</li><li>Não contradição</li><li>Terceiro excluído</li></ul></div>
+              <div class="mm-node"><h4>Estrutura do argumento</h4><ul><li>Premissas</li><li>Conclusão</li><li>Relação de sustentação</li></ul></div>
+              <div class="mm-node"><h4>Validade x Verdade</h4><ul><li>Validade = estrutura</li><li>Verdade material = conteúdo</li></ul></div>
+              <div class="mm-node"><h4>Tipos de raciocínio</h4><ul><li>Dedutivo</li><li>Indutivo</li><li>Por analogia</li></ul></div>
+              <div class="mm-node"><h4>Aplicações</h4><ul><li>Base p/ lógica sentencial</li><li>Base p/ lógica de 1ª ordem</li><li>Base p/ argumentação</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 O que é uma proposição</h3>
+          <p><b>Proposição</b> é toda sentença declarativa (afirmativa ou negativa) à qual se pode atribuir um único valor lógico: verdadeiro (V) ou falso (F). É o "tijolo básico" de toda a lógica formal.</p>
+          <table>
+            <thead><tr><th>É proposição?</th><th>Exemplo</th><th>Por quê</th></tr></thead>
+            <tbody>
+              <tr><td>Sim</td><td>"O Brasil é um país da América do Sul."</td><td>Pode ser julgada verdadeira ou falsa (nesse caso, verdadeira)</td></tr>
+              <tr><td>Sim</td><td>"2 + 2 = 5."</td><td>Pode ser julgada verdadeira ou falsa (nesse caso, falsa) — não precisa ser verdadeira para ser proposição</td></tr>
+              <tr><td>Não</td><td>"Feche a porta!"</td><td>É uma ordem (frase imperativa), não pode ser V ou F</td></tr>
+              <tr><td>Não</td><td>"Que horas são?"</td><td>É uma pergunta (frase interrogativa), não pode ser V ou F</td></tr>
+              <tr><td>Não</td><td>"Que dia lindo!"</td><td>É uma exclamação, expressa emoção, não afirma um fato julgável</td></tr>
+              <tr><td>Não (paradoxo)</td><td>"Esta frase é falsa."</td><td>Autorreferente — não é possível atribuir um único valor de verdade consistente</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Frases com <b>pronomes ou termos vagos</b>, sem referência clara ("Ele é alto", "Aquilo é bonito"), também não são consideradas proposições em sentido lógico estrito, pois seu valor de verdade depende de um contexto não fornecido — a banca explora essa ambiguidade para testar se o candidato reconhece a diferença entre "sentença gramaticalmente completa" e "proposição logicamente bem-formada".</p>
+          </div>
+
+          <h3>4.2 Os três princípios fundamentais da lógica clássica</h3>
+          <table>
+            <thead><tr><th>Princípio</th><th>Enunciado</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Identidade</td><td>Toda proposição é idêntica a si mesma (A é A)</td><td>"O céu é azul" significa exatamente "o céu é azul", sem ambiguidade de identidade</td></tr>
+              <tr><td>Não contradição</td><td>Uma proposição não pode ser simultaneamente verdadeira e falsa</td><td>"Chove" e "Não chove" não podem ser ambas verdadeiras ao mesmo tempo, no mesmo sentido</td></tr>
+              <tr><td>Terceiro excluído</td><td>Toda proposição é verdadeira ou falsa — não há uma terceira possibilidade</td><td>Não existe "meio-termo lógico" entre V e F na lógica clássica bivalente</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box info">
+            <div class="box-title">📘 Analogia para fixar</div>
+            <p>Pense nos três princípios como as "regras de um interruptor de luz": ele é ele mesmo (identidade), não pode estar ligado e desligado ao mesmo tempo (não contradição), e só existem dois estados possíveis — ligado ou desligado, sem um terceiro estado "meio-ligado" na lógica clássica (terceiro excluído).</p>
+          </div>
+
+          <h3>4.3 Estrutura de um argumento: premissas e conclusão</h3>
+          <p>Um <b>argumento</b> é um conjunto de proposições em que uma (a <b>conclusão</b>) é apresentada como decorrente das demais (as <b>premissas</b>). A estrutura básica é:</p>
+          <div class="box tip">
+            <div class="box-title">✅ Estrutura padrão de um argumento</div>
+            <p><b>Premissa 1:</b> Todo servidor público deve seguir o código de ética.<br>
+            <b>Premissa 2:</b> Maria é servidora pública.<br>
+            <b>Conclusão:</b> Logo, Maria deve seguir o código de ética.</p>
+          </div>
+          <p>Palavras-chave costumam sinalizar premissas e conclusões em textos corridos:</p>
+          <table>
+            <thead><tr><th>Sinaliza</th><th>Palavras-chave típicas</th></tr></thead>
+            <tbody>
+              <tr><td>Premissa</td><td>"pois", "porque", "visto que", "já que", "dado que"</td></tr>
+              <tr><td>Conclusão</td><td>"logo", "portanto", "assim", "por conseguinte", "conclui-se que"</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Validade x verdade material</h3>
+          <p>Este é o conceito mais cobrado e mais mal compreendido do tópico. <b>Validade</b> é uma propriedade da <b>estrutura</b> do argumento: um argumento é válido quando, <b>SE</b> as premissas forem verdadeiras, a conclusão <b>necessariamente</b> também será. <b>Verdade material</b> é uma propriedade do <b>conteúdo</b>: refere-se a saber se as premissas realmente correspondem aos fatos do mundo real.</p>
+          <table>
+            <thead><tr><th>Situação</th><th>Premissas</th><th>Conclusão</th><th>É válido?</th></tr></thead>
+            <tbody>
+              <tr><td>Válido, premissas verdadeiras</td><td>Verdadeiras</td><td>Verdadeira</td><td>Sim</td></tr>
+              <tr><td>Válido, premissas falsas</td><td>Falsas (mas estrutura correta)</td><td>Pode ser falsa, decorrente logicamente</td><td>Sim (validade não depende da verdade das premissas)</td></tr>
+              <tr><td>Inválido, mesmo com premissas e conclusão verdadeiras</td><td>Verdadeiras</td><td>Verdadeira, mas não decorre logicamente das premissas</td><td>Não</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV: argumento válido com premissa falsa</div>
+            <p>Exemplo: "Todo peixe voa. Todo animal que voa é um pássaro. Logo, todo peixe é um pássaro." — as premissas são <b>falsas</b> no mundo real, mas a <b>estrutura é válida</b> (a conclusão decorre logicamente das premissas, se elas fossem verdadeiras). A FGV explora exatamente esse tipo de armadilha, testando se o candidato confunde verdade de conteúdo com validade estrutural.</p>
+          </div>
+
+          <h3>4.5 Panorama dos tipos de raciocínio (aprofundados em tópicos seguintes)</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Característica</th><th>Exemplo resumido</th></tr></thead>
+            <tbody>
+              <tr><td>Dedutivo</td><td>Se as premissas são verdadeiras, a conclusão é necessariamente verdadeira (parte do geral para o específico)</td><td>"Todo A é B; X é A; logo, X é B."</td></tr>
+              <tr><td>Indutivo</td><td>A conclusão é provável, mas não certa, mesmo com premissas verdadeiras (parte do específico para o geral)</td><td>"Os cisnes observados até hoje são brancos; logo, todos os cisnes são brancos" (generalização, não certeza)</td></tr>
+              <tr><td>Por analogia</td><td>Conclui-se por semelhança entre casos, sem garantia lógica de certeza</td><td>"O medicamento funcionou no caso A, similar ao caso B; logo, deve funcionar no caso B."</td></tr>
+            </tbody>
+          </table>
+          <p>Esse panorama será aprofundado no próximo tópico do edital (Lógica de argumentação: analogias, inferências, deduções e conclusões) — aqui, o essencial é reconhecer que <b>nem todo raciocínio busca certeza absoluta</b>; apenas o raciocínio dedutivo válido garante a conclusão com certeza a partir de premissas verdadeiras.</p>
+
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma apresentar pequenos textos ou diálogos do cotidiano institucional e pedir a identificação da estrutura lógica: quais afirmações são premissas, qual é a conclusão, e se o raciocínio apresentado é válido — sem exigir notação simbólica complexa neste tópico introdutório (a simbolização aparece com mais força no tópico de Lógica Sentencial).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV apresenta situações textuais curtas — muitas vezes com tom coloquial ou institucional — pedindo a identificação de premissas, conclusão, e a avaliação de validade do raciocínio apresentado, sem exigir domínio de simbologia lógica complexa neste tópico específico.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>"Assinale a alternativa que identifica corretamente a conclusão do argumento acima."</li>
+            <li>"O argumento apresentado é válido? Por quê?"</li>
+            <li>"Assinale a alternativa que NÃO é uma proposição, segundo a lógica clássica."</li>
+            <li>Dificuldade média — a dificuldade está mais em reconhecer as armadilhas conceituais do que em cálculos.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Distinção entre proposição e não-proposição</td><td>Alta</td></tr>
+              <tr><td>Distinção entre validade e verdade material</td><td>Muito alta</td></tr>
+              <tr><td>Identificação de premissas e conclusão em um texto</td><td>Alta</td></tr>
+              <tr><td>Princípio da não contradição e do terceiro excluído</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Confundir <b>validade</b> (estrutura) com <b>verdade</b> (conteúdo) — julgar um argumento inválido só porque a premissa é falsa no mundo real.</li>
+            <li>Classificar como proposição uma frase interrogativa, imperativa ou exclamativa.</li>
+            <li>Não perceber que uma frase com pronome sem referência clara não é uma proposição bem-formada.</li>
+            <li>Achar que "conclusão verdadeira" garante que o argumento é válido (a validade depende da relação lógica, não do resultado).</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV usar situações do cotidiano corporativo ("Se o relatório não for entregue, a reunião será cancelada...") como base para identificar estrutura lógica, testando ao mesmo tempo compreensão textual e raciocínio formal — uma ponte natural entre Português e Raciocínio Lógico.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao avaliar validade, ignore se você "acha" a premissa verdadeira ou não — foque apenas se a conclusão decorre logicamente dela.</li>
+            <li>Ao identificar proposições, pergunte: "essa frase pode ser V ou F?" Se não puder, não é proposição.</li>
+            <li>Palavras como "logo", "portanto", "pois" são pistas fortes de onde está a conclusão e as premissas.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Mnemônico dos 3 princípios: I-C-T</div><p><b>I</b>dentidade (A é A), <b>C</b>ontradição não pode existir (A não é não-A ao mesmo tempo), <b>T</b>erceiro excluído (só V ou F, nunca meio-termo).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Truque da proposição</div><p>Pergunte: "dá pra responder 'isso é verdade' ou 'isso é mentira'?" Se sim, é proposição. Perguntas, ordens e exclamações nunca passam nesse teste.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete da validade</div><p>Validade = "SE as premissas forem verdadeiras, a conclusão TEM que ser verdadeira". Não interessa se as premissas são verdadeiras de fato — só interessa a relação lógica entre elas.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Palavras-chave de premissa/conclusão</div><p>"Pois/porque/já que" → premissa vem depois. "Logo/portanto/assim" → conclusão vem depois.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Proposição = sentença declarativa com valor V ou F, nunca ambos, nunca nenhum.</li>
+            <li>Perguntas, ordens, exclamações e paradoxos NÃO são proposições.</li>
+            <li>3 princípios: identidade, não contradição, terceiro excluído.</li>
+            <li>Argumento = premissas + conclusão, ligados por relação de sustentação lógica.</li>
+            <li>Validade = propriedade da ESTRUTURA; verdade material = propriedade do CONTEÚDO.</li>
+            <li>Um argumento pode ser válido com premissas falsas; pode ser inválido com premissas e conclusão verdadeiras.</li>
+            <li>Raciocínio dedutivo garante certeza (se premissas verdadeiras); indutivo e por analogia geram apenas probabilidade.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS/TÉCNICAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e técnicas de resolução</h2></div>
+        <div class="card">
+          <div class="box info"><div class="box-title">ℹ Observação</div><p>Este tópico introdutório não envolve fórmulas de cálculo. Apresentamos o <b>protocolo de análise de argumentos</b>, técnica central deste tópico.</p></div>
+          <table>
+            <thead><tr><th>Passo</th><th>Ação</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Identifique cada proposição do texto — cada afirmação testável como V ou F.</td></tr>
+              <tr><td>2</td><td>Localize a conclusão, geralmente sinalizada por "logo", "portanto", "assim".</td></tr>
+              <tr><td>3</td><td>Classifique as demais proposições como premissas.</td></tr>
+              <tr><td>4</td><td>Pergunte: SE as premissas forem verdadeiras, a conclusão TEM que ser verdadeira?</td></tr>
+              <tr><td>5</td><td>Se sim → argumento válido (independentemente de as premissas serem verdadeiras de fato).</td></tr>
+              <tr><td>6</td><td>Se não → argumento inválido, mesmo que premissas e conclusão sejam verdadeiras isoladamente.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Proposição x não-proposição</h3>
+          <table>
+            <thead><tr><th>É proposição</th><th>Não é proposição</th></tr></thead>
+            <tbody>
+              <tr><td>Frases declarativas (afirmativas/negativas)</td><td>Perguntas, ordens, exclamações</td></tr>
+              <tr><td>Valor V ou F determinável</td><td>Paradoxos autorreferentes; frases com termo vago sem contexto</td></tr>
+            </tbody>
+          </table>
+          <h3>Validade x verdade material</h3>
+          <table>
+            <thead><tr><th>Validade</th><th>Verdade material</th></tr></thead>
+            <tbody>
+              <tr><td>Propriedade da estrutura do argumento</td><td>Propriedade do conteúdo das premissas</td></tr>
+              <tr><td>Independe de as premissas serem verdadeiras de fato</td><td>Depende de correspondência com a realidade</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Por seu forte vínculo com formação em direito e economia, a FGV costuma contextualizar questões de estruturas lógicas em situações jurídicas ou administrativas — normas, regulamentos e decisões institucionais — em vez de exemplos puramente abstratos.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>Os três princípios fundamentais da lógica clássica (identidade, não contradição, terceiro excluído) foram formalizados por Aristóteles, no século IV a.C., na obra <i>Metafísica</i>, e permanecem a base da lógica bivalente ensinada até hoje.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>Existem lógicas não clássicas (como a lógica paraconsistente e a lógica difusa) que relaxam o princípio do terceiro excluído ou da não contradição — mas essas não são cobradas em concursos, que trabalham exclusivamente com a lógica clássica bivalente.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Lógica de argumentação (Tópico 2)</td><td>Aprofunda os tipos de raciocínio (dedutivo, indutivo, analogia) introduzidos aqui</td></tr>
+              <tr><td>Lógica sentencial (Tópico 3)</td><td>Formaliza simbolicamente as proposições e conectivos vistos de forma introdutória aqui</td></tr>
+              <tr><td>Lógica de primeira ordem (Tópico 4)</td><td>Amplia a análise de proposições para incluir quantificadores e predicados</td></tr>
+              <tr><td>Compreensão e interpretação de textos (Português)</td><td>Identificar premissas e conclusão em um texto usa a mesma habilidade de leitura atenta</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar a diferença entre validade e verdade material com os exemplos dados.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, identificando por escrito premissas e conclusão de cada argumento.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para Lógica de Argumentação (Tópico 2).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ALENCAR FILHO, Edgard de. <i>Iniciação à Lógica Matemática</i>. São Paulo: Nobel.</li>
+            <li>COPI, Irving M.; COHEN, Carl. <i>Introdução à Lógica</i>. São Paulo: Mestre Jou.</li>
+            <li>MORTARI, Cezar A. <i>Introdução à Lógica</i>. São Paulo: Editora Unesp.</li>
+            <li>SILVA, Jônatas Zampa. <i>Raciocínio Lógico Comentado</i>. São Paulo: Método.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Raciocínio Lógico · Tópico 01/05</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_rlog_t01";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"O que é uma proposição, em lógica?", a:"Toda sentença declarativa à qual se pode atribuir um único valor de verdade: verdadeiro ou falso."},
+    {q:"Por que perguntas e ordens não são proposições?", a:"Porque não podem ser classificadas como verdadeiras ou falsas."},
+    {q:"O que é o princípio da identidade?", a:"Toda proposição é idêntica a si mesma (A é A)."},
+    {q:"O que é o princípio da não contradição?", a:"Uma proposição não pode ser verdadeira e falsa ao mesmo tempo, no mesmo sentido."},
+    {q:"O que é o princípio do terceiro excluído?", a:"Toda proposição é verdadeira ou falsa; não existe uma terceira possibilidade na lógica clássica."},
+    {q:"O que são premissas em um argumento?", a:"Afirmações tomadas como ponto de partida, que sustentam a conclusão."},
+    {q:"O que é a conclusão de um argumento?", a:"A afirmação que se pretende demonstrar a partir das premissas."},
+    {q:"Cite duas palavras-chave que costumam sinalizar uma conclusão.", a:"'Logo' e 'portanto' (também 'assim', 'por conseguinte')."},
+    {q:"Cite duas palavras-chave que costumam sinalizar uma premissa.", a:"'Pois' e 'porque' (também 'já que', 'visto que')."},
+    {q:"O que significa dizer que um argumento é válido?", a:"Que, SE as premissas forem verdadeiras, a conclusão necessariamente também será."},
+    {q:"O que é verdade material?", a:"Propriedade do conteúdo das premissas — se elas correspondem de fato aos fatos do mundo real."},
+    {q:"Um argumento pode ser válido mesmo com premissas falsas?", a:"Sim — a validade depende da estrutura lógica, não da verdade de fato das premissas."},
+    {q:"Um argumento pode ser inválido mesmo com premissas e conclusão verdadeiras?", a:"Sim — se a conclusão não decorrer logicamente da estrutura das premissas, o argumento é inválido, mesmo que tudo seja verdadeiro isoladamente."},
+    {q:"O que caracteriza o raciocínio dedutivo?", a:"Se as premissas são verdadeiras, a conclusão é necessariamente verdadeira; parte do geral para o específico."},
+    {q:"O que caracteriza o raciocínio indutivo?", a:"A conclusão é apenas provável, não certa, mesmo com premissas verdadeiras; parte do específico para o geral."},
+    {q:"O que caracteriza o raciocínio por analogia?", a:"Conclui-se por semelhança entre casos, sem garantia lógica de certeza."},
+    {q:"Uma frase como 'Ele é alto', sem contexto, é uma proposição bem-formada?", a:"Não — o pronome 'ele' não tem referência clara, tornando o valor de verdade indeterminável sem contexto adicional."},
+    {q:"O que é um paradoxo autorreferente, como 'Esta frase é falsa'?", a:"Uma frase que não pode receber um único valor de verdade consistente, não sendo considerada proposição bem-formada."},
+    {q:"Quem formalizou os três princípios fundamentais da lógica clássica?", a:"Aristóteles, no século IV a.C., na obra Metafísica."},
+    {q:"A lógica cobrada em concursos costuma ser clássica (bivalente) ou não clássica?", a:"Clássica bivalente — lógicas não clássicas (paraconsistente, difusa) não são objeto de concursos."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Proposição", texto:"—", enun:"Assinale a alternativa que apresenta uma proposição, segundo a lógica clássica:", alts:["Feche a porta, por favor.","Que horas são?","O relatório foi entregue ontem.","Que dia maravilhoso!","Ele é muito competente (sem contexto)."], correta:2, coment:"'O relatório foi entregue ontem' é uma sentença declarativa que pode ser julgada verdadeira ou falsa — é uma proposição. As demais são ordem, pergunta, exclamação e frase com pronome sem referência clara."},
+    {tema:"Princípios da lógica", texto:"—", enun:"O princípio segundo o qual uma proposição não pode ser verdadeira e falsa ao mesmo tempo é o princípio:", alts:["Da identidade","Da não contradição","Do terceiro excluído","Da bivalência absoluta (não é um dos três princípios clássicos)","Da equivalência lógica"], correta:1, coment:"O princípio da não contradição estabelece exatamente essa impossibilidade — uma proposição não pode ser V e F simultaneamente, no mesmo sentido."},
+    {tema:"Validade x verdade", texto:"“Todo peixe voa. Todo animal que voa é um pássaro. Logo, todo peixe é um pássaro.”", enun:"Sobre esse argumento, é correto afirmar que:", alts:["É inválido, pois as premissas são falsas.","É válido, pois a conclusão decorre logicamente das premissas, independentemente de elas serem verdadeiras no mundo real.","É válido apenas se as premissas forem verdadeiras de fato.","É inválido, pois a conclusão é falsa.","Não é possível avaliar a validade sem saber se peixes realmente voam."], correta:1, coment:"A validade depende apenas da estrutura lógica: SE as premissas fossem verdadeiras, a conclusão teria que ser verdadeira — e de fato decorre logicamente delas, mesmo sendo as premissas falsas no mundo real."},
+    {tema:"Estrutura do argumento", texto:"“Como o orçamento foi aprovado, o projeto poderá ser iniciado no próximo mês.”", enun:"Nesse trecho, a conclusão é:", alts:["O orçamento foi aprovado.","O projeto poderá ser iniciado no próximo mês.","Como o orçamento (fragmento incompleto).","Não há conclusão explícita nesse trecho.","Ambas as afirmações são premissas."], correta:1, coment:"'Como' sinaliza a premissa ('o orçamento foi aprovado'); a oração seguinte apresenta a conclusão decorrente dela ('o projeto poderá ser iniciado')."},
+    {tema:"Não-proposições", texto:"—", enun:"Assinale a alternativa que NÃO representa uma proposição:", alts:["A empresa registrou lucro no último trimestre.","2 + 2 = 5.","Qual é o prazo para entrega do relatório?","Nenhum funcionário foi demitido este ano.","O Brasil é um país da América do Sul."], correta:2, coment:"'Qual é o prazo para entrega do relatório?' é uma pergunta (frase interrogativa), não podendo ser classificada como verdadeira ou falsa — não é proposição. As demais são todas sentenças declarativas, mesmo que falsas (como '2+2=5')."},
+    {tema:"Princípio do terceiro excluído", texto:"—", enun:"O princípio do terceiro excluído estabelece que:", alts:["Toda proposição pode ser parcialmente verdadeira.","Toda proposição é verdadeira ou falsa, não havendo uma terceira possibilidade.","Existem proposições sem valor de verdade definido.","Uma proposição pode ser verdadeira e falsa ao mesmo tempo.","Apenas proposições matemáticas seguem esse princípio."], correta:1, coment:"O terceiro excluído afirma que toda proposição é V ou F, sem uma terceira opção — é um dos três princípios fundamentais da lógica clássica bivalente."},
+    {tema:"Argumento inválido com conteúdo verdadeiro", texto:"“Todos os servidores públicos são brasileiros. João é brasileiro. Logo, João é servidor público.”", enun:"Sobre esse argumento, é correto afirmar que:", alts:["É válido, pois todas as afirmações podem ser verdadeiras.","É inválido, pois a conclusão não decorre necessariamente das premissas, mesmo que todas sejam verdadeiras isoladamente.","É válido, pois João realmente pode ser servidor público.","É inválido apenas porque a primeira premissa é falsa.","Não é possível avaliar sem saber a profissão real de João."], correta:1, coment:"Mesmo que as premissas e a conclusão sejam individualmente verdadeiras, a estrutura do argumento é inválida: ser brasileiro não implica ser servidor público — é uma falácia clássica de afirmação do consequente."},
+    {tema:"Premissas e conclusão", texto:"“Visto que a equipe cumpriu todas as metas do trimestre, receberá a bonificação prevista em contrato.”", enun:"Nesse trecho, a premissa é:", alts:["Receberá a bonificação prevista em contrato.","A equipe cumpriu todas as metas do trimestre.","Visto que a equipe (fragmento incompleto).","Não há premissa explícita.","Ambas as afirmações são conclusões."], correta:1, coment:"'Visto que' sinaliza a premissa ('a equipe cumpriu todas as metas'), da qual decorre a conclusão ('receberá a bonificação')."},
+    {tema:"Raciocínio indutivo", texto:"—", enun:"Assinale a alternativa que exemplifica raciocínio indutivo:", alts:["Todo número par é divisível por 2; 8 é par; logo, 8 é divisível por 2.","Os relatórios analisados nos últimos cinco anos sempre apresentaram esse padrão; logo, esse padrão deve se repetir este ano.","Se chove, a rua fica molhada; a rua está molhada; logo, choveu (falácia).","A é B; B é C; logo, A é C.","Todo servidor deve seguir o código de ética; Maria é servidora; logo, Maria deve seguir o código de ética."], correta:1, coment:"A generalização a partir de casos observados (padrão dos últimos cinco anos) para uma conclusão provável sobre o futuro é típica do raciocínio indutivo, que não garante certeza absoluta."},
+    {tema:"Validade estrutural", texto:"—", enun:"Um argumento é considerado válido quando:", alts:["Suas premissas são obrigatoriamente verdadeiras.","Sua conclusão é obrigatoriamente verdadeira, independentemente das premissas.","Se as premissas forem verdadeiras, a conclusão necessariamente também será.","Todas as proposições envolvidas são simples, sem conectivos.","O argumento é aceito pela maioria das pessoas."], correta:2, coment:"A definição correta de validade é estrutural: a relação entre premissas e conclusão garante que, SE as premissas forem verdadeiras, a conclusão TEM que ser verdadeira — independentemente de sua verdade de fato."},
+    {tema:"Frases não proposicionais", text2:"", texto:"—", enun:"Assinale a alternativa que contém uma frase que NÃO pode ser considerada proposição bem-formada, mesmo sendo gramaticalmente completa:", alts:["O relatório contém 40 páginas.","Ela é muito eficiente (sem indicação de quem é 'ela').","A reunião foi marcada para as 10h.","Nenhum documento foi extraviado.","O orçamento foi aprovado por unanimidade."], correta:1, coment:"'Ela é muito eficiente', sem indicação clara de a quem 'ela' se refere, não tem valor de verdade determinável no contexto dado — não é proposição logicamente bem-formada, apesar de gramaticalmente completa."},
+    {tema:"Aplicação combinada", texto:"“Se o sistema apresentar falha crítica, a equipe de TI será acionada imediatamente. O sistema apresentou falha crítica. Logo, a equipe de TI foi acionada imediatamente.”", enun:"Esse argumento é:", alts:["Inválido, pois a primeira premissa é uma suposição.","Válido, pois a conclusão decorre logicamente das duas premissas.","Inválido, pois não se sabe se a equipe realmente foi acionada.","Válido apenas se o sistema realmente tiver apresentado falha.","Não é possível classificar sem mais informações."], correta:1, coment:"A estrutura segue o padrão válido do modus ponens (se P, então Q; P; logo, Q) — a conclusão decorre necessariamente das premissas apresentadas."},
+    {tema:"Princípio da identidade", texto:"—", enun:"O princípio da identidade estabelece que:", alts:["Toda proposição é idêntica a si mesma.","Duas proposições diferentes podem ter o mesmo valor de verdade.","Toda proposição tem um valor de verdade oposto ao seu antônimo.","Proposições idênticas sempre têm valores de verdade opostos.","A identidade só se aplica a proposições matemáticas."], correta:0, coment:"O princípio da identidade afirma simplesmente que toda proposição é idêntica a si mesma (A é A) — base lógica elementar, mas frequentemente cobrada em sua formulação exata."},
+    {tema:"Reconhecimento de argumento", texto:"“A economia global enfrenta desafios crescentes.”", enun:"Essa frase isolada, sem mais contexto, constitui:", alts:["Um argumento completo, com premissa e conclusão.","Apenas uma proposição isolada, sem estrutura de argumento.","Uma pergunta retórica.","Uma ordem disfarçada de afirmação.","Um paradoxo lógico."], correta:1, coment:"Trata-se de uma única proposição (afirmação testável como V ou F), mas não há premissa e conclusão relacionadas — não constitui um argumento completo, apenas uma proposição isolada."},
+    {tema:"Falácia lógica", texto:"“Se o relatório for aprovado, o projeto avançará. O projeto avançou. Logo, o relatório foi aprovado.”", enun:"Esse argumento é:", alts:["Válido, pois segue a estrutura do modus ponens.","Inválido — trata-se da falácia de afirmação do consequente.","Válido, pois a conclusão é plausível.","Inválido apenas se o relatório realmente não tiver sido aprovado.","Não é possível avaliar sem mais dados."], correta:1, coment:"O projeto pode ter avançado por outros motivos, não necessariamente pela aprovação do relatório — essa é a clássica falácia de afirmação do consequente, tornando o argumento inválido mesmo que pareça plausível."},
+    {tema:"Estrutura lógica em texto institucional", texto:"“Dado que o setor não atingiu a meta trimestral, a diretoria decidiu revisar o plano de ação.”", enun:"Nesse trecho, 'dado que' sinaliza:", alts:["A conclusão do argumento.","A premissa do argumento.","Uma pergunta retórica.","Um paradoxo lógico.","Nenhuma das anteriores — não há estrutura de argumento nesse trecho."], correta:1, coment:"'Dado que' é expressão típica de introdução de premissa, análoga a 'porque' e 'visto que' — o restante da frase apresenta a conclusão decorrente dessa premissa."},
+    {tema:"Terceiro excluído aplicado", texto:"—", enun:"Segundo o princípio do terceiro excluído, a proposição 'O relatório está correto' pode ser:", alts:["Parcialmente verdadeira e parcialmente falsa.","Apenas verdadeira, nunca falsa.","Verdadeira ou falsa, sem uma terceira opção.","Nem verdadeira nem falsa, indefinidamente.","Verdadeira em um contexto e neutra em outro."], correta:2, coment:"O terceiro excluído garante que toda proposição bem-formada é verdadeira ou falsa, sem admitir uma terceira possibilidade ou situação de indefinição permanente."},
+    {tema:"Raciocínio por analogia", texto:"—", enun:"Assinale a alternativa que exemplifica raciocínio por analogia:", alts:["Todo mamífero tem sangue quente; o cão é mamífero; logo, o cão tem sangue quente.","A estratégia funcionou na filial A, que tem características semelhantes à filial B; logo, deve funcionar também na filial B.","Se P, então Q; não Q; logo, não P.","Todos os documentos analisados até agora estavam corretos; logo, todos os documentos estão corretos.","P e Q são ambos verdadeiros; logo, P é verdadeiro."], correta:1, coment:"A conclusão baseada na semelhança entre dois casos (filial A e filial B) é característica do raciocínio por analogia, que não garante certeza lógica, apenas plausibilidade."},
+    {tema:"Reconhecimento de premissa e conclusão avançado", texto:"“O sistema de reconciliação automática reduziu o tempo de fechamento contábil; por conseguinte, a equipe pôde direcionar esforços a outras atividades estratégicas.”", enun:"A conclusão do trecho é:", alts:["O sistema de reconciliação automática reduziu o tempo de fechamento contábil.","A equipe pôde direcionar esforços a outras atividades estratégicas.","Por conseguinte (conector isolado, não é uma proposição).","Não há conclusão nesse trecho.","Ambas as afirmações são premissas de igual peso."], correta:1, coment:"'Por conseguinte' sinaliza a conclusão, que decorre da premissa anterior (redução do tempo de fechamento contábil pelo sistema)."},
+    {tema:"Aplicação avançada de validade", texto:"“Nenhum servidor foi promovido sem avaliação de desempenho. Carlos foi promovido. Logo, Carlos passou por avaliação de desempenho.”", enun:"Sobre esse argumento, é correto afirmar que:", alts:["É inválido, pois a primeira premissa é uma generalização.","É válido, pois a conclusão decorre logicamente das premissas apresentadas.","É inválido, pois não sabemos se Carlos realmente foi promovido.","É válido apenas se todos os servidores tiverem sido avaliados.","Não é possível avaliar a validade sem dados externos sobre Carlos."], correta:1, coment:"A estrutura é válida: se 'nenhum servidor foi promovido sem avaliação' (premissa 1) e 'Carlos foi promovido' (premissa 2), a conclusão de que ele passou por avaliação decorre necessariamente — segue o padrão lógico correto (modus tollens invertido em contexto de negação universal)."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Assinale a alternativa que é uma proposição:", alts:["Feche a janela.","O documento foi assinado ontem.","Que horas são?","Que susto!","Ele chegou atrasado (sem contexto)."], correta:1},
+    {d:"Fácil", texto:"—", enun:"Assinale a alternativa que NÃO é proposição:", alts:["O Brasil é um país.","2+2=4.","Vá embora agora!","A empresa lucrou este ano.","Nenhum funcionário faltou."], correta:2},
+    {d:"Fácil", texto:"—", enun:"O princípio da não contradição afirma que:", alts:["Toda proposição é idêntica a si mesma.","Uma proposição não pode ser V e F ao mesmo tempo.","Toda proposição é V ou F, sem terceira opção.","Proposições podem ser parcialmente verdadeiras.","Nenhuma proposição pode ser falsa."], correta:1},
+    {d:"Fácil", texto:"—", enun:"O princípio do terceiro excluído afirma que:", alts:["Toda proposição é idêntica a si mesma.","Uma proposição não pode ser V e F ao mesmo tempo.","Toda proposição é V ou F, sem terceira opção.","Proposições podem ser indefinidas.","Nenhuma proposição pode ser verdadeira."], correta:2},
+    {d:"Fácil", texto:"“Logo, o projeto será aprovado.”", enun:"A palavra 'logo' sinaliza:", alts:["Uma premissa","Uma conclusão","Uma pergunta","Uma ordem","Um paradoxo"], correta:1},
+    {d:"Fácil", texto:"“Porque o orçamento foi revisado.”", enun:"A palavra 'porque' sinaliza:", alts:["Uma conclusão","Uma premissa","Uma pergunta","Uma exclamação","Um paradoxo"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Validade é uma propriedade:", alts:["Do conteúdo das premissas","Da estrutura do argumento","Apenas da conclusão isolada","Do autor do argumento","Do tempo verbal usado"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Verdade material é uma propriedade:", alts:["Da estrutura do argumento","Do conteúdo das premissas","Apenas da conclusão isolada","Da forma gramatical","Do conectivo lógico usado"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Um argumento válido pode ter premissas falsas?", alts:["Não, nunca","Sim, a validade não depende da verdade de fato das premissas","Apenas em lógica não clássica","Apenas se a conclusão for falsa também","Apenas em argumentos matemáticos"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Quem formalizou os três princípios fundamentais da lógica clássica?", alts:["Platão","Aristóteles","Sócrates","Descartes","Euclides"], correta:1},
+    {d:"Média", texto:"“Todo peixe voa. Todo animal que voa é ave. Logo, todo peixe é ave.”", enun:"Esse argumento é:", alts:["Inválido, pois as premissas são falsas","Válido, pois a conclusão decorre logicamente das premissas","Válido apenas se peixes realmente voarem","Inválido, pois a conclusão é falsa no mundo real","Não é possível avaliar"], correta:1},
+    {d:"Média", texto:"“Todos os servidores são brasileiros. João é brasileiro. Logo, João é servidor.”", enun:"Esse argumento é:", alts:["Válido","Inválido — a conclusão não decorre necessariamente das premissas","Válido, pois João realmente é servidor","Inválido apenas porque a premissa é falsa","Não é possível avaliar sem mais dados"], correta:1},
+    {d:"Média", texto:"“Se chove, a rua fica molhada. A rua está molhada. Logo, choveu.”", enun:"Esse argumento comete a falácia de:", alts:["Negação do antecedente","Afirmação do consequente","Modus ponens (argumento válido)","Modus tollens (argumento válido)","Nenhuma falácia — o argumento é válido"], correta:1},
+    {d:"Média", texto:"“Se o relatório for aprovado, o projeto avança. O relatório não foi aprovado. Logo, o projeto não avança.”", enun:"Esse argumento comete a falácia de:", alts:["Afirmação do consequente","Negação do antecedente","Modus ponens (válido)","Modus tollens (válido)","Nenhuma falácia"], correta:1},
+    {d:"Média", texto:"“Se P, então Q. P é verdadeiro. Logo, Q é verdadeiro.”", enun:"Essa estrutura corresponde a:", alts:["Modus tollens","Modus ponens","Falácia da afirmação do consequente","Falácia da negação do antecedente","Silogismo disjuntivo"], correta:1},
+    {d:"Média", texto:"“Se P, então Q. Q é falso. Logo, P é falso.”", enun:"Essa estrutura corresponde a:", alts:["Modus ponens","Modus tollens","Falácia da afirmação do consequente","Falácia da negação do antecedente","Silogismo disjuntivo"], correta:1},
+    {d:"Média", texto:"“Ela é muito competente.”", enun:"Essa frase, isolada e sem contexto, é considerada:", alts:["Proposição bem-formada","Não plenamente proposicional, por falta de referência clara ao pronome","Uma pergunta disfarçada","Um paradoxo lógico","Uma ordem implícita"], correta:1},
+    {d:"Média", texto:"“Dado que o orçamento foi cortado, a equipe revisou as prioridades.”", enun:"'Dado que' sinaliza:", alts:["A conclusão","A premissa","Uma pergunta retórica","Um paradoxo","Nenhuma estrutura de argumento"], correta:1},
+    {d:"Média", texto:"“Os cinco relatórios analisados apresentaram o mesmo padrão; logo, esse padrão deve se repetir em todos os relatórios futuros.”", enun:"Esse raciocínio é:", alts:["Dedutivo","Indutivo","Por analogia","Não é um raciocínio","Circular"], correta:1},
+    {d:"Média", texto:"“A estratégia funcionou na filial A, semelhante à filial B; logo, deve funcionar na filial B.”", enun:"Esse raciocínio é:", alts:["Dedutivo","Indutivo","Por analogia","Não é um raciocínio","Circular"], correta:2},
+    {d:"Difícil", texto:"“Nenhum servidor foi promovido sem avaliação. Carlos foi promovido. Logo, Carlos passou por avaliação.”", enun:"Esse argumento é:", alts:["Inválido","Válido — a conclusão decorre logicamente das premissas","Inválido, pois não sabemos se Carlos foi promovido","Válido apenas se todos forem avaliados igualmente","Não é possível avaliar"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um argumento pode ser inválido mesmo que premissas e conclusão sejam, isoladamente, todas verdadeiras?", alts:["Não, isso é logicamente impossível","Sim, se a conclusão não decorrer necessariamente das premissas","Apenas em lógica não clássica","Apenas se houver mais de duas premissas","Apenas em argumentos matemáticos"], correta:1},
+    {d:"Difícil", texto:"“O sistema apresentou falha crítica; por conseguinte, a equipe de TI foi imediatamente acionada, conforme protocolo interno vigente desde 2023.”", enun:"A conclusão desse trecho é:", alts:["O sistema apresentou falha crítica.","A equipe de TI foi imediatamente acionada.","O protocolo vigente desde 2023.","Não há conclusão nesse trecho.","Ambas as afirmações são premissas de igual peso."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente a relação entre validade e verdade material:", alts:["São sinônimos e podem ser usados indistintamente.","Validade trata da estrutura; verdade material trata do conteúdo — são independentes entre si.","Um argumento só é válido se todas as premissas forem verdadeiras.","Verdade material garante automaticamente a validade do argumento.","Validade é sempre mais importante que verdade material em qualquer contexto."], correta:1, },
+    {d:"Difícil", texto:"“Se o candidato for aprovado, ele assumirá o cargo em 30 dias. O candidato assumiu o cargo em 30 dias. Logo, ele foi aprovado.”", enun:"Esse argumento comete a falácia de:", alts:["Negação do antecedente","Afirmação do consequente","Modus ponens (válido)","Modus tollens (válido)","Nenhuma falácia"], correta:1},
+    {d:"Difícil", texto:"“Todo relatório revisado pela auditoria interna recebe selo de conformidade. Este relatório recebeu o selo de conformidade. Logo, foi revisado pela auditoria interna.”", enun:"Esse argumento é:", alts:["Válido, pois segue modus ponens","Inválido — comete a falácia de afirmação do consequente","Válido, pois o selo garante a revisão","Inválido apenas se o relatório não existir","Não é possível avaliar sem mais dados"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa correta sobre paradoxos autorreferentes, como 'Esta frase é falsa':", alts:["São proposições verdadeiras por definição.","São proposições falsas por definição.","Não podem receber um único valor de verdade consistente, não sendo proposições bem-formadas.","São sempre classificados como premissas.","São sempre classificados como conclusões."], correta:2},
+    {d:"Difícil", texto:"“Considerando que o relatório trimestral apontou queda na receita, a diretoria decidiu revisar as metas para o próximo período, buscando maior alinhamento com a realidade do mercado.”", enun:"A premissa central desse trecho é:", alts:["A diretoria decidiu revisar as metas.","O relatório trimestral apontou queda na receita.","O alinhamento com a realidade do mercado.","O próximo período.","Não há premissa identificável nesse trecho."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor expressa a diferença entre raciocínio dedutivo e indutivo:", alts:["Ambos garantem certeza absoluta da conclusão.","O dedutivo garante certeza se as premissas forem verdadeiras; o indutivo gera apenas probabilidade, mesmo com premissas verdadeiras.","O indutivo garante certeza; o dedutivo gera apenas probabilidade.","Não há diferença relevante entre os dois tipos.","Apenas o raciocínio indutivo é usado em concursos."], correta:1},
+    {d:"Difícil", texto:"“Reduzir a equipe para economizar recursos pode, paradoxalmente, aumentar os custos totais, caso a queda de produtividade gere retrabalho significativo.”", enun:"Esse trecho estrutura-se logicamente como:", alts:["Uma proposição isolada, sem relação condicional.","Uma estrutura condicional (uma consequência possível, dada uma condição).","Uma ordem direta.","Um paradoxo autorreferente.","Uma pergunta retórica disfarçada de afirmação."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Diferenciar proposição de frases não proposicionais (perguntas, ordens, exclamações, paradoxos)",
+    "Reconhecer os três princípios fundamentais: identidade, não contradição, terceiro excluído",
+    "Identificar premissas e conclusão em um texto, usando palavras-chave",
+    "Diferenciar validade (estrutura) de verdade material (conteúdo)",
+    "Reconhecer que um argumento pode ser válido com premissas falsas",
+    "Reconhecer que um argumento pode ser inválido mesmo com conteúdo verdadeiro",
+    "Diferenciar raciocínio dedutivo, indutivo e por analogia",
+    "Identificar falácias comuns (afirmação do consequente, negação do antecedente)",
+    "Reconhecer modus ponens e modus tollens como estruturas válidas",
+    "Resolver questões que pedem avaliação de validade de argumentos textuais",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Confundir validade (estrutura) com verdade material (conteúdo), julgando argumento inválido só por premissa falsa.",
+    "Classificar como proposição frases interrogativas, imperativas ou exclamativas.",
+    "Não perceber que frases com pronome sem referência clara não são proposições bem-formadas.",
+    "Achar que 'conclusão verdadeira' garante automaticamente que o argumento é válido.",
+    "Confundir modus ponens (válido) com a falácia de afirmação do consequente.",
+    "Confundir modus tollens (válido) com a falácia de negação do antecedente.",
+    "Não identificar corretamente premissa e conclusão em textos mais longos e institucionais.",
+    "Ignorar palavras-chave como 'logo', 'portanto', 'pois', 'porque' na hora de mapear o argumento.",
+    "Achar que todo raciocínio busca certeza absoluta, ignorando a natureza probabilística do indutivo e da analogia.",
+    "Confundir raciocínio dedutivo com indutivo, trocando as definições.",
+    "Não perceber quando um texto apresenta apenas uma proposição isolada, sem estrutura de argumento completo.",
+    "Julgar paradoxos autorreferentes como proposições comuns.",
+    "Esquecer que o princípio do terceiro excluído não admite 'meio-termo' na lógica clássica.",
+    "Confundir o princípio da identidade com o da não contradição.",
+    "Assumir que premissas precisam ser plausíveis no mundo real para o argumento ser considerado válido.",
+    "Não aplicar o teste 'SE as premissas forem verdadeiras, a conclusão TEM que ser verdadeira?' antes de responder.",
+    "Ignorar que a ordem das informações no texto nem sempre segue a ordem lógica (conclusão pode vir antes das premissas).",
+    "Confundir estrutura lógica com opinião pessoal sobre o conteúdo do argumento.",
+    "Não reconhecer estruturas condicionais implícitas em textos sem a palavra 'se' explícita.",
+    "Tentar resolver questões de estrutura lógica sem grifar mentalmente premissas e conclusão antes de responder.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Proposição","Sentença declarativa à qual se pode atribuir um único valor de verdade: verdadeiro ou falso."],
+    ["Princípio da identidade","Toda proposição é idêntica a si mesma (A é A)."],
+    ["Princípio da não contradição","Uma proposição não pode ser verdadeira e falsa ao mesmo tempo, no mesmo sentido."],
+    ["Princípio do terceiro excluído","Toda proposição é verdadeira ou falsa; não há uma terceira possibilidade."],
+    ["Argumento","Conjunto de proposições em que uma (conclusão) é apresentada como decorrente das demais (premissas)."],
+    ["Premissa","Afirmação tomada como ponto de partida de um argumento."],
+    ["Conclusão","Afirmação que se pretende demonstrar a partir das premissas de um argumento."],
+    ["Validade","Propriedade da estrutura de um argumento: se as premissas forem verdadeiras, a conclusão necessariamente também será."],
+    ["Verdade material","Propriedade do conteúdo de uma proposição: correspondência com os fatos do mundo real."],
+    ["Raciocínio dedutivo","Tipo de raciocínio em que a conclusão é necessariamente verdadeira se as premissas forem verdadeiras."],
+    ["Raciocínio indutivo","Tipo de raciocínio em que a conclusão é apenas provável, mesmo com premissas verdadeiras."],
+    ["Raciocínio por analogia","Tipo de raciocínio que conclui por semelhança entre casos, sem garantia lógica de certeza."],
+    ["Modus ponens","Estrutura de argumento válido: 'Se P, então Q; P; logo, Q'."],
+    ["Modus tollens","Estrutura de argumento válido: 'Se P, então Q; não Q; logo, não P'."],
+    ["Falácia","Erro de raciocínio que torna um argumento inválido, mesmo que possa parecer convincente."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

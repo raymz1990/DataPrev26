@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inteligência Artificial: Fundamentos e Aplicações | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Atualidades e Inteligência Artificial</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">02 - Inteligência Artificial: fundamentos e aplicações</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Tópicos relevantes e atuais.html">01 - Tópicos relevantes e atuais</option>
+    <option value="02 - Inteligência Artificial - fundamentos e aplicações.html" selected>02 - Inteligência Artificial: fundamentos e aplicações</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Inteligência Artificial: Fundamentos e Aplicações</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadros de referência</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Atualidades e Inteligência Artificial<br>Tópico 02 de 02<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Inteligência Artificial: Fundamentos e Aplicações</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Atualidades e Inteligência Artificial</b> &nbsp;›&nbsp; Tópico 02</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">7h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — conteúdo introdutório e conceitual</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio-alto — tema estratégico para a DATAPREV, empresa de TI</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender os <b>conceitos fundamentais de Inteligência Artificial</b> (IA), incluindo suas diferentes abordagens e níveis de capacidade.</li>
+            <li>Diferenciar <b>aprendizado supervisionado, não supervisionado e por reforço</b>, e reconhecer aplicações típicas de cada um.</li>
+            <li>Compreender a diferença entre <b>machine learning</b> e <b>deep learning</b>, e onde se situam as redes neurais.</li>
+            <li>Compreender os fundamentos de <b>modelos generativos</b> e <b>modelos de linguagem</b> (LLMs), incluindo o conceito de arquitetura Transformer.</li>
+            <li>Reconhecer os principais <b>riscos e desafios éticos</b> associados à IA: viés algorítmico, alucinação, explicabilidade, uso indevido.</li>
+            <li>Compreender os fundamentos de <b>governança de IA</b> aplicados ao setor público, incluindo o papel do Marco Legal da IA (PL 2338/2023).</li>
+            <li>Compreender os princípios de <b>privacidade em IA</b>, sua interseção com a LGPD e boas práticas de minimização de dados.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Inteligência Artificial (IA)</b> é a área da ciência da computação dedicada a criar sistemas capazes de executar tarefas que, historicamente, exigiam inteligência humana — reconhecimento de padrões, tomada de decisão, geração de linguagem e raciocínio. O <b>Machine Learning (aprendizado de máquina)</b> é o principal ramo prático da IA hoje, caracterizado por sistemas que "aprendem" padrões a partir de dados, em vez de seguir regras explicitamente programadas.</p>
+          <p>Os três grandes <b>paradigmas de aprendizado de máquina</b> são: <b>supervisionado</b> (o modelo aprende a partir de exemplos rotulados, com respostas corretas conhecidas), <b>não supervisionado</b> (o modelo encontra padrões e agrupamentos em dados sem rótulos) e <b>por reforço</b> (o modelo aprende por tentativa e erro, recebendo recompensas ou penalidades conforme suas ações).</p>
+          <p>O <b>Deep Learning (aprendizado profundo)</b> é um subcampo do machine learning baseado em <b>redes neurais artificiais</b> com múltiplas camadas, inspiradas — de forma simplificada — no funcionamento do cérebro humano. É a tecnologia por trás dos avanços mais recentes em visão computacional, reconhecimento de voz e, especialmente, <b>modelos de linguagem</b>.</p>
+          <p>Os <b>modelos generativos</b> são sistemas capazes de criar novo conteúdo (texto, imagem, áudio, código) a partir de padrões aprendidos em grandes volumes de dados. Os <b>modelos de linguagem</b> (Large Language Models, LLMs) são um tipo específico de modelo generativo, baseados na arquitetura <b>Transformer</b>, treinados para prever a próxima palavra de um texto e, com isso, desenvolver capacidade de compreensão e geração de linguagem natural.</p>
+          <p>O uso responsável de IA exige atenção a princípios de <b>ética, governança e privacidade</b>: a IA pode reproduzir ou amplificar <b>vieses</b> presentes nos dados de treinamento, pode gerar informações incorretas com aparência de certeza (<b>alucinação</b>), e frequentemente apresenta baixa <b>explicabilidade</b> (dificuldade de entender por que tomou determinada decisão) — desafios centrais para o uso de IA no setor público, onde decisões precisam ser transparentes e auditáveis.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Inteligência Artificial:<br>Fundamentos e Aplicações</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Conceitos básicos</h4><ul><li>IA / ML / Deep Learning</li><li>IA estreita x geral</li></ul></div>
+              <div class="mm-node"><h4>Aprendizado de máquina</h4><ul><li>Supervisionado</li><li>Não supervisionado</li><li>Por reforço</li></ul></div>
+              <div class="mm-node"><h4>Modelos generativos</h4><ul><li>Texto, imagem, áudio, código</li><li>Arquitetura Transformer</li></ul></div>
+              <div class="mm-node"><h4>Modelos de linguagem</h4><ul><li>LLMs</li><li>Prompt e contexto</li><li>Alucinação</li></ul></div>
+              <div class="mm-node"><h4>Ética e governança</h4><ul><li>Viés algorítmico</li><li>Explicabilidade</li><li>Marco Legal da IA</li></ul></div>
+              <div class="mm-node"><h4>Privacidade</h4><ul><li>Minimização de dados</li><li>Interseção com LGPD</li><li>Anonimização</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Conceitos fundamentais de Inteligência Artificial</h3>
+          <table>
+            <thead><tr><th>Conceito</th><th>Definição</th></tr></thead>
+            <tbody>
+              <tr><td>Inteligência Artificial (IA)</td><td>Área da computação voltada a criar sistemas capazes de executar tarefas que exigem capacidades cognitivas humanas (percepção, raciocínio, aprendizado, linguagem)</td></tr>
+              <tr><td>IA estreita (narrow AI)</td><td>Sistemas especializados em uma tarefa específica (ex.: reconhecimento facial, tradução) — toda IA em uso comercial hoje é desse tipo</td></tr>
+              <tr><td>IA geral (AGI)</td><td>Hipotética IA com capacidade cognitiva equivalente ou superior à humana em qualquer tarefa — ainda não existe, é objeto de pesquisa e debate</td></tr>
+              <tr><td>Algoritmo</td><td>Sequência finita de instruções para resolver um problema ou executar uma tarefa</td></tr>
+              <tr><td>Modelo</td><td>Representação matemática treinada a partir de dados, capaz de fazer previsões ou gerar saídas para novas entradas</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.2 Aprendizado de máquina: os três paradigmas</h3>
+          <table>
+            <thead><tr><th>Paradigma</th><th>Como funciona</th><th>Exemplo de aplicação</th></tr></thead>
+            <tbody>
+              <tr><td>Supervisionado</td><td>O modelo aprende a partir de exemplos rotulados (entrada + saída correta conhecida)</td><td>Classificar e-mails como spam ou não spam; prever inadimplência de clientes</td></tr>
+              <tr><td>Não supervisionado</td><td>O modelo identifica padrões e agrupamentos em dados sem rótulos prévios</td><td>Segmentação de clientes por comportamento; detecção de anomalias em transações</td></tr>
+              <tr><td>Por reforço</td><td>O modelo aprende por tentativa e erro, recebendo recompensas/penalidades conforme as ações tomadas</td><td>Sistemas que jogam jogos, otimização de rotas, ajuste fino de modelos de linguagem via feedback humano</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Não confundir aprendizado <b>não supervisionado</b> (sem rótulos, o modelo descobre padrões sozinho) com aprendizado <b>por reforço</b> (existe um sistema de recompensas guiando o aprendizado, mesmo sem rótulos explícitos) — são paradigmas distintos, frequentemente trocados em questões de múltipla escolha.</p>
+          </div>
+
+          <h3>4.3 Machine Learning x Deep Learning: a relação hierárquica</h3>
+          <p>É comum a confusão entre esses termos. A relação correta é de <b>inclusão hierárquica</b>: Inteligência Artificial é o campo mais amplo; Machine Learning é um subcampo da IA; Deep Learning é um subcampo do Machine Learning, baseado especificamente em redes neurais profundas.</p>
+          <div class="box info">
+            <div class="box-title">📘 Analogia para fixar</div>
+            <p>Pense em círculos concêntricos: o maior é IA (todo o campo); dentro dele, Machine Learning (a abordagem baseada em aprender com dados); dentro deste, Deep Learning (a abordagem específica baseada em redes neurais com múltiplas camadas).</p>
+          </div>
+
+          <h3>4.4 Modelos generativos e modelos de linguagem</h3>
+          <p>Um <b>modelo generativo</b> é treinado para aprender a distribuição estatística dos dados de treinamento e, a partir disso, <b>gerar novo conteúdo</b> plausível — texto, imagem, áudio, vídeo, código. Um <b>modelo de linguagem (Large Language Model, LLM)</b> é um tipo de modelo generativo especializado em texto, treinado para prever a próxima unidade textual (token) de uma sequência.</p>
+          <table>
+            <thead><tr><th>Elemento</th><th>Definição</th></tr></thead>
+            <tbody>
+              <tr><td>Transformer</td><td>Arquitetura de rede neural, introduzida em 2017, baseada em um mecanismo chamado "atenção" (attention), que permite ao modelo ponderar a relevância de diferentes partes do texto simultaneamente — base de praticamente todos os LLMs modernos</td></tr>
+              <tr><td>Token</td><td>Unidade mínima de processamento de texto usada pelo modelo (pode ser uma palavra, parte de uma palavra ou caractere)</td></tr>
+              <tr><td>Prompt</td><td>Instrução ou texto de entrada fornecido pelo usuário para orientar a resposta do modelo</td></tr>
+              <tr><td>Fine-tuning</td><td>Processo de ajuste adicional de um modelo pré-treinado para uma tarefa ou domínio específico</td></tr>
+              <tr><td>Alucinação</td><td>Geração, pelo modelo, de informação incorreta ou inventada, apresentada com aparência de certeza e coerência</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Um LLM não "sabe" fatos como um banco de dados — ele gera texto <b>estatisticamente plausível</b> com base em padrões aprendidos. Por isso, a <b>alucinação</b> não é um "bug" raro, mas uma consequência inerente ao funcionamento probabilístico do modelo, especialmente em temas fora do que foi bem representado nos dados de treinamento.</p>
+          </div>
+
+          <h3>4.5 Ética em Inteligência Artificial</h3>
+          <table>
+            <thead><tr><th>Desafio ético</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td>Viés algorítmico</td><td>Reprodução ou amplificação, pelo modelo, de preconceitos e desigualdades presentes nos dados de treinamento</td></tr>
+              <tr><td>Explicabilidade (XAI)</td><td>Capacidade de compreender e justificar por que um modelo tomou determinada decisão — modelos complexos (deep learning) tendem a ser menos explicáveis ("caixas-pretas")</td></tr>
+              <tr><td>Responsabilização (accountability)</td><td>Definição de quem responde legal e institucionalmente por decisões tomadas com apoio de IA</td></tr>
+              <tr><td>Uso indevido / deepfakes</td><td>Criação de conteúdo sintético enganoso (imagens, vídeos, áudios falsos) com potencial de desinformação e fraude</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Governança de IA no setor público brasileiro</h3>
+          <p>A <b>governança de IA</b> trata do conjunto de políticas, processos e estruturas institucionais que orientam o desenvolvimento e uso responsável de sistemas de IA. No contexto brasileiro, o principal instrumento em construção é o <b>Marco Legal da Inteligência Artificial (PL 2338/2023)</b>, já estudado no Tópico 1 desta disciplina, que propõe um modelo regulatório baseado em risco, com a ANPD como autoridade central.</p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Por que este tema é estratégico para a DATAPREV</div>
+            <p>Como empresa pública especializada em tecnologia da informação para a Previdência Social e áreas correlatas, a DATAPREV processa volumes massivos de dados sensíveis de cidadãos — o que torna governança de IA, ética algorítmica e privacidade temas diretamente relevantes à atuação institucional da empresa, e não apenas conhecimento genérico de cultura geral.</p>
+          </div>
+
+          <h3>4.7 Privacidade em IA e interseção com a LGPD</h3>
+          <p>Sistemas de IA frequentemente dependem de grandes volumes de dados para treinamento, o que gera tensão direta com princípios de proteção de dados pessoais, como os da <b>LGPD</b> (Lei nº 13.709/2018, estudada no Tópico 4 de Legislação).</p>
+          <table>
+            <thead><tr><th>Princípio de privacidade aplicado à IA</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td>Minimização de dados</td><td>Coletar e processar apenas os dados estritamente necessários ao propósito do sistema de IA</td></tr>
+              <tr><td>Anonimização/pseudonimização</td><td>Técnicas para reduzir a identificabilidade de indivíduos nos dados usados para treinar modelos</td></tr>
+              <tr><td>Consentimento e finalidade</td><td>Uso de dados pessoais em treinamento de IA deve respeitar a base legal e a finalidade original da coleta</td></tr>
+              <tr><td>Direito à explicação</td><td>Direito do titular de dados de solicitar revisão de decisões automatizadas que o afetem significativamente</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV cobra este tópico em nível <b>conceitual e introdutório</b>, sem exigir formação técnica em ciência de dados — o foco está em vocabulário correto, distinções conceituais (ML x Deep Learning, supervisionado x não supervisionado) e compreensão dos desafios éticos e regulatórios, com forte conexão ao contexto institucional da DATAPREV.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões de definição e diferenciação conceitual (ML x Deep Learning; tipos de aprendizado).</li>
+            <li>Questões sobre riscos éticos de IA aplicados a cenários institucionais (viés em sistemas de concessão de benefícios, por exemplo).</li>
+            <li>Questões que conectam IA com a LGPD e com o Marco Legal da IA.</li>
+            <li>Dificuldade média — o desafio está em vocabulário técnico específico, não em cálculo ou lógica complexa.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Distinção entre IA, Machine Learning e Deep Learning</td><td>Muito alta</td></tr>
+              <tr><td>Tipos de aprendizado de máquina (supervisionado, não supervisionado, por reforço)</td><td>Alta</td></tr>
+              <tr><td>Viés algorítmico e explicabilidade</td><td>Alta</td></tr>
+              <tr><td>Alucinação em modelos de linguagem</td><td>Média-alta</td></tr>
+              <tr><td>Interseção entre IA e LGPD</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Inverter a hierarquia IA → ML → Deep Learning (tratando-os como categorias equivalentes, não hierárquicas).</li>
+            <li>Confundir aprendizado não supervisionado com aprendizado por reforço.</li>
+            <li>Achar que "alucinação" é um erro raro e evitável, quando é uma característica estrutural dos modelos probabilísticos.</li>
+            <li>Confundir IA estreita (a única existente hoje) com IA geral (ainda hipotética).</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver uma questão sobre "tipo de IA", verifique se a alternativa menciona IA geral/superinteligência como algo já existente — isso é sempre incorreto no estado atual da tecnologia.</li>
+            <li>Ao ver "aprendizado sem rótulos", pense em não supervisionado; ao ver "recompensa/penalidade", pense em reforço.</li>
+            <li>Desconfie de alternativas que tratam a IA como infalível ou "neutra" — vieses e erros são temas centrais do debate ético.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Hierarquia IA → ML → Deep Learning</div><p>São círculos concêntricos, não categorias paralelas: todo Deep Learning é Machine Learning, e todo Machine Learning é IA — o inverso não é verdadeiro.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Mnemônico dos 3 aprendizados: R-S-N</div><p><b>R</b>eforço (recompensa/penalidade), <b>S</b>upervisionado (com rótulos/respostas certas), <b>N</b>ão supervisionado (sem rótulos, busca padrões).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra da alucinação</div><p>LLM gera texto estatisticamente plausível, não "recupera fatos de um banco de dados" — por isso, sempre pode alucinar, mesmo com boa reputação de precisão.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Conexão institucional</div><p>IA + dados pessoais + setor público = sempre pensar em LGPD (minimização, finalidade, consentimento) e no Marco Legal da IA (PL 2338/2023).</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>IA ⊃ Machine Learning ⊃ Deep Learning (hierarquia de inclusão, não categorias paralelas).</li>
+            <li>3 tipos de aprendizado: supervisionado (rótulos), não supervisionado (padrões, sem rótulos), por reforço (recompensa/penalidade).</li>
+            <li>Modelos generativos criam conteúdo novo; LLMs são modelos generativos de texto, baseados em Transformer.</li>
+            <li>Alucinação = geração de informação incorreta com aparência de certeza — característica estrutural, não bug raro.</li>
+            <li>Desafios éticos centrais: viés algorítmico, explicabilidade, responsabilização, uso indevido (deepfakes).</li>
+            <li>Governança de IA no Brasil: Marco Legal da IA (PL 2338/2023), com a ANPD como autoridade central prevista.</li>
+            <li>Privacidade em IA: minimização de dados, anonimização, consentimento, direito à explicação — interseção direta com a LGPD.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADROS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadros de referência rápida</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Termo</th><th>Definição resumida</th></tr></thead>
+            <tbody>
+              <tr><td>IA</td><td>Campo amplo de sistemas que simulam capacidades cognitivas</td></tr>
+              <tr><td>Machine Learning</td><td>Subcampo da IA — aprender padrões a partir de dados</td></tr>
+              <tr><td>Deep Learning</td><td>Subcampo do ML — redes neurais com múltiplas camadas</td></tr>
+              <tr><td>LLM</td><td>Modelo de linguagem de grande porte, baseado em Transformer</td></tr>
+              <tr><td>Alucinação</td><td>Geração de informação incorreta com aparência de certeza</td></tr>
+              <tr><td>Viés algorítmico</td><td>Reprodução/amplificação de preconceitos presentes nos dados</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Os três tipos de aprendizado de máquina</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Característica-chave</th></tr></thead>
+            <tbody>
+              <tr><td>Supervisionado</td><td>Usa dados rotulados (com resposta correta conhecida)</td></tr>
+              <tr><td>Não supervisionado</td><td>Busca padrões em dados sem rótulos</td></tr>
+              <tr><td>Por reforço</td><td>Aprende por recompensa/penalidade, via tentativa e erro</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>A FGV mantém centros de pesquisa em economia e tecnologia com produção acadêmica relevante sobre IA aplicada a políticas públicas — o que reforça sua tendência de conectar questões de IA a temas de governança e gestão pública, e não apenas a aspectos técnicos isolados.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>O termo "Inteligência Artificial" foi cunhado em 1956, na Conferência de Dartmouth, mas a arquitetura Transformer — base de todos os LLMs atuais — só foi introduzida em 2017, no artigo "Attention Is All You Need", marcando o início da era dos modelos de linguagem de grande porte.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>Pesquisas em explicabilidade de IA (XAI — Explainable AI) buscam desenvolver técnicas para tornar modelos complexos de deep learning mais interpretáveis, um requisito cada vez mais exigido por legislações como o Marco Legal da IA e o AI Act europeu para decisões automatizadas de alto risco.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Tópicos relevantes e atuais (Tópico 1 desta disciplina)</td><td>O Marco Legal da IA (PL 2338/2023), estudado ali, é o instrumento central de governança de IA no Brasil</td></tr>
+              <tr><td>Lei nº 13.709/2018 (LGPD)</td><td>Privacidade em IA está diretamente conectada aos princípios de proteção de dados pessoais</td></tr>
+              <tr><td>Lei nº 12.965/2014 (Marco Civil da Internet)</td><td>Base legal para direitos e deveres no ambiente digital, relevante ao uso de IA em serviços online</td></tr>
+              <tr><td>Excel Avançado e Linguagem R (Módulo II)</td><td>Ferramentas práticas de análise de dados frequentemente associadas a aplicações de IA/ML no dia a dia da controladoria</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar a hierarquia IA → ML → Deep Learning e os três tipos de aprendizado.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, revisando o glossário de termos técnicos a cada erro.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; com isso, encerrar a disciplina de Atualidades e IA antes de seguir para Legislação de Segurança da Informação.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>RUSSELL, Stuart; NORVIG, Peter. <i>Inteligência Artificial: Uma Abordagem Moderna</i>. Rio de Janeiro: GEN LTC.</li>
+            <li>VASWANI, Ashish et al. <i>Attention Is All You Need</i>. Advances in Neural Information Processing Systems (NeurIPS), 2017.</li>
+            <li>GOODFELLOW, Ian; BENGIO, Yoshua; COURVILLE, Aaron. <i>Deep Learning</i>. Cambridge: MIT Press.</li>
+            <li>Projeto de Lei nº 2338/2023 (Marco Legal da Inteligência Artificial) — Senado Federal.</li>
+            <li>Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais).</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Atualidades e Inteligência Artificial · Tópico 02/02</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_atu_t02";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual a relação hierárquica entre IA, Machine Learning e Deep Learning?", a:"IA é o campo mais amplo; Machine Learning é um subcampo da IA; Deep Learning é um subcampo do Machine Learning, baseado em redes neurais profundas."},
+    {q:"O que caracteriza o aprendizado supervisionado?", a:"O modelo aprende a partir de exemplos rotulados, com respostas corretas conhecidas."},
+    {q:"O que caracteriza o aprendizado não supervisionado?", a:"O modelo identifica padrões e agrupamentos em dados sem rótulos prévios."},
+    {q:"O que caracteriza o aprendizado por reforço?", a:"O modelo aprende por tentativa e erro, recebendo recompensas ou penalidades conforme suas ações."},
+    {q:"O que é um modelo generativo?", a:"Um sistema capaz de criar novo conteúdo (texto, imagem, áudio, código) a partir de padrões aprendidos em dados."},
+    {q:"O que é um LLM (Large Language Model)?", a:"Um modelo de linguagem de grande porte, um tipo de modelo generativo especializado em texto, baseado na arquitetura Transformer."},
+    {q:"O que é a arquitetura Transformer?", a:"Arquitetura de rede neural baseada em um mecanismo de 'atenção', que permite ponderar a relevância de diferentes partes do texto simultaneamente — base dos LLMs modernos."},
+    {q:"O que é alucinação em modelos de linguagem?", a:"Geração de informação incorreta ou inventada, apresentada com aparência de certeza e coerência."},
+    {q:"Por que a alucinação não é apenas um 'bug raro'?", a:"Porque é uma consequência inerente ao funcionamento probabilístico do modelo, que gera texto estatisticamente plausível, não recuperado de um banco de fatos verificados."},
+    {q:"O que é viés algorítmico?", a:"Reprodução ou amplificação, pelo modelo, de preconceitos e desigualdades presentes nos dados de treinamento."},
+    {q:"O que é explicabilidade (XAI) em IA?", a:"A capacidade de compreender e justificar por que um modelo tomou determinada decisão."},
+    {q:"Qual é o principal instrumento de governança de IA em construção no Brasil?", a:"O Marco Legal da Inteligência Artificial (PL 2338/2023)."},
+    {q:"Qual órgão é previsto como autoridade central de fiscalização de IA no Brasil?", a:"A ANPD (Autoridade Nacional de Proteção de Dados)."},
+    {q:"O que é minimização de dados, no contexto de privacidade em IA?", a:"Coletar e processar apenas os dados estritamente necessários ao propósito do sistema de IA."},
+    {q:"Existe hoje alguma IA de propósito geral (AGI) em uso comercial?", a:"Não — toda IA em uso comercial atualmente é IA estreita (narrow AI), especializada em tarefas específicas."},
+    {q:"Em que ano foi cunhado o termo 'Inteligência Artificial'?", a:"Em 1956, na Conferência de Dartmouth."},
+    {q:"Em que ano foi introduzida a arquitetura Transformer, e em qual artigo?", a:"Em 2017, no artigo 'Attention Is All You Need'."},
+    {q:"O que é fine-tuning?", a:"Processo de ajuste adicional de um modelo pré-treinado para uma tarefa ou domínio específico."},
+    {q:"O que é um token, em processamento de linguagem natural?", a:"A unidade mínima de processamento de texto usada pelo modelo — pode ser uma palavra, parte de uma palavra ou caractere."},
+    {q:"Por que o tema de IA é estrategicamente relevante para a DATAPREV?", a:"Porque a empresa processa grandes volumes de dados sensíveis de cidadãos, tornando governança de IA, ética algorítmica e privacidade temas diretamente ligados à sua atuação institucional."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Hierarquia conceitual", texto:"—", enun:"Assinale a alternativa que descreve corretamente a relação entre Inteligência Artificial, Machine Learning e Deep Learning:", alts:["São três campos totalmente independentes, sem relação hierárquica entre si.","Machine Learning é um subcampo da IA, e Deep Learning é um subcampo do Machine Learning.","Deep Learning é o campo mais amplo, contendo IA e Machine Learning.","IA é um subcampo do Machine Learning.","Não há diferença real entre os três termos; são sinônimos."], correta:1, coment:"A relação correta é de inclusão hierárquica: IA é o campo mais amplo; Machine Learning é subcampo da IA; Deep Learning é subcampo do Machine Learning, baseado em redes neurais profundas."},
+    {tema:"Tipos de aprendizado", texto:"—", enun:"Um sistema que aprende a classificar transações financeiras como fraudulentas ou não, a partir de um histórico de transações já rotuladas como fraude ou não fraude, utiliza o paradigma de:", alts:["Aprendizado por reforço","Aprendizado não supervisionado","Aprendizado supervisionado","Aprendizado por transferência","Aprendizado federado"], correta:2, coment:"O uso de dados rotulados (transações já classificadas como fraude ou não) caracteriza o aprendizado supervisionado."},
+    {tema:"Tipos de aprendizado", texto:"—", enun:"Um sistema que agrupa clientes por padrões de comportamento de consumo, sem qualquer rótulo prévio indicando categorias, utiliza o paradigma de:", alts:["Aprendizado supervisionado","Aprendizado não supervisionado","Aprendizado por reforço","Aprendizado ativo","Aprendizado semi-supervisionado apenas"], correta:1, coment:"A ausência de rótulos prévios e a busca por padrões/agrupamentos caracterizam o aprendizado não supervisionado."},
+    {tema:"Alucinação", texto:"—", enun:"Assinale a alternativa que descreve corretamente o fenômeno da 'alucinação' em modelos de linguagem:", alts:["Erro raro causado exclusivamente por falha de hardware.","Geração de informação incorreta ou inventada, apresentada com aparência de certeza, decorrente do funcionamento probabilístico do modelo.","Recusa do modelo em responder a qualquer pergunta.","Falha exclusiva de modelos muito antigos, já superada nos modelos atuais.","Sinônimo de viés algorítmico."], correta:1, coment:"Alucinação é a geração de conteúdo incorreto com aparência de coerência, decorrente da natureza probabilística/estatística dos modelos de linguagem — não é um bug raro nem exclusivo de modelos antigos."},
+    {tema:"Governança de IA", texto:"—", enun:"No Brasil, qual é o principal instrumento legislativo em construção voltado à governança de Inteligência Artificial?", alts:["A Lei Geral de Proteção de Dados (LGPD)","O Marco Legal da Inteligência Artificial (PL 2338/2023)","O Marco Civil da Internet","A Lei de Acesso à Informação","O Código de Defesa do Consumidor"], correta:1, coment:"O Marco Legal da IA (PL 2338/2023) é o principal instrumento legislativo específico voltado à governança de Inteligência Artificial no Brasil, distinto da LGPD (proteção de dados) e do Marco Civil (internet em geral)."},
+    {tema:"Viés algorítmico", texto:"—", enun:"O viés algorítmico em sistemas de IA ocorre principalmente porque:", alts:["Os modelos são sempre programados intencionalmente para discriminar.","Os modelos podem reproduzir ou amplificar padrões de discriminação já presentes nos dados de treinamento.","A IA é uma tecnologia neutra por definição, imune a qualquer viés.","O viés só ocorre em modelos muito simples, nunca em modelos complexos.","O viés é exclusivo de sistemas de reconhecimento facial."], correta:1, coment:"O viés algorítmico decorre principalmente da reprodução, pelo modelo, de padrões de discriminação ou desigualdade já presentes nos dados usados para seu treinamento — não é necessariamente intencional."},
+    {tema:"Explicabilidade", texto:"—", enun:"O conceito de 'explicabilidade' (XAI) em Inteligência Artificial refere-se a:", alts:["A velocidade de processamento de um modelo.","A capacidade de compreender e justificar por que um modelo tomou determinada decisão.","O custo computacional de treinamento de um modelo.","A quantidade de dados usados para treinar o modelo.","A popularidade comercial de um determinado sistema de IA."], correta:1, coment:"Explicabilidade (XAI - Explainable AI) refere-se à capacidade de compreender e justificar as decisões de um modelo, especialmente relevante para IA usada em decisões de alto impacto."},
+    {tema:"Modelos generativos", texto:"—", enun:"Um modelo capaz de gerar novas imagens realistas a partir de padrões aprendidos em um grande conjunto de imagens de treinamento é um exemplo de:", alts:["Modelo supervisionado apenas","Modelo generativo","Modelo de regras fixas (sistema especialista clássico)","Banco de dados relacional","Algoritmo de busca simples"], correta:1, coment:"Um modelo que cria novo conteúdo (nesse caso, imagens) a partir de padrões aprendidos é, por definição, um modelo generativo."},
+    {tema:"Arquitetura Transformer", texto:"—", enun:"A arquitetura Transformer, base dos modelos de linguagem modernos, é caracterizada principalmente por:", alts:["Processamento sequencial estrito, sem paralelismo.","Um mecanismo de 'atenção' que pondera a relevância de diferentes partes do texto simultaneamente.","Ausência total de camadas de rede neural.","Uso exclusivo de regras gramaticais programadas manualmente.","Funcionamento idêntico ao de um banco de dados relacional."], correta:1, coment:"O mecanismo de atenção (attention), que permite ponderar diferentes partes do texto simultaneamente, é a característica central e definidora da arquitetura Transformer."},
+    {tema:"Privacidade e LGPD", texto:"—", enun:"O princípio de 'minimização de dados', aplicado ao desenvolvimento de sistemas de IA, significa:", alts:["Coletar o maior volume possível de dados, sem restrições.","Coletar e processar apenas os dados estritamente necessários ao propósito do sistema.","Eliminar toda coleta de dados pessoais, inviabilizando qualquer treinamento de IA.","Duplicar os dados coletados para garantir redundância.","Ignorar completamente a finalidade da coleta de dados."], correta:1, coment:"Minimização de dados é o princípio segundo o qual apenas os dados estritamente necessários ao propósito declarado devem ser coletados e processados — princípio compartilhado entre boas práticas de IA e a LGPD."},
+    {tema:"IA estreita x geral", texto:"—", enun:"Assinale a alternativa correta sobre os tipos de Inteligência Artificial existentes atualmente:", alts:["Já existem sistemas de IA geral (AGI) amplamente comercializados.","Toda IA em uso comercial hoje é IA estreita, especializada em tarefas específicas.","IA geral e IA estreita são sinônimos.","A IA geral já superou a inteligência humana em todas as tarefas.","Não há distinção relevante entre IA estreita e IA geral."], correta:1, coment:"Atualmente, toda IA em uso comercial é IA estreita (narrow AI), especializada em tarefas específicas — a IA geral (AGI) permanece hipotética e objeto de pesquisa, não de uso comercial consolidado."},
+    {tema:"Fine-tuning", texto:"—", enun:"O processo de 'fine-tuning' em modelos de IA refere-se a:", alts:["O treinamento inicial completo de um modelo do zero.","O ajuste adicional de um modelo já pré-treinado para uma tarefa ou domínio específico.","A exclusão de dados de treinamento de um modelo.","A tradução automática de textos entre idiomas.","A criação de um novo algoritmo sem uso de dados."], correta:1, coment:"Fine-tuning é o processo de ajustar um modelo que já passou por um treinamento inicial (pré-treinamento) para especializá-lo em uma tarefa ou domínio específico, sem precisar treiná-lo do zero."},
+    {tema:"Aprendizado por reforço aplicado", texto:"—", enun:"Um sistema que aprende a otimizar rotas de entrega recebendo recompensas por rotas mais eficientes e penalidades por atrasos utiliza o paradigma de:", alts:["Aprendizado supervisionado","Aprendizado não supervisionado","Aprendizado por reforço","Aprendizado por transferência exclusivamente","Nenhum paradigma de aprendizado de máquina"], correta:2, coment:"O uso de recompensas e penalidades para guiar o aprendizado por tentativa e erro é a característica definidora do aprendizado por reforço."},
+    {tema:"Responsabilização em IA", texto:"—", enun:"O conceito de 'responsabilização' (accountability) em ética de IA refere-se a:", alts:["A velocidade de resposta de um sistema de IA.","A definição de quem responde legal e institucionalmente por decisões tomadas com apoio de IA.","O custo de manutenção de um sistema de IA.","A popularidade de um modelo entre usuários.","A quantidade de parâmetros de um modelo."], correta:1, coment:"Responsabilização (accountability) trata de estabelecer claramente quem é responsável legal e institucionalmente pelas decisões tomadas com apoio de sistemas de IA — tema central em contextos de uso público."},
+    {tema:"Aplicação institucional de IA", texto:"—", enun:"Considerando o perfil institucional da DATAPREV, o uso de IA em sistemas de concessão de benefícios previdenciários exige atenção especial a qual conjunto de riscos?", alts:["Apenas riscos de custo computacional.","Viés algorítmico, explicabilidade das decisões e proteção de dados pessoais sensíveis.","Apenas riscos estéticos de interface.","Nenhum risco relevante, pois a IA é sempre neutra.","Apenas riscos relacionados à velocidade de processamento."], correta:1, coment:"Em um contexto de concessão de benefícios previdenciários, os riscos mais relevantes envolvem viés algorítmico (tratamento desigual indevido), explicabilidade (justificar decisões que afetam diretamente cidadãos) e proteção de dados sensíveis dos beneficiários."},
+    {tema:"Deep Learning", texto:"—", enun:"O Deep Learning se caracteriza especificamente pelo uso de:", alts:["Árvores de decisão simples, sem camadas.","Redes neurais artificiais com múltiplas camadas.","Bancos de dados relacionais tradicionais.","Regras lógicas programadas manualmente, sem aprendizado a partir de dados.","Algoritmos de ordenação clássicos."], correta:1, coment:"Deep Learning é definido pelo uso de redes neurais artificiais com múltiplas camadas ('profundas'), permitindo o aprendizado de representações complexas a partir de grandes volumes de dados."},
+    {tema:"Interseção IA-LGPD", texto:"—", enun:"Assinale a alternativa que descreve corretamente uma tensão comum entre o desenvolvimento de sistemas de IA e os princípios da LGPD:", alts:["Não existe qualquer tensão entre IA e proteção de dados pessoais.","Sistemas de IA frequentemente demandam grandes volumes de dados, o que pode conflitar com o princípio de minimização previsto na LGPD.","A LGPD proíbe totalmente o uso de qualquer dado em sistemas de IA.","A LGPD se aplica exclusivamente a sistemas de IA generativa.","Não há necessidade de base legal para uso de dados pessoais em treinamento de IA."], correta:1, coment:"A necessidade de grandes volumes de dados para treinar sistemas de IA frequentemente tensiona com o princípio de minimização de dados da LGPD, que exige coletar apenas o estritamente necessário — daí a importância de técnicas como anonimização."},
+    {tema:"Modelo x algoritmo", texto:"—", enun:"Assinale a alternativa que diferencia corretamente 'algoritmo' de 'modelo' em Inteligência Artificial:", alts:["São sinônimos exatos, sem qualquer diferença.","Algoritmo é a sequência de instruções para resolver um problema; modelo é a representação treinada a partir de dados, capaz de fazer previsões.","Modelo é sempre mais simples que algoritmo.","Algoritmo só existe em sistemas não computacionais.","Modelo é sinônimo exclusivo de rede neural."], correta:1, coment:"Algoritmo é a sequência de instruções/passos para resolver um problema (incluindo o processo de treinamento); modelo é o resultado treinado, a representação matemática capaz de gerar previsões para novas entradas."},
+    {tema:"Deepfakes", texto:"—", enun:"O termo 'deepfake' refere-se a:", alts:["Um tipo de algoritmo de busca em bancos de dados.","Conteúdo sintético (imagem, vídeo, áudio) gerado por IA de forma enganosa, simulando pessoas reais.","Um método de criptografia de dados.","Um tipo específico de aprendizado supervisionado.","Um protocolo de segurança de redes."], correta:1, coment:"Deepfake é o termo usado para conteúdo sintético — geralmente vídeos, áudios ou imagens — criado por IA de forma a simular, de maneira enganosa, pessoas reais dizendo ou fazendo algo que não ocorreu."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Assinale a alternativa que combina corretamente conceitos estudados neste tópico:", alts:["Todo modelo de Machine Learning é necessariamente um LLM.","Um LLM é um exemplo de modelo generativo, treinado por técnicas de Deep Learning, e pode apresentar alucinações mesmo com boa reputação de precisão.","Aprendizado por reforço é sinônimo de aprendizado supervisionado.","A explicabilidade é sempre garantida em modelos de Deep Learning.","IA geral já está em uso comercial amplo em sistemas de linguagem."], correta:1, coment:"A alternativa correta combina três conceitos estudados de forma coerente: LLMs são modelos generativos, tipicamente construídos com técnicas de Deep Learning, e sujeitos à alucinação como característica estrutural — as demais alternativas contêm erros conceituais estudados ao longo do capítulo."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Machine Learning é um subcampo de:", alts:["Deep Learning","Inteligência Artificial","LGPD","Blockchain","Cibersegurança"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Deep Learning é um subcampo de:", alts:["IA apenas, diretamente","Machine Learning","LGPD","Marco Civil da Internet","Nenhum dos anteriores"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Aprendizado com dados rotulados é chamado de:", alts:["Não supervisionado","Supervisionado","Por reforço","Federado","Ativo"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Aprendizado sem rótulos, buscando padrões, é chamado de:", alts:["Supervisionado","Não supervisionado","Por reforço","Semi-supervisionado","Nenhum dos anteriores"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Aprendizado por recompensa e penalidade é chamado de:", alts:["Supervisionado","Não supervisionado","Por reforço","Transferência","Nenhum dos anteriores"], correta:2},
+    {d:"Fácil", texto:"—", enun:"LLM significa:", alts:["Linguagem de Lógica Matemática","Large Language Model","Legislação de Licenciamento de Máquinas","Limite Legal de Memória","Lista de Ligações Múltiplas"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A arquitetura base dos LLMs modernos é chamada de:", alts:["Rede Convolucional","Transformer","Árvore de Decisão","Máquina de Vetores de Suporte","Regressão Linear"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Geração de informação incorreta com aparência de certeza por um LLM é chamada de:", alts:["Overfitting","Alucinação","Underfitting","Regularização","Tokenização"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O Marco Legal da IA no Brasil corresponde a qual projeto de lei?", alts:["PL 1234/2020","PL 2338/2023","PL 5678/2021","PL 9999/2024","PL 3000/2022"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Qual autoridade é prevista como central na fiscalização de IA no Brasil?", alts:["Banco Central","ANPD","Anatel","TCU","STF"], correta:1},
+    {d:"Média", texto:"—", enun:"Reprodução, por um modelo, de preconceitos presentes nos dados de treinamento é chamada de:", alts:["Overfitting","Viés algorítmico","Alucinação","Fine-tuning","Tokenização"], correta:1},
+    {d:"Média", texto:"—", enun:"A capacidade de explicar por que um modelo tomou determinada decisão é chamada de:", alts:["Escalabilidade","Explicabilidade (XAI)","Portabilidade","Interoperabilidade","Modularidade"], correta:1},
+    {d:"Média", texto:"—", enun:"Um sistema que classifica e-mails como spam com base em exemplos já rotulados usa qual tipo de aprendizado?", alts:["Não supervisionado","Supervisionado","Por reforço","Nenhum dos anteriores","Todos simultaneamente"], correta:1},
+    {d:"Média", texto:"—", enun:"Um sistema que agrupa clientes por padrão de consumo, sem rótulos prévios, usa qual tipo de aprendizado?", alts:["Supervisionado","Não supervisionado","Por reforço","Nenhum dos anteriores","Todos simultaneamente"], correta:1},
+    {d:"Média", texto:"—", enun:"Coletar apenas os dados estritamente necessários ao propósito de um sistema de IA é o princípio de:", alts:["Maximização de dados","Minimização de dados","Duplicação de dados","Anonimização obrigatória sempre","Nenhum princípio reconhecido"], correta:1},
+    {d:"Média", texto:"—", enun:"Conteúdo sintético enganoso que simula pessoas reais é chamado de:", alts:["Overfitting","Deepfake","Underfitting","Tokenização","Fine-tuning"], correta:1},
+    {d:"Média", texto:"—", enun:"Toda IA em uso comercial hoje é classificada como:", alts:["IA geral (AGI)","IA estreita (narrow AI)","IA superinteligente","IA quântica","Nenhuma classificação se aplica"], correta:1},
+    {d:"Média", texto:"—", enun:"O ajuste de um modelo pré-treinado para uma tarefa específica é chamado de:", alts:["Pré-treinamento inicial","Fine-tuning","Tokenização","Overfitting completo","Regularização L2"], correta:1},
+    {d:"Média", texto:"—", enun:"Quem responde legal e institucionalmente por decisões tomadas com apoio de IA é uma questão de:", alts:["Escalabilidade","Responsabilização (accountability)","Portabilidade","Interoperabilidade","Modularidade"], correta:1},
+    {d:"Média", texto:"—", enun:"O mecanismo central da arquitetura Transformer é chamado de:", alts:["Convolução","Atenção (attention)","Poda (pruning)","Quantização","Regularização"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Por que a alucinação não é considerada um bug raro em LLMs?", alts:["Porque afeta apenas modelos muito antigos.","Porque é consequência do funcionamento estatístico/probabilístico do modelo, gerando texto plausível, não fatos verificados.","Porque só ocorre quando o usuário formula perguntas maliciosas.","Porque é causada exclusivamente por falhas de hardware.","Porque os desenvolvedores não têm meios de reduzi-la."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um sistema de IA usado para pré-selecionar candidatos a um benefício previdenciário, treinado com dados históricos que refletem desigualdades regionais passadas, corre principalmente o risco de:", alts:["Consumir pouca energia computacional.","Reproduzir viés algorítmico, perpetuando desigualdades presentes nos dados históricos.","Ser explicável por padrão, sem qualquer esforço adicional.","Eliminar automaticamente qualquer erro humano anterior.","Não ter qualquer relação com a LGPD."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que relaciona corretamente explicabilidade e complexidade de modelo:", alts:["Modelos mais complexos (deep learning) tendem a ser mais explicáveis que modelos simples.","Modelos mais complexos (deep learning) tendem a ser menos explicáveis, funcionando como 'caixas-pretas'.","Não há relação entre complexidade e explicabilidade.","Todo modelo de IA é igualmente explicável, independentemente da arquitetura.","Explicabilidade só se aplica a modelos supervisionados."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente a tensão entre IA e o princípio de minimização de dados da LGPD:", alts:["Não existe qualquer tensão, pois a IA nunca usa dados pessoais.","Sistemas de IA frequentemente demandam grandes volumes de dados para treinamento, o que pode conflitar com a exigência de coletar apenas o estritamente necessário.","A LGPD se aplica exclusivamente a sistemas que não usam IA.","A minimização de dados é incompatível com qualquer uso de tecnologia digital.","Não há necessidade de anonimização em sistemas de IA que usam dados pessoais."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que diferencia corretamente aprendizado por transferência (transfer learning) de fine-tuning:", alts:["São exatamente a mesma técnica, sem qualquer distinção.","Transfer learning reaproveita conhecimento de um modelo treinado em uma tarefa para acelerar o aprendizado em outra tarefa relacionada; fine-tuning é um tipo específico de ajuste dentro desse processo.","Fine-tuning sempre exige treinar um modelo do zero.","Transfer learning só se aplica a modelos de imagem, nunca a modelos de texto.","Nenhuma das duas técnicas envolve reaproveitamento de conhecimento prévio."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor descreve o papel da ANPD no contexto do Marco Legal da IA (PL 2338/2023):", alts:["Substituir integralmente todos os reguladores setoriais existentes.","Atuar como autoridade central de fiscalização de IA, com atuação complementar de reguladores setoriais.","Ter competência exclusiva sobre segurança pública, sem relação com IA.","Não ter qualquer papel previsto na regulação de IA.","Ser um órgão do Poder Judiciário, não do Executivo."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente por que a hierarquia IA-ML-Deep Learning é frequentemente cobrada de forma invertida em questões incorretas:", alts:["Porque as bancas nunca cobram esse tema.","Porque candidatos tendem a tratar os três termos como categorias paralelas e equivalentes, em vez de reconhecer a relação de inclusão hierárquica entre eles.","Porque Deep Learning é, na verdade, mais amplo que IA.","Porque não existe hierarquia real entre os termos.","Porque Machine Learning é posterior historicamente ao Deep Learning."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando o perfil de Gestão Econômico-Financeira, assinale a aplicação de Machine Learning mais diretamente relevante ao dia a dia da controladoria:", alts:["Geração de imagens artísticas para campanhas publicitárias.","Detecção de anomalias em transações financeiras e previsão de inadimplência, via aprendizado supervisionado e não supervisionado.","Tradução automática de poemas.","Reconhecimento de voz para assistentes pessoais domésticos.","Geração de música por IA."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor sintetiza o desafio de explicabilidade em decisões automatizadas no setor público:", alts:["Não é necessário explicar decisões automatizadas em nenhum contexto.","Decisões automatizadas de alto impacto sobre cidadãos exigem maior transparência e capacidade de justificativa, dado seu potencial efeito sobre direitos individuais.","A explicabilidade só importa em sistemas privados, nunca públicos.","Modelos de IA são sempre plenamente explicáveis por definição legal.","O setor público está isento de qualquer exigência de transparência algorítmica."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Diferenciar IA, Machine Learning e Deep Learning (relação hierárquica)",
+    "Diferenciar os três tipos de aprendizado de máquina (supervisionado, não supervisionado, por reforço)",
+    "Compreender o conceito de modelo generativo e de LLM",
+    "Compreender a arquitetura Transformer em nível conceitual",
+    "Compreender o que é alucinação e por que ela ocorre estruturalmente",
+    "Reconhecer desafios éticos: viés algorítmico, explicabilidade, responsabilização",
+    "Conhecer o Marco Legal da IA (PL 2338/2023) e o papel da ANPD",
+    "Compreender princípios de privacidade em IA (minimização, anonimização, consentimento)",
+    "Conectar riscos de IA a aplicações do setor público e da DATAPREV",
+    "Resolver questões que combinam conceitos técnicos com contexto institucional",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Tratar IA, Machine Learning e Deep Learning como categorias paralelas, em vez de hierárquicas.",
+    "Confundir aprendizado não supervisionado com aprendizado por reforço.",
+    "Achar que alucinação é um erro raro e facilmente eliminável, quando é estrutural.",
+    "Confundir IA estreita (a única existente hoje) com IA geral (ainda hipotética).",
+    "Não reconhecer o Marco Legal da IA (PL 2338/2023) como o principal instrumento de governança em construção no Brasil.",
+    "Confundir a ANPD com outros órgãos reguladores (Anatel, Banco Central) no contexto de fiscalização de IA.",
+    "Achar que a IA é uma tecnologia neutra por definição, ignorando o risco de viés algorítmico.",
+    "Confundir explicabilidade com velocidade ou eficiência computacional do modelo.",
+    "Não perceber a tensão entre uso intensivo de dados em IA e o princípio de minimização da LGPD.",
+    "Confundir fine-tuning com o treinamento inicial completo de um modelo do zero.",
+    "Não reconhecer o mecanismo de 'atenção' como elemento central da arquitetura Transformer.",
+    "Confundir modelo generativo com qualquer sistema de IA (nem todo sistema de IA é generativo).",
+    "Ignorar a conexão entre uso de IA no setor público e exigências de responsabilização institucional.",
+    "Não distinguir claramente algoritmo (processo) de modelo (resultado treinado).",
+    "Achar que deepfakes são apenas um problema de entretenimento, ignorando riscos de fraude e desinformação.",
+    "Confundir token com palavra completa, sempre — tokens podem ser partes de palavras.",
+    "Ignorar que sistemas de IA usados em decisões sobre cidadãos exigem maior explicabilidade que sistemas de uso interno trivial.",
+    "Assumir que toda questão de IA será puramente técnica, sem conexão com legislação (LGPD, Marco Legal da IA).",
+    "Não revisar terminologia técnica em português e inglês (LLM, XAI, fine-tuning), já que a FGV pode usar qualquer uma das formas.",
+    "Deixar de conectar este tópico ao Tópico 1 (Atualidades), especialmente quanto à tramitação do PL 2338/2023.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Inteligência Artificial (IA)","Campo da computação dedicado a criar sistemas capazes de executar tarefas que exigem capacidades cognitivas humanas."],
+    ["Machine Learning","Subcampo da IA em que sistemas aprendem padrões a partir de dados, em vez de seguir regras explicitamente programadas."],
+    ["Deep Learning","Subcampo do Machine Learning baseado em redes neurais artificiais com múltiplas camadas."],
+    ["Aprendizado supervisionado","Paradigma de aprendizado baseado em dados rotulados, com respostas corretas conhecidas."],
+    ["Aprendizado não supervisionado","Paradigma de aprendizado que busca padrões em dados sem rótulos prévios."],
+    ["Aprendizado por reforço","Paradigma de aprendizado por tentativa e erro, guiado por recompensas e penalidades."],
+    ["Modelo generativo","Sistema de IA capaz de criar novo conteúdo a partir de padrões aprendidos em dados."],
+    ["LLM (Large Language Model)","Modelo de linguagem de grande porte, tipo de modelo generativo especializado em texto."],
+    ["Transformer","Arquitetura de rede neural baseada em mecanismo de atenção, base dos LLMs modernos."],
+    ["Alucinação","Geração, por um modelo de linguagem, de informação incorreta apresentada com aparência de certeza."],
+    ["Viés algorítmico","Reprodução ou amplificação, por um modelo, de preconceitos presentes nos dados de treinamento."],
+    ["Explicabilidade (XAI)","Capacidade de compreender e justificar as decisões tomadas por um modelo de IA."],
+    ["Fine-tuning","Ajuste adicional de um modelo pré-treinado para uma tarefa ou domínio específico."],
+    ["Minimização de dados","Princípio de coletar e processar apenas os dados estritamente necessários a um propósito declarado."],
+    ["Deepfake","Conteúdo sintético gerado por IA de forma enganosa, simulando pessoas reais."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

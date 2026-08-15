@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raciocínio Lógico Aritmético, Geométrico e Matricial | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .matrix{display:grid;grid-template-columns:repeat(3,52px);gap:4px;font-family:var(--mono);font-weight:700;margin:10px 0;}
+  .matrix span{background:var(--paper-2);border:1px solid var(--border-soft);border-radius:6px;text-align:center;padding:8px 0;}
+  [data-theme="dark"] .matrix span{background:var(--ink-800);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Raciocínio Lógico</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">05 - Raciocínio aritmético, geométrico e matricial</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+        <option value="">Ir para tópico…</option>
+        <option value="01 - Estruturas lógicas.html">01 - Estruturas lógicas</option>
+        <option value="02 - Lógica de argumentação.html">02 - Lógica de argumentação</option>
+        <option value="03 - Lógica sentencial.html">03 - Lógica sentencial</option>
+        <option value="04 - Lógica de primeira ordem.html">04 - Lógica de primeira ordem</option>
+        <option value="05 - Raciocínio aritmético, geométrico e matricial.html" selected>05 - Raciocínio aritmético, geométrico e matricial</option>
+  </select>
+</nav>
+
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Raciocínio Aritmético, Geométrico e Matricial</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas / técnicas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Raciocínio Lógico<br>Tópico 05 de 05<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Raciocínio Lógico Envolvendo Problemas Aritméticos, Geométricos e Matriciais</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Raciocínio Lógico</b> &nbsp;›&nbsp; Tópico 05</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">8h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 1 a 4 desta disciplina; matemática básica</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — fecha o bloco de Raciocínio Lógico com questões práticas</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Resolver problemas de <b>raciocínio aritmético</b> envolvendo razão, proporção, porcentagem, sequências numéricas e problemas de idade/mistura.</li>
+            <li>Resolver problemas de <b>raciocínio geométrico</b> envolvendo contagem de figuras, padrões visuais e propriedades básicas de figuras planas.</li>
+            <li>Resolver problemas de <b>raciocínio matricial</b>, identificando padrões de transformação entre células de uma matriz.</li>
+            <li>Aplicar <b>princípios de contagem</b> (princípio fundamental da contagem, permutações e combinações simples) em problemas de raciocínio lógico.</li>
+            <li>Resolver problemas de <b>lógica de sequências</b> (numéricas, alfabéticas e figurativas).</li>
+            <li>Resolver questões FGV que combinam raciocínio lógico-dedutivo com cálculo aritmético direto, em contexto de gestão e finanças.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Este tópico final da disciplina de Raciocínio Lógico aplica os conceitos lógico-formais estudados anteriormente a <b>problemas práticos com números, figuras e matrizes</b>. Diferente dos tópicos anteriores (mais conceituais), aqui o foco é a <b>resolução de exercícios</b> — sequências, proporções, contagem e padrões visuais.</p>
+          <p>Nos <b>problemas aritméticos</b>, destacam-se: razão e proporção (grandezas diretamente/inversamente proporcionais), porcentagem aplicada a aumentos/descontos sucessivos, problemas de idade (relações entre idades em diferentes momentos do tempo), problemas de mistura (concentração de soluções) e sequências numéricas (aritméticas, geométricas, ou com padrão não linear).</p>
+          <p>Nos <b>problemas geométricos</b>, o foco recai sobre contagem de figuras compostas (quantos triângulos/quadrados há em uma figura), reconhecimento de padrões de rotação/reflexão/tradução em sequências visuais, e propriedades básicas (perímetro, área de figuras simples) aplicadas a problemas de raciocínio, não a cálculos geométricos avançados.</p>
+          <p>Nos <b>problemas matriciais</b>, o candidato deve identificar a <b>regra de transformação</b> que liga células de uma matriz (por linha, coluna ou diagonal) e aplicá-la para descobrir o elemento faltante — uma extensão visual do raciocínio por analogia estudado no Tópico 2.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Raciocínio Aritmético,<br>Geométrico e Matricial</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Aritmético</h4><ul><li>Razão e proporção</li><li>Porcentagem</li><li>Problemas de idade</li><li>Sequências numéricas</li></ul></div>
+              <div class="mm-node"><h4>Geométrico</h4><ul><li>Contagem de figuras</li><li>Padrões de rotação/reflexão</li><li>Perímetro/área básicos</li></ul></div>
+              <div class="mm-node"><h4>Matricial</h4><ul><li>Regra por linha</li><li>Regra por coluna</li><li>Regra por diagonal</li></ul></div>
+              <div class="mm-node"><h4>Contagem</h4><ul><li>Princípio fundamental</li><li>Permutação simples</li><li>Combinação simples</li></ul></div>
+              <div class="mm-node"><h4>Sequências</h4><ul><li>Aritmética (soma fixa)</li><li>Geométrica (razão fixa)</li><li>Padrão não linear</li></ul></div>
+              <div class="mm-node"><h4>Aplicação</h4><ul><li>Contexto de gestão/finanças</li><li>Combinação com lógica formal</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Razão e proporção</h3>
+          <p><b>Razão</b> é a comparação entre duas grandezas por meio de uma divisão (a:b, ou a/b). <b>Proporção</b> é a igualdade entre duas razões (a/b = c/d).</p>
+          <div class="box tip">
+            <div class="box-title">✅ Propriedade fundamental das proporções</div>
+            <p>Em a/b = c/d, o produto dos meios é igual ao produto dos extremos: a×d = b×c ("multiplicação em cruz").</p>
+          </div>
+          <table>
+            <thead><tr><th>Tipo</th><th>Regra</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Grandezas diretamente proporcionais</td><td>Se uma aumenta, a outra aumenta na mesma razão</td><td>Quanto mais horas trabalhadas, mais produção (mantendo produtividade constante)</td></tr>
+              <tr><td>Grandezas inversamente proporcionais</td><td>Se uma aumenta, a outra diminui na razão inversa</td><td>Quanto mais trabalhadores, menos tempo para concluir uma tarefa (mesmo volume de trabalho)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.2 Porcentagem: aumentos e descontos sucessivos</h3>
+          <p>Um erro comum é somar percentuais sucessivos diretamente. A forma correta é multiplicar os fatores de variação.</p>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Um aumento de 20% seguido de um desconto de 20% NÃO retorna ao valor original. Aumento de 20% → fator 1,20; desconto de 20% sobre o novo valor → fator 0,80. Fator final: 1,20 × 0,80 = 0,96 → o valor final é 96% do original, ou seja, uma <b>redução líquida de 4%</b>, não neutro como a intuição sugere.</p>
+          </div>
+
+          <h3>4.3 Problemas de idade</h3>
+          <p>Problemas de idade envolvem relações entre idades de duas ou mais pessoas em diferentes momentos do tempo (presente, passado, futuro), resolvidos com sistemas de equações simples.</p>
+          <div class="box tip">
+            <div class="box-title">✅ Exemplo resolvido</div>
+            <p>"A idade de Marcos é o dobro da idade de sua filha. Daqui a 10 anos, a idade de Marcos será 1,5 vezes a idade da filha. Qual a idade atual de Marcos?" — Seja F a idade da filha: Marcos = 2F. Em 10 anos: 2F+10 = 1,5(F+10) → 2F+10 = 1,5F+15 → 0,5F = 5 → F = 10. Marcos tem 2×10 = 20 anos.</p>
+          </div>
+
+          <h3>4.4 Sequências numéricas</h3>
+          <table>
+            <thead><tr><th>Tipo</th><th>Regra</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Progressão aritmética (PA)</td><td>Cada termo = termo anterior + razão constante (soma fixa)</td><td>2, 5, 8, 11, 14... (razão +3)</td></tr>
+              <tr><td>Progressão geométrica (PG)</td><td>Cada termo = termo anterior × razão constante (multiplicação fixa)</td><td>3, 6, 12, 24, 48... (razão ×2)</td></tr>
+              <tr><td>Padrão não linear</td><td>Regra variável ou combinada (ex.: soma de termos anteriores)</td><td>1, 1, 2, 3, 5, 8, 13... (Fibonacci: soma dos dois anteriores)</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Fórmulas de PA e PG</div>
+            <p><b>PA</b>: termo geral aₙ = a₁ + (n−1)×r, onde r é a razão. <b>PG</b>: termo geral aₙ = a₁ × q^(n−1), onde q é a razão.</p>
+          </div>
+
+          <h3>4.5 Problemas geométricos de raciocínio</h3>
+          <p>Diferente da geometria "pura" (cálculo de área/volume complexos), o raciocínio lógico geométrico foca em:</p>
+          <ul class="styled">
+            <li><b>Contagem de figuras compostas</b>: quantos triângulos, quadrados ou retângulos existem em uma figura formada pela sobreposição de linhas.</li>
+            <li><b>Padrões de transformação</b>: rotação, reflexão, translação de uma figura em uma sequência visual.</li>
+            <li><b>Propriedades básicas aplicadas</b>: perímetro e área de figuras simples (quadrado, retângulo, triângulo, círculo) usadas como dado de um problema maior.</li>
+          </ul>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV raramente pede cálculo geométrico avançado (trigonometria, geometria espacial complexa) neste bloco — prioriza a percepção de <b>padrões visuais</b> e a aplicação de fórmulas básicas dentro de um raciocínio lógico maior.</p>
+          </div>
+
+          <h3>4.6 Raciocínio matricial</h3>
+          <p>Nas questões de matriz lógica, uma grade de 3×3 (ou menor) apresenta figuras/números com um padrão de transformação, faltando o último elemento a ser deduzido.</p>
+          <div class="box tip">
+            <div class="box-title">✅ Exemplo de matriz numérica</div>
+            <div class="matrix"><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span><span>?</span></div>
+            <p>Padrão: cada célula é 2 unidades maior que a anterior, lendo da esquerda para a direita e de cima para baixo. O elemento faltante é <b>18</b>.</p>
+          </div>
+          <table>
+            <thead><tr><th>Tipo de regra matricial</th><th>Como identificar</th></tr></thead>
+            <tbody>
+              <tr><td>Regra por linha</td><td>O padrão se repete igualmente em cada linha (soma, produto, rotação)</td></tr>
+              <tr><td>Regra por coluna</td><td>O padrão se repete igualmente em cada coluna</td></tr>
+              <tr><td>Regra por diagonal</td><td>O padrão segue as diagonais principais ou secundárias da matriz</td></tr>
+              <tr><td>Regra combinada</td><td>Combina elementos de linha e coluna (ex.: soma da linha + coluna correspondente)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.7 Princípios de contagem</h3>
+          <table>
+            <thead><tr><th>Princípio</th><th>Fórmula</th><th>Quando usar</th></tr></thead>
+            <tbody>
+              <tr><td>Princípio fundamental da contagem</td><td>Multiplicar o número de opções de cada etapa independente</td><td>Escolhas sequenciais e independentes (ex.: senha com letra + número)</td></tr>
+              <tr><td>Permutação simples</td><td>Pn = n!</td><td>Ordenar todos os n elementos de um conjunto</td></tr>
+              <tr><td>Combinação simples</td><td>Cn,p = n!/(p!×(n−p)!)</td><td>Escolher p elementos de um total de n, sem considerar a ordem</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV tende a contextualizar problemas aritméticos em situações de gestão, orçamento e finanças (coerente com o perfil da vaga), enquanto problemas geométricos e matriciais costumam ser mais abstratos, testando puramente a percepção de padrões.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Problemas de porcentagem aplicados a variações orçamentárias (aumentos/descontos sucessivos).</li>
+            <li>Sequências numéricas com padrão a ser identificado.</li>
+            <li>Matrizes lógicas numéricas ou de figuras, com elemento faltante a determinar.</li>
+            <li>Problemas de contagem envolvendo combinações de equipes ou processos.</li>
+            <li>Dificuldade alta — exige tanto raciocínio lógico quanto precisão de cálculo.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Porcentagem com aumentos/descontos sucessivos</td><td>Muito alta</td></tr>
+              <tr><td>Sequências numéricas (PA, PG, padrões não lineares)</td><td>Alta</td></tr>
+              <tr><td>Matrizes lógicas numéricas</td><td>Alta</td></tr>
+              <tr><td>Razão e proporção (direta/inversa)</td><td>Média-alta</td></tr>
+              <tr><td>Problemas de contagem (princípio fundamental, combinação)</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Somar percentuais sucessivos em vez de multiplicar os fatores de variação.</li>
+            <li>Confundir grandezas diretamente proporcionais com inversamente proporcionais.</li>
+            <li>Errar a identificação do padrão em sequências não lineares por testar apenas somas simples.</li>
+            <li>Aplicar a regra errada (linha em vez de coluna, ou vice-versa) em matrizes lógicas.</li>
+            <li>Confundir permutação (importa a ordem) com combinação (não importa a ordem).</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV formular problemas de porcentagem envolvendo reajustes orçamentários sucessivos ao longo de dois ou três períodos, testando se o candidato multiplica corretamente os fatores de variação em vez de somar os percentuais.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver "aumento seguido de desconto" (ou vice-versa) do mesmo percentual, desconfie: o resultado NUNCA é neutro.</li>
+            <li>Antes de aplicar uma regra a uma sequência, teste-a nas primeiras posições para confirmar antes de aplicar à posição pedida.</li>
+            <li>Em matriz lógica, teste a regra em pelo menos duas linhas/colunas antes de aplicá-la à célula faltante.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Macete de aumentos/descontos sucessivos</div><p>Nunca some percentuais — multiplique os fatores: aumento de X% = fator (1+X/100); desconto de X% = fator (1−X/100).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete de proporção</div><p>"Multiplicação em cruz": a/b = c/d → a×d = b×c.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Truque de sequências</div><p>Primeiro teste se é PA (diferença constante); se não for, teste PG (razão constante); se não for nenhuma, procure padrão de soma de termos anteriores ou alternância.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete de matriz lógica</div><p>Teste a regra na primeira linha/coluna completa antes de aplicá-la à célula faltante — nunca assuma o padrão com base em uma única célula.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Permutação x combinação</div><p>Se a ORDEM importa (ex.: pódio 1º/2º/3º) → permutação. Se a ordem NÃO importa (ex.: escolher uma comissão de 3 pessoas) → combinação.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Proporção: a/b = c/d → a×d = b×c.</li>
+            <li>Aumento/desconto sucessivos: SEMPRE multiplicar fatores, NUNCA somar percentuais.</li>
+            <li>PA: aₙ = a₁+(n−1)r; PG: aₙ = a₁×q^(n−1).</li>
+            <li>Matriz lógica: sempre confirme a regra em pelo menos duas linhas/colunas antes de aplicá-la.</li>
+            <li>Permutação = importa a ordem (n!); Combinação = não importa a ordem (n!/(p!(n−p)!)).</li>
+            <li>Problemas de idade: monte equações relacionando as idades nos diferentes momentos citados.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS/TÉCNICAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e técnicas de resolução</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td>a/b = c/d → a×d = b×c</td><td>Proporção — multiplicação em cruz</td></tr>
+              <tr><td>Fator = 1 ± (X/100)</td><td>Aumento (+) ou desconto (−) percentual, para multiplicar em sequência</td></tr>
+              <tr><td>aₙ = a₁ + (n−1)×r</td><td>Termo geral de uma progressão aritmética</td></tr>
+              <tr><td>aₙ = a₁ × q^(n−1)</td><td>Termo geral de uma progressão geométrica</td></tr>
+              <tr><td>Pn = n!</td><td>Permutação simples de n elementos</td></tr>
+              <tr><td>Cn,p = n! / (p! × (n−p)!)</td><td>Combinação simples de p elementos entre n</td></tr>
+              <tr><td>Perímetro do quadrado = 4×lado; Área = lado²</td><td>Propriedades básicas usadas em problemas de raciocínio</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Permutação x Combinação</h3>
+          <table>
+            <thead><tr><th>Permutação</th><th>Combinação</th></tr></thead>
+            <tbody>
+              <tr><td>A ordem importa</td><td>A ordem não importa</td></tr>
+              <tr><td>Fórmula: n!</td><td>Fórmula: n!/(p!(n−p)!)</td></tr>
+              <tr><td>Ex.: pódio 1º, 2º, 3º lugar</td><td>Ex.: escolher uma comissão de 3 pessoas</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Como o perfil da vaga é de Gestão Econômico-Financeira, a FGV tende a contextualizar os problemas aritméticos deste tópico em situações de orçamento, reajustes salariais e variações financeiras, tornando o conteúdo uma ponte direta com Matemática Financeira (Módulo II).</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>A sequência de Fibonacci, usada como exemplo de padrão não linear, foi descrita por Leonardo Fibonacci no século XIII para modelar o crescimento de uma população de coelhos, mas hoje aparece em contextos totalmente diferentes — da botânica à análise de mercados financeiros (retração de Fibonacci).</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>Testes de raciocínio matricial (como as Matrizes Progressivas de Raven) são amplamente usados em psicologia para medir inteligência fluida — a capacidade de identificar padrões abstratos sem depender de conhecimento prévio — e influenciaram diretamente o formato das questões de matriz lógica em concursos.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Lógica de argumentação (Tópico 2)</td><td>Raciocínio por analogia e identificação de padrões, aplicados agora a números e figuras</td></tr>
+              <tr><td>Matemática Financeira (Módulo II)</td><td>Porcentagem, juros e sequências são a base direta dos cálculos financeiros mais avançados</td></tr>
+              <tr><td>Contabilidade Empresarial e Excel Avançado (Módulo II)</td><td>Razão e proporção aplicam-se diretamente à análise de indicadores contábeis</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e revisar as fórmulas de PA, PG, permutação e combinação.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, resolvendo cada uma no papel antes de conferir a resposta.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; com isso, encerrar a revisão completa de Raciocínio Lógico (Tópicos 1 a 5) antes de seguir para Atualidades e IA.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>SILVA, Jônatas Zampa. <i>Raciocínio Lógico Comentado</i>. São Paulo: Método.</li>
+            <li>SÉRATES, Jonofon. <i>Raciocínio Lógico</i>. Brasília: JS Editora.</li>
+            <li>IEZZI, Gelson; DOLCE, Osvaldo. <i>Matemática: Volume Único</i>. São Paulo: Atual.</li>
+            <li>MORGADO, Augusto César; CARVALHO, Paulo Cezar Pinto. <i>Matemática Discreta</i>. Rio de Janeiro: SBM.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Raciocínio Lógico · Tópico 05/05</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_rlog_t05";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual a propriedade fundamental das proporções?", a:"Em a/b = c/d, o produto dos meios é igual ao produto dos extremos: a×d = b×c."},
+    {q:"Um aumento de 20% seguido de um desconto de 20% retorna ao valor original?", a:"Não — o fator final é 1,20×0,80=0,96, resultando em uma redução líquida de 4% em relação ao valor original."},
+    {q:"Qual a fórmula do termo geral de uma progressão aritmética?", a:"aₙ = a₁ + (n−1)×r, onde r é a razão (diferença constante)."},
+    {q:"Qual a fórmula do termo geral de uma progressão geométrica?", a:"aₙ = a₁ × q^(n−1), onde q é a razão (multiplicador constante)."},
+    {q:"Qual a diferença entre grandezas diretamente e inversamente proporcionais?", a:"Diretamente: se uma aumenta, a outra aumenta na mesma razão. Inversamente: se uma aumenta, a outra diminui na razão inversa."},
+    {q:"Qual a fórmula da permutação simples de n elementos?", a:"Pn = n! (fatorial de n)."},
+    {q:"Qual a fórmula da combinação simples de p elementos entre n?", a:"Cn,p = n! / (p! × (n−p)!)."},
+    {q:"Qual a diferença central entre permutação e combinação?", a:"Na permutação a ordem dos elementos importa; na combinação, não importa."},
+    {q:"O que caracteriza a sequência de Fibonacci?", a:"Cada termo é a soma dos dois termos anteriores: 1, 1, 2, 3, 5, 8, 13..."},
+    {q:"Qual o macete para não errar aumentos/descontos sucessivos?", a:"Nunca somar os percentuais — sempre multiplicar os fatores de variação (1±X/100)."},
+    {q:"O que se deve fazer antes de aplicar uma regra em uma matriz lógica?", a:"Testar a regra em pelo menos duas linhas ou colunas completas antes de aplicá-la à célula faltante."},
+    {q:"Qual princípio se aplica a escolhas sequenciais e independentes?", a:"O princípio fundamental da contagem: multiplicar o número de opções de cada etapa."},
+    {q:"Como resolver problemas de idade, em geral?", a:"Montando um sistema de equações que relaciona as idades das pessoas nos diferentes momentos citados (presente, passado, futuro)."},
+    {q:"Quem descreveu a sequência de Fibonacci e em que contexto?", a:"Leonardo Fibonacci, no século XIII, para modelar o crescimento de uma população de coelhos."},
+    {q:"O que testam as Matrizes Progressivas de Raven?", a:"A inteligência fluida — capacidade de identificar padrões abstratos sem depender de conhecimento prévio."},
+    {q:"Qual é a fórmula do perímetro de um quadrado de lado L?", a:"4×L."},
+    {q:"Qual é a fórmula da área de um quadrado de lado L?", a:"L² (lado ao quadrado)."},
+    {q:"O que costuma ser priorizado pela FGV em problemas geométricos deste tópico?", a:"Percepção de padrões visuais e aplicação de fórmulas básicas, não cálculos geométricos avançados."},
+    {q:"Por que a FGV costuma contextualizar problemas aritméticos em orçamento e finanças?", a:"Porque o perfil da vaga (Gestão Econômico-Financeira) torna esse contexto natural e conecta com Matemática Financeira."},
+    {q:"Qual é a estratégia recomendada para identificar o padrão de uma sequência numérica?", a:"Testar primeiro se é PA (diferença constante), depois PG (razão constante), e por fim buscar padrão não linear (soma de termos, alternância)."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Porcentagem sucessiva", texto:"—", enun:"Um produto sofreu aumento de 25% em janeiro e, em seguida, desconto de 20% em fevereiro sobre o novo valor. Em relação ao valor original, o preço final representa:", alts:["Exatamente o valor original (100%)","95% do valor original","100,5% do valor original (leve aumento)","105% do valor original","90% do valor original"], correta:0, coment:"Fator final: 1,25 × 0,80 = 1,00 — nesse caso específico, o aumento e o desconto se compensam exatamente, retornando ao valor original."},
+    {tema:"Proporção", texto:"—", enun:"Se 8 trabalhadores concluem uma tarefa em 15 dias, em quantos dias 12 trabalhadores concluiriam a mesma tarefa, mantida a produtividade individual?", alts:["10 dias","20 dias","22,5 dias","12 dias","8 dias"], correta:0, coment:"Grandezas inversamente proporcionais: 8×15 = 12×x → x = 120/12 = 10 dias."},
+    {tema:"Sequência numérica", texto:"—", enun:"Assinale o próximo termo da sequência: 3, 7, 11, 15, 19, ___", alts:["21","22","23","24","25"], correta:2, coment:"Progressão aritmética de razão +4: 19+4=23."},
+    {tema:"Sequência geométrica", texto:"—", enun:"Assinale o próximo termo da sequência: 2, 6, 18, 54, ___", alts:["108","162","216","81","144"], correta:1, coment:"Progressão geométrica de razão ×3: 54×3=162."},
+    {tema:"Problema de idade", texto:"—", enun:"A idade de Ana é o triplo da idade de seu filho. Daqui a 5 anos, a idade de Ana será o dobro da idade do filho. Qual a idade atual do filho?", alts:["5 anos","10 anos","15 anos","20 anos","25 anos"], correta:0, coment:"Seja F a idade do filho: Ana=3F. Em 5 anos: 3F+5=2(F+5) → 3F+5=2F+10 → F=5. O filho tem 5 anos."},
+    {tema:"Permutação", texto:"—", enun:"De quantas formas diferentes 4 processos podem ser organizados em uma fila de prioridade?", alts:["4","8","16","24","12"], correta:3, coment:"Permutação simples de 4 elementos: P4 = 4! = 24 formas diferentes."},
+    {tema:"Combinação", texto:"—", enun:"De quantas formas uma comissão de 2 pessoas pode ser escolhida entre 5 candidatos, sem considerar a ordem?", alts:["10","20","5","25","15"], correta:0, coment:"Combinação: C5,2 = 5!/(2!×3!) = 120/(2×6) = 10 formas."},
+    {tema:"Matriz lógica", texto:"—", enun:"Considerando a matriz [1,2,3 / 4,5,6 / 7,8,?], em que cada célula segue a sequência de 1 a 9 lida da esquerda para a direita e de cima para baixo, o valor de '?' é:", alts:["8","9","10","7","6"], correta:1, coment:"A sequência completa vai de 1 a 9; a última célula (9ª posição) é 9."},
+    {tema:"Princípio fundamental da contagem", texto:"—", enun:"Uma senha de acesso é formada por 1 letra (26 possibilidades) seguida de 2 dígitos (0 a 9, com repetição permitida). Quantas senhas diferentes são possíveis?", alts:["260","2600","520","2860","26000"], correta:1, coment:"Princípio fundamental da contagem: 26×10×10 = 2600 senhas possíveis."},
+    {tema:"Razão e proporção aplicada", texto:"—", enun:"Em uma empresa, a razão entre o número de analistas e o número de gestores é de 5:1. Se há 6 gestores, quantos analistas há?", alts:["25","30","35","20","24"], correta:1, coment:"Razão 5:1 com 6 gestores: 5×6=30 analistas (mantendo a proporção 5 analistas para cada gestor)."},
+    {tema:"Aumento percentual aplicado", texto:"—", enun:"Um orçamento de R$ 100.000 sofreu aumento de 10% no primeiro trimestre e aumento de 10% adicional no segundo trimestre (sobre o novo valor). Qual o valor final do orçamento?", alts:["R$ 120.000","R$ 121.000","R$ 110.000","R$ 122.000","R$ 100.000"], correta:1, coment:"Fator: 1,10×1,10=1,21 → 100.000×1,21 = R$ 121.000 (aumentos sucessivos NÃO se somam diretamente, são 21% acumulados, não 20%)."},
+    {tema:"Sequência não linear", texto:"—", enun:"Assinale o próximo termo da sequência de Fibonacci: 1, 1, 2, 3, 5, 8, 13, ___", alts:["18","19","20","21","24"], correta:3, coment:"Cada termo é a soma dos dois anteriores: 8+13=21."},
+    {tema:"Área e perímetro básicos", texto:"—", enun:"Um terreno retangular tem 12 metros de comprimento e 8 metros de largura. Qual sua área?", alts:["20 m²","40 m²","96 m²","48 m²","192 m²"], correta:2, coment:"Área do retângulo = comprimento × largura = 12×8 = 96 m²."},
+    {tema:"Matriz lógica avançada", texto:"—", enun:"Considerando a matriz onde cada célula é o dobro da célula à esquerda, com a primeira coluna [1, 3, 5] e a segunda coluna [2, 6, 10], qual o valor da célula na terceira coluna, segunda linha?", alts:["8","10","12","14","16"], correta:2, coment:"Segunda linha: 3, 6, 12 (cada célula é o dobro da anterior na linha) — a terceira coluna da segunda linha é 12."},
+    {tema:"Desconto percentual único", texto:"—", enun:"Um produto de R$ 250,00 recebeu desconto de 15%. Qual o valor final?", alts:["R$ 212,50","R$ 200,00","R$ 220,00","R$ 225,00","R$ 235,00"], correta:0, coment:"Fator de desconto: 1−0,15=0,85 → 250×0,85 = R$ 212,50."},
+    {tema:"Problema de mistura", texto:"—", enun:"Uma solução de 5 litros contém 20% de álcool. Quantos litros de álcool puro há na solução?", alts:["0,5 litro","1 litro","2 litros","4 litros","5 litros"], correta:1, coment:"20% de 5 litros = 0,20×5 = 1 litro de álcool puro."},
+    {tema:"Combinação avançada", texto:"—", enun:"De quantas formas uma equipe de 3 analistas pode ser escolhida entre 7 candidatos disponíveis?", alts:["21","35","42","210","105"], correta:1, coment:"Combinação: C7,3 = 7!/(3!×4!) = 5040/(6×24) = 35 formas."},
+    {tema:"Sequência de letras/padrão alfabético", texto:"—", enun:"Assinale o próximo elemento da sequência: A, C, E, G, ___ (avançando 2 letras a cada termo)", alts:["H","I","J","K","F"], correta:1, coment:"A sequência avança 2 letras a cada termo (A→C→E→G→I): a letra I vem após G."},
+    {tema:"Aplicação combinada — juros e proporção", texto:"—", enun:"Um investimento de R$ 10.000 rendeu 8% no primeiro ano e 5% no segundo ano (sobre o novo valor). Qual o valor final aproximado?", alts:["R$ 11.300,00","R$ 11.340,00","R$ 11.400,00","R$ 10.800,00","R$ 11.200,00"], correta:1, coment:"Fator: 1,08×1,05=1,134 → 10.000×1,134 = R$ 11.340,00 (rendimentos sucessivos se multiplicam, não se somam)."},
+    {tema:"Matriz lógica com figuras (descrita)", texto:"Matriz descrita: cada célula contém um número de pontos que aumenta em 1 a cada posição, da esquerda para a direita, reiniciando a contagem a cada nova linha a partir do último valor da linha anterior.", enun:"Se a primeira linha tem 1, 2, 3 pontos e a segunda linha começa com 4 pontos, quantos pontos terá a última célula da segunda linha?", alts:["5","6","7","8","9"], correta:1, coment:"Segunda linha: 4, 5, 6 — a última célula da segunda linha (terceira posição) tem 6 pontos, continuando a sequência linear iniciada na primeira linha."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"Assinale o próximo termo: 5, 10, 15, 20, ___", alts:["22","24","25","30","23"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Assinale o próximo termo: 4, 8, 16, 32, ___", alts:["48","56","64","40","36"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Um produto de R$ 100 recebeu desconto de 10%. Novo preço:", alts:["R$ 90","R$ 95","R$ 85","R$ 110","R$ 100"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Um produto de R$ 100 recebeu aumento de 10%. Novo preço:", alts:["R$ 90","R$ 100","R$ 110","R$ 115","R$ 120"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Se a/b = c/d, então:", alts:["a+d=b+c","a×d=b×c","a−d=b−c","a÷d=b×c","Nenhuma relação"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Área de um quadrado de lado 6:", alts:["12","24","36","30","18"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Perímetro de um quadrado de lado 6:", alts:["12","18","24","36","30"], correta:2},
+    {d:"Fácil", texto:"—", enun:"P4 (permutação de 4 elementos) é igual a:", alts:["4","8","16","24","12"], correta:3},
+    {d:"Fácil", texto:"—", enun:"Na permutação, a ordem dos elementos:", alts:["Não importa","Importa","É irrelevante sempre","Depende do contexto matemático apenas","Nunca é considerada"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Na combinação, a ordem dos elementos:", alts:["Importa sempre","Não importa","É sempre crescente","Depende do número de elementos","Nunca é definida"], correta:1},
+    {d:"Média", texto:"—", enun:"Um valor sofreu aumento de 30% seguido de desconto de 10% sobre o novo valor. O fator final de variação é:", alts:["1,17","1,20","1,30","0,90","1,00"], correta:0},
+    {d:"Média", texto:"—", enun:"8 trabalhadores concluem uma obra em 20 dias. Em quantos dias 10 trabalhadores concluiriam a mesma obra?", alts:["16 dias","18 dias","20 dias","25 dias","14 dias"], correta:0},
+    {d:"Média", texto:"—", enun:"Assinale o próximo termo: 1, 4, 9, 16, 25, ___ (quadrados perfeitos)", alts:["30","32","36","35","40"], correta:2},
+    {d:"Média", texto:"—", enun:"De quantas formas 5 documentos podem ser organizados em sequência?", alts:["25","60","100","120","20"], correta:3},
+    {d:"Média", texto:"—", enun:"De quantas formas uma dupla pode ser escolhida entre 6 pessoas?", alts:["12","15","30","36","10"], correta:1},
+    {d:"Média", texto:"—", enun:"A razão entre analistas e gestores é 4:1. Com 5 gestores, quantos analistas há?", alts:["15","20","25","10","24"], correta:1},
+    {d:"Média", texto:"—", enun:"Uma solução de 8 litros contém 25% de sal. Quantos litros de sal há?", alts:["1","1,5","2","2,5","3"], correta:2},
+    {d:"Média", texto:"—", enun:"Ana tem o dobro da idade de Bia. Daqui a 4 anos, a idade de Ana será 1,5 vez a de Bia. Qual a idade atual de Bia?", alts:["2 anos","4 anos","6 anos","8 anos","10 anos"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale o próximo termo: 2, 5, 10, 17, 26, ___ (diferenças crescentes: +3,+5,+7,+9,...)", alts:["35","36","37","38","39"], correta:2},
+    {d:"Média", texto:"—", enun:"Um investimento de R$ 5.000 rendeu 4% no primeiro mês e 6% no segundo mês (sobre o novo valor). Valor final aproximado:", alts:["R$ 5.500,00","R$ 5.512,00","R$ 5.520,00","R$ 5.400,00","R$ 5.300,00"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando a matriz [2,4,6 / 8,10,12 / 14,16,?], seguindo o padrão de +2 a cada célula (esquerda-direita, cima-baixo), o valor de '?' é:", alts:["17","18","19","20","16"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um orçamento sofreu redução de 25% seguida de aumento de 25% sobre o novo valor. Em relação ao original, o resultado final é:", alts:["Igual ao original (100%)","93,75% do original","106,25% do original","75% do original","125% do original"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Uma senha é formada por 2 letras distintas (26 opções na primeira, 25 na segunda, sem repetição) seguidas de 3 dígitos (0-9, com repetição). Quantas senhas são possíveis?", alts:["6500","650000","6500000","65000","650"], correta:1},
+    {d:"Difícil", texto:"—", enun:"De uma comissão de 4 pessoas escolhida entre 9 candidatos, quantas combinações diferentes são possíveis?", alts:["36","126","216","3024","84"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale o próximo termo da sequência não linear: 2, 3, 5, 8, 13, 21, ___ (Fibonacci)", alts:["29","30","32","34","36"], correta:3},
+    {d:"Difícil", texto:"—", enun:"Um terreno retangular tem perímetro de 40 metros e comprimento de 12 metros. Qual sua área?", alts:["96 m²","120 m²","144 m²","80 m²","112 m²"], correta:0},
+    {d:"Difícil", texto:"—", enun:"Marcos tem o triplo da idade de seu filho. Há 5 anos, a idade de Marcos era 5 vezes a idade do filho. Qual a idade atual do filho?", alts:["5 anos","8 anos","10 anos","12 anos","15 anos"], correta:2},
+    {d:"Difícil", texto:"—", enun:"Em uma matriz onde cada linha soma sempre 15 e a primeira linha é [4, 5, 6], a segunda linha é [7, ?, 3]. O valor de '?' é:", alts:["3","4","5","6","7"], correta:2},
+    {d:"Difícil", texto:"—", enun:"Um valor inicial sofre três aumentos sucessivos de 10% cada. O fator de variação total (aproximado) é:", alts:["1,10","1,20","1,30","1,331","1,300"], correta:3},
+    {d:"Difícil", texto:"—", enun:"Considerando razão inversamente proporcional, se 6 máquinas produzem um lote em 8 horas, quantas horas levariam 4 máquinas para produzir o mesmo lote?", alts:["10 horas","12 horas","14 horas","16 horas","6 horas"], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Resolver problemas de razão e proporção (diretamente e inversamente proporcionais)",
+    "Aplicar corretamente aumentos e descontos percentuais sucessivos (multiplicar fatores)",
+    "Resolver problemas de idade com sistemas de equações simples",
+    "Identificar e continuar sequências aritméticas (PA)",
+    "Identificar e continuar sequências geométricas (PG)",
+    "Identificar padrões não lineares em sequências (Fibonacci e similares)",
+    "Resolver problemas de contagem de figuras geométricas compostas",
+    "Identificar regras de transformação em matrizes lógicas (linha, coluna, diagonal)",
+    "Aplicar o princípio fundamental da contagem",
+    "Diferenciar e aplicar permutação simples e combinação simples",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Somar percentuais sucessivos em vez de multiplicar os fatores de variação.",
+    "Confundir grandezas diretamente proporcionais com inversamente proporcionais.",
+    "Não testar a regra de uma sequência em posições anteriores antes de aplicá-la à posição pedida.",
+    "Confundir progressão aritmética (soma constante) com progressão geométrica (multiplicação constante).",
+    "Errar a montagem das equações em problemas de idade, trocando os momentos temporais.",
+    "Aplicar a regra errada de uma matriz lógica (linha em vez de coluna, ou vice-versa).",
+    "Confundir permutação (ordem importa) com combinação (ordem não importa).",
+    "Esquecer de considerar repetição ou não repetição em problemas de contagem.",
+    "Errar o fatorial em cálculos de permutação e combinação.",
+    "Não simplificar corretamente a fração em fórmulas de combinação.",
+    "Assumir erroneamente que aumento seguido de desconto do mesmo percentual retorna ao valor original.",
+    "Não verificar a unidade de medida (dias, litros, metros) antes de responder um problema aritmético.",
+    "Ignorar pistas visuais em problemas geométricos, tentando resolver apenas com cálculo.",
+    "Não desenhar (nem mentalmente) a matriz antes de tentar identificar seu padrão.",
+    "Resolver problemas de mistura sem identificar corretamente qual grandeza representa a concentração.",
+    "Não verificar se a resposta obtida faz sentido no contexto do problema (ex.: idade negativa).",
+    "Confundir razão (comparação simples) com proporção (igualdade de razões).",
+    "Aplicar a propriedade fundamental das proporções de forma invertida (trocar meios por extremos).",
+    "Tentar resolver sequências complexas sem testar sistematicamente os padrões mais simples primeiro (PA, PG).",
+    "Perder tempo excessivo tentando memorizar fórmulas em vez de compreender a lógica por trás delas.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Razão","Comparação entre duas grandezas por meio de uma divisão (a:b ou a/b)."],
+    ["Proporção","Igualdade entre duas razões (a/b = c/d)."],
+    ["Grandezas diretamente proporcionais","Se uma aumenta, a outra aumenta na mesma razão."],
+    ["Grandezas inversamente proporcionais","Se uma aumenta, a outra diminui na razão inversa."],
+    ["Progressão aritmética (PA)","Sequência em que cada termo é obtido somando uma razão constante ao termo anterior."],
+    ["Progressão geométrica (PG)","Sequência em que cada termo é obtido multiplicando o termo anterior por uma razão constante."],
+    ["Permutação simples","Número de formas de ordenar todos os elementos de um conjunto, dado por n!."],
+    ["Combinação simples","Número de formas de escolher p elementos de um total de n, sem considerar a ordem."],
+    ["Princípio fundamental da contagem","Regra segundo a qual o total de possibilidades é o produto das opções de cada etapa independente."],
+    ["Matriz lógica","Grade de elementos organizados segundo um padrão de transformação, usada para deduzir um elemento faltante."],
+    ["Sequência de Fibonacci","Sequência numérica em que cada termo é a soma dos dois termos anteriores."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>
