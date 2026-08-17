@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marco Civil da Internet (Lei nº 12.965/2014) | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Legislação — Segurança da Informação e Proteção de Dados</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">03 - Marco Civil da Internet (Lei nº 12.965/2014)</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Lei de Acesso à Informação.html">01 - Lei de Acesso à Informação</option>
+    <option value="02 - Lei de Delitos Informáticos.html">02 - Lei de Delitos Informáticos</option>
+    <option value="03 - Marco Civil da Internet.html" selected>03 - Marco Civil da Internet</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Marco Civil da Internet (Lei nº 12.965/2014)</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadro de prazos</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Legislação: Segurança da Informação e Proteção de Dados<br>Tópico 03 de 04<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Lei nº 12.965/2014 — Marco Civil da Internet</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Legislação: Segurança da Informação e Proteção de Dados</b> &nbsp;›&nbsp; Tópico 03</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">7h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Lei nº 12.527/2011 (LAI) — Tópico 1</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — base normativa para direitos digitais e proteção de dados</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender o objetivo geral do <b>Marco Civil da Internet</b>: estabelecer princípios, garantias, direitos e deveres para o uso da internet no Brasil.</li>
+            <li>Dominar os <b>direitos dos usuários</b> previstos no art. 7º (Capítulo II, Seção I), incluindo privacidade, sigilo de comunicações e proteção de dados pessoais.</li>
+            <li>Compreender a <b>nulidade de cláusulas contratuais</b> abusivas prevista no art. 8º.</li>
+            <li>Dominar o princípio da <b>neutralidade de rede</b> (Capítulo III, Seção I, art. 9º) e suas exceções técnicas.</li>
+            <li>Compreender o regime de <b>proteção aos registros, dados pessoais e comunicações privadas</b> (Capítulo III, Seção II, arts. 10 a 17), incluindo os prazos de guarda de registros de conexão e de acesso a aplicações.</li>
+            <li>Diferenciar as três subseções da Seção II: guarda de registros de conexão, guarda de registros de acesso a aplicações na provisão de conexão, e guarda de registros de acesso a aplicações na provisão de aplicações.</li>
+            <li>Resolver questões FGV que exigem aplicação literal dos artigos estudados a cenários de provedores de conexão e aplicações.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A <b>Lei nº 12.965/2014</b>, conhecida como <b>Marco Civil da Internet</b>, estabelece princípios, garantias, direitos e deveres para o uso da internet no Brasil, sendo considerada legislação pioneira e referência internacional em regulação da internet centrada em direitos civis.</p>
+          <p>O <b>Capítulo II</b> (Dos Direitos e Garantias dos Usuários), em sua <b>Seção I</b> (arts. 7º e 8º), estabelece um rol extenso de direitos assegurados ao usuário: inviolabilidade da intimidade e vida privada; sigilo do fluxo de comunicações e das comunicações armazenadas (ambos excepcionados apenas por ordem judicial); não suspensão da conexão salvo por débito decorrente de sua própria utilização; manutenção da qualidade contratada; informações claras sobre tratamento de dados pessoais; consentimento expresso e destacado para coleta de dados; e exclusão definitiva de dados pessoais ao término da relação com o provedor.</p>
+          <p>O art. 8º estabelece que a garantia à privacidade e à liberdade de expressão é <b>condição para o pleno exercício do acesso à internet</b>, sendo <b>nulas de pleno direito</b> cláusulas contratuais que violem a inviolabilidade das comunicações privadas ou que não ofereçam ao contratante a opção pelo foro brasileiro em contratos de adesão.</p>
+          <p>O <b>Capítulo III</b> (Da Provisão de Conexão e de Aplicações de Internet), em sua <b>Seção I</b> (art. 9º), consagra o princípio da <b>neutralidade de rede</b>: o responsável pela transmissão, comutação ou roteamento deve tratar isonomicamente todos os pacotes de dados, sem distinção por conteúdo, origem, destino, serviço, terminal ou aplicação — com exceções restritas a requisitos técnicos indispensáveis e priorização de serviços de emergência, sempre regulamentadas por decreto presidencial.</p>
+          <p>A <b>Seção II</b> do Capítulo III (arts. 10 a 17) trata da <b>proteção aos registros, dados pessoais e comunicações privadas</b>, dividindo-se em três subseções sobre <b>guarda de registros</b>: registros de conexão devem ser mantidos por <b>1 ano</b> pelo administrador de sistema autônomo (art. 13); é <b>vedado</b> guardar registros de acesso a aplicações na provisão de conexão (art. 14); e provedores de aplicações organizados/profissionais/com fins econômicos devem guardar registros de acesso a aplicações por <b>6 meses</b> (art. 15). A disponibilização desses registros a terceiros sempre depende de <b>ordem judicial</b>.</p>
+          <div class="box warn">
+            <div class="box-title">⚠ Atenção: alterações da MP nº 1.068/2021 foram rejeitadas</div>
+            <p>A Medida Provisória nº 1.068/2021 tentou inserir uma nova "Seção II" no Capítulo II (sobre direitos de usuários de redes sociais, arts. 8º-A a 8º-D) e um novo Capítulo IV-A (Das Sanções), além de revogar os arts. 11 e 12 originais. Essa MP foi <b>rejeitada pelo Congresso Nacional</b>, de modo que essas alterações <b>não vigoram</b> — o texto válido do Capítulo II permanece com apenas os arts. 7º e 8º, e os arts. 11 e 12 originais (incluindo as sanções por infração aos arts. 10 e 11) continuam em vigor.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Marco Civil<br>da Internet</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Cap. II Seção I</h4><ul><li>Art. 7º: direitos do usuário</li><li>Art. 8º: nulidade de cláusulas</li></ul></div>
+              <div class="mm-node"><h4>Cap. III Seção I</h4><ul><li>Art. 9º: neutralidade de rede</li><li>Exceções técnicas restritas</li></ul></div>
+              <div class="mm-node"><h4>Cap. III Seção II</h4><ul><li>Arts. 10-12: proteção geral</li><li>Sanções (art. 12, ainda vigente)</li></ul></div>
+              <div class="mm-node"><h4>Subseção I</h4><ul><li>Registros de conexão</li><li>Guarda: 1 ano</li></ul></div>
+              <div class="mm-node"><h4>Subseção II</h4><ul><li>Registros de acesso na conexão</li><li>Vedado guardar</li></ul></div>
+              <div class="mm-node"><h4>Subseção III</h4><ul><li>Registros de acesso em aplicações</li><li>Guarda: 6 meses</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Capítulo II, Seção I — Direitos e Garantias dos Usuários (arts. 7º e 8º)</h3>
+          <p>O art. 7º estabelece que o <b>acesso à internet é essencial ao exercício da cidadania</b>, assegurando ao usuário um rol de treze direitos.</p>
+          <table>
+            <thead><tr><th>Inciso</th><th>Direito assegurado</th></tr></thead>
+            <tbody>
+              <tr><td>I</td><td>Inviolabilidade da intimidade e vida privada, com proteção e indenização por dano material ou moral</td></tr>
+              <tr><td>II</td><td>Inviolabilidade e sigilo do fluxo de comunicações pela internet, salvo por ordem judicial</td></tr>
+              <tr><td>III</td><td>Inviolabilidade e sigilo das comunicações privadas armazenadas, salvo por ordem judicial</td></tr>
+              <tr><td>IV</td><td>Não suspensão da conexão, salvo por débito diretamente decorrente de sua utilização</td></tr>
+              <tr><td>V</td><td>Manutenção da qualidade contratada da conexão</td></tr>
+              <tr><td>VI</td><td>Informações claras e completas nos contratos sobre proteção de registros e gerenciamento de rede</td></tr>
+              <tr><td>VII</td><td>Não fornecimento a terceiros de dados pessoais, salvo consentimento livre/expresso/informado ou hipóteses legais</td></tr>
+              <tr><td>VIII</td><td>Informações claras sobre coleta, uso, armazenamento e tratamento de dados pessoais</td></tr>
+              <tr><td>IX</td><td>Consentimento expresso para coleta/uso/tratamento de dados, destacado das demais cláusulas contratuais</td></tr>
+              <tr><td>X</td><td>Exclusão definitiva dos dados pessoais fornecidos, a requerimento, ao término da relação (ressalvadas hipóteses de guarda obrigatória)</td></tr>
+              <tr><td>XI</td><td>Publicidade e clareza das políticas de uso dos provedores</td></tr>
+              <tr><td>XII</td><td>Acessibilidade, considerando características físico-motoras, perceptivas, sensoriais, intelectuais e mentais</td></tr>
+              <tr><td>XIII</td><td>Aplicação das normas de proteção e defesa do consumidor</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Padrão comum: exceção por ordem judicial</div>
+            <p>Repare que tanto o inciso II (sigilo do fluxo) quanto o III (sigilo das comunicações armazenadas) só admitem exceção mediante <b>ordem judicial</b> — jamais por decisão administrativa unilateral do provedor ou de autoridade não judicial.</p>
+          </div>
+
+          <h3>4.2 Art. 8º — Nulidade de cláusulas contratuais</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal</div>
+            <p><b>Art. 8º</b> A garantia do direito à privacidade e à liberdade de expressão nas comunicações é condição para o pleno exercício do direito de acesso à internet. <b>Parágrafo único.</b> São nulas de pleno direito as cláusulas contratuais que violem o disposto no caput, tais como aquelas que: <b>I</b> — impliquem ofensa à inviolabilidade e ao sigilo das comunicações privadas; ou <b>II</b> — em contrato de adesão, não ofereçam como alternativa a adoção do foro brasileiro para solução de controvérsias.</p>
+          </div>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV explora bastante esse dispositivo em contratos de adesão de serviços de internet estrangeiros que tentam impor foro exclusivo no exterior — tal cláusula é <b>nula de pleno direito</b> se não oferecer alternativa de foro brasileiro.</p>
+          </div>
+
+          <h3>4.3 Capítulo III, Seção I — Neutralidade de Rede (art. 9º)</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal (resumo)</div>
+            <p><b>Art. 9º</b> O responsável pela transmissão, comutação ou roteamento tem o dever de tratar de forma isonômica quaisquer pacotes de dados, sem distinção por conteúdo, origem e destino, serviço, terminal ou aplicação.</p>
+          </div>
+          <table>
+            <thead><tr><th>Elemento</th><th>Regra</th></tr></thead>
+            <tbody>
+              <tr><td>Regra geral</td><td>Tratamento isonômico de todos os pacotes de dados</td></tr>
+              <tr><td>Exceções (§1º)</td><td>Discriminação/degradação de tráfego só pode decorrer de: (I) requisitos técnicos indispensáveis à prestação adequada dos serviços; (II) priorização de serviços de emergência — regulamentadas por decreto presidencial, ouvidos o Comitê Gestor da Internet e a Anatel</td></tr>
+              <tr><td>Deveres em caso de discriminação (§2º)</td><td>Abster-se de causar dano; agir com proporcionalidade, transparência e isonomia; informar previamente as práticas de gerenciamento; oferecer condições comerciais não discriminatórias</td></tr>
+              <tr><td>Vedação geral (§3º)</td><td>É vedado bloquear, monitorar, filtrar ou analisar o conteúdo dos pacotes de dados</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Capítulo III, Seção II — Proteção aos Registros, Dados Pessoais e Comunicações Privadas (arts. 10 a 12)</h3>
+          <table>
+            <thead><tr><th>Artigo</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Art. 10</td><td>Guarda e disponibilização de registros/dados pessoais/comunicações privadas devem respeitar intimidade, vida privada, honra e imagem; disponibilização a terceiros exige ordem judicial (exceto dados cadastrais básicos — qualificação, filiação, endereço — a autoridades administrativas competentes)</td></tr>
+              <tr><td>Art. 11</td><td>Aplicabilidade territorial: legislação brasileira aplica-se sempre que ao menos um ato de coleta/armazenamento/tratamento ocorrer em território nacional, mesmo por empresa estrangeira que ofereça serviço ao público brasileiro</td></tr>
+              <tr><td>Art. 12</td><td>Sanções por infração aos arts. 10 e 11: advertência; multa de até 10% do faturamento do grupo econômico no Brasil; suspensão temporária das atividades; proibição de exercício das atividades</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Ponto de atenção sobre vigência</div>
+            <p>Os arts. 11 e 12 tiveram tentativa de revogação/alteração pela MP nº 1.068/2021 — como essa MP foi <b>rejeitada</b>, o texto original desses artigos permanece <b>plenamente em vigor</b>, incluindo o teto de multa de <b>10% do faturamento</b>.</p>
+          </div>
+
+          <h3>4.5 Subseção I — Da Guarda de Registros de Conexão (art. 13)</h3>
+          <table>
+            <thead><tr><th>Elemento</th><th>Regra</th></tr></thead>
+            <tbody>
+              <tr><td>Responsável</td><td>Administrador de sistema autônomo</td></tr>
+              <tr><td>Prazo de guarda</td><td>1 (um) ano, sob sigilo, em ambiente controlado e de segurança</td></tr>
+              <tr><td>Transferência da responsabilidade</td><td>Não pode ser transferida a terceiros</td></tr>
+              <tr><td>Guarda cautelar estendida</td><td>Autoridade policial/administrativa ou Ministério Público pode requerer guarda por prazo superior; deve ingressar com pedido de autorização judicial em até 60 dias</td></tr>
+              <tr><td>Acesso aos registros</td><td>Sempre precedido de autorização judicial</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Subseção II — Guarda de Registros de Acesso a Aplicações na Provisão de Conexão (art. 14)</h3>
+          <div class="box warn">
+            <div class="box-title">⚠ Regra oposta à Subseção I</div>
+            <p><b>Art. 14.</b> Na provisão de conexão, onerosa ou gratuita, é <b>vedado guardar</b> os registros de acesso a aplicações de internet. Ou seja: quem fornece a CONEXÃO (provedor de acesso à internet) NÃO PODE guardar quais aplicações/sites o usuário acessou — essa é uma proteção adicional de privacidade, frequentemente confundida com a obrigação de guarda de registros de conexão do art. 13.</p>
+          </div>
+
+          <h3>4.7 Subseção III — Guarda de Registros de Acesso a Aplicações na Provisão de Aplicações (arts. 15 a 17)</h3>
+          <table>
+            <thead><tr><th>Artigo</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Art. 15</td><td>Provedor de aplicações constituído como pessoa jurídica, que exerça a atividade de forma organizada, profissional e com fins econômicos, deve manter registros de acesso a aplicações por <b>6 (seis) meses</b>, sob sigilo</td></tr>
+              <tr><td>Art. 16</td><td>É vedada a guarda de: (I) registros de acesso a OUTRAS aplicações sem consentimento prévio do titular; (II) dados pessoais excessivos em relação à finalidade do consentimento</td></tr>
+              <tr><td>Art. 17</td><td>A opção por não guardar registros de acesso não implica, por si só, responsabilidade por danos decorrentes do uso dos serviços por terceiros</td></tr>
+            </tbody>
+          </table>
+
+          <div class="box tip">
+            <div class="box-title">✅ Comparativo dos três prazos/regras de guarda</div>
+            <p><b>Registros de conexão (art. 13):</b> guardar por 1 ano. <b>Registros de acesso a aplicações na provisão de conexão (art. 14):</b> proibido guardar. <b>Registros de acesso a aplicações na provisão de aplicações (art. 15):</b> guardar por 6 meses (apenas para provedores organizados/profissionais/com fins econômicos).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV cobra o Marco Civil por meio de cenários envolvendo provedores de conexão/aplicações e usuários, testando prazos de guarda de registros, exigência de ordem judicial para acesso a dados, e o princípio da neutralidade de rede — sempre com aplicação literal do texto legal.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões sobre prazos de guarda de registros (1 ano x 6 meses x vedação de guarda).</li>
+            <li>Questões sobre a exigência de ordem judicial para acesso a dados/comunicações.</li>
+            <li>Questões sobre neutralidade de rede e suas exceções restritas.</li>
+            <li>Dificuldade alta — muitos artigos, prazos e distinções sutis entre subseções.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Prazos de guarda de registros (arts. 13, 14, 15)</td><td>Muito alta</td></tr>
+              <tr><td>Direitos do art. 7º (especialmente sigilo e proteção de dados)</td><td>Alta</td></tr>
+              <tr><td>Neutralidade de rede e suas exceções (art. 9º)</td><td>Alta</td></tr>
+              <tr><td>Exigência de ordem judicial para disponibilização de registros</td><td>Alta</td></tr>
+              <tr><td>Nulidade de cláusulas contratuais (art. 8º)</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Trocar o prazo de guarda de registros de conexão (1 ano) pelo de registros de acesso a aplicações (6 meses), ou vice-versa.</li>
+            <li>Achar que é permitido guardar registros de acesso a aplicações na provisão de CONEXÃO — é expressamente vedado (art. 14).</li>
+            <li>Achar que a disponibilização de registros pode ocorrer por requisição de autoridade administrativa comum, sem ordem judicial.</li>
+            <li>Confundir a exceção de dados cadastrais básicos (nome, filiação, endereço) com o conteúdo de comunicações privadas (sempre exige ordem judicial).</li>
+            <li>Achar que a MP 1.068/2021 alterou definitivamente a lei — ela foi rejeitada.</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Toda vez que aparecer "1 ano" ou "6 meses", identifique se a questão trata de registros de CONEXÃO (1 ano) ou de ACESSO A APLICAÇÕES (6 meses, provedor organizado/profissional/com fins econômicos).</li>
+            <li>Desconfie de qualquer hipótese de acesso a dados sem menção a "ordem judicial".</li>
+            <li>Ao ver "provedor de conexão" mantendo logs de sites visitados, lembre-se: isso é proibido pelo art. 14.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Regra dos três prazos</div><p>Conexão (art. 13): guarda 1 ano. Acesso a aplicações NA CONEXÃO (art. 14): proibido guardar. Acesso a aplicações NAS APLICAÇÕES (art. 15): guarda 6 meses.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra de ouro: ordem judicial</div><p>Qualquer disponibilização de registros ou conteúdo de comunicações privadas a terceiros exige ordem judicial — exceção única: dados cadastrais básicos a autoridades administrativas competentes.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Neutralidade de rede em uma frase</div><p>"Todo pacote de dados é tratado igual" — exceções só por decreto presidencial, para requisitos técnicos ou emergência.</p></div>
+          <div class="box tip"><div class="box-title">🧠 MP 1.068/2021 = rejeitada</div><p>As tentativas de inserir "Seção II" no Cap. II (redes sociais) e "Capítulo IV-A" (sanções) foram REJEITADAS pelo Congresso — não vigoram.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Marco Civil: princípios, garantias, direitos e deveres para o uso da internet no Brasil.</li>
+            <li>Art. 7º: 13 direitos do usuário (privacidade, sigilo de comunicações, não suspensão de conexão, proteção de dados pessoais).</li>
+            <li>Art. 8º: cláusulas contratuais que violam privacidade ou não oferecem foro brasileiro são nulas de pleno direito.</li>
+            <li>Art. 9º: neutralidade de rede — tratamento isonômico de pacotes, exceções técnicas restritas via decreto.</li>
+            <li>Art. 10-12: proteção de registros/dados/comunicações; acesso a terceiros exige ordem judicial; sanções até 10% do faturamento.</li>
+            <li>Art. 13: registros de conexão — guarda de 1 ano, pelo administrador de sistema autônomo.</li>
+            <li>Art. 14: vedado guardar registros de acesso a aplicações na provisão de CONEXÃO.</li>
+            <li>Art. 15: registros de acesso a aplicações — guarda de 6 meses, por provedores organizados/profissionais/com fins econômicos.</li>
+            <li>MP 1.068/2021 foi rejeitada — não altera a lei.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADRO DE PRAZOS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadro de prazos (referência rápida)</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo/Regra</th><th>Situação</th></tr></thead>
+            <tbody>
+              <tr><td>1 ano</td><td>Guarda de registros de conexão (art. 13)</td></tr>
+              <tr><td>Vedado guardar</td><td>Registros de acesso a aplicações na provisão de conexão (art. 14)</td></tr>
+              <tr><td>6 meses</td><td>Guarda de registros de acesso a aplicações na provisão de aplicações (art. 15)</td></tr>
+              <tr><td>60 dias</td><td>Prazo para autoridade requerente ingressar com pedido de autorização judicial, após requerimento cautelar de guarda estendida (art. 13, §3º)</td></tr>
+              <tr><td>Até 10%</td><td>Teto de multa sobre faturamento do grupo econômico, por infração aos arts. 10/11 (art. 12)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Estrutura dos capítulos e seções estudados</h3>
+          <table>
+            <thead><tr><th>Capítulo/Seção</th><th>Artigos</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Cap. II, Seção I</td><td>Arts. 7º-8º</td><td>Direitos e garantias dos usuários; nulidade de cláusulas abusivas</td></tr>
+              <tr><td>Cap. III, Seção I</td><td>Art. 9º</td><td>Neutralidade de rede</td></tr>
+              <tr><td>Cap. III, Seção II</td><td>Arts. 10-12</td><td>Proteção de registros/dados/comunicações; sanções</td></tr>
+              <tr><td>Cap. III, Seção II, Subseção I</td><td>Art. 13</td><td>Guarda de registros de conexão</td></tr>
+              <tr><td>Cap. III, Seção II, Subseção II</td><td>Art. 14</td><td>Guarda de registros de acesso a aplicações na provisão de conexão</td></tr>
+              <tr><td>Cap. III, Seção II, Subseção III</td><td>Arts. 15-17</td><td>Guarda de registros de acesso a aplicações na provisão de aplicações</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>O Marco Civil da Internet é frequentemente cobrado junto com a LGPD, já que ambos tratam de proteção de dados — a FGV gosta de testar se o candidato sabe que o Marco Civil trata de forma mais ampla os direitos digitais, enquanto a LGPD é específica sobre tratamento de dados pessoais.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>O Marco Civil da Internet foi fruto de um processo inovador de elaboração legislativa colaborativa, com consulta pública online que recebeu milhares de contribuições da sociedade civil antes de sua votação no Congresso Nacional — um marco de "governança multiparticipativa" citado na própria lei (art. 24).</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>A distinção entre registros de conexão (guardados por 1 ano) e registros de acesso a aplicações (guardados por 6 meses, ou proibidos na provisão de conexão) reflete uma arquitetura de proteção de privacidade em camadas: quanto mais próximo do comportamento específico do usuário (o que ele acessa), maior a proteção contra retenção de dados.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Lei nº 13.709/2018 (LGPD) — Tópico 4</td><td>O Marco Civil trata de proteção de dados de forma geral; a LGPD é a lei específica sobre tratamento de dados pessoais, citada inclusive no próprio art. 7º, X, do Marco Civil</td></tr>
+              <tr><td>Lei nº 12.737/2012 (Delitos Informáticos) — Tópico 2</td><td>Ambas tratam de proteção no ambiente digital, sob perspectivas civil (Marco Civil) e penal (Lei 12.737)</td></tr>
+              <tr><td>Lei nº 12.527/2011 (LAI) — Tópico 1</td><td>Convergem no tema de proteção de dados pessoais como limite ao acesso a informações</td></tr>
+              <tr><td>Inteligência Artificial: fundamentos e aplicações (Atualidades)</td><td>Neutralidade de rede e proteção de dados são pré-condições para governança responsável de sistemas de IA na internet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar o quadro de prazos (13).</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com atenção à distinção entre as três subseções de guarda de registros.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para a LGPD (Tópico 4), que fecha a disciplina de Legislação.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Lei nº 12.965, de 23 de abril de 2014 (Marco Civil da Internet) — texto integral, Presidência da República.</li>
+            <li>Decreto nº 8.771, de 11 de maio de 2016 — regulamenta o Marco Civil da Internet.</li>
+            <li>Medida Provisória nº 1.068/2021 — tentativa de alteração, rejeitada pelo Congresso Nacional.</li>
+            <li>Lei nº 13.709/2018 (LGPD) — referenciada no art. 7º, X, do Marco Civil.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Legislação: Segurança da Informação e Proteção de Dados · Tópico 03/04</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_leg_t03";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"O que estabelece a Lei nº 12.965/2014 (Marco Civil da Internet)?", a:"Princípios, garantias, direitos e deveres para o uso da internet no Brasil."},
+    {q:"O acesso à internet é considerado essencial a quê, segundo o art. 7º?", a:"Ao exercício da cidadania."},
+    {q:"Quais direitos do art. 7º só admitem exceção por ordem judicial?", a:"A inviolabilidade e sigilo do fluxo de comunicações (inciso II) e das comunicações privadas armazenadas (inciso III)."},
+    {q:"Em que hipótese a conexão à internet pode ser suspensa, segundo o art. 7º, IV?", a:"Apenas por débito diretamente decorrente da própria utilização da conexão."},
+    {q:"O que torna nula uma cláusula contratual, segundo o art. 8º?", a:"Violar a inviolabilidade/sigilo das comunicações privadas, ou não oferecer, em contrato de adesão, a opção pelo foro brasileiro."},
+    {q:"O que é o princípio da neutralidade de rede (art. 9º)?", a:"O dever de tratar de forma isonômica todos os pacotes de dados, sem distinção por conteúdo, origem, destino, serviço, terminal ou aplicação."},
+    {q:"Quais são as únicas exceções admitidas à neutralidade de rede?", a:"Requisitos técnicos indispensáveis à prestação adequada dos serviços, e priorização de serviços de emergência."},
+    {q:"O que é vedado ao responsável pela transmissão de dados, segundo o §3º do art. 9º?", a:"Bloquear, monitorar, filtrar ou analisar o conteúdo dos pacotes de dados."},
+    {q:"Quando a disponibilização de registros/dados/comunicações a terceiros pode ocorrer, segundo o art. 10?", a:"Mediante ordem judicial, exceto dados cadastrais básicos (qualificação, filiação, endereço) a autoridades administrativas competentes."},
+    {q:"Qual o teto de multa previsto no art. 12 por infração aos arts. 10/11?", a:"Até 10% do faturamento do grupo econômico no Brasil no último exercício."},
+    {q:"Por quanto tempo devem ser guardados os registros de conexão, segundo o art. 13?", a:"1 (um) ano."},
+    {q:"Quem é responsável pela guarda dos registros de conexão?", a:"O administrador de sistema autônomo."},
+    {q:"O que estabelece o art. 14 sobre registros de acesso a aplicações na provisão de conexão?", a:"É vedado guardá-los."},
+    {q:"Por quanto tempo devem ser guardados os registros de acesso a aplicações, segundo o art. 15?", a:"6 (seis) meses, para provedores organizados, profissionais e com fins econômicos."},
+    {q:"O que é vedado guardar, segundo o art. 16?", a:"Registros de acesso a OUTRAS aplicações sem consentimento prévio, e dados pessoais excessivos em relação à finalidade do consentimento."},
+    {q:"Não guardar registros de acesso implica automaticamente responsabilidade por danos, segundo o art. 17?", a:"Não — a opção por não guardar não implica, por si só, responsabilidade."},
+    {q:"O que aconteceu com a Medida Provisória nº 1.068/2021 que tentou alterar o Marco Civil?", a:"Foi rejeitada pelo Congresso Nacional, não produzindo efeitos permanentes."},
+    {q:"Quais dispositivos a MP 1.068/2021 tentou inserir, sem sucesso?", a:"Uma nova Seção II no Cap. II (direitos em redes sociais, arts. 8º-A a 8º-D) e um Capítulo IV-A (Das Sanções)."},
+    {q:"O que caracteriza uma legislação pioneira em direitos digitais, segundo o contexto do Marco Civil?", a:"O Marco Civil brasileiro é considerado referência internacional em regulação da internet centrada em direitos civis, sendo fruto de consulta pública colaborativa."},
+    {q:"Qual artigo do Marco Civil faz referência expressa à LGPD?", a:"O art. 7º, X, ao tratar da exclusão de dados pessoais, ressalvando hipóteses de guarda obrigatória previstas 'na que dispõe sobre a proteção de dados pessoais' (LGPD)."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Objetivo geral", texto:"—", enun:"A Lei nº 12.965/2014 (Marco Civil da Internet) tem por objeto:", alts:["Regular exclusivamente o comércio eletrônico.","Estabelecer princípios, garantias, direitos e deveres para o uso da internet no Brasil.","Regular exclusivamente a proteção de dados pessoais.","Criar a Autoridade Nacional de Proteção de Dados.","Tipificar crimes cibernéticos."], correta:1, coment:"O art. 1º estabelece expressamente esse objeto amplo: princípios, garantias, direitos e deveres para o uso da internet no Brasil."},
+    {tema:"Direitos do art. 7º", texto:"—", enun:"Segundo o art. 7º, a conexão à internet do usuário pode ser suspensa:", alts:["A qualquer momento, a critério do provedor.","Apenas por débito diretamente decorrente de sua utilização.","Por qualquer inadimplência contratual, ainda que não relacionada à conexão.","Nunca, em nenhuma hipótese.","Apenas mediante decisão administrativa da Anatel."], correta:1, coment:"O inciso IV do art. 7º assegura a não suspensão da conexão, salvo por débito diretamente decorrente de sua própria utilização."},
+    {tema:"Sigilo de comunicações", texto:"—", enun:"A inviolabilidade e o sigilo das comunicações privadas armazenadas, segundo o art. 7º, III, só podem ser excepcionados:", alts:["Por decisão do próprio provedor de serviços.","Por ordem judicial.","Por requisição do Ministério Público, sem necessidade de ordem judicial.","Por simples solicitação da autoridade policial.","Nunca podem ser excepcionados."], correta:1, coment:"O inciso III do art. 7º condiciona expressamente a exceção à existência de ordem judicial."},
+    {tema:"Nulidade de cláusulas", texto:"—", enun:"Segundo o art. 8º, é nula de pleno direito a cláusula contratual que, em contrato de adesão:", alts:["Ofereça a opção de foro brasileiro ao contratante.","Não ofereça, como alternativa, a adoção do foro brasileiro para solução de controvérsias.","Trate de qualquer assunto não relacionado à internet.","Seja redigida em português.","Envolva valores superiores a determinado teto."], correta:1, coment:"O parágrafo único, II, do art. 8º considera nula a cláusula que, em contrato de adesão, não oferece ao contratante a alternativa do foro brasileiro."},
+    {tema:"Neutralidade de rede", texto:"—", enun:"O princípio da neutralidade de rede, previsto no art. 9º, estabelece que o responsável pela transmissão de dados deve:", alts:["Priorizar pacotes de dados de aplicações pagas.","Tratar de forma isonômica quaisquer pacotes de dados, sem distinção por conteúdo, origem, destino, serviço, terminal ou aplicação.","Bloquear livremente qualquer conteúdo considerado inadequado.","Cobrar valores diferenciados conforme o tipo de conteúdo acessado.","Analisar o conteúdo de todos os pacotes de dados transmitidos."], correta:1, coment:"O caput do art. 9º estabelece exatamente o dever de tratamento isonômico dos pacotes de dados, sem qualquer das distinções mencionadas nas demais alternativas."},
+    {tema:"Exceções à neutralidade", texto:"—", enun:"Segundo o §1º do art. 9º, a discriminação ou degradação do tráfego de dados somente pode decorrer de:", alts:["Qualquer decisão comercial do provedor.","Requisitos técnicos indispensáveis à prestação adequada dos serviços, e priorização de serviços de emergência.","Preferência do usuário final, mediante pagamento adicional.","Determinação de qualquer autoridade administrativa, sem regulamentação específica.","Inexistência de qualquer exceção admitida."], correta:1, coment:"O §1º do art. 9º lista taxativamente essas duas hipóteses, regulamentadas por decreto presidencial."},
+    {tema:"Vedação de análise de conteúdo", texto:"—", enun:"Segundo o §3º do art. 9º, é vedado ao responsável pela transmissão de dados:", alts:["Cobrar pela conexão à internet.","Bloquear, monitorar, filtrar ou analisar o conteúdo dos pacotes de dados.","Oferecer serviços de banda larga.","Contratar com empresas privadas.","Estabelecer prazos de contrato."], correta:1, coment:"O §3º do art. 9º veda expressamente essas quatro condutas em relação ao conteúdo dos pacotes de dados."},
+    {tema:"Disponibilização de registros", texto:"—", enun:"Segundo o art. 10, a disponibilização de registros de conexão a terceiros, de forma associada a dados pessoais, depende de:", alts:["Simples requerimento do interessado.","Ordem judicial.","Autorização do provedor, sem necessidade de outro requisito.","Decisão do Comitê Gestor da Internet.","Publicação em Diário Oficial."], correta:1, coment:"O §1º do art. 10 exige expressamente ordem judicial para essa disponibilização, respeitado o art. 7º."},
+    {tema:"Exceção de dados cadastrais", texto:"—", enun:"Segundo o §3º do art. 10, o disposto no caput não impede o acesso, sem ordem judicial, a:", alts:["Conteúdo integral de comunicações privadas.","Dados cadastrais que informem qualificação pessoal, filiação e endereço, por autoridades administrativas competentes.","Qualquer dado pessoal, sem exceção.","Registros de acesso a aplicações de terceiros.","Senhas de acesso a contas de usuário."], correta:1, coment:"O §3º do art. 10 excepciona apenas os dados cadastrais básicos (qualificação, filiação, endereço), acessíveis por autoridades administrativas com competência legal, sem exigir ordem judicial nesse caso específico."},
+    {tema:"Sanções (art. 12)", texto:"—", enun:"O teto de multa previsto no art. 12 por infração às normas dos arts. 10 e 11 é de:", alts:["Até 5% do faturamento","Até 10% do faturamento do grupo econômico no Brasil","Valor fixo de R$ 50 milhões","Até 20% do faturamento","Não há previsão de multa"], correta:1, coment:"O inciso II do art. 12 prevê multa de até 10% do faturamento do grupo econômico no Brasil no último exercício, excluídos os tributos."},
+    {tema:"Guarda de registros de conexão", texto:"—", enun:"Segundo o art. 13, os registros de conexão devem ser guardados, sob sigilo, pelo prazo de:", alts:["6 meses","1 ano","2 anos","5 anos","Indefinidamente"], correta:1, coment:"O caput do art. 13 estabelece o prazo de guarda de 1 (um) ano para os registros de conexão, a cargo do administrador de sistema autônomo."},
+    {tema:"Responsável pela guarda de registros de conexão", texto:"—", enun:"A quem cabe o dever de manter os registros de conexão, segundo o art. 13?", alts:["Ao usuário final.","Ao administrador de sistema autônomo.","Exclusivamente ao Ministério Público.","À Anatel.","A qualquer provedor de aplicações."], correta:1, coment:"O caput do art. 13 atribui esse dever ao administrador de sistema autônomo responsável pela provisão de conexão."},
+    {tema:"Guarda de registros de acesso na conexão", texto:"—", enun:"Segundo o art. 14, na provisão de conexão, onerosa ou gratuita, é:", alts:["Obrigatório guardar os registros de acesso a aplicações de internet.","Vedado guardar os registros de acesso a aplicações de internet.","Facultativo, a critério do provedor.","Obrigatório apenas para provedores com fins econômicos.","Permitido apenas mediante autorização judicial prévia."], correta:1, coment:"O art. 14 estabelece expressamente a vedação: na provisão de CONEXÃO, é proibido guardar registros de acesso a aplicações de internet."},
+    {tema:"Guarda de registros de acesso a aplicações", texto:"—", enun:"Segundo o art. 15, o provedor de aplicações de internet, constituído como pessoa jurídica e que exerça a atividade de forma organizada, profissional e com fins econômicos, deve manter os registros de acesso a aplicações pelo prazo de:", alts:["1 ano","6 meses","3 meses","2 anos","Indefinidamente"], correta:1, coment:"O caput do art. 15 estabelece o prazo de 6 (seis) meses para esse tipo específico de provedor de aplicações."},
+    {tema:"Guarda vedada pelo art. 16", texto:"—", enun:"Segundo o art. 16, na provisão de aplicações, é vedada a guarda de:", alts:["Registros de acesso à própria aplicação, com consentimento do usuário.","Registros de acesso a OUTRAS aplicações de internet, sem consentimento prévio do titular.","Dados de contato, mediante consentimento.","Qualquer dado, mesmo com consentimento expresso.","Dados de pagamento, mediante consentimento."], correta:1, coment:"O inciso I do art. 16 veda a guarda de registros de acesso a OUTRAS aplicações sem consentimento prévio do titular dos dados — não se refere aos registros da própria aplicação usada."},
+    {tema:"Responsabilidade por não guardar registros", texto:"—", enun:"Segundo o art. 17, a opção por não guardar registros de acesso a aplicações de internet:", alts:["Gera automaticamente responsabilidade por qualquer dano causado por terceiros.","Não implica, por si só, responsabilidade sobre danos decorrentes do uso desses serviços por terceiros.","É sempre proibida por lei.","Gera multa automática ao provedor.","Só é permitida mediante autorização judicial prévia."], correta:1, coment:"O art. 17 esclarece que a simples opção por não guardar registros não gera, isoladamente, responsabilidade sobre danos causados por terceiros que usaram o serviço."},
+    {tema:"MP 1.068/2021", texto:"—", enun:"A Medida Provisória nº 1.068/2021, que tentou alterar significativamente o Marco Civil da Internet (incluindo nova Seção II no Cap. II e um Capítulo IV-A):", alts:["Foi convertida em lei sem alterações.","Foi rejeitada pelo Congresso Nacional, não produzindo efeitos permanentes.","Ainda está em tramitação, sem decisão final.","Substituiu integralmente o Marco Civil.","Foi declarada inconstitucional pelo STF antes de qualquer votação."], correta:1, coment:"A MP nº 1.068/2021 foi rejeitada pelo Congresso Nacional, de modo que as alterações que propunha (incluindo os arts. 8º-A a 8º-D e o Capítulo IV-A) não vigoram."},
+    {tema:"Aplicabilidade territorial", texto:"—", enun:"Segundo o art. 11, a legislação brasileira aplica-se a operações de coleta, armazenamento e tratamento de dados quando:", alts:["A empresa responsável tiver sede exclusivamente no Brasil.","Pelo menos um dos atos de coleta, armazenamento, guarda ou tratamento ocorrer em território nacional.","O usuário for necessariamente brasileiro nato.","O serviço for gratuito.","Nunca se aplica a empresas estrangeiras."], correta:1, coment:"O caput do art. 11 estabelece a aplicabilidade territorial ampla: basta que ao menos um dos atos (coleta, armazenamento, guarda, tratamento) ocorra em território nacional."},
+    {tema:"Cenário — guarda cautelar", texto:"—", enun:"Segundo o art. 13, §§2º e 3º, quando a autoridade policial requer cautelarmente a guarda de registros de conexão por prazo superior ao legal, ela deve ingressar com pedido de autorização judicial em até:", alts:["10 dias","30 dias","60 dias","90 dias","120 dias"], correta:2, coment:"O §3º do art. 13 estabelece o prazo de 60 dias, contados do requerimento cautelar, para que a autoridade ingresse com o pedido de autorização judicial de acesso aos registros."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Um provedor de conexão à internet mantém, por conta própria, um registro detalhado de todos os sites (aplicações) acessados por seus usuários, sem qualquer determinação legal ou judicial para tanto. Essa conduta:", alts:["É plenamente permitida pelo Marco Civil, sem qualquer restrição.","Viola o art. 14, que veda expressamente a guarda de registros de acesso a aplicações na provisão de conexão.","É permitida desde que o usuário seja informado, ainda que sem consentimento.","É permitida apenas para provedores com fins econômicos.","É regulada exclusivamente pela LGPD, sem relação com o Marco Civil."], correta:1, coment:"A conduta descrita viola diretamente o art. 14 do Marco Civil, que veda expressamente, na provisão de conexão, a guarda de registros de acesso a aplicações de internet — essa é uma proteção distinta e mais rígida do que a aplicável aos provedores de aplicações (art. 15)."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"O Marco Civil da Internet é a Lei nº:", alts:["12.527/2011","12.737/2012","12.965/2014","13.709/2018","13.964/2019"], correta:2},
+    {d:"Fácil", texto:"—", enun:"O acesso à internet é considerado essencial a quê, segundo o art. 7º?", alts:["Ao lazer","Ao exercício da cidadania","Ao comércio exclusivamente","À educação exclusivamente","Nenhuma das anteriores"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A conexão só pode ser suspensa por:", alts:["Qualquer inadimplência","Débito decorrente de sua própria utilização","Decisão arbitrária do provedor","Ordem de qualquer autoridade","Nunca pode ser suspensa"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O sigilo de comunicações privadas armazenadas só é excepcionado por:", alts:["Decisão do provedor","Ordem judicial","Requisição policial simples","Requisição do MP sem juiz","Nunca é excepcionado"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Cláusula que não oferece foro brasileiro em contrato de adesão é:", alts:["Válida sempre","Nula de pleno direito","Anulável em 2 anos","Válida se em português","Válida se assinada"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A neutralidade de rede está prevista em qual artigo?", alts:["Art. 7º","Art. 8º","Art. 9º","Art. 10","Art. 13"], correta:2},
+    {d:"Fácil", texto:"—", enun:"É vedado ao responsável pela transmissão de dados:", alts:["Cobrar pela conexão","Bloquear/monitorar/filtrar conteúdo dos pacotes","Contratar com empresas","Oferecer planos diferentes","Ter sede no exterior"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Registros de conexão devem ser guardados por:", alts:["6 meses","1 ano","2 anos","Indefinidamente","3 meses"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Registros de acesso a aplicações na PROVISÃO DE CONEXÃO devem ser:", alts:["Guardados por 1 ano","Guardados por 6 meses","Não guardados (vedado)","Guardados indefinidamente","Guardados por 2 anos"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Registros de acesso a aplicações NA PROVISÃO DE APLICAÇÕES devem ser guardados por:", alts:["1 ano","6 meses","Vedado guardar","2 anos","Indefinidamente"], correta:1},
+    {d:"Média", texto:"—", enun:"Quem é responsável pela guarda dos registros de conexão?", alts:["O usuário","O administrador de sistema autônomo","A Anatel","O Ministério Público","O Comitê Gestor"], correta:1},
+    {d:"Média", texto:"—", enun:"O teto de multa do art. 12, por infração aos arts. 10/11, é:", alts:["5%","10%","15%","20%","Sem teto"], correta:1},
+    {d:"Média", texto:"—", enun:"Quais são as exceções à neutralidade de rede?", alts:["Qualquer decisão comercial","Requisitos técnicos e priorização de emergência","Preferência do usuário mediante pagamento","Nenhuma exceção existe","Decisão do provedor, sem regulamentação"], correta:1},
+    {d:"Média", texto:"—", enun:"Dados cadastrais básicos (nome, filiação, endereço) podem ser acessados por autoridades administrativas:", alts:["Apenas com ordem judicial","Sem necessidade de ordem judicial, conforme exceção do art. 10, §3º","Nunca podem ser acessados","Apenas por decisão do STF","Apenas mediante lei complementar"], correta:1},
+    {d:"Média", texto:"—", enun:"A MP 1.068/2021 tentou incluir no Marco Civil:", alts:["Apenas alterações de prazo de guarda","Nova Seção II no Cap. II e Capítulo IV-A (Sanções)","Revogação total da lei","Criação da ANPD","Nenhuma alteração relevante"], correta:1},
+    {d:"Média", texto:"—", enun:"A MP 1.068/2021, ao final, foi:", alts:["Convertida em lei integralmente","Rejeitada pelo Congresso Nacional","Ainda pendente de votação","Declarada inconstitucional pelo STF","Revogada por lei posterior"], correta:1},
+    {d:"Média", texto:"—", enun:"O prazo para a autoridade requerente ingressar com pedido de autorização judicial, após guarda cautelar estendida, é de:", alts:["10 dias","30 dias","60 dias","90 dias","120 dias"], correta:2},
+    {d:"Média", texto:"—", enun:"A legislação brasileira sobre proteção de dados no Marco Civil se aplica quando:", alts:["A empresa tem sede exclusivamente no Brasil","Ao menos um ato de coleta/armazenamento/tratamento ocorre em território nacional","Apenas a usuários brasileiros natos","Apenas a serviços pagos","Nunca a empresas estrangeiras"], correta:1},
+    {d:"Média", texto:"—", enun:"É vedada, segundo o art. 16, a guarda de:", alts:["Registros da própria aplicação usada, com consentimento","Registros de acesso a OUTRAS aplicações sem consentimento prévio","Dados de pagamento, com consentimento","Dados de contato, com consentimento","Nenhuma guarda é vedada"], correta:1},
+    {d:"Média", texto:"—", enun:"Não guardar registros de acesso a aplicações:", alts:["Gera responsabilidade automática por danos de terceiros","Não implica, por si só, responsabilidade por danos de terceiros","É sempre proibido por lei","Gera multa automática","Exige autorização judicial prévia"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um provedor de conexão mantém, por iniciativa própria, registro de todos os sites visitados por seus usuários. Essa conduta viola:", alts:["Art. 13 (guarda de registros de conexão)","Art. 14 (vedação de guarda de registros de acesso na provisão de conexão)","Art. 15 (guarda de registros de acesso a aplicações)","Nenhum artigo, é permitida","Art. 9º (neutralidade de rede)"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando a MP 1.068/2021 (rejeitada), é correto afirmar que atualmente:", alts:["O Cap. II possui Seção I e Seção II, ambas em vigor","O Cap. II possui apenas os arts. 7º e 8º em vigor (Seção II não vigora)","Não existe mais Capítulo II na lei","O Capítulo IV-A está em pleno vigor","Os arts. 11 e 12 foram revogados definitivamente"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a diferença correta entre os arts. 14 e 15 do Marco Civil:", alts:["Ambos exigem guarda de registros pelo mesmo prazo.","O art. 14 veda a guarda na provisão de CONEXÃO; o art. 15 exige guarda de 6 meses na provisão de APLICAÇÕES (para provedores organizados/profissionais/com fins econômicos).","O art. 14 exige guarda de 1 ano; o art. 15 veda qualquer guarda.","Não há diferença relevante entre os dois artigos.","Ambos se aplicam apenas a provedores de conexão."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um provedor de aplicações de internet, pessoa jurídica com fins econômicos, mantém registros de acesso a sua própria aplicação por 8 meses. Essa conduta:", alts:["Está de acordo com o prazo mínimo de 6 meses do art. 15, podendo manter por mais tempo conforme necessidade legítima, respeitados os demais limites legais.","Viola diretamente o art. 15, que estabelece prazo máximo de exatamente 6 meses, sem qualquer margem.","É sempre ilegal, pois o prazo máximo absoluto é de 6 meses improrrogáveis em qualquer hipótese.","Não tem qualquer relação com o art. 15.","Configura crime tipificado no próprio Marco Civil."], correta:0, coment:""},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que resume corretamente a arquitetura de proteção de privacidade nos arts. 13-15:", alts:["Todos os provedores têm as mesmas obrigações de guarda, independentemente da atividade exercida.","Há uma distinção proposital entre guarda obrigatória de registros de conexão (1 ano), vedação de guarda de acesso a aplicações na conexão, e guarda de acesso a aplicações nas próprias aplicações (6 meses) — regime em camadas.","A lei não estabelece qualquer distinção entre os tipos de registro.","Apenas provedores estrangeiros estão sujeitos a essas regras.","As regras de guarda dependem exclusivamente do valor cobrado pelo serviço."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um contrato de adesão de um serviço de streaming, sediado no exterior mas oferecido ao público brasileiro, impõe foro exclusivo em outro país, sem qualquer alternativa de foro brasileiro. Essa cláusula é:", alts:["Válida, por se tratar de empresa estrangeira.","Nula de pleno direito, nos termos do art. 8º, parágrafo único, II.","Válida apenas se o usuário concordar expressamente.","Válida se o valor do contrato for inferior a determinado teto.","Regulada exclusivamente por tratado internacional, não pelo Marco Civil."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando o art. 11, a aplicação da legislação brasileira de proteção de dados a uma empresa estrangeira depende de:", alts:["A empresa ter sede física no Brasil, obrigatoriamente.","A empresa ofertar serviço ao público brasileiro, ou ao menos um ato de tratamento ocorrer em território nacional.","O usuário ser necessariamente cidadão brasileiro nato.","O serviço ser necessariamente pago.","Não há qualquer hipótese de aplicação a empresas estrangeiras."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a afirmação mais precisa sobre a relação entre o Marco Civil e a LGPD, considerando o art. 7º, X, do Marco Civil:", alts:["São leis totalmente independentes, sem qualquer referência cruzada.","O Marco Civil faz referência expressa à LGPD ao tratar da exclusão de dados pessoais, ressalvando hipóteses de guarda obrigatória previstas na lei de proteção de dados.","A LGPD revogou integralmente o Marco Civil.","O Marco Civil é posterior à LGPD e a substitui.","Não há qualquer sobreposição temática entre as duas leis."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente por que a rejeição da MP 1.068/2021 é relevante para fins de prova:", alts:["Porque não há qualquer relevância; a MP nunca existiu formalmente.","Porque candidatos podem encontrar textos de referência desatualizados que ainda mencionam dispositivos (como Seção II do Cap. II) que não estão de fato em vigor.","Porque a rejeição tornou toda a Lei 12.965/2014 inválida.","Porque a MP criou obrigações permanentes, independentemente da rejeição.","Porque a matéria da MP nunca foi discutida no Congresso."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Compreender o objetivo geral do Marco Civil da Internet",
+    "Memorizar os direitos do art. 7º, especialmente os que exigem ordem judicial",
+    "Compreender a nulidade de cláusulas contratuais do art. 8º",
+    "Dominar o princípio da neutralidade de rede (art. 9º) e suas exceções",
+    "Compreender o regime de proteção de registros/dados/comunicações (arts. 10-12)",
+    "Memorizar o prazo de guarda de registros de conexão (1 ano, art. 13)",
+    "Memorizar a vedação de guarda de registros de acesso na provisão de conexão (art. 14)",
+    "Memorizar o prazo de guarda de registros de acesso a aplicações (6 meses, art. 15)",
+    "Saber que a MP 1.068/2021 foi rejeitada e não altera a lei",
+    "Conectar o Marco Civil à LGPD e à Lei de Delitos Informáticos",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Trocar o prazo de guarda de registros de conexão (1 ano) pelo de acesso a aplicações (6 meses).",
+    "Achar que é permitido guardar registros de acesso a aplicações na provisão de conexão (é vedado, art. 14).",
+    "Achar que qualquer autoridade pode requisitar registros sem ordem judicial.",
+    "Confundir a exceção de dados cadastrais básicos com o conteúdo de comunicações privadas.",
+    "Achar que a MP 1.068/2021 alterou definitivamente a lei — foi rejeitada.",
+    "Confundir neutralidade de rede com proibição total de qualquer gerenciamento técnico de tráfego.",
+    "Não perceber que as exceções à neutralidade de rede são taxativas (requisitos técnicos e emergência).",
+    "Achar que a suspensão de conexão pode ocorrer por qualquer inadimplência, não apenas a relacionada à própria conexão.",
+    "Confundir 'administrador de sistema autônomo' (guarda registros de conexão) com 'provedor de aplicações' (guarda registros de acesso a aplicações).",
+    "Achar que o teto de multa do art. 12 é diferente de 10% do faturamento.",
+    "Não perceber que o art. 15 só se aplica a provedores organizados/profissionais/com fins econômicos.",
+    "Confundir a vedação do art. 16 (registros de OUTRAS aplicações) com a guarda normal de registros da própria aplicação.",
+    "Achar que não guardar registros gera automaticamente isenção ou automaticamente responsabilidade — o art. 17 é mais nuançado.",
+    "Ignorar que os arts. 11 e 12 permanecem em vigor no texto original, apesar da tentativa de revogação pela MP rejeitada.",
+    "Não conectar o art. 7º, X, à LGPD, perdendo o contexto de complementaridade entre as leis.",
+    "Confundir cláusula de eleição de foro (art. 8º) com cláusula sobre preço ou prazo contratual.",
+    "Achar que a lei brasileira só se aplica a empresas com sede no Brasil, ignorando o art. 11.",
+    "Negligenciar a leitura literal do texto legal ao responder questões sobre prazos e exceções.",
+    "Confundir 'Capítulo II' (direitos dos usuários) com 'Capítulo III' (provisão de conexão/aplicações).",
+    "Não diferenciar as três subseções da Seção II do Capítulo III (registros de conexão, de acesso na conexão, de acesso em aplicações).",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Neutralidade de rede","Princípio segundo o qual todos os pacotes de dados devem ser tratados de forma isonômica, sem distinção por conteúdo, origem, destino, serviço, terminal ou aplicação."],
+    ["Registro de conexão","Conjunto de informações sobre data/hora de início e término de uma conexão à internet, sua duração e o endereço IP utilizado."],
+    ["Registro de acesso a aplicações de internet","Conjunto de informações sobre data/hora de uso de uma aplicação de internet a partir de um determinado endereço IP."],
+    ["Administrador de sistema autônomo","Pessoa física ou jurídica que administra blocos de endereço IP e o respectivo sistema de roteamento."],
+    ["Provedor de conexão","Responsável por habilitar o terminal do usuário para acesso à internet."],
+    ["Provedor de aplicações de internet","Responsável por oferecer funcionalidades acessíveis por meio de um terminal conectado à internet."],
+    ["Guarda de registros","Obrigação (ou vedação) de manter armazenados, por determinado prazo, registros de conexão ou de acesso a aplicações."],
+    ["Medida Provisória (MP)","Ato normativo do Poder Executivo com força de lei, sujeito a aprovação (conversão em lei) ou rejeição pelo Congresso Nacional."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

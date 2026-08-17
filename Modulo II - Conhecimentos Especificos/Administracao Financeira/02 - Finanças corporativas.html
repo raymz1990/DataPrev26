@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finanças Corporativas | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Administração Financeira</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">02 - Finanças corporativas</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceitos básicos de administração financeira.html">01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html" selected>02 - Finanças corporativas</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Finanças Corporativas</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Administração Financeira<br>Tópico 02 de 10<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Finanças Corporativas: Endividamento, Financiamento, Estrutura de Capital e M&A</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Administração Financeira</b> &nbsp;›&nbsp; Tópico 02</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">9h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Conceitos básicos de administração financeira (Tópico 1)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Muito alto — núcleo técnico da disciplina</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Calcular e interpretar os principais <b>índices de endividamento</b>: endividamento geral, composição do endividamento, endividamento sobre PL e garantia de capital próprio.</li>
+            <li>Diferenciar <b>fontes de financiamento próprias</b> (capital próprio, lucros retidos) de <b>fontes de terceiros</b> (empréstimos, financiamentos, debêntures).</li>
+            <li>Compreender as principais <b>teorias de estrutura de capital</b>: Modigliani-Miller (com e sem impostos), teoria do trade-off e pecking order.</li>
+            <li>Compreender o conceito e a fórmula do <b>WACC (custo médio ponderado de capital)</b>.</li>
+            <li>Compreender o conceito de <b>alavancagem financeira</b> e quando ela beneficia ou prejudica a empresa.</li>
+            <li>Diferenciar <b>fusão, aquisição, incorporação e cisão</b> como formas de reorganização societária.</li>
+            <li>Compreender as principais <b>motivações e riscos</b> de operações de fusões e aquisições (M&A), incluindo o conceito de due diligence.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Os <b>índices de endividamento</b> medem o grau de dependência da empresa em relação a capital de terceiros e a composição desse endividamento entre curto e longo prazo. Os principais são: <b>Endividamento Geral</b> (capital de terceiros / ativo total), <b>Composição do Endividamento</b> (passivo circulante / capital de terceiros total) e <b>Endividamento sobre PL</b> (capital de terceiros / patrimônio líquido).</p>
+          <p>As <b>fontes de financiamento</b> se dividem em <b>capital próprio</b> (aportes dos sócios/acionistas, lucros retidos, emissão de novas ações) e <b>capital de terceiros</b> (empréstimos bancários, financiamentos, debêntures, fornecedores). Cada fonte tem um custo associado — o custo do capital próprio (Ke) e o custo do capital de terceiros (Kd) — que juntos compõem o <b>WACC (Weighted Average Cost of Capital, ou Custo Médio Ponderado de Capital)</b>, taxa que pondera os dois custos pela proporção de cada fonte na estrutura de capital.</p>
+          <p>A <b>estrutura de capital</b> é a proporção entre capital próprio e capital de terceiros usada para financiar os ativos da empresa. A teoria clássica de <b>Modigliani-Miller (MM), sem impostos</b>, demonstra que, em mercados perfeitos, o valor da empresa é independente de sua estrutura de capital — o WACC permanece constante, pois o benefício do capital de terceiros mais barato é anulado pelo aumento do risco (e custo) do capital próprio. Já a versão de <b>MM com impostos</b> reconhece o <b>benefício fiscal da dívida</b> (juros são dedutíveis do imposto de renda), o que incentivaria, em teoria, o endividamento máximo — limitado, na prática, pelos <b>custos de insolvência/falência</b>, conforme a <b>teoria do trade-off</b>. A <b>teoria pecking order</b> (ordem de preferência) propõe que empresas preferem financiar-se, em ordem, por lucros retidos, depois dívida, e só por último emissão de novas ações, devido à assimetria informacional.</p>
+          <p>A <b>alavancagem financeira</b> ocorre quando a empresa usa capital de terceiros para ampliar o retorno sobre o patrimônio líquido — é favorável quando o custo da dívida é menor que a rentabilidade dos ativos, e desfavorável no caso contrário.</p>
+          <p>As operações de <b>fusões e aquisições (M&A)</b> são formas de reorganização societária: <b>fusão</b> (duas empresas se unem para formar uma nova, extinguindo-se as anteriores), <b>aquisição</b> (uma empresa compra o controle de outra), <b>incorporação</b> (uma empresa absorve outra, que deixa de existir) e <b>cisão</b> (uma empresa se divide em duas ou mais). As motivações mais comuns incluem sinergias operacionais e financeiras, economias de escala, diversificação e aquisição de tecnologia/mercado — sempre precedidas, idealmente, de um processo de <b>due diligence</b> (investigação detalhada da empresa-alvo).</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Finanças<br>Corporativas</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Índices de endividamento</h4><ul><li>Endividamento geral</li><li>Composição</li><li>Endividamento/PL</li></ul></div>
+              <div class="mm-node"><h4>Fontes de financiamento</h4><ul><li>Capital próprio</li><li>Capital de terceiros</li></ul></div>
+              <div class="mm-node"><h4>Estrutura de capital</h4><ul><li>MM sem impostos</li><li>MM com impostos</li><li>Trade-off</li><li>Pecking order</li></ul></div>
+              <div class="mm-node"><h4>WACC</h4><ul><li>Custo ponderado</li><li>Ke e Kd</li></ul></div>
+              <div class="mm-node"><h4>Alavancagem financeira</h4><ul><li>Kd &lt; ROA → benéfica</li></ul></div>
+              <div class="mm-node"><h4>Fusões e aquisições</h4><ul><li>Fusão/Aquisição</li><li>Incorporação/Cisão</li><li>Due diligence</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Índices de endividamento</h3>
+          <table>
+            <thead><tr><th>Índice</th><th>Fórmula</th><th>Interpretação</th></tr></thead>
+            <tbody>
+              <tr><td>Endividamento Geral (Total)</td><td>Capital de Terceiros / Ativo Total</td><td>Percentual do ativo financiado por capital de terceiros — quanto maior, maior a dependência de dívida</td></tr>
+              <tr><td>Composição do Endividamento</td><td>Passivo Circulante / Capital de Terceiros Total</td><td>Percentual da dívida total que vence no curto prazo — quanto maior, maior a pressão de caixa de curto prazo</td></tr>
+              <tr><td>Endividamento sobre PL (Debt-to-Equity)</td><td>Capital de Terceiros / Patrimônio Líquido</td><td>Relação entre dívida e capital próprio — mostra quanto de capital de terceiros existe para cada unidade de capital próprio</td></tr>
+              <tr><td>Garantia de Capital Próprio</td><td>Patrimônio Líquido / Capital de Terceiros</td><td>Inverso do índice anterior — mostra a capacidade do capital próprio de "garantir" a dívida existente</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Como interpretar rapidamente</div>
+            <p>Quanto maior o índice de <b>endividamento geral</b>, maior o risco financeiro da empresa. Quanto maior a <b>composição do endividamento</b> (dívida concentrada no curto prazo), maior a pressão de liquidez imediata — mesmo com endividamento total moderado.</p>
+          </div>
+
+          <h3>4.2 Fontes de financiamento</h3>
+          <table>
+            <thead><tr><th>Fonte</th><th>Exemplos</th><th>Custo associado</th></tr></thead>
+            <tbody>
+              <tr><td>Capital próprio</td><td>Aporte dos sócios/acionistas, lucros retidos, emissão de novas ações</td><td>Custo de capital próprio (Ke) — geralmente mais alto, pois o acionista assume mais risco</td></tr>
+              <tr><td>Capital de terceiros (curto prazo)</td><td>Empréstimos bancários de curto prazo, fornecedores, desconto de duplicatas</td><td>Taxas de curto prazo, normalmente mais altas por unidade de risco de liquidez</td></tr>
+              <tr><td>Capital de terceiros (longo prazo)</td><td>Financiamentos de longo prazo, debêntures, empréstimos com bancos de fomento (BNDES)</td><td>Custo de capital de terceiros (Kd) — geralmente mais baixo que Ke, dado o benefício fiscal e a prioridade de pagamento</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.3 WACC — Custo Médio Ponderado de Capital</h3>
+          <p>O <b>WACC</b> pondera o custo de cada fonte de capital pela sua proporção na estrutura de capital total da empresa, refletindo o custo médio que a empresa paga para financiar seus ativos.</p>
+          <div class="box info">
+            <div class="box-title">📘 Fórmula conceitual do WACC</div>
+            <p>WACC = (E/V × Ke) + (D/V × Kd × (1−T))</p>
+            <p>Onde: E = valor de mercado do capital próprio; D = valor de mercado da dívida; V = E+D (valor total); Ke = custo do capital próprio; Kd = custo da dívida; T = alíquota de imposto de renda (aplicada ao Kd, pois os juros são dedutíveis).</p>
+          </div>
+
+          <h3>4.4 Teorias de estrutura de capital</h3>
+          <table>
+            <thead><tr><th>Teoria</th><th>Proposição central</th></tr></thead>
+            <tbody>
+              <tr><td>Modigliani-Miller (MM) sem impostos</td><td>Em mercado perfeito (sem impostos, sem custos de transação/falência), o valor da empresa e o WACC são independentes da estrutura de capital — o benefício da dívida mais barata é anulado pelo maior custo do capital próprio, dado o aumento do risco</td></tr>
+              <tr><td>Modigliani-Miller (MM) com impostos</td><td>Reconhecendo o benefício fiscal da dívida (juros dedutíveis do IR), o valor da empresa aumenta com o endividamento — em teoria, levando ao limite de 100% de dívida (conclusão considerada irrealista na prática)</td></tr>
+              <tr><td>Teoria do trade-off</td><td>Existe uma estrutura de capital ótima, que equilibra o benefício fiscal da dívida com os custos crescentes de insolvência/falência à medida que o endividamento aumenta</td></tr>
+              <tr><td>Pecking order (ordem de preferência)</td><td>Devido à assimetria informacional, empresas preferem se financiar, em ordem: (1) lucros retidos, (2) dívida, (3) emissão de novas ações — como última opção</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>MM <b>sem impostos</b> afirma que a estrutura de capital é <b>irrelevante</b> para o valor da empresa; MM <b>com impostos</b> reconhece o <b>benefício fiscal da dívida</b>, tornando o endividamento vantajoso (na teoria pura). A banca costuma testar se o candidato sabe qual das duas versões afirma o quê — cuidado para não trocar as conclusões.</p>
+          </div>
+
+          <h3>4.5 Alavancagem financeira</h3>
+          <p>A empresa se beneficia da <b>alavancagem financeira</b> quando o custo do capital de terceiros (Kd) é menor que a rentabilidade dos ativos (ROA), pois nesse caso o uso de dívida amplia o retorno sobre o patrimônio líquido (ROE) além do que seria obtido apenas com capital próprio.</p>
+          <table>
+            <thead><tr><th>Condição</th><th>Efeito da alavancagem</th></tr></thead>
+            <tbody>
+              <tr><td>Kd &lt; Rentabilidade do Ativo</td><td>Alavancagem favorável — endividar-se amplia o ROE</td></tr>
+              <tr><td>Kd &gt; Rentabilidade do Ativo</td><td>Alavancagem desfavorável — endividar-se reduz o ROE</td></tr>
+              <tr><td>Kd = Rentabilidade do Ativo</td><td>Alavancagem neutra — endividamento não altera o ROE</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Fusões e aquisições (M&A) — conceitos societários</h3>
+          <table>
+            <thead><tr><th>Operação</th><th>Definição</th></tr></thead>
+            <tbody>
+              <tr><td>Fusão</td><td>Duas ou mais empresas se unem para formar uma nova empresa, com extinção das empresas originais</td></tr>
+              <tr><td>Aquisição</td><td>Uma empresa compra o controle acionário/societário de outra, que pode continuar existindo como subsidiária</td></tr>
+              <tr><td>Incorporação</td><td>Uma empresa absorve o patrimônio de outra(s), que deixa(m) de existir, mantendo-se apenas a incorporadora</td></tr>
+              <tr><td>Cisão</td><td>Uma empresa transfere parcelas de seu patrimônio para uma ou mais empresas, existentes ou novas, podendo ser parcial ou total</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.7 Motivações e riscos de M&A</h3>
+          <table>
+            <thead><tr><th>Motivação</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td>Sinergias operacionais</td><td>Redução de custos e ganhos de eficiência pela combinação de operações</td></tr>
+              <tr><td>Sinergias financeiras</td><td>Melhoria da capacidade de captação, redução do custo de capital combinado</td></tr>
+              <tr><td>Economias de escala</td><td>Redução do custo unitário com o aumento do volume de produção/operação</td></tr>
+              <tr><td>Diversificação</td><td>Redução do risco geral do negócio pela atuação em diferentes mercados/produtos</td></tr>
+              <tr><td>Aquisição de tecnologia/mercado</td><td>Acesso rápido a novas tecnologias, marcas ou mercados sem desenvolvê-los internamente</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Due diligence</div>
+            <p>Antes de concretizar uma operação de M&A, é fundamental realizar a <b>due diligence</b> — processo de investigação e auditoria detalhada da empresa-alvo (situação financeira, contábil, jurídica, tributária, operacional), para identificar riscos e passivos ocultos antes de fechar o negócio.</p>
+          </div>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma cobrar a diferenciação precisa entre fusão, incorporação e cisão (conceitos que se confundem facilmente), além de aplicar cálculos simples de índices de endividamento e WACC a partir de dados fornecidos em um pequeno balanço ou tabela.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV combina questões conceituais (teorias de estrutura de capital, diferenças entre fusão/incorporação/cisão) com questões de cálculo direto (índices de endividamento, WACC), a partir de dados numéricos simples fornecidos no enunciado.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Cálculo de índices de endividamento a partir de dados de balanço patrimonial simplificado.</li>
+            <li>Identificação da teoria de estrutura de capital correspondente a uma afirmação dada.</li>
+            <li>Diferenciação entre fusão, aquisição, incorporação e cisão em cenários descritos.</li>
+            <li>Cálculo simples de WACC, dados os pesos e custos de cada fonte de capital.</li>
+            <li>Dificuldade alta — combina memorização conceitual com precisão de cálculo.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Cálculo de índices de endividamento</td><td>Muito alta</td></tr>
+              <tr><td>Diferenciação entre fusão, incorporação e cisão</td><td>Alta</td></tr>
+              <tr><td>Teorias de MM (com e sem impostos)</td><td>Alta</td></tr>
+              <tr><td>Cálculo de WACC</td><td>Média-alta</td></tr>
+              <tr><td>Alavancagem financeira favorável/desfavorável</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Trocar a conclusão de MM sem impostos (irrelevância) com a de MM com impostos (benefício da dívida).</li>
+            <li>Confundir fusão (nova empresa, extinção das anteriores) com incorporação (uma absorve a outra).</li>
+            <li>Errar o numerador/denominador dos índices de endividamento.</li>
+            <li>Esquecer de aplicar o efeito fiscal (1−T) ao custo da dívida no cálculo do WACC.</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver "fusão", pense "empresa nova, as antigas somem"; ao ver "incorporação", pense "uma absorve, só ela sobra".</li>
+            <li>Ao calcular WACC, sempre aplique (1−T) ao componente de dívida, nunca ao de capital próprio.</li>
+            <li>Releia com atenção qual índice está sendo pedido antes de montar a fórmula (endividamento geral x sobre PL x composição).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 MM sem impostos x com impostos</div><p>Sem impostos = estrutura de capital IRRELEVANTE. Com impostos = dívida gera BENEFÍCIO FISCAL, tornando o endividamento vantajoso na teoria.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Fusão x Incorporação x Cisão</div><p>Fusão = A+B → C (nova, A e B somem). Incorporação = A absorve B (só A sobra). Cisão = A se divide em partes (o inverso da fusão).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Fórmula do WACC simplificada</div><p>WACC = peso do capital próprio × Ke + peso da dívida × Kd × (1 − alíquota de IR).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra da alavancagem favorável</div><p>Dívida barata (Kd) + ativos rentáveis (ROA alto) = alavancagem ajuda o ROE. Dívida cara + ativos pouco rentáveis = alavancagem prejudica o ROE.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Pecking order em ordem</div><p>1º lucros retidos, 2º dívida, 3º (última opção) emissão de ações novas.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Endividamento Geral = Capital de Terceiros / Ativo Total.</li>
+            <li>Endividamento sobre PL = Capital de Terceiros / Patrimônio Líquido.</li>
+            <li>Fontes: capital próprio (Ke, mais caro) x capital de terceiros (Kd, mais barato, com benefício fiscal).</li>
+            <li>MM sem impostos: estrutura de capital irrelevante. MM com impostos: dívida gera benefício fiscal.</li>
+            <li>Trade-off: equilíbrio entre benefício fiscal e custo de insolvência. Pecking order: lucros retidos > dívida > ações novas.</li>
+            <li>WACC pondera Ke e Kd pela proporção de cada fonte, aplicando (1−T) sobre Kd.</li>
+            <li>Alavancagem favorável quando Kd &lt; rentabilidade dos ativos.</li>
+            <li>Fusão (nova empresa) ≠ Incorporação (uma absorve outra) ≠ Cisão (uma se divide).</li>
+            <li>Due diligence: investigação prévia detalhada da empresa-alvo em operações de M&A.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Indicador</th><th>Fórmula</th></tr></thead>
+            <tbody>
+              <tr><td>Endividamento Geral</td><td>Capital de Terceiros / Ativo Total</td></tr>
+              <tr><td>Composição do Endividamento</td><td>Passivo Circulante / Capital de Terceiros Total</td></tr>
+              <tr><td>Endividamento sobre PL</td><td>Capital de Terceiros / Patrimônio Líquido</td></tr>
+              <tr><td>Garantia de Capital Próprio</td><td>Patrimônio Líquido / Capital de Terceiros</td></tr>
+              <tr><td>WACC</td><td>(E/V × Ke) + (D/V × Kd × (1−T))</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Teorias de estrutura de capital — comparação direta</h3>
+          <table>
+            <thead><tr><th>Teoria</th><th>Endividamento é...</th></tr></thead>
+            <tbody>
+              <tr><td>MM sem impostos</td><td>Irrelevante para o valor da empresa</td></tr>
+              <tr><td>MM com impostos</td><td>Benéfico (benefício fiscal da dívida)</td></tr>
+              <tr><td>Trade-off</td><td>Ótimo em um ponto de equilíbrio (nem 0%, nem 100%)</td></tr>
+              <tr><td>Pecking order</td><td>Preferido apenas depois de esgotados os lucros retidos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Questões sobre M&A costumam usar contextos de empresas públicas ou de infraestrutura, aproximando o tema da realidade de reorganizações societárias no setor público brasileiro, relevante ao perfil da DATAPREV.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>Franco Modigliani e Merton Miller publicaram sua teoria original sobre estrutura de capital em 1958, revolucionando as finanças corporativas — Modigliani recebeu o Prêmio Nobel de Economia em 1985, e Miller em 1990, em parte por essas contribuições.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>A pecking order theory foi formalizada por Stewart Myers e Nicolas Majluf em 1984, explicando por que empresas evitam emitir novas ações sempre que possível: o mercado tende a interpretar essa emissão como sinal de que os gestores acreditam que as ações estão supervalorizadas.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Conceitos básicos de administração financeira (Tópico 1)</td><td>Aprofunda a decisão de financiamento introduzida ali</td></tr>
+              <tr><td>Princípios de alavancagem operacional e financeira (Tópico 3)</td><td>Aprofunda diretamente o conceito de alavancagem financeira introduzido aqui</td></tr>
+              <tr><td>Fontes de financiamento a longo prazo (Tópico 8)</td><td>Detalha instrumentos específicos de capital de terceiros de longo prazo</td></tr>
+              <tr><td>Valuation (Tópico 10)</td><td>O WACC estudado aqui é insumo direto para métodos de avaliação de empresas</td></tr>
+              <tr><td>Contabilidade Empresarial (matéria própria)</td><td>Fornece os dados de Balanço Patrimonial usados no cálculo dos índices de endividamento</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar as fórmulas dos índices de endividamento e do WACC.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, praticando o cálculo manual de cada índice.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para o Tópico 3 (Alavancagem operacional e financeira).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey. <i>Administração Financeira</i>. Porto Alegre: AMGH.</li>
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas.</li>
+            <li>MODIGLIANI, Franco; MILLER, Merton H. <i>The Cost of Capital, Corporation Finance and the Theory of Investment</i>. American Economic Review, 1958.</li>
+            <li>MYERS, Stewart C.; MAJLUF, Nicolas S. <i>Corporate Financing and Investment Decisions</i>. Journal of Financial Economics, 1984.</li>
+            <li>Lei nº 6.404/1976 (Lei das Sociedades por Ações) — dispositivos sobre fusão, incorporação e cisão.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Administração Financeira · Tópico 02/10</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_admfin_t02";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual a fórmula do Endividamento Geral?", a:"Capital de Terceiros / Ativo Total."},
+    {q:"Qual a fórmula do Endividamento sobre PL?", a:"Capital de Terceiros / Patrimônio Líquido."},
+    {q:"Qual a fórmula da Composição do Endividamento?", a:"Passivo Circulante / Capital de Terceiros Total."},
+    {q:"O que a teoria de MM sem impostos afirma sobre a estrutura de capital?", a:"Que ela é irrelevante para o valor da empresa, em mercado perfeito."},
+    {q:"O que a teoria de MM com impostos reconhece?", a:"O benefício fiscal da dívida — juros são dedutíveis do imposto de renda, o que aumenta o valor da empresa com o endividamento."},
+    {q:"O que propõe a teoria do trade-off?", a:"Que existe uma estrutura de capital ótima, equilibrando o benefício fiscal da dívida com os custos de insolvência/falência."},
+    {q:"Qual a ordem de preferência de financiamento segundo a pecking order theory?", a:"1º lucros retidos, 2º dívida, 3º emissão de novas ações."},
+    {q:"O que significa WACC?", a:"Weighted Average Cost of Capital, ou Custo Médio Ponderado de Capital."},
+    {q:"Por que se aplica o fator (1−T) ao custo da dívida no cálculo do WACC?", a:"Porque os juros da dívida são dedutíveis do imposto de renda, reduzindo seu custo efetivo."},
+    {q:"Quando a alavancagem financeira é favorável à empresa?", a:"Quando o custo da dívida (Kd) é menor que a rentabilidade dos ativos (ROA)."},
+    {q:"O que é uma fusão, do ponto de vista societário?", a:"Duas ou mais empresas se unem para formar uma nova empresa, com extinção das empresas originais."},
+    {q:"O que é uma incorporação?", a:"Uma empresa absorve o patrimônio de outra(s), que deixa(m) de existir, mantendo-se apenas a incorporadora."},
+    {q:"O que é uma cisão?", a:"Uma empresa transfere parcelas de seu patrimônio para uma ou mais empresas, existentes ou novas."},
+    {q:"O que é due diligence?", a:"Processo de investigação e auditoria detalhada da empresa-alvo, antes de concretizar uma operação de M&A."},
+    {q:"Cite duas motivações comuns para operações de M&A.", a:"Sinergias operacionais e economias de escala (também: sinergias financeiras, diversificação, aquisição de tecnologia/mercado)."},
+    {q:"Quem formalizou a teoria original de Modigliani-Miller e em que ano?", a:"Franco Modigliani e Merton Miller, em 1958."},
+    {q:"Quem recebeu o Prêmio Nobel de Economia por contribuições relacionadas à teoria de estrutura de capital?", a:"Franco Modigliani (1985) e Merton Miller (1990)."},
+    {q:"Quem formalizou a pecking order theory e em que ano?", a:"Stewart Myers e Nicolas Majluf, em 1984."},
+    {q:"Por que empresas evitam emitir novas ações, segundo a pecking order theory?", a:"Porque o mercado tende a interpretar a emissão como sinal de que os gestores acreditam que as ações estão supervalorizadas."},
+    {q:"Qual índice mostra a capacidade do capital próprio de 'garantir' a dívida existente?", a:"Garantia de Capital Próprio = Patrimônio Líquido / Capital de Terceiros."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Índices de endividamento", texto:"Uma empresa possui Capital de Terceiros de R$ 400.000 e Ativo Total de R$ 1.000.000.", enun:"O Endividamento Geral dessa empresa é de:", alts:["10%","20%","40%","60%","100%"], correta:2, coment:"Endividamento Geral = Capital de Terceiros / Ativo Total = 400.000/1.000.000 = 0,40 = 40%."},
+    {tema:"Endividamento sobre PL", texto:"Uma empresa possui Capital de Terceiros de R$ 300.000 e Patrimônio Líquido de R$ 600.000.", enun:"O índice de Endividamento sobre PL dessa empresa é de:", alts:["0,25","0,50","1,00","2,00","0,75"], correta:1, coment:"Endividamento sobre PL = Capital de Terceiros / PL = 300.000/600.000 = 0,50."},
+    {tema:"MM sem impostos", texto:"—", enun:"Segundo a teoria de Modigliani-Miller SEM impostos, a estrutura de capital de uma empresa:", alts:["É o fator mais relevante para determinar seu valor de mercado.","É irrelevante para o valor da empresa, em mercado perfeito.","Determina exclusivamente o lucro líquido do período.","Deve ser sempre 100% capital de terceiros.","Deve ser sempre 100% capital próprio."], correta:1, coment:"A proposição original de MM (1958), sem considerar impostos, demonstra que, em mercado perfeito, o valor da empresa e seu WACC são independentes da estrutura de capital adotada."},
+    {tema:"MM com impostos", texto:"—", enun:"Segundo a teoria de Modigliani-Miller COM impostos, o endividamento:", alts:["É sempre prejudicial ao valor da empresa.","Gera benefício fiscal, pois os juros são dedutíveis do imposto de renda, aumentando o valor da empresa.","Não tem qualquer relação com impostos.","Elimina completamente o risco da empresa.","Deve ser sempre evitado pelos gestores financeiros."], correta:1, coment:"A versão de MM com impostos (1963) reconhece que os juros da dívida são dedutíveis do IR, gerando um benefício fiscal que aumenta o valor da empresa à medida que o endividamento cresce (na teoria pura)."},
+    {tema:"Trade-off theory", texto:"—", enun:"A teoria do trade-off em estrutura de capital propõe que:", alts:["A estrutura de capital é sempre irrelevante.","Existe uma estrutura de capital ótima, que equilibra o benefício fiscal da dívida com os custos de insolvência.","A empresa deve emitir ações antes de qualquer outra fonte de financiamento.","O endividamento deve ser sempre de 100%.","Não existe qualquer custo associado ao endividamento."], correta:1, coment:"A teoria do trade-off busca um ponto de equilíbrio entre os benefícios fiscais do endividamento e os custos crescentes de insolvência/falência à medida que a dívida aumenta."},
+    {tema:"Pecking order", texto:"—", enun:"Segundo a pecking order theory, a ordem de preferência de financiamento das empresas é:", alts:["Emissão de ações, depois dívida, depois lucros retidos.","Lucros retidos, depois dívida, depois emissão de novas ações.","Dívida, depois emissão de ações, depois lucros retidos.","Todas as fontes têm a mesma prioridade.","Apenas emissão de ações é considerada."], correta:1, coment:"A pecking order theory propõe que, devido à assimetria informacional, as empresas preferem financiar-se primeiro com lucros retidos, depois com dívida, e apenas por último com emissão de novas ações."},
+    {tema:"WACC", texto:"Uma empresa tem 60% de capital próprio (Ke=15%) e 40% de capital de terceiros (Kd=10%), com alíquota de IR de 25%.", enun:"O WACC dessa empresa é aproximadamente:", alts:["10,0%","12,0%","13,0%","15,0%","9,0%"], correta:1, coment:"WACC = (0,60×15%) + (0,40×10%×(1−0,25)) = 9% + (0,40×10%×0,75) = 9% + 3% = 12%."},
+    {tema:"Alavancagem financeira favorável", texto:"—", enun:"A alavancagem financeira é favorável à empresa quando:", alts:["O custo da dívida (Kd) é maior que a rentabilidade dos ativos.","O custo da dívida (Kd) é menor que a rentabilidade dos ativos.","A empresa não possui qualquer capital de terceiros.","O ROE é sempre igual ao ROA.","A empresa possui apenas capital próprio."], correta:1, coment:"A alavancagem financeira é favorável quando o custo da dívida é menor que a rentabilidade dos ativos, pois nesse caso o uso de capital de terceiros amplia o retorno sobre o patrimônio líquido (ROE)."},
+    {tema:"Fusão", texto:"—", enun:"Duas empresas, A e B, se unem para formar uma nova empresa C, com extinção de A e B. Essa operação é classificada como:", alts:["Aquisição","Fusão","Incorporação","Cisão parcial","Joint venture apenas"], correta:1, coment:"A fusão é a operação em que duas ou mais empresas se unem para formar uma nova empresa, com extinção das empresas originais."},
+    {tema:"Incorporação", texto:"—", enun:"A empresa A absorve o patrimônio da empresa B, que deixa de existir, permanecendo apenas A no mercado. Essa operação é classificada como:", alts:["Fusão","Cisão","Incorporação","Joint venture","Nenhuma das anteriores"], correta:2, coment:"A incorporação ocorre quando uma empresa absorve o patrimônio de outra(s), que deixa(m) de existir, mantendo-se apenas a incorporadora."},
+    {tema:"Cisão", texto:"—", enun:"Uma empresa transfere parte de seu patrimônio para duas novas empresas, permanecendo com o restante de suas atividades. Essa operação é classificada como:", alts:["Fusão total","Cisão parcial","Incorporação total","Aquisição hostil","Nenhuma das anteriores"], correta:1, coment:"A cisão parcial ocorre quando a empresa transfere apenas parte de seu patrimônio para outra(s) empresa(s), mantendo suas demais atividades."},
+    {tema:"Due diligence", texto:"—", enun:"O processo de investigação e auditoria detalhada de uma empresa-alvo, antes de uma operação de fusão ou aquisição, é chamado de:", alts:["Underwriting","Due diligence","Benchmarking","Rating","Hedge"], correta:1, coment:"Due diligence é o processo de investigação detalhada (financeira, contábil, jurídica, tributária, operacional) da empresa-alvo, antes de concretizar uma operação de M&A."},
+    {tema:"Sinergia operacional", texto:"—", enun:"A redução de custos e ganhos de eficiência decorrentes da combinação de operações de duas empresas em um processo de M&A é chamada de:", alts:["Sinergia financeira","Sinergia operacional","Diversificação de risco","Economia de escopo apenas","Nenhuma das anteriores"], correta:1, coment:"A sinergia operacional refere-se especificamente aos ganhos de eficiência e redução de custos obtidos pela combinação das operações das empresas envolvidas."},
+    {tema:"Composição do endividamento", texto:"Uma empresa tem Passivo Circulante de R$ 150.000 e Capital de Terceiros Total de R$ 500.000.", enun:"A Composição do Endividamento dessa empresa é de:", alts:["15%","30%","50%","70%","100%"], correta:1, coment:"Composição do Endividamento = Passivo Circulante / Capital de Terceiros Total = 150.000/500.000 = 0,30 = 30%."},
+    {tema:"Fontes de financiamento", texto:"—", enun:"Assinale a alternativa que apresenta corretamente uma fonte de capital PRÓPRIO:", alts:["Empréstimo bancário de longo prazo","Debêntures emitidas pela empresa","Lucros retidos","Financiamento junto ao BNDES","Desconto de duplicatas"], correta:2, coment:"Lucros retidos são recursos gerados pela própria empresa e mantidos internamente, constituindo fonte de capital próprio — diferente de empréstimos, debêntures e financiamentos, que são capital de terceiros."},
+    {tema:"Custo de capital", texto:"—", enun:"Em geral, o custo do capital próprio (Ke) tende a ser _____ que o custo do capital de terceiros (Kd), pois o acionista assume _____ risco.", alts:["menor; menos","maior; mais","igual; o mesmo","menor; mais","maior; menos"], correta:1, coment:"O custo do capital próprio tende a ser maior que o custo do capital de terceiros, pois o acionista assume mais risco (é o último a receber em caso de liquidação da empresa, por exemplo)."},
+    {tema:"Aplicação combinada de teorias", texto:"—", enun:"Uma empresa aumenta seu endividamento e, em consequência, seus custos de possível insolvência começam a superar o benefício fiscal adicional da dívida. Essa situação exemplifica diretamente qual teoria de estrutura de capital?", alts:["MM sem impostos","MM com impostos, em sua forma pura","Teoria do trade-off","Pecking order theory","Nenhuma das teorias estudadas"], correta:2, coment:"A teoria do trade-off descreve exatamente esse fenômeno: à medida que o endividamento aumenta, chega-se a um ponto em que os custos de insolvência superam o benefício fiscal, definindo um ponto ótimo de estrutura de capital."},
+    {tema:"WACC aplicado", texto:"Uma empresa tem 50% de capital próprio (Ke=20%) e 50% de capital de terceiros (Kd=12%), com alíquota de IR de 20%.", enun:"O WACC dessa empresa é aproximadamente:", alts:["14,8%","15,4%","16,0%","10,0%","20,0%"], correta:0, coment:"WACC = (0,50×20%) + (0,50×12%×(1−0,20)) = 10% + (0,50×12%×0,80) = 10% + 4,8% = 14,8%."},
+    {tema:"Comparação fusão x incorporação", texto:"—", enun:"Assinale a alternativa que diferencia corretamente fusão de incorporação:", alts:["São exatamente a mesma operação, com nomes diferentes.","Na fusão, surge uma empresa nova e as anteriores se extinguem; na incorporação, uma empresa absorve a outra e permanece existindo.","Na incorporação, surge sempre uma nova empresa; na fusão, uma empresa absorve a outra.","Fusão e incorporação nunca envolvem extinção de nenhuma empresa.","Apenas a incorporação é reconhecida pela legislação societária brasileira."], correta:1, coment:"A diferença central é: na fusão, uma NOVA empresa surge e AMBAS as anteriores se extinguem; na incorporação, UMA empresa (a incorporadora) ABSORVE a outra, que se extingue, mas a incorporadora continua existindo."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Assinale a alternativa que combina corretamente conceitos estudados neste tópico:", alts:["MM sem impostos afirma que o endividamento sempre aumenta o valor da empresa.","A alavancagem financeira é favorável quando o custo da dívida é menor que a rentabilidade dos ativos, e o WACC pondera o custo de cada fonte de capital pela sua proporção na estrutura total.","Fusão e cisão são exatamente a mesma operação societária.","O WACC nunca considera o benefício fiscal da dívida.","A pecking order theory recomenda emitir ações antes de utilizar lucros retidos."], correta:1, coment:"A alternativa correta combina corretamente dois conceitos centrais: a condição para alavancagem financeira favorável e a lógica de ponderação do WACC — as demais alternativas contêm erros conceituais estudados ao longo do capítulo."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"A fórmula do Endividamento Geral é:", alts:["Capital de Terceiros / Ativo Total","Ativo Total / Capital de Terceiros","PL / Ativo Total","Passivo Circulante / PL","Ativo Circulante / Passivo Circulante"], correta:0},
+    {d:"Fácil", texto:"—", enun:"A fórmula do Endividamento sobre PL é:", alts:["PL / Capital de Terceiros","Capital de Terceiros / PL","Ativo Total / PL","PL / Ativo Total","Capital de Terceiros / Ativo Circulante"], correta:1},
+    {d:"Fácil", texto:"—", enun:"WACC significa:", alts:["Weighted Average Cost of Capital","World Association of Capital Companies","Working Asset Capital Control","Wide Area Corporate Credit","Weekly Average Cash Control"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Segundo MM sem impostos, a estrutura de capital é:", alts:["O fator mais importante para o valor da empresa","Irrelevante para o valor da empresa","Sempre 100% dívida","Sempre 100% capital próprio","Determinada apenas pelo governo"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Segundo MM com impostos, o endividamento gera:", alts:["Prejuízo automático","Benefício fiscal","Nenhum efeito no valor da empresa","Aumento do imposto de renda","Redução do lucro líquido apenas"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A pecking order theory prioriza, em primeiro lugar:", alts:["Emissão de ações","Dívida bancária","Lucros retidos","Debêntures","Nenhuma fonte específica"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Na fusão, o que ocorre com as empresas originais?", alts:["Permanecem inalteradas","Extinguem-se, surgindo uma nova empresa","Apenas uma delas se extingue","Nenhuma se extingue jamais","Tornam-se subsidiárias uma da outra"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Na incorporação, o que ocorre?", alts:["Surge sempre uma empresa nova","Uma empresa absorve a outra, que se extingue","Nenhuma empresa se extingue","Ambas as empresas se extinguem","É sinônimo exato de cisão"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A investigação detalhada da empresa-alvo antes de um M&A é chamada de:", alts:["Underwriting","Due diligence","Benchmarking","Hedge","Rating"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A alavancagem financeira é favorável quando:", alts:["Kd > rentabilidade dos ativos","Kd < rentabilidade dos ativos","A empresa não tem dívida","O ROE é sempre zero","Kd é indefinido"], correta:1},
+    {d:"Média", texto:"Capital de Terceiros R$ 200.000, Ativo Total R$ 800.000.", enun:"O Endividamento Geral é de:", alts:["15%","20%","25%","30%","40%"], correta:2},
+    {d:"Média", texto:"Capital de Terceiros R$ 250.000, PL R$ 500.000.", enun:"O Endividamento sobre PL é de:", alts:["0,25","0,50","0,75","1,00","2,00"], correta:1},
+    {d:"Média", texto:"Passivo Circulante R$ 100.000, Capital de Terceiros Total R$ 400.000.", enun:"A Composição do Endividamento é de:", alts:["10%","25%","40%","50%","75%"], correta:1},
+    {d:"Média", texto:"Capital próprio 70% (Ke=18%), capital de terceiros 30% (Kd=9%), IR 25%.", enun:"O WACC aproximado é:", alts:["13,0%","14,6%","15,5%","12,0%","16,0%"], correta:1},
+    {d:"Média", texto:"—", enun:"A teoria do trade-off busca equilibrar:", alts:["Receita e despesa","Benefício fiscal da dívida e custos de insolvência","Lucro e prejuízo","Ativo e passivo apenas","Marketing e vendas"], correta:1},
+    {d:"Média", texto:"—", enun:"Por que se aplica (1−T) ao custo da dívida no WACC?", alts:["Porque juros não são dedutíveis","Porque juros são dedutíveis do IR, reduzindo o custo efetivo","Por exigência contábil sem relação fiscal","Porque a dívida nunca gera juros","Porque o capital próprio também é tributado da mesma forma"], correta:1},
+    {d:"Média", texto:"—", enun:"Lucros retidos são classificados como:", alts:["Capital de terceiros de curto prazo","Capital próprio","Dívida de longo prazo","Debênture","Financiamento bancário"], correta:1},
+    {d:"Média", texto:"—", enun:"Debêntures são classificadas como:", alts:["Capital próprio","Capital de terceiros","Patrimônio líquido","Reserva de lucros","Ativo circulante"], correta:1},
+    {d:"Média", texto:"—", enun:"Uma empresa se divide, transferindo parte de seu patrimônio para uma nova empresa, mantendo suas demais atividades. Essa operação é:", alts:["Fusão total","Cisão parcial","Incorporação total","Aquisição hostil","Joint venture"], correta:1},
+    {d:"Média", texto:"—", enun:"Sinergia financeira em M&A refere-se a:", alts:["Redução de custos operacionais apenas","Melhoria da capacidade de captação e redução do custo de capital combinado","Aumento do número de funcionários","Redução da diversificação de produtos","Aumento do risco da empresa combinada"], correta:1},
+    {d:"Difícil", texto:"Capital próprio 40% (Ke=22%), capital de terceiros 60% (Kd=11%), IR 30%.", enun:"O WACC aproximado é:", alts:["13,4%","14,2%","15,0%","12,0%","16,6%"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que diferencia corretamente MM sem impostos de MM com impostos:", alts:["São exatamente a mesma teoria.","Sem impostos, a estrutura de capital é irrelevante; com impostos, a dívida gera benefício fiscal, aumentando o valor da empresa.","Sem impostos, a dívida gera benefício fiscal; com impostos, é irrelevante.","Ambas afirmam que a estrutura de capital é sempre irrelevante.","Nenhuma das duas considera o valor da empresa."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Segundo a pecking order theory, por que empresas evitam emitir novas ações sempre que possível?", alts:["Porque ações são sempre mais baratas que dívida.","Porque o mercado pode interpretar a emissão como sinal de que os gestores acreditam que as ações estão supervalorizadas.","Porque é proibido por lei na maioria dos países.","Porque ações não geram qualquer custo para a empresa.","Porque investidores preferem sempre comprar dívida a ações."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Uma empresa com Kd de 8% e rentabilidade dos ativos de 6% decide aumentar seu endividamento. O efeito esperado sobre o ROE é:", alts:["Aumento do ROE, pois a alavancagem é favorável.","Redução do ROE, pois a alavancagem é desfavorável (Kd > rentabilidade dos ativos).","Nenhum efeito sobre o ROE.","Aumento automático do lucro líquido, independentemente do endividamento.","Eliminação total do risco financeiro."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente a relação entre due diligence e o sucesso de uma operação de M&A:", alts:["A due diligence é irrelevante para o sucesso da operação.","Uma due diligence bem conduzida ajuda a identificar riscos e passivos ocultos, reduzindo a chance de surpresas negativas após o fechamento do negócio.","A due diligence substitui totalmente a necessidade de negociação do preço.","A due diligence só é exigida em fusões, nunca em aquisições.","A due diligence é um processo exclusivamente contábil, sem aspectos jurídicos."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que aplica corretamente o conceito de composição do endividamento a um cenário de risco de liquidez:", alts:["Uma empresa com alta composição do endividamento (dívida concentrada no curto prazo) enfrenta maior pressão de caixa imediata, mesmo com endividamento total moderado.","A composição do endividamento nunca afeta a liquidez da empresa.","Quanto menor a composição do endividamento, maior o risco de liquidez imediata.","A composição do endividamento é irrelevante se o endividamento geral for baixo.","Composição do endividamento e endividamento geral medem exatamente a mesma coisa."], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que combina corretamente dois conceitos de estrutura de capital estudados:", alts:["A teoria do trade-off ignora completamente o benefício fiscal da dívida.","A teoria do trade-off incorpora tanto o benefício fiscal (de MM com impostos) quanto os custos de insolvência, buscando um ponto ótimo de endividamento.","MM sem impostos e a pecking order theory chegam exatamente à mesma conclusão prática.","A pecking order theory recomenda sempre 100% de endividamento.","Nenhuma das teorias estudadas considera o custo de capital de terceiros."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando o perfil institucional da DATAPREV, uma eventual reorganização societária envolvendo a absorção de outra entidade pública, com extinção desta e manutenção da DATAPREV como única entidade remanescente, seria classificada como:", alts:["Fusão","Incorporação","Cisão total","Joint venture","Nenhuma das anteriores"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que sintetiza corretamente a relação entre WACC e decisões de investimento:", alts:["O WACC não tem qualquer relação com decisões de investimento.","O WACC frequentemente serve como taxa de desconto de referência para avaliar se um investimento cria ou destrói valor, comparando seu retorno esperado ao custo de capital.","O WACC é sempre igual à taxa Selic, independentemente da empresa.","O WACC só é relevante para empresas sem qualquer dívida.","O WACC mede exclusivamente o lucro contábil do período."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Calcular os principais índices de endividamento",
+    "Diferenciar capital próprio de capital de terceiros",
+    "Compreender a teoria de MM sem impostos (irrelevância)",
+    "Compreender a teoria de MM com impostos (benefício fiscal)",
+    "Compreender a teoria do trade-off",
+    "Compreender a pecking order theory",
+    "Calcular o WACC a partir de dados fornecidos",
+    "Compreender quando a alavancagem financeira é favorável",
+    "Diferenciar fusão, incorporação e cisão",
+    "Compreender o conceito de due diligence e as motivações de M&A",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Trocar a conclusão de MM sem impostos (irrelevância) com a de MM com impostos (benefício fiscal).",
+    "Confundir fusão (nova empresa, as anteriores somem) com incorporação (uma absorve a outra).",
+    "Errar o numerador ou denominador dos índices de endividamento.",
+    "Esquecer de aplicar o fator (1−T) ao custo da dívida no cálculo do WACC.",
+    "Confundir Endividamento Geral com Endividamento sobre PL.",
+    "Achar que lucros retidos são capital de terceiros, em vez de capital próprio.",
+    "Confundir debêntures (capital de terceiros) com ações (capital próprio).",
+    "Não perceber quando a alavancagem financeira é favorável ou desfavorável.",
+    "Confundir cisão com fusão, tratando-as como operações equivalentes.",
+    "Não reconhecer a due diligence como etapa fundamental antes de um M&A.",
+    "Confundir sinergia operacional com sinergia financeira.",
+    "Achar que o WACC é sempre igual ao custo do capital próprio, ignorando a ponderação.",
+    "Não aplicar corretamente os pesos (E/V e D/V) na fórmula do WACC.",
+    "Confundir a teoria do trade-off com a pecking order theory.",
+    "Não perceber que a pecking order theory recomenda ações como ÚLTIMA opção, não a primeira.",
+    "Ignorar a relação entre Kd, rentabilidade dos ativos e efeito sobre o ROE.",
+    "Tratar 'composição do endividamento' e 'endividamento geral' como sinônimos.",
+    "Não conectar este tópico com Alavancagem (Tópico 3) e Valuation (Tópico 10).",
+    "Assumir que maior endividamento é sempre ruim, ignorando o benefício fiscal em certos contextos.",
+    "Negligenciar a prática de cálculo numérico, focando apenas na teoria conceitual.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Endividamento Geral","Índice que mede o percentual do ativo total financiado por capital de terceiros."],
+    ["Composição do Endividamento","Índice que mede a proporção da dívida total que vence no curto prazo."],
+    ["WACC","Custo Médio Ponderado de Capital — pondera o custo de cada fonte de financiamento pela sua proporção na estrutura de capital."],
+    ["Ke","Custo do capital próprio."],
+    ["Kd","Custo do capital de terceiros (dívida)."],
+    ["Alavancagem financeira","Uso de capital de terceiros para ampliar o retorno sobre o patrimônio líquido (ROE)."],
+    ["Fusão","Operação em que duas ou mais empresas se unem para formar uma nova, com extinção das anteriores."],
+    ["Incorporação","Operação em que uma empresa absorve outra(s), que deixa(m) de existir."],
+    ["Cisão","Operação em que uma empresa transfere parte ou todo o seu patrimônio para outra(s) empresa(s)."],
+    ["Due diligence","Processo de investigação e auditoria detalhada de uma empresa-alvo antes de uma operação de M&A."],
+    ["Sinergia","Ganho conjunto obtido pela combinação de duas empresas, superior à soma dos ganhos individuais."],
+    ["Pecking order theory","Teoria segundo a qual empresas preferem, em ordem, lucros retidos, dívida e, por último, emissão de ações."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

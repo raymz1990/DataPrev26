@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGPD — Lei nº 13.709/2018 | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Legislação — Segurança da Informação e Proteção de Dados</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">04 - LGPD (Lei nº 13.709/2018)</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Lei de Acesso à Informação.html">01 - Lei de Acesso à Informação</option>
+    <option value="02 - Lei de Delitos Informáticos.html">02 - Lei de Delitos Informáticos</option>
+    <option value="03 - Marco Civil da Internet.html">03 - Marco Civil da Internet</option>
+    <option value="04 - LGPD.html" selected>04 - LGPD</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">LGPD — Lei nº 13.709/2018</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadros de referência</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Legislação: Segurança da Informação e Proteção de Dados<br>Tópico 04 de 04<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Lei nº 13.709/2018 — Lei Geral de Proteção de Dados (LGPD)</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Legislação: Segurança da Informação e Proteção de Dados</b> &nbsp;›&nbsp; Tópico 04</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">10h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Muito alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">LAI, Marco Civil da Internet (Tópicos 1 e 3)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Máximo — lei mais estratégica desta disciplina para a DATAPREV</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender os <b>fundamentos e princípios</b> da LGPD (Capítulo I).</li>
+            <li>Dominar as <b>10 bases legais</b> para tratamento de dados pessoais comuns e as <b>hipóteses específicas</b> para dados sensíveis e dados de crianças/adolescentes (Capítulo II).</li>
+            <li>Conhecer todos os <b>direitos do titular</b> de dados pessoais (Capítulo III).</li>
+            <li>Compreender as regras específicas para <b>tratamento de dados pelo Poder Público</b> (Capítulo IV), essenciais ao contexto institucional da DATAPREV.</li>
+            <li>Dominar os deveres de <b>segurança e boas práticas</b>, incluindo o Relatório de Impacto à Proteção de Dados — RIPD (Capítulo VII).</li>
+            <li>Conhecer as <b>sanções administrativas</b> aplicáveis em caso de descumprimento da lei (Capítulo VIII).</li>
+            <li>Compreender a estrutura, natureza jurídica e competências da <b>ANPD</b> e do <b>CNPD</b> (Capítulo IX).</li>
+            <li>Resolver questões FGV que exigem aplicação da LGPD a cenários institucionais de gestão pública e tratamento de dados de segurados.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A <b>Lei Geral de Proteção de Dados Pessoais (LGPD)</b>, Lei nº 13.709/2018, disciplina o tratamento de dados pessoais no Brasil, por pessoa natural ou jurídica de direito público ou privado, com o objetivo de proteger os direitos fundamentais de <b>liberdade e privacidade</b> e o <b>livre desenvolvimento da personalidade</b> da pessoa natural.</p>
+          <p>O <b>Capítulo I</b> estabelece os fundamentos (respeito à privacidade, autodeterminação informativa, liberdade de expressão, inviolabilidade da intimidade/honra/imagem, desenvolvimento econômico e tecnológico, livre iniciativa, defesa do consumidor, direitos humanos) e os <b>10 princípios</b> que regem o tratamento de dados: finalidade, adequação, necessidade, livre acesso, qualidade dos dados, transparência, segurança, prevenção, não discriminação e <b>responsabilização e prestação de contas (accountability)</b>.</p>
+          <p>O <b>Capítulo II</b> estabelece as <b>10 bases legais</b> que autorizam o tratamento de dados pessoais comuns (consentimento, cumprimento de obrigação legal/regulatória, execução de políticas públicas, estudos por órgão de pesquisa, execução de contrato, exercício regular de direitos, proteção da vida, tutela da saúde, legítimo interesse, proteção do crédito). Dados <b>sensíveis</b> (origem racial/étnica, convicção religiosa, opinião política, filiação sindical, dado referente à saúde/vida sexual, dado genético/biométrico) têm regime mais restritivo, com hipóteses próprias de tratamento. O tratamento de dados de <b>crianças e adolescentes</b> exige, em regra, consentimento específico de ao menos um dos pais ou responsável legal.</p>
+          <p>O <b>Capítulo III</b> lista os <b>direitos do titular</b>: confirmação de existência de tratamento, acesso aos dados, correção de dados incompletos/inexatos, anonimização/bloqueio/eliminação de dados desnecessários, portabilidade, eliminação de dados tratados com consentimento, informação sobre compartilhamento, informação sobre a possibilidade de não fornecer consentimento e as consequências da negativa, revogação do consentimento, e revisão de decisões automatizadas.</p>
+          <p>O <b>Capítulo IV</b> traz regras específicas para o <b>tratamento de dados pelo Poder Público</b>, exigindo finalidade pública, forma proporcional e não excessiva, e prevendo regras próprias para compartilhamento entre órgãos — capítulo de altíssima relevância para a DATAPREV, que processa dados de milhões de segurados.</p>
+          <p>O <b>Capítulo VII</b> trata de <b>segurança e boas práticas</b>: dever de adotar medidas técnicas e administrativas aptas a proteger os dados, obrigatoriedade de comunicar incidentes de segurança à ANPD e ao titular em prazo razoável, e a figura do <b>Relatório de Impacto à Proteção de Dados Pessoais (RIPD)</b>, documento que descreve processos de tratamento capazes de gerar riscos às liberdades civis e aos direitos fundamentais.</p>
+          <p>O <b>Capítulo VIII</b> disciplina a <b>fiscalização</b> e as <b>sanções administrativas</b>: advertência, multa (até <b>2% do faturamento</b>, limitada a <b>R$ 50 milhões por infração</b>), multa diária, publicização da infração, bloqueio e eliminação dos dados, suspensão do funcionamento do banco de dados, suspensão do exercício da atividade de tratamento, e proibição parcial ou total de atividades relacionadas a tratamento de dados.</p>
+          <p>O <b>Capítulo IX</b> cria a <b>Autoridade Nacional de Proteção de Dados (ANPD)</b>, órgão da administração pública federal responsável por zelar pela proteção de dados e fiscalizar o cumprimento da lei, e o <b>Conselho Nacional de Proteção de Dados Pessoais e da Privacidade (CNPD)</b>, órgão consultivo composto por representantes do poder público e da sociedade civil.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">LGPD<br>Lei nº 13.709/2018</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Cap. I — Preliminares</h4><ul><li>Fundamentos</li><li>10 princípios</li></ul></div>
+              <div class="mm-node"><h4>Cap. II — Tratamento</h4><ul><li>10 bases legais</li><li>Dados sensíveis</li><li>Crianças/adolescentes</li></ul></div>
+              <div class="mm-node"><h4>Cap. III — Direitos do titular</h4><ul><li>Acesso, correção</li><li>Portabilidade</li><li>Revisão de decisão automatizada</li></ul></div>
+              <div class="mm-node"><h4>Cap. IV — Poder Público</h4><ul><li>Finalidade pública</li><li>Compartilhamento entre órgãos</li></ul></div>
+              <div class="mm-node"><h4>Cap. VII — Segurança</h4><ul><li>Medidas técnicas</li><li>RIPD</li><li>Comunicação de incidente</li></ul></div>
+              <div class="mm-node"><h4>Cap. VIII — Fiscalização</h4><ul><li>Advertência</li><li>Multa até 2% (máx. R$50mi)</li><li>Suspensão/proibição</li></ul></div>
+              <div class="mm-node"><h4>Cap. IX — ANPD/CNPD</h4><ul><li>ANPD: fiscaliza</li><li>CNPD: consultivo</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Capítulo I — Disposições Preliminares (arts. 1º a 4º)</h3>
+          <table>
+            <thead><tr><th>Elemento</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Objetivo da lei</td><td>Proteger os direitos fundamentais de liberdade e privacidade e o livre desenvolvimento da personalidade da pessoa natural</td></tr>
+              <tr><td>Abrangência</td><td>Qualquer operação de tratamento de dados, por pessoa natural ou jurídica, de direito público ou privado, independentemente do meio, país de sede ou onde estejam localizados os dados, desde que a operação de tratamento ocorra em território nacional</td></tr>
+              <tr><td>Aplicação ao Poder Público</td><td>A LGPD se aplica aos órgãos públicos, com regras próprias específicas previstas no Capítulo IV</td></tr>
+            </tbody>
+          </table>
+          <p>O <b>art. 2º</b> lista os fundamentos: respeito à privacidade; autodeterminação informativa; liberdade de expressão, informação, comunicação e opinião; inviolabilidade da intimidade, honra e imagem; desenvolvimento econômico e tecnológico e a inovação; livre iniciativa, livre concorrência e defesa do consumidor; e os direitos humanos, o livre desenvolvimento da personalidade, a dignidade e o exercício da cidadania pelas pessoas naturais.</p>
+          <table>
+            <thead><tr><th>Princípio (art. 6º)</th><th>Significado resumido</th></tr></thead>
+            <tbody>
+              <tr><td>Finalidade</td><td>Tratamento para propósitos legítimos, específicos, explícitos e informados ao titular</td></tr>
+              <tr><td>Adequação</td><td>Compatibilidade do tratamento com as finalidades informadas</td></tr>
+              <tr><td>Necessidade</td><td>Limitação do tratamento ao mínimo necessário para a realização de suas finalidades</td></tr>
+              <tr><td>Livre acesso</td><td>Garantia de consulta facilitada e gratuita sobre forma e duração do tratamento</td></tr>
+              <tr><td>Qualidade dos dados</td><td>Garantia de exatidão, clareza, relevância e atualização dos dados</td></tr>
+              <tr><td>Transparência</td><td>Garantia de informações claras, precisas e acessíveis sobre o tratamento</td></tr>
+              <tr><td>Segurança</td><td>Utilização de medidas técnicas e administrativas aptas a proteger os dados</td></tr>
+              <tr><td>Prevenção</td><td>Adoção de medidas para prevenir danos em virtude do tratamento</td></tr>
+              <tr><td>Não discriminação</td><td>Impossibilidade de tratamento para fins discriminatórios ilícitos/abusivos</td></tr>
+              <tr><td>Responsabilização e prestação de contas (accountability)</td><td>Demonstração, pelo agente, da adoção de medidas eficazes e capazes de comprovar a observância da lei</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.2 Capítulo II — Do Tratamento de Dados Pessoais (arts. 7º a 16)</h3>
+          <p>O <b>art. 7º</b> lista as <b>10 hipóteses (bases legais)</b> que autorizam o tratamento de dados pessoais comuns:</p>
+          <table>
+            <thead><tr><th>Base legal</th><th>Resumo</th></tr></thead>
+            <tbody>
+              <tr><td>1. Consentimento</td><td>Fornecido pelo titular de forma livre, informada e inequívoca</td></tr>
+              <tr><td>2. Cumprimento de obrigação legal ou regulatória</td><td>Pelo controlador</td></tr>
+              <tr><td>3. Execução de políticas públicas</td><td>Pela administração pública, previstas em lei ou regulamento</td></tr>
+              <tr><td>4. Estudos por órgão de pesquisa</td><td>Garantida, sempre que possível, a anonimização dos dados</td></tr>
+              <tr><td>5. Execução de contrato</td><td>Ou de procedimentos preliminares relacionados a contrato do qual o titular seja parte</td></tr>
+              <tr><td>6. Exercício regular de direitos</td><td>Em processo judicial, administrativo ou arbitral</td></tr>
+              <tr><td>7. Proteção da vida</td><td>Ou da incolumidade física do titular ou de terceiro</td></tr>
+              <tr><td>8. Tutela da saúde</td><td>Em procedimento realizado por profissionais de saúde ou entidades sanitárias</td></tr>
+              <tr><td>9. Legítimo interesse</td><td>Do controlador ou de terceiro, exceto quando prevalecerem direitos e liberdades fundamentais do titular</td></tr>
+              <tr><td>10. Proteção do crédito</td><td>Inclusive quanto ao disposto na legislação pertinente</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Regra de ouro sobre consentimento</div>
+            <p>O consentimento é apenas UMA das 10 bases legais, não a única — muitas operações de tratamento no setor público, por exemplo, se apoiam em "execução de políticas públicas" ou "cumprimento de obrigação legal", dispensando consentimento individual.</p>
+          </div>
+
+          <p><b>Dados sensíveis (art. 11)</b> — origem racial/étnica, convicção religiosa, opinião política, filiação a sindicato/organização religiosa/filosófica/política, dado referente à saúde ou à vida sexual, dado genético ou biométrico — têm hipóteses de tratamento mais restritas, incluindo consentimento <b>específico e destacado</b>, cumprimento de obrigação legal, execução de políticas públicas, realização de estudos, exercício regular de direitos, proteção da vida, tutela da saúde, e garantia de prevenção à fraude.</p>
+
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Não confundir a lista de <b>dados sensíveis</b> (art. 11) com a lista de <b>bases legais gerais</b> (art. 7º) — dado sensível é uma categoria especial de dado (o "quê"), enquanto base legal é o fundamento jurídico que autoriza qualquer tratamento (o "porquê"). O consentimento para dado sensível deve ser específico e destacado, diferente do consentimento genérico do art. 7º.</p>
+          </div>
+
+          <p>O tratamento de dados pessoais de <b>crianças e adolescentes (art. 14)</b> deve ser realizado em seu melhor interesse, exigindo, em regra, <b>consentimento específico e em destaque, dado por ao menos um dos pais ou pelo responsável legal</b>. Dados podem ser coletados sem consentimento quando necessário para contatar os pais/responsável ou para proteção da criança, sendo vedado seu uso para fins de direcionamento de publicidade.</p>
+
+          <h3>4.3 Capítulo III — Dos Direitos do Titular (arts. 17 a 22)</h3>
+          <table>
+            <thead><tr><th>Direito</th><th>Descrição resumida</th></tr></thead>
+            <tbody>
+              <tr><td>Confirmação de existência de tratamento</td><td>Saber se seus dados estão sendo tratados</td></tr>
+              <tr><td>Acesso aos dados</td><td>Obter cópia dos dados tratados</td></tr>
+              <tr><td>Correção de dados</td><td>Corrigir dados incompletos, inexatos ou desatualizados</td></tr>
+              <tr><td>Anonimização, bloqueio ou eliminação</td><td>De dados desnecessários, excessivos ou tratados em desconformidade com a lei</td></tr>
+              <tr><td>Portabilidade</td><td>Transferir os dados a outro fornecedor de serviço ou produto</td></tr>
+              <tr><td>Eliminação dos dados tratados com consentimento</td><td>Salvo hipóteses de conservação previstas em lei</td></tr>
+              <tr><td>Informação sobre compartilhamento</td><td>Entidades públicas e privadas com as quais o controlador compartilhou dados</td></tr>
+              <tr><td>Informação sobre a possibilidade de não fornecer consentimento</td><td>E as consequências da negativa</td></tr>
+              <tr><td>Revogação do consentimento</td><td>De forma gratuita e facilitada</td></tr>
+              <tr><td>Revisão de decisões automatizadas</td><td>Que afetem interesses do titular, incluindo decisões destinadas a definir seu perfil pessoal, profissional, de consumo e de crédito</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Capítulo IV — Do Tratamento de Dados Pessoais pelo Poder Público (arts. 23 a 30)</h3>
+          <p>Este capítulo é o de <b>maior relevância institucional</b> para o perfil da vaga na DATAPREV. Estabelece que o tratamento de dados pelo Poder Público deve ser realizado para o atendimento de sua finalidade pública, na persecução do interesse público, com o objetivo de executar as competências legais ou cumprir as atribuições legais do serviço público.</p>
+          <table>
+            <thead><tr><th>Regra específica</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Finalidade pública e transparência</td><td>Uso de dados deve ser divulgado em veículos de fácil acesso, preferencialmente em sítios eletrônicos</td></tr>
+              <tr><td>Compartilhamento entre órgãos</td><td>Deve atender a finalidades específicas de execução de políticas públicas e atribuição legal, observados os princípios de proteção de dados</td></tr>
+              <tr><td>Vedação de compartilhamento com entidade privada</td><td>Regra geral, salvo hipóteses legais específicas (execução de políticas públicas previstas em lei, prestação de serviço público contratado etc.)</td></tr>
+              <tr><td>Uso compartilhado de dados</td><td>A comunicação ou o uso compartilhado de dados pessoais pelo Poder Público deve atender às finalidades específicas e ser comunicado à ANPD, quando exigido</td></tr>
+            </tbody>
+          </table>
+          <div class="box fgv">
+            <div class="box-title">🏛 Por que este capítulo é estratégico para a DATAPREV</div>
+            <p>Como empresa pública que processa dados de identificação, saúde e histórico contributivo de milhões de segurados, a DATAPREV opera diretamente sob as regras do Capítulo IV — a distinção entre finalidade pública legítima e uso indevido/compartilhamento irregular de dados é matéria de alta relevância prática, não apenas teórica, para a instituição.</p>
+          </div>
+
+          <h3>4.5 Capítulo VII — Da Segurança e das Boas Práticas (arts. 46 a 51)</h3>
+          <table>
+            <thead><tr><th>Elemento</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td>Medidas de segurança</td><td>Agentes de tratamento devem adotar medidas de segurança técnicas e administrativas aptas a proteger os dados de acessos não autorizados e situações de destruição, perda, alteração ou comunicação indevida</td></tr>
+              <tr><td>Comunicação de incidente de segurança</td><td>O controlador deve comunicar à ANPD e ao titular, em prazo razoável, incidente de segurança que possa acarretar risco ou dano relevante</td></tr>
+              <tr><td>RIPD — Relatório de Impacto à Proteção de Dados Pessoais</td><td>Documentação do controlador que descreve os processos de tratamento capazes de gerar riscos às liberdades civis e aos direitos fundamentais, contendo descrição dos tipos de dados, metodologia e medidas de mitigação de risco</td></tr>
+              <tr><td>Boas práticas e governança</td><td>Adoção de regras de boas práticas e governança que estabeleçam condições de organização, regime de funcionamento, procedimentos e mecanismos de supervisão</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Capítulo VIII — Da Fiscalização (arts. 52 a 54)</h3>
+          <table>
+            <thead><tr><th>Sanção administrativa</th><th>Detalhe</th></tr></thead>
+            <tbody>
+              <tr><td>Advertência</td><td>Com indicação de prazo para adoção de medidas corretivas</td></tr>
+              <tr><td>Multa simples</td><td>Até 2% do faturamento da pessoa jurídica de direito privado, grupo ou conglomerado no Brasil, no seu último exercício, excluídos os tributos, limitada, no total, a R$ 50.000.000,00 por infração</td></tr>
+              <tr><td>Multa diária</td><td>Observado o limite total acima</td></tr>
+              <tr><td>Publicização da infração</td><td>Após devidamente apurada e confirmada sua ocorrência</td></tr>
+              <tr><td>Bloqueio ou eliminação dos dados pessoais</td><td>Relacionados à infração</td></tr>
+              <tr><td>Suspensão parcial do funcionamento do banco de dados</td><td>Pelo período máximo de 6 meses, prorrogável por igual período</td></tr>
+              <tr><td>Suspensão do exercício da atividade de tratamento</td><td>Pelo período máximo de 6 meses, prorrogável por igual período</td></tr>
+              <tr><td>Proibição parcial ou total do exercício de atividades relacionadas a tratamento de dados</td><td>Sanção mais grave, aplicável em infrações reiteradas e graves</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>A multa máxima é de <b>2% do faturamento</b>, limitada a <b>R$ 50 milhões por infração</b> — não é 2% do faturamento sem limite, nem um valor fixo único. A banca costuma trocar o percentual (ex.: "10%") ou o teto (ex.: "R$ 500 milhões") para testar a leitura literal.</p>
+          </div>
+
+          <h3>4.7 Capítulo IX — Da ANPD e do CNPD (arts. 55-A a 58-B)</h3>
+          <table>
+            <thead><tr><th>Órgão</th><th>Natureza e função</th></tr></thead>
+            <tbody>
+              <tr><td>ANPD — Autoridade Nacional de Proteção de Dados</td><td>Órgão da administração pública federal, integrante da Presidência da República, dotado de autonomia técnica e decisória, responsável por zelar, implementar e fiscalizar o cumprimento da LGPD em todo o território nacional</td></tr>
+              <tr><td>CNPD — Conselho Nacional de Proteção de Dados Pessoais e da Privacidade</td><td>Órgão consultivo, composto por representantes do Poder Executivo, Poder Legislativo, Poder Judiciário, órgãos de defesa do consumidor, setor empresarial, comunidade científica e sociedade civil</td></tr>
+            </tbody>
+          </table>
+          <p>Entre as competências da ANPD estão: zelar pela proteção de dados; elaborar diretrizes; fiscalizar e aplicar sanções; atender petições de titulares contra controladores; promover ações de cooperação com autoridades de outros países; editar regulamentos e normas complementares.</p>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV apresenta cenários de tratamento de dados (por empresas ou pelo setor público) e pede a identificação da base legal aplicável, do direito do titular cabível, ou da sanção correspondente — exige domínio literal da lei combinado à capacidade de aplicá-la a casos concretos, especialmente envolvendo o Poder Público.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Cenários pedindo identificação da base legal correta (art. 7º) para uma operação de tratamento descrita.</li>
+            <li>Questões sobre dados sensíveis e suas hipóteses específicas de tratamento.</li>
+            <li>Questões sobre direitos do titular aplicados a um pedido concreto.</li>
+            <li>Questões sobre o Capítulo IV (tratamento pelo Poder Público) — tema muito relevante para a DATAPREV.</li>
+            <li>Questões sobre valores e limites de multa, e sobre a natureza jurídica da ANPD.</li>
+            <li>Dificuldade muito alta — grande volume de listas numeradas (bases legais, direitos, sanções) a memorizar com precisão.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>As 10 bases legais do art. 7º</td><td>Muito alta</td></tr>
+              <tr><td>Direitos do titular (Capítulo III)</td><td>Muito alta</td></tr>
+              <tr><td>Tratamento de dados pelo Poder Público (Capítulo IV)</td><td>Alta (dado o perfil da vaga)</td></tr>
+              <tr><td>Sanções administrativas e limites de multa</td><td>Alta</td></tr>
+              <tr><td>Dados sensíveis x dados comuns</td><td>Média-alta</td></tr>
+              <tr><td>Natureza jurídica e competências da ANPD</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Achar que o consentimento é a única base legal possível para tratamento de dados.</li>
+            <li>Confundir a lista de dados sensíveis com a lista de bases legais gerais.</li>
+            <li>Trocar o percentual (2%) ou o teto (R$ 50 milhões) da multa por outros valores.</li>
+            <li>Achar que a LGPD proíbe totalmente o compartilhamento de dados entre órgãos públicos.</li>
+            <li>Confundir a função fiscalizadora da ANPD com a função meramente consultiva do CNPD.</li>
+          </ol>
+          <h3>Casos reais de cobrança (padrão observado em provas FGV)</h3>
+          <div class="box fgv">
+            <div class="box-title">📄 Padrão observado</div>
+            <p>É comum a FGV descrever um cenário de tratamento de dados por um órgão público (ex.: cruzamento de bases de dados para concessão de benefício) e pedir a identificação da base legal correta e das obrigações de transparência associadas — testando simultaneamente os Capítulos II e IV.</p>
+          </div>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao ver um cenário envolvendo o setor público, verifique primeiro se a base legal é "execução de políticas públicas" ou "cumprimento de obrigação legal", antes de assumir que seria necessário consentimento.</li>
+            <li>Ao ver "dado sensível", confira se a hipótese de tratamento exige consentimento específico e destacado, diferente do consentimento comum.</li>
+            <li>Sempre que aparecer um valor de multa, confira se respeita o teto de 2% do faturamento / R$ 50 milhões por infração.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Mnemônico das bases legais (art. 7º): C-L-E-P-C-E-P-T-L-P</div><p><b>C</b>onsentimento, cumprimento de obrigação <b>L</b>egal, <b>E</b>xecução de políticas públicas, estudos por órgão de <b>P</b>esquisa, execução de <b>C</b>ontrato, <b>E</b>xercício regular de direitos, <b>P</b>roteção da vida, <b>T</b>utela da saúde, <b>L</b>egítimo interesse, <b>P</b>roteção do crédito.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Truque da multa: 2-50</div><p>Multa = até <b>2%</b> do faturamento, teto de <b>R$ 50 milhões</b> por infração.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Diferença ANPD x CNPD</div><p>ANPD <b>fiscaliza e sanciona</b> (função executiva/reguladora); CNPD apenas <b>aconselha</b> (função consultiva) — não confundir os papéis.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra de ouro do Poder Público</div><p>Tratamento pelo Poder Público = sempre checar <b>finalidade pública</b> + <b>transparência</b> antes de aplicar qualquer outra regra.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Objetivo da LGPD: proteger liberdade, privacidade e livre desenvolvimento da personalidade.</li>
+            <li>10 princípios (art. 6º): finalidade, adequação, necessidade, livre acesso, qualidade, transparência, segurança, prevenção, não discriminação, accountability.</li>
+            <li>10 bases legais (art. 7º) — consentimento é apenas uma delas, não a única.</li>
+            <li>Dados sensíveis exigem consentimento específico e destacado, ou hipóteses próprias mais restritas.</li>
+            <li>Direitos do titular incluem acesso, correção, portabilidade, eliminação, revisão de decisão automatizada.</li>
+            <li>Poder Público: tratamento deve ter finalidade pública e ser transparente; compartilhamento com entidade privada é regra geral vedada, salvo exceções legais.</li>
+            <li>RIPD: documento que descreve riscos de um processo de tratamento de dados.</li>
+            <li>Multa máxima: 2% do faturamento, limitada a R$ 50 milhões por infração.</li>
+            <li>ANPD fiscaliza e sanciona; CNPD é apenas consultivo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADROS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadros de referência rápida</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Item</th><th>Valor/Regra</th></tr></thead>
+            <tbody>
+              <tr><td>Multa simples máxima</td><td>2% do faturamento (excluídos tributos)</td></tr>
+              <tr><td>Teto da multa por infração</td><td>R$ 50.000.000,00</td></tr>
+              <tr><td>Prazo de suspensão do banco de dados</td><td>Até 6 meses, prorrogável por igual período</td></tr>
+              <tr><td>Nº de bases legais gerais (art. 7º)</td><td>10</td></tr>
+              <tr><td>Nº de princípios (art. 6º)</td><td>10</td></tr>
+              <tr><td>Consentimento para dados sensíveis</td><td>Específico e destacado</td></tr>
+              <tr><td>Consentimento para dados de crianças</td><td>De ao menos um dos pais ou responsável legal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Capítulos estudados neste tópico</h3>
+          <table>
+            <thead><tr><th>Capítulo</th><th>Título</th></tr></thead>
+            <tbody>
+              <tr><td>I</td><td>Disposições Preliminares</td></tr>
+              <tr><td>II</td><td>Do Tratamento de Dados Pessoais</td></tr>
+              <tr><td>III</td><td>Dos Direitos do Titular</td></tr>
+              <tr><td>IV</td><td>Do Tratamento de Dados Pessoais pelo Poder Público</td></tr>
+              <tr><td>VII</td><td>Da Segurança e das Boas Práticas</td></tr>
+              <tr><td>VIII</td><td>Da Fiscalização</td></tr>
+              <tr><td>IX</td><td>Da Autoridade Nacional de Proteção de Dados (ANPD) e do Conselho Nacional de Proteção de Dados Pessoais e da Privacidade (CNPD)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Dado o perfil técnico da DATAPREV como processadora de dados sensíveis de segurados, a FGV tende a explorar intensamente o Capítulo IV (tratamento pelo Poder Público) em provas para esse tipo de instituição, muito além do que faria em concursos de perfil puramente privado.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>A LGPD foi fortemente inspirada no <b>GDPR</b> (Regulamento Geral de Proteção de Dados) da União Europeia, de 2016 — ambas compartilham estrutura de bases legais, direitos do titular e sanções proporcionais ao faturamento, embora com valores e detalhes distintos.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade institucional</div><p>A ANPD, criada pela própria LGPD, só ganhou natureza de autarquia especial em lei posterior (Lei nº 14.460/2022) — antes disso, operava com autonomia técnica limitada, vinculada diretamente à Presidência da República.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Lei nº 12.527/2011 (LAI) — Tópico 1</td><td>Regimes complementares: LAI amplia acesso público, LGPD protege dados pessoais — tensão frequente entre transparência e privacidade</td></tr>
+              <tr><td>Lei nº 12.965/2014 (Marco Civil da Internet) — Tópico 3</td><td>O Marco Civil já previa proteção de dados pessoais online antes da LGPD, que aprofundou e sistematizou o tema</td></tr>
+              <tr><td>Lei nº 12.737/2012 (Delitos Informáticos) — Tópico 2</td><td>Invasão de dispositivo para obter dados pode configurar crime e, simultaneamente, violação da LGPD</td></tr>
+              <tr><td>Inteligência Artificial: fundamentos e aplicações (Atualidades)</td><td>Privacidade em sistemas de IA está diretamente fundamentada nos princípios e bases legais da LGPD</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar as 10 bases legais do art. 7º e os limites de multa.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com foco especial no Capítulo IV (Poder Público).</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; com isso, encerrar a disciplina de Legislação de Segurança da Informação e Proteção de Dados (Tópicos 1 a 4) e avançar para o Módulo II.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Lei nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais) — texto integral, Presidência da República.</li>
+            <li>Lei nº 14.460/2022 — dispõe sobre a natureza jurídica da ANPD como autarquia especial.</li>
+            <li>Portal oficial da Autoridade Nacional de Proteção de Dados (gov.br/anpd).</li>
+            <li>Regulamento (UE) 2016/679 — GDPR (General Data Protection Regulation), referência comparada.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Legislação: Segurança da Informação e Proteção de Dados · Tópico 04/04</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_leg_t04";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual o objetivo principal da LGPD?", a:"Proteger os direitos fundamentais de liberdade e privacidade e o livre desenvolvimento da personalidade da pessoa natural."},
+    {q:"Quantas bases legais gerais para tratamento de dados o art. 7º prevê?", a:"10 bases legais."},
+    {q:"O consentimento é a única base legal para tratamento de dados pessoais?", a:"Não — é apenas uma das 10 bases legais previstas no art. 7º."},
+    {q:"Cite três bases legais do art. 7º além do consentimento.", a:"Cumprimento de obrigação legal, execução de políticas públicas, execução de contrato (entre outras: exercício regular de direitos, proteção da vida, tutela da saúde, legítimo interesse, proteção do crédito, estudos por órgão de pesquisa)."},
+    {q:"O que caracteriza um dado pessoal sensível?", a:"Dado sobre origem racial/étnica, convicção religiosa, opinião política, filiação sindical/religiosa/filosófica/política, saúde, vida sexual, dado genético ou biométrico."},
+    {q:"Que tipo de consentimento é exigido para tratamento de dados sensíveis?", a:"Consentimento específico e destacado."},
+    {q:"Quem deve consentir, em regra, para o tratamento de dados de crianças?", a:"Ao menos um dos pais ou o responsável legal."},
+    {q:"Cite três direitos do titular previstos no Capítulo III.", a:"Confirmação de existência de tratamento, acesso aos dados, correção de dados (entre outros: portabilidade, eliminação, informação sobre compartilhamento, revisão de decisão automatizada)."},
+    {q:"Qual a exigência central para o tratamento de dados pelo Poder Público?", a:"Que o tratamento tenha finalidade pública e seja realizado de forma transparente."},
+    {q:"O compartilhamento de dados entre Poder Público e entidade privada é sempre permitido?", a:"Não — é regra geral vedada, salvo hipóteses legais específicas."},
+    {q:"O que é o RIPD?", a:"Relatório de Impacto à Proteção de Dados Pessoais, documento que descreve processos de tratamento capazes de gerar riscos aos direitos fundamentais."},
+    {q:"O controlador deve comunicar incidentes de segurança a quem?", a:"À ANPD e ao titular dos dados, em prazo razoável."},
+    {q:"Qual o percentual máximo da multa simples prevista na LGPD?", a:"2% do faturamento (excluídos tributos)."},
+    {q:"Qual o teto de multa por infração previsto na LGPD?", a:"R$ 50.000.000,00 (cinquenta milhões de reais)."},
+    {q:"Cite duas sanções administrativas da LGPD além da multa.", a:"Advertência e bloqueio/eliminação dos dados (entre outras: publicização da infração, suspensão do banco de dados, suspensão da atividade de tratamento, proibição de atividades)."},
+    {q:"Qual é a natureza jurídica da ANPD?", a:"Órgão da administração pública federal, integrante da Presidência da República, com autonomia técnica e decisória."},
+    {q:"Qual a função principal da ANPD?", a:"Zelar pela proteção de dados, implementar e fiscalizar o cumprimento da LGPD."},
+    {q:"Qual é a natureza do CNPD?", a:"Órgão consultivo, composto por representantes do poder público e da sociedade civil."},
+    {q:"A LGPD se aplica apenas a empresas privadas?", a:"Não — aplica-se também ao Poder Público, com regras específicas previstas no Capítulo IV."},
+    {q:"Qual documento internacional inspirou fortemente a LGPD?", a:"O GDPR (Regulamento Geral de Proteção de Dados) da União Europeia, de 2016."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Objetivo da lei", texto:"—", enun:"O objetivo central da LGPD, previsto em seu art. 1º, é:", alts:["Proteger exclusivamente dados financeiros de empresas.","Proteger os direitos fundamentais de liberdade e privacidade e o livre desenvolvimento da personalidade da pessoa natural.","Regular exclusivamente o comércio eletrônico.","Substituir integralmente a Lei de Acesso à Informação.","Regular apenas o tratamento de dados por órgãos públicos."], correta:1, coment:"O art. 1º da LGPD estabelece que a lei dispõe sobre o tratamento de dados pessoais para proteger os direitos fundamentais de liberdade e privacidade e o livre desenvolvimento da personalidade da pessoa natural."},
+    {tema:"Bases legais", texto:"—", enun:"Assinale a alternativa que apresenta corretamente uma base legal para tratamento de dados pessoais prevista no art. 7º da LGPD, distinta do consentimento:", alts:["Curiosidade do controlador","Cumprimento de obrigação legal ou regulatória pelo controlador","Interesse exclusivo de terceiros sem qualquer vínculo com o titular","Ausência de outra opção disponível","Vontade unilateral de qualquer empresa"], correta:1, coment:"O cumprimento de obrigação legal ou regulatória pelo controlador é uma das 10 bases legais do art. 7º, independente de consentimento do titular."},
+    {tema:"Dados sensíveis", texto:"—", enun:"Assinale a alternativa que apresenta um exemplo de dado pessoal SENSÍVEL, segundo a LGPD:", alts:["Nome completo","Endereço residencial","Dado referente à saúde do titular","Número de telefone","Profissão declarada em cadastro"], correta:2, coment:"Dados referentes à saúde estão expressamente listados como dado sensível no art. 5º, II, da LGPD, junto com origem racial/étnica, convicção religiosa, opinião política, filiação sindical, vida sexual, dado genético e biométrico."},
+    {tema:"Consentimento para dados sensíveis", texto:"—", enun:"O tratamento de dados sensíveis, quando fundamentado em consentimento, exige que este seja:", alts:["Genérico e implícito","Específico e destacado","Verbal apenas, sem registro","Dispensável em qualquer hipótese","Válido apenas se renovado mensalmente"], correta:1, coment:"Para dados sensíveis, a LGPD exige consentimento específico e destacado, diferente do consentimento genérico aplicável a dados comuns."},
+    {tema:"Dados de crianças", texto:"—", enun:"O tratamento de dados pessoais de crianças, em regra, exige:", alts:["Nenhum consentimento, por serem incapazes.","Consentimento específico e em destaque, dado por ao menos um dos pais ou responsável legal.","Consentimento apenas da própria criança, independentemente da idade.","Autorização judicial prévia obrigatória em todos os casos.","Consentimento de qualquer adulto presente no momento da coleta."], correta:1, coment:"O art. 14 da LGPD exige, em regra, consentimento específico e em destaque de ao menos um dos pais ou do responsável legal para o tratamento de dados de crianças."},
+    {tema:"Direitos do titular", texto:"—", enun:"Assinale a alternativa que NÃO corresponde a um direito do titular previsto na LGPD:", alts:["Confirmação da existência de tratamento","Correção de dados incompletos ou inexatos","Portabilidade dos dados a outro fornecedor","Revisão de decisões automatizadas que o afetem","Direito de impedir qualquer empresa de existir no mercado"], correta:4, coment:"A LGPD prevê direitos concretos e específicos ao titular (confirmação, acesso, correção, portabilidade, eliminação, revisão de decisão automatizada, entre outros) — não prevê um poder genérico de impedir a existência de empresas no mercado."},
+    {tema:"Tratamento pelo Poder Público", texto:"—", enun:"O tratamento de dados pessoais pelo Poder Público, segundo o Capítulo IV da LGPD, deve ser realizado para:", alts:["Qualquer finalidade, sem necessidade de justificativa.","O atendimento de sua finalidade pública, na persecução do interesse público.","Exclusivamente fins comerciais do próprio órgão.","Venda de dados a terceiros interessados.","Uso irrestrito, sem qualquer obrigação de transparência."], correta:1, coment:"O art. 23 da LGPD estabelece que o tratamento de dados pelo Poder Público deve ser realizado para o atendimento de sua finalidade pública, na persecução do interesse público, com o objetivo de executar suas competências legais."},
+    {tema:"Compartilhamento com entidade privada", texto:"—", enun:"O compartilhamento de dados pessoais entre o Poder Público e entidades privadas é:", alts:["Sempre permitido, sem qualquer restrição.","Regra geral vedada, salvo hipóteses legais específicas.","Obrigatório em todos os casos de interesse comercial.","Permitido apenas mediante pagamento de taxa.","Regulado exclusivamente por normas internas de cada órgão, sem base na LGPD."], correta:1, coment:"A LGPD estabelece, como regra geral, a vedação ao compartilhamento de dados entre Poder Público e entidades privadas, ressalvadas hipóteses legais específicas, como execução de políticas públicas previstas em lei."},
+    {tema:"RIPD", texto:"—", enun:"O Relatório de Impacto à Proteção de Dados Pessoais (RIPD) tem como finalidade:", alts:["Substituir integralmente a necessidade de bases legais.","Descrever processos de tratamento capazes de gerar riscos às liberdades civis e aos direitos fundamentais.","Servir exclusivamente como peça publicitária da empresa.","Eliminar automaticamente todos os dados tratados.","Aplicar sanções administrativas diretamente."], correta:1, coment:"O RIPD é a documentação que descreve os processos de tratamento de dados pessoais capazes de gerar riscos às liberdades civis e aos direitos fundamentais, contendo medidas de mitigação de risco."},
+    {tema:"Multa administrativa", texto:"—", enun:"A multa simples prevista na LGPD pode chegar a, no máximo:", alts:["10% do faturamento, sem limite de valor.","2% do faturamento, limitada a R$ 50.000.000,00 por infração.","5% do faturamento, limitada a R$ 100.000.000,00.","1% do faturamento, sem teto definido.","Valor fixo de R$ 1.000.000,00, independentemente do faturamento."], correta:1, coment:"O art. 52 da LGPD estabelece multa simples de até 2% do faturamento da pessoa jurídica, grupo ou conglomerado no Brasil, limitada a R$ 50.000.000,00 por infração."},
+    {tema:"Sanções administrativas", texto:"—", enun:"Assinale a alternativa que apresenta corretamente uma sanção administrativa prevista na LGPD:", alts:["Pena de reclusão automática, sem processo administrativo.","Suspensão parcial do funcionamento do banco de dados por até 6 meses, prorrogável por igual período.","Confisco imediato de todos os bens da empresa.","Extinção automática da personalidade jurídica.","Multa vitalícia sem possibilidade de recurso."], correta:1, coment:"A suspensão parcial do funcionamento do banco de dados, pelo período máximo de 6 meses (prorrogável por igual período), é uma das sanções administrativas previstas no art. 52 da LGPD."},
+    {tema:"ANPD", texto:"—", enun:"A Autoridade Nacional de Proteção de Dados (ANPD) tem natureza jurídica de:", alts:["Empresa privada com fins lucrativos.","Órgão da administração pública federal, integrante da Presidência da República, com autonomia técnica e decisória.","Organização não governamental internacional.","Tribunal do Poder Judiciário.","Sindicato de trabalhadores de tecnologia."], correta:1, coment:"A ANPD é órgão da administração pública federal, integrante da Presidência da República, dotado de autonomia técnica e decisória para zelar pela proteção de dados."},
+    {tema:"CNPD", texto:"—", enun:"O Conselho Nacional de Proteção de Dados Pessoais e da Privacidade (CNPD) tem função:", alts:["Executiva e sancionadora, substituindo a ANPD.","Consultiva, composto por representantes do poder público e da sociedade civil.","Judicial, julgando processos de proteção de dados.","Exclusivamente arrecadadora de multas.","Legislativa, criando novas leis sobre dados pessoais."], correta:1, coment:"O CNPD tem função consultiva, sendo composto por representantes de diferentes segmentos (Executivo, Legislativo, Judiciário, defesa do consumidor, setor empresarial, sociedade civil), diferentemente da ANPD, que tem função fiscalizadora e sancionadora."},
+    {tema:"Princípios", texto:"—", enun:"O princípio da LGPD que exige limitação do tratamento ao mínimo necessário para a realização de suas finalidades é o princípio da:", alts:["Transparência","Necessidade","Livre acesso","Qualidade dos dados","Não discriminação"], correta:1, coment:"O princípio da necessidade exige que o tratamento se limite ao mínimo necessário para a realização de suas finalidades, com abrangência de dados pertinentes, proporcionais e não excessivos."},
+    {tema:"Accountability", texto:"—", enun:"O princípio da 'responsabilização e prestação de contas', também conhecido como accountability, exige que o agente de tratamento:", alts:["Ignore completamente qualquer obrigação de comprovação.","Demonstre a adoção de medidas eficazes e capazes de comprovar a observância da lei.","Delegue toda a responsabilidade ao titular dos dados.","Publique automaticamente todos os dados tratados.","Aguarde apenas decisão judicial para agir."], correta:1, coment:"O princípio da responsabilização e prestação de contas (accountability) exige que o agente demonstre a adoção de medidas eficazes e capazes de comprovar a observância e o cumprimento das normas de proteção de dados."},
+    {tema:"Aplicação a cenário institucional", texto:"—", enun:"Um órgão público federal cruza bases de dados de diferentes sistemas para verificar a regularidade de um benefício previdenciário, com base em previsão legal expressa que autoriza essa política pública. Essa operação está fundamentada, principalmente, em qual base legal do art. 7º?", alts:["Consentimento do titular","Execução de políticas públicas previstas em lei ou regulamento","Proteção do crédito","Legítimo interesse comercial","Tutela exclusiva da saúde"], correta:1, coment:"Quando há previsão legal expressa autorizando a política pública, a base legal aplicável é a execução de políticas públicas previstas em lei ou regulamento, dispensando consentimento individual do titular."},
+    {tema:"Vedação de uso de dados de crianças", texto:"—", enun:"Segundo a LGPD, o tratamento de dados de crianças é vedado para qual finalidade específica, mesmo com consentimento?", alts:["Contato com os pais ou responsável, em caso de necessidade.","Proteção da própria criança.","Direcionamento de publicidade.","Cumprimento de obrigação legal aplicável à criança.","Nenhuma vedação específica existe para dados de crianças."], correta:2, coment:"A LGPD veda expressamente o uso de dados de crianças para fins de direcionamento de publicidade, mesmo quando há consentimento dos pais ou responsável para outras finalidades."},
+    {tema:"Comunicação de incidente", texto:"—", enun:"Em caso de incidente de segurança que possa acarretar risco ou dano relevante aos titulares, o controlador deve:", alts:["Manter sigilo absoluto, sem comunicar a ninguém.","Comunicar à ANPD e ao titular dos dados, em prazo razoável.","Comunicar apenas à imprensa, sem informar a ANPD.","Aguardar decisão judicial antes de qualquer comunicação.","Comunicar apenas se o incidente for de conhecimento público."], correta:1, coment:"O art. 48 da LGPD exige que o controlador comunique à ANPD e ao titular, em prazo razoável, a ocorrência de incidente de segurança que possa acarretar risco ou dano relevante."},
+    {tema:"Fundamentos da lei", texto:"—", enun:"Assinale a alternativa que apresenta corretamente um dos fundamentos da LGPD, previstos no art. 2º:", alts:["Exclusividade estatal sobre qualquer dado pessoal.","Autodeterminação informativa.","Proibição total de qualquer tratamento de dados.","Prevalência automática do interesse comercial sobre direitos individuais.","Vedação absoluta ao desenvolvimento tecnológico."], correta:1, coment:"A autodeterminação informativa — o direito do titular de controlar informações sobre si mesmo — é um dos fundamentos expressos no art. 2º da LGPD."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Considerando os capítulos estudados, assinale a alternativa que combina corretamente conceitos da LGPD:", alts:["O consentimento é a única base legal válida para qualquer tratamento de dados, inclusive pelo Poder Público.","O Poder Público pode tratar dados com base em execução de políticas públicas, mas deve observar finalidade pública e transparência; já dados sensíveis, quando tratados por consentimento, exigem consentimento específico e destacado.","A ANPD é um órgão meramente consultivo, sem poder de sanção.","O CNPD tem poder de aplicar multas milionárias a empresas infratoras.","Dados de crianças podem ser usados livremente para publicidade, desde que os pais sejam informados posteriormente."], correta:1, coment:"A alternativa correta combina corretamente dois conceitos centrais: a base legal de políticas públicas exige finalidade pública e transparência (Capítulo IV), e o consentimento para dados sensíveis deve ser específico e destacado (Capítulo II) — as demais alternativas contêm erros conceituais estudados ao longo do capítulo."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"A sigla LGPD significa:", alts:["Lei Geral de Proteção de Dados","Lei de Gestão Pública Digital","Lei Geral de Privacidade Doméstica","Lei de Governança e Proteção Documental","Lei Geral de Publicidade de Dados"], correta:0},
+    {d:"Fácil", texto:"—", enun:"O consentimento é a única base legal para tratamento de dados?", alts:["Sim","Não","Apenas para dados sensíveis","Apenas para o setor público","Apenas para menores de idade"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Quantas bases legais gerais o art. 7º prevê?", alts:["5","7","10","12","15"], correta:2},
+    {d:"Fácil", texto:"—", enun:"Dado referente à saúde é classificado como:", alts:["Dado comum","Dado sensível","Dado público","Dado irrelevante","Dado anônimo por definição"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Consentimento para dados sensíveis deve ser:", alts:["Genérico","Específico e destacado","Verbal apenas","Dispensável sempre","Anual, obrigatoriamente"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Dados de crianças, em regra, exigem consentimento de:", alts:["Qualquer adulto presente","Pelo menos um dos pais ou responsável legal","Apenas da própria criança","Um juiz","Nenhum consentimento é necessário"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O que é o RIPD?", alts:["Um tipo de multa","Relatório de Impacto à Proteção de Dados Pessoais","Um órgão do Judiciário","Um tipo de contrato","Uma base legal do art. 7º"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Multa máxima simples prevista na LGPD:", alts:["1% do faturamento","2% do faturamento, até R$ 50 milhões","5% do faturamento, sem teto","10% do faturamento","Valor fixo de R$ 1 milhão"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A ANPD tem natureza jurídica de:", alts:["Empresa privada","Órgão da administração pública federal","ONG internacional","Sindicato","Tribunal"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O CNPD tem função:", alts:["Sancionadora","Consultiva","Judicial","Legislativa","Nenhuma função definida"], correta:1},
+    {d:"Média", texto:"—", enun:"O compartilhamento de dados entre Poder Público e entidade privada é:", alts:["Sempre livre","Regra geral vedada, salvo exceções legais","Proibido em qualquer hipótese, sem exceção","Livre apenas para empresas estrangeiras","Regulado apenas por normas internas"], correta:1},
+    {d:"Média", texto:"—", enun:"O tratamento de dados pelo Poder Público deve observar principalmente:", alts:["Interesse comercial do órgão","Finalidade pública e transparência","Interesse exclusivo do servidor responsável","Sigilo absoluto, sem exceção","Nenhuma regra específica se aplica"], correta:1},
+    {d:"Média", texto:"—", enun:"Quem deve ser comunicado em caso de incidente de segurança relevante?", alts:["Apenas a imprensa","ANPD e o titular dos dados","Apenas o Ministério Público","Apenas o Congresso Nacional","Ninguém, é sigiloso por padrão"], correta:1},
+    {d:"Média", texto:"—", enun:"É vedado usar dados de crianças para qual finalidade específica?", alts:["Contato com os pais","Proteção da própria criança","Direcionamento de publicidade","Cumprimento de obrigação legal","Nenhuma vedação existe"], correta:2},
+    {d:"Média", texto:"—", enun:"O princípio da necessidade exige:", alts:["Tratamento ilimitado de dados","Limitação do tratamento ao mínimo necessário à finalidade","Coleta máxima possível de dados","Ausência de qualquer limite","Consentimento sempre renovado mensalmente"], correta:1},
+    {d:"Média", texto:"—", enun:"O princípio de accountability exige que o agente:", alts:["Ignore obrigações legais","Demonstre adoção de medidas eficazes de conformidade","Delegue responsabilidade ao titular","Publique todos os dados tratados","Aguarde apenas decisão judicial"], correta:1},
+    {d:"Média", texto:"—", enun:"Suspensão parcial do banco de dados pode durar, no máximo (com prorrogação):", alts:["3 meses","6 meses, prorrogável por igual período","1 ano, sem prorrogação","Indefinidamente","1 mês"], correta:1},
+    {d:"Média", texto:"—", enun:"'Execução de políticas públicas previstas em lei' é uma base legal aplicável principalmente a:", alts:["Empresas privadas exclusivamente","Órgãos do Poder Público","Apenas ONGs","Apenas pessoas físicas","Nenhum agente de tratamento"], correta:1},
+    {d:"Média", texto:"—", enun:"O direito de revisão de decisões automatizadas se aplica a decisões que:", alts:["Nunca afetam o titular","Afetam interesses do titular, incluindo definição de perfil","Envolvem apenas decisões judiciais","São tomadas exclusivamente por seres humanos","Aplicam-se apenas a empresas estrangeiras"], correta:1},
+    {d:"Média", texto:"—", enun:"O que caracteriza um fundamento da LGPD, segundo o art. 2º?", alts:["Exclusividade estatal sobre dados","Autodeterminação informativa","Proibição de qualquer tratamento","Prevalência do interesse comercial sempre","Vedação ao desenvolvimento tecnológico"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um órgão público cruza dados de diferentes sistemas com base em previsão legal expressa para verificar regularidade de benefício. A base legal principal é:", alts:["Consentimento do titular","Execução de políticas públicas previstas em lei","Proteção do crédito","Legítimo interesse comercial","Tutela exclusiva da saúde"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que diferencia corretamente dado sensível de base legal:", alts:["São exatamente o mesmo conceito.","Dado sensível é uma categoria de dado; base legal é o fundamento jurídico que autoriza o tratamento de qualquer dado.","Base legal só se aplica a dados sensíveis.","Dado sensível é sinônimo de dado anonimizado.","Não há relação entre os dois conceitos na LGPD."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente a relação entre ANPD e CNPD:", alts:["São o mesmo órgão, com nomes diferentes.","A ANPD fiscaliza e sanciona; o CNPD tem função consultiva.","O CNPD substitui integralmente a ANPD em casos graves.","A ANPD é um órgão privado; o CNPD é público.","Nenhum dos dois tem competência sobre a LGPD."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um controlador sofre um incidente de segurança que expõe dados sensíveis de milhares de titulares, mas decide não comunicar por considerar 'baixo risco', sem seguir critério objetivo. Essa conduta é compatível com a LGPD?", alts:["Sim, sempre, a critério exclusivo do controlador.","Não — o controlador deve comunicar incidentes que possam acarretar risco ou dano relevante, em prazo razoável.","Sim, desde que o incidente não se torne público.","Não há qualquer obrigação de comunicação prevista na LGPD.","Depende exclusivamente de decisão judicial prévia."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor descreve o papel do RIPD em um projeto de tratamento de dados de alto risco:", alts:["É opcional e nunca é exigido pela ANPD.","Descreve os processos de tratamento e as medidas de mitigação de riscos às liberdades civis e direitos fundamentais.","Substitui integralmente qualquer base legal necessária.","É um documento exclusivamente financeiro.","Aplica-se apenas a empresas com menos de 10 funcionários."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente uma limitação à multa administrativa da LGPD:", alts:["Não há limite algum, podendo a multa ultrapassar livremente qualquer teto.","A multa simples é limitada a 2% do faturamento e a um teto de R$ 50 milhões por infração.","A multa é sempre um valor fixo de R$ 10 milhões, independentemente do porte da empresa.","A multa só pode ser aplicada a pessoas físicas, nunca a empresas.","Não existe previsão de multa na LGPD, apenas advertência."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando o Capítulo IV, assinale a alternativa correta sobre transparência no tratamento de dados pelo Poder Público:", alts:["A transparência é dispensável para órgãos públicos.","O uso de dados por órgãos públicos deve ser divulgado em veículos de fácil acesso, preferencialmente em sítios eletrônicos.","Apenas o Judiciário precisa dar transparência ao tratamento de dados.","A transparência só é exigida mediante ordem judicial específica.","Não há qualquer previsão sobre transparência no Capítulo IV."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que combina corretamente dois conceitos estudados sobre dados de crianças:", alts:["O consentimento dos pais é sempre dispensável, e dados podem ser usados livremente para publicidade.","O consentimento específico dos pais/responsável é exigido em regra, e o uso para publicidade é vedado mesmo com consentimento para outras finalidades.","Apenas a própria criança pode consentir, independentemente da idade.","Não há qualquer regra especial para dados de crianças na LGPD.","O consentimento pode ser substituído por autorização de qualquer adulto presente."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que sintetiza corretamente a relevância do Capítulo IV da LGPD para uma empresa pública de tecnologia da informação como a DATAPREV:", alts:["É irrelevante, pois a empresa não trata dados pessoais.","É central, pois a empresa trata dados sensíveis de segurados sob regras específicas de finalidade pública, transparência e restrição ao compartilhamento com entidades privadas.","Aplica-se apenas a empresas estrangeiras.","Só se aplica a empresas com fins lucrativos exclusivamente privados.","Não há qualquer relação entre a LGPD e empresas públicas de TI."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Conhecer o objetivo e os fundamentos da LGPD (Capítulo I)",
+    "Memorizar as 10 bases legais do art. 7º",
+    "Diferenciar dado comum de dado sensível",
+    "Compreender a regra de consentimento para dados de crianças",
+    "Conhecer todos os direitos do titular (Capítulo III)",
+    "Dominar as regras de tratamento pelo Poder Público (Capítulo IV)",
+    "Compreender o que é o RIPD e a obrigação de comunicar incidentes",
+    "Memorizar os limites de multa administrativa (2% / R$ 50 milhões)",
+    "Conhecer as demais sanções administrativas previstas",
+    "Diferenciar a natureza e função da ANPD e do CNPD",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Achar que o consentimento é a única base legal para tratamento de dados.",
+    "Confundir a lista de dados sensíveis com a lista de bases legais gerais.",
+    "Trocar o percentual (2%) ou o teto (R$ 50 milhões) da multa por outros valores.",
+    "Achar que a LGPD proíbe totalmente o compartilhamento de dados entre órgãos públicos.",
+    "Confundir a função fiscalizadora da ANPD com a função consultiva do CNPD.",
+    "Não perceber que o consentimento para dados sensíveis deve ser específico e destacado.",
+    "Ignorar que o uso de dados de crianças para publicidade é vedado, mesmo com consentimento para outras finalidades.",
+    "Confundir tratamento pelo Poder Público (Capítulo IV) com regras gerais aplicáveis a empresas privadas.",
+    "Não memorizar os 10 princípios do art. 6º com precisão.",
+    "Confundir o RIPD com um relatório financeiro comum.",
+    "Achar que incidentes de segurança nunca precisam ser comunicados à ANPD.",
+    "Não distinguir claramente os diferentes direitos do titular entre si.",
+    "Ignorar a exigência de finalidade pública e transparência no tratamento por órgãos públicos.",
+    "Confundir a LGPD com a LAI quanto ao seu propósito (proteção de dados x acesso à informação).",
+    "Achar que apenas empresas privadas estão sujeitas às sanções da LGPD.",
+    "Não perceber a diferença entre multa simples e multa diária.",
+    "Ignorar que a suspensão de atividades tem prazo máximo (6 meses, prorrogável).",
+    "Confundir 'legítimo interesse' com uma autorização irrestrita para qualquer tratamento.",
+    "Não conectar este tópico ao contexto institucional da DATAPREV como processadora de dados sensíveis.",
+    "Negligenciar a leitura literal do texto legal ao responder questões que exigem precisão numérica.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Titular","Pessoa natural a quem se referem os dados pessoais objeto de tratamento."],
+    ["Controlador","Pessoa natural ou jurídica responsável pelas decisões referentes ao tratamento de dados pessoais."],
+    ["Operador","Pessoa natural ou jurídica que realiza o tratamento de dados em nome do controlador."],
+    ["Dado pessoal","Informação relacionada a pessoa natural identificada ou identificável."],
+    ["Dado pessoal sensível","Dado sobre origem racial/étnica, convicção religiosa, opinião política, filiação sindical/religiosa/filosófica/política, saúde, vida sexual, dado genético ou biométrico."],
+    ["Consentimento","Manifestação livre, informada e inequívoca pela qual o titular concorda com o tratamento de seus dados."],
+    ["Anonimização","Processo pelo qual um dado perde a possibilidade de associação a um indivíduo."],
+    ["RIPD","Relatório de Impacto à Proteção de Dados Pessoais — descreve riscos de um processo de tratamento."],
+    ["ANPD","Autoridade Nacional de Proteção de Dados — órgão federal responsável por fiscalizar a LGPD."],
+    ["CNPD","Conselho Nacional de Proteção de Dados Pessoais e da Privacidade — órgão consultivo."],
+    ["Accountability","Princípio de responsabilização e prestação de contas pelo cumprimento da LGPD."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

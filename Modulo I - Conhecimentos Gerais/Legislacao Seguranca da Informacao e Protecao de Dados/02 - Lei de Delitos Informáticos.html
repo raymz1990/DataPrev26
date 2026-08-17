@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lei de Delitos Informáticos (Lei nº 12.737/2012) | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo I – Conhecimentos Gerais</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Legislação — Segurança da Informação e Proteção de Dados</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">02 - Lei de Delitos Informáticos (Lei nº 12.737/2012)</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Lei de Acesso à Informação.html">01 - Lei de Acesso à Informação</option>
+    <option value="02 - Lei de Delitos Informáticos.html" selected>02 - Lei de Delitos Informáticos</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Lei de Delitos Informáticos (Lei nº 12.737/2012)</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Quadro de penas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo I — Legislação: Segurança da Informação e Proteção de Dados<br>Tópico 02 de 04<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Lei nº 12.737/2012 — Lei de Delitos Informáticos (art. 2º)</h1>
+      <div class="breadcrumb">Módulo I &nbsp;›&nbsp; <b>Legislação: Segurança da Informação e Proteção de Dados</b> &nbsp;›&nbsp; Tópico 02</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">4h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — noções básicas de Código Penal ajudam</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio — escopo estreito (um único artigo), mas de cobrança certeira</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender o <b>contexto histórico</b> de criação da Lei nº 12.737/2012, popularmente chamada de "Lei Carolina Dieckmann".</li>
+            <li>Dominar o conteúdo do <b>art. 2º</b> da lei, que insere o <b>art. 154-A</b> no Código Penal, tipificando o crime de <b>invasão de dispositivo informático</b>.</li>
+            <li>Identificar os <b>elementos do tipo penal</b>: conduta, elemento subjetivo (finalidade específica), objeto material e sujeitos.</li>
+            <li>Diferenciar a <b>figura simples</b> (caput), a <b>figura equiparada</b> (§1º), o <b>aumento de pena por prejuízo econômico</b> (§2º), a <b>forma qualificada</b> (§3º) e os <b>aumentos de pena específicos</b> (§4º e §5º).</li>
+            <li>Compreender as regras de <b>ação penal</b> previstas no art. 154-B (inserido pelo mesmo art. 2º), incluindo a hipótese de ação pública incondicionada.</li>
+            <li>Resolver questões FGV que exigem aplicação do tipo penal a cenários concretos de invasão de sistemas ou dispositivos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A <b>Lei nº 12.737/2012</b>, sancionada em 30 de novembro de 2012, ficou popularmente conhecida como <b>"Lei Carolina Dieckmann"</b>, em referência ao caso da atriz que teve fotos íntimas obtidas por meio de invasão de seu computador e divulgadas sem autorização — episódio que impulsionou a tramitação do projeto de lei no Congresso Nacional.</p>
+          <p>O <b>art. 2º</b> da lei — escopo específico deste tópico — insere o <b>art. 154-A</b> no Código Penal, criando o tipo penal de <b>"Invasão de dispositivo informático"</b>. A conduta consiste em invadir dispositivo informático alheio, conectado ou não à rede de computadores, com a <b>finalidade específica</b> de obter, adulterar ou destruir dados ou informações sem autorização do usuário, ou de instalar vulnerabilidades para obter vantagem ilícita.</p>
+          <p>O mesmo art. 2º também insere o <b>art. 154-B</b> no Código Penal, que trata da <b>ação penal</b> aplicável: em regra, o crime é de <b>ação penal pública condicionada à representação</b> da vítima; excepcionalmente, será de <b>ação pública incondicionada</b> quando cometido contra a administração pública direta ou indireta de qualquer dos Poderes (União, estados, DF, municípios) ou contra empresas concessionárias de serviços públicos.</p>
+          <p>O art. 154-A possui uma estrutura escalonada: <b>caput</b> (figura simples), <b>§1º</b> (figura equiparada, para quem produz/distribui ferramentas de invasão), <b>§2º</b> (aumento de pena por prejuízo econômico), <b>§3º</b> (forma qualificada, quando a invasão resulta na obtenção de conteúdo de comunicações privadas, segredos comerciais/industriais, informações sigilosas ou controle remoto não autorizado do dispositivo), <b>§4º</b> (aumento de pena por divulgação/comercialização dos dados obtidos) e <b>§5º</b> (aumento de pena quando a vítima é autoridade de alto escalão, como Presidente da República, governadores, prefeitos e dirigentes máximos da administração pública).</p>
+          <div class="box warn">
+            <div class="box-title">⚠ Importante: alteração legislativa relevante (Lei nº 14.155/2021)</div>
+            <p>O art. 154-A foi <b>significativamente alterado pela Lei nº 14.155/2021</b>, que elevou a pena da figura simples de <b>detenção, de 3 meses a 1 ano</b> (texto original de 2012), para <b>reclusão, de 1 a 4 anos</b> (texto vigente). A lei de 2021 também <b>removeu a exigência</b>, do caput, de que a invasão ocorra "mediante violação indevida de mecanismo de segurança" — elemento que constava do texto original de 2012, mas foi suprimido, ampliando o alcance do tipo penal. Este material apresenta o <b>texto atualmente em vigor</b>, indicando expressamente onde houve mudança em relação ao texto original de 2012.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Art. 2º da Lei 12.737/2012<br>(insere art. 154-A e 154-B no CP)</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Caput — figura simples</h4><ul><li>Invadir dispositivo alheio</li><li>Finalidade específica</li><li>Pena: reclusão 1-4 anos</li></ul></div>
+              <div class="mm-node"><h4>§1º — equiparada</h4><ul><li>Produzir/distribuir ferramenta</li><li>Mesma pena do caput</li></ul></div>
+              <div class="mm-node"><h4>§2º — aumento</h4><ul><li>Prejuízo econômico</li><li>Aumenta 1/3 a 2/3</li></ul></div>
+              <div class="mm-node"><h4>§3º — qualificada</h4><ul><li>Obtenção de conteúdo sigiloso</li><li>Pena: reclusão 6m-2a</li></ul></div>
+              <div class="mm-node"><h4>§4º e §5º</h4><ul><li>Divulgação dos dados</li><li>Vítima autoridade pública</li></ul></div>
+              <div class="mm-node"><h4>Art. 154-B — ação penal</h4><ul><li>Representação (regra)</li><li>Incondicionada (adm. pública)</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Contexto histórico: a "Lei Carolina Dieckmann"</h3>
+          <p>Em maio de 2012, a atriz Carolina Dieckmann teve seu computador invadido, com a obtenção e posterior divulgação não autorizada de fotos íntimas. Na época, não havia tipificação penal específica para a mera invasão de dispositivo informático — o episódio teve grande repercussão nacional e acelerou a tramitação do projeto de lei que já existia no Congresso, resultando na sanção da Lei nº 12.737/2012.</p>
+
+          <h3>4.2 Art. 154-A, caput — figura simples</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal vigente (após Lei nº 14.155/2021)</div>
+            <p><b>Art. 154-A.</b> Invadir dispositivo informático de uso alheio, conectado ou não à rede de computadores, com o fim de obter, adulterar ou destruir dados ou informações sem autorização expressa ou tácita do usuário do dispositivo ou de instalar vulnerabilidades para obter vantagem ilícita: <b>Pena – reclusão, de 1 (um) a 4 (quatro) anos, e multa.</b></p>
+          </div>
+          <table>
+            <thead><tr><th>Elemento do tipo</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td>Conduta (verbo núcleo)</td><td>Invadir dispositivo informático de uso alheio</td></tr>
+              <tr><td>Objeto material</td><td>Dispositivo informático alheio, conectado ou não à rede de computadores (computador, celular, tablet etc.)</td></tr>
+              <tr><td>Elemento subjetivo</td><td>Dolo específico: finalidade de obter, adulterar ou destruir dados/informações sem autorização, ou de instalar vulnerabilidades para obter vantagem ilícita</td></tr>
+              <tr><td>Consumação</td><td>Não se exige que o invasor efetivamente obtenha qualquer vantagem — basta a invasão com a finalidade específica exigida pelo tipo</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠ Atenção: elemento removido do caput em 2021</div>
+            <p>O texto original de 2012 exigia que a invasão ocorresse <b>"mediante violação indevida de mecanismo de segurança"</b> — ou seja, era necessário que o dispositivo tivesse alguma proteção (senha, firewall etc.) rompida pelo invasor. A <b>Lei nº 14.155/2021 removeu essa exigência</b> do caput, ampliando o alcance do crime para abranger também invasões em dispositivos sem mecanismo de segurança específico.</p>
+          </div>
+
+          <h3>4.3 Art. 154-A, §1º — figura equiparada</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal</div>
+            <p><b>§1º</b> Na mesma pena incorre quem produz, oferece, distribui, vende ou difunde dispositivo ou programa de computador com o intuito de permitir a prática da conduta definida no caput.</p>
+          </div>
+          <p>Trata-se de <b>equiparação</b>: quem cria ou distribui uma "ferramenta de invasão" (por exemplo, um malware ou spyware) com o intuito de viabilizar a invasão de terceiros, recebe a <b>mesma pena</b> do autor da invasão, mesmo sem invadir pessoalmente nenhum dispositivo.</p>
+
+          <h3>4.4 Art. 154-A, §2º — aumento de pena por prejuízo econômico</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal vigente</div>
+            <p><b>§2º</b> Aumenta-se a pena de 1/3 (um terço) a 2/3 (dois terços) se da invasão resulta prejuízo econômico.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠ Atenção: percentual alterado em 2021</div>
+            <p>O texto original de 2012 previa aumento de <b>"um sexto a um terço"</b>; a Lei nº 14.155/2021 elevou o aumento para <b>"um terço a dois terços"</b>. Esse aumento incide apenas sobre a figura simples (caput) e a equiparada (§1º) — não se aplica à forma qualificada do §3º, que já possui pena autônoma.</p>
+          </div>
+
+          <h3>4.5 Art. 154-A, §3º — forma qualificada</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal</div>
+            <p><b>§3º</b> Se da invasão resultar a obtenção de conteúdo de comunicações eletrônicas privadas, segredos comerciais ou industriais, informações sigilosas, assim definidas em lei, ou o controle remoto não autorizado do dispositivo invadido: <b>Pena – reclusão, de 6 (seis) meses a 2 (dois) anos, e multa</b>, se a conduta não constitui crime mais grave.</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">✅ Atenção ao detalhe</div>
+            <p>Note que a pena da forma qualificada (6 meses a 2 anos) pode, em uma leitura rápida, parecer "menor" do que a pena máxima da forma simples com aumento (que pode chegar a até 6 anos e 8 meses, considerando o aumento de 2/3 sobre o máximo de 4 anos) — isso ocorre porque o §3º tem regime de pena próprio, autônomo, específico para essa hipótese qualificada.</p>
+          </div>
+
+          <h3>4.6 Art. 154-A, §4º e §5º — aumentos de pena específicos</h3>
+          <table>
+            <thead><tr><th>Parágrafo</th><th>Hipótese</th><th>Aumento</th></tr></thead>
+            <tbody>
+              <tr><td>§4º</td><td>Divulgação, comercialização ou transmissão a terceiro, a qualquer título, dos dados ou informações obtidos com a invasão</td><td>1/3 a 2/3</td></tr>
+              <tr><td>§5º</td><td>Crime praticado contra: Presidente da República, governadores, prefeitos; Presidente do STF; Presidentes de Câmara dos Deputados, Senado Federal, Assembleia Legislativa, Câmara Legislativa do DF ou Câmara Municipal; dirigente máximo da administração direta e indireta federal, estadual, municipal ou do DF</td><td>1/3 à metade</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.7 Art. 154-B — ação penal</h3>
+          <div class="box info">
+            <div class="box-title">📘 Texto legal</div>
+            <p><b>Art. 154-B.</b> Nos crimes definidos no art. 154-A, somente se procede mediante representação, salvo se o crime é cometido contra a administração pública direta ou indireta de qualquer dos Poderes da União, Estados, Distrito Federal ou Municípios ou contra empresas concessionárias de serviços públicos.</p>
+          </div>
+          <table>
+            <thead><tr><th>Regra</th><th>Tipo de ação penal</th></tr></thead>
+            <tbody>
+              <tr><td>Regra geral (vítima particular)</td><td>Ação penal pública <b>condicionada à representação</b> da vítima</td></tr>
+              <tr><td>Exceção (vítima é administração pública ou concessionária de serviço público)</td><td>Ação penal pública <b>incondicionada</b> — não depende de representação</td></tr>
+            </tbody>
+          </table>
+          <div class="box fgv">
+            <div class="box-title">🏛 Por que este dispositivo é especialmente relevante para a DATAPREV</div>
+            <p>Como empresa pública, a DATAPREV integra a administração pública indireta federal. Uma invasão de dispositivo informático cometida contra sistemas da própria DATAPREV configuraria, em tese, hipótese de <b>ação penal pública incondicionada</b>, dispensando representação da empresa para a persecução penal — ponto de conexão direto entre a norma penal e a realidade institucional da vaga.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>Por se tratar de um único artigo de lei (art. 2º da Lei 12.737/2012, que insere os arts. 154-A e 154-B no CP), a FGV tende a cobrar o tema de forma <b>precisa e literal</b>, testando elementos do tipo penal, penas exatas e a distinção entre as hipóteses de ação penal.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Questões que apresentam um cenário de invasão e pedem a classificação correta (figura simples, equiparada, qualificada).</li>
+            <li>Questões sobre o tipo de ação penal aplicável a um cenário específico (particular x administração pública).</li>
+            <li>Questões sobre penas exatas de cada figura (caput, §2º, §3º).</li>
+            <li>Dificuldade média — exige precisão técnica, mas o escopo é limitado a um único artigo.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Elementos do tipo penal do caput (art. 154-A)</td><td>Muito alta</td></tr>
+              <tr><td>Distinção entre ação penal condicionada e incondicionada (art. 154-B)</td><td>Alta</td></tr>
+              <tr><td>Forma qualificada do §3º (conteúdo sigiloso, controle remoto)</td><td>Média-alta</td></tr>
+              <tr><td>Figura equiparada do §1º (produção/distribuição de ferramentas)</td><td>Média</td></tr>
+              <tr><td>Contexto histórico (Lei Carolina Dieckmann)</td><td>Baixa-média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Achar que a "violação de mecanismo de segurança" ainda é exigida pelo caput — foi removida pela Lei 14.155/2021.</li>
+            <li>Confundir a pena da forma simples (reclusão, 1 a 4 anos) com a pena da forma qualificada do §3º (reclusão, 6 meses a 2 anos).</li>
+            <li>Achar que toda invasão de dispositivo, mesmo contra particular, é de ação penal incondicionada.</li>
+            <li>Achar que é necessário obter efetivamente vantagem para consumar o crime — basta a invasão com a finalidade específica.</li>
+            <li>Confundir a figura equiparada (§1º, quem produz/distribui ferramenta) com a figura qualificada (§3º, quem obtém conteúdo sigiloso).</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Sempre verifique se a vítima do cenário é particular ou órgão/empresa pública — isso determina o tipo de ação penal.</li>
+            <li>Ao ver menção a "mecanismo de segurança violado" como requisito do crime, desconfie — não é mais elemento do caput desde 2021.</li>
+            <li>Diferencie prejuízo econômico (§2º, aumento de pena) de obtenção de conteúdo sigiloso (§3º, forma qualificada com pena própria).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Pena do caput: 1 a 4</div><p>Reclusão, de 1 a 4 anos, e multa — pena atual (pós-2021), bem maior que a original de 2012 (detenção, 3 meses a 1 ano).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Pena do §3º (qualificada): 6 meses a 2 anos</div><p>Menor que a pena-base do caput, mas é regime autônomo — não é "aumento" sobre o caput, é pena própria da forma qualificada.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra de ação penal: representação, salvo administração pública</div><p>"Salvo se contra administração pública ou concessionária de serviço público" = ação pública incondicionada. Todo o resto = condicionada à representação.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Macete do §1º x §3º</div><p>§1º = quem FABRICA/DISTRIBUI a ferramenta de invasão (equiparado ao autor). §3º = quem OBTÉM conteúdo sigiloso com a invasão (forma mais grave, qualificada).</p></div>
+          <div class="box tip"><div class="box-title">🧠 "Lei Carolina Dieckmann"</div><p>Apelido popular da Lei 12.737/2012, em referência ao caso da atriz que motivou sua tramitação acelerada no Congresso.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Lei 12.737/2012, art. 2º, insere os arts. 154-A e 154-B no Código Penal.</li>
+            <li>Art. 154-A caput: invadir dispositivo alheio, com finalidade específica; pena atual: reclusão, 1 a 4 anos, e multa (alterada pela Lei 14.155/2021).</li>
+            <li>Não é mais exigida "violação de mecanismo de segurança" no caput (removido em 2021).</li>
+            <li>§1º: figura equiparada — quem produz/distribui ferramenta de invasão, mesma pena do caput.</li>
+            <li>§2º: aumento de 1/3 a 2/3 se houver prejuízo econômico.</li>
+            <li>§3º: forma qualificada — obtenção de conteúdo sigiloso/controle remoto; pena própria: reclusão, 6 meses a 2 anos.</li>
+            <li>§4º: aumento de 1/3 a 2/3 por divulgação/comercialização dos dados obtidos.</li>
+            <li>§5º: aumento de 1/3 à metade se a vítima for autoridade de alto escalão.</li>
+            <li>Art. 154-B: ação penal condicionada à representação, salvo contra administração pública/concessionária de serviço público (incondicionada).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 QUADRO DE PENAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Quadro de penas (referência rápida)</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Dispositivo</th><th>Pena / Efeito</th></tr></thead>
+            <tbody>
+              <tr><td>Caput (figura simples, texto vigente)</td><td>Reclusão, 1 a 4 anos, e multa</td></tr>
+              <tr><td>§1º (figura equiparada)</td><td>Mesma pena do caput</td></tr>
+              <tr><td>§2º (prejuízo econômico)</td><td>Aumento de 1/3 a 2/3 sobre a pena do caput/§1º</td></tr>
+              <tr><td>§3º (forma qualificada)</td><td>Reclusão, 6 meses a 2 anos, e multa (pena própria)</td></tr>
+              <tr><td>§4º (divulgação dos dados)</td><td>Aumento de 1/3 a 2/3</td></tr>
+              <tr><td>§5º (vítima autoridade de alto escalão)</td><td>Aumento de 1/3 à metade</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Texto original (2012) x texto vigente (após Lei 14.155/2021)</h3>
+          <table>
+            <thead><tr><th>Elemento</th><th>Texto original (2012)</th><th>Texto vigente (2021+)</th></tr></thead>
+            <tbody>
+              <tr><td>Pena do caput</td><td>Detenção, 3 meses a 1 ano</td><td>Reclusão, 1 a 4 anos</td></tr>
+              <tr><td>Exigência de violação de mecanismo de segurança</td><td>Exigida expressamente no caput</td><td>Removida do caput</td></tr>
+              <tr><td>Aumento do §2º</td><td>1/6 a 1/3</td><td>1/3 a 2/3</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Por ser um dispositivo compacto e de aplicação prática direta, a Lei 12.737/2012 costuma ser cobrada em conjunto com cenários de segurança da informação institucional, conectando-se facilmente a temas de proteção de dados e governança de TI no setor público.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>A Lei 12.737/2012 foi sancionada poucos meses após o caso Carolina Dieckmann, evidenciando como um episódio de grande repercussão midiática pode acelerar a tramitação legislativa de um projeto de lei já em debate no Congresso Nacional.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>A Lei nº 14.155/2021, que endureceu as penas do art. 154-A, também alterou outros crimes cibernéticos do Código Penal, como o furto mediante fraude eletrônica e o estelionato praticado por meio de dispositivo eletrônico, refletindo uma tendência de recrudescimento penal frente ao aumento de crimes digitais no Brasil.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Lei nº 12.965/2014 (Marco Civil da Internet) — Tópico 3</td><td>Complementa a proteção jurídica de dispositivos e dados no ambiente digital</td></tr>
+              <tr><td>Lei nº 13.709/2018 (LGPD) — Tópico 4</td><td>A invasão de dispositivo frequentemente resulta em vazamento de dados pessoais, tema central da LGPD</td></tr>
+              <tr><td>Inteligência Artificial: fundamentos e aplicações (Atualidades)</td><td>Segurança cibernética é pré-requisito para governança responsável de sistemas de IA</td></tr>
+              <tr><td>Lei nº 12.527/2011 (LAI) — Tópico 1</td><td>Ambas tratam de proteção da informação, mas em direções distintas: LAI amplia acesso; Lei 12.737 protege contra acesso não autorizado</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar o quadro de penas (13).</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com atenção especial à diferença entre texto original (2012) e texto vigente (2021+).</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para o Marco Civil da Internet (Tópico 3).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Lei nº 12.737, de 30 de novembro de 2012 — texto integral, Presidência da República.</li>
+            <li>Lei nº 14.155, de 27 de maio de 2021 — altera a redação do art. 154-A do Código Penal.</li>
+            <li>Decreto-Lei nº 2.848/1940 (Código Penal) — art. 154-A e art. 154-B.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo I · Legislação: Segurança da Informação e Proteção de Dados · Tópico 02/04</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_leg_t02";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual apelido popular recebeu a Lei nº 12.737/2012?", a:"'Lei Carolina Dieckmann', em referência ao caso da atriz que teve seu computador invadido e fotos íntimas divulgadas."},
+    {q:"O que o art. 2º da Lei 12.737/2012 faz?", a:"Insere os arts. 154-A e 154-B no Código Penal, tipificando o crime de invasão de dispositivo informático."},
+    {q:"Qual a pena da figura simples do art. 154-A, caput, no texto vigente?", a:"Reclusão, de 1 a 4 anos, e multa (alterada pela Lei nº 14.155/2021)."},
+    {q:"Qual era a pena original do art. 154-A, caput, em 2012?", a:"Detenção, de 3 meses a 1 ano, e multa."},
+    {q:"O caput do art. 154-A ainda exige 'violação indevida de mecanismo de segurança'?", a:"Não — essa exigência foi removida pela Lei nº 14.155/2021."},
+    {q:"O que caracteriza a figura equiparada do §1º do art. 154-A?", a:"Produzir, oferecer, distribuir, vender ou difundir dispositivo/programa com o intuito de permitir a invasão — mesma pena do caput."},
+    {q:"O que aumenta a pena segundo o §2º do art. 154-A?", a:"O prejuízo econômico resultante da invasão — aumento de 1/3 a 2/3 (texto vigente)."},
+    {q:"O que caracteriza a forma qualificada do §3º do art. 154-A?", a:"A invasão resultar na obtenção de conteúdo de comunicações privadas, segredos comerciais/industriais, informações sigilosas ou controle remoto não autorizado."},
+    {q:"Qual a pena da forma qualificada do §3º?", a:"Reclusão, de 6 meses a 2 anos, e multa (pena própria, não é apenas um aumento sobre o caput)."},
+    {q:"O que aumenta a pena segundo o §4º do art. 154-A?", a:"Divulgação, comercialização ou transmissão a terceiro dos dados ou informações obtidos com a invasão — aumento de 1/3 a 2/3."},
+    {q:"O que aumenta a pena segundo o §5º do art. 154-A?", a:"O crime ser praticado contra autoridades de alto escalão (Presidente da República, governadores, prefeitos, entre outros) — aumento de 1/3 à metade."},
+    {q:"Qual é a regra geral de ação penal no art. 154-B?", a:"Ação penal pública condicionada à representação da vítima."},
+    {q:"Quando a ação penal se torna incondicionada, segundo o art. 154-B?", a:"Quando o crime é cometido contra a administração pública direta ou indireta, de qualquer Poder ou esfera, ou contra empresas concessionárias de serviços públicos."},
+    {q:"É necessário que o invasor efetivamente obtenha vantagem para consumar o crime do art. 154-A?", a:"Não — basta a invasão com a finalidade específica exigida pelo tipo penal, independentemente de obtenção efetiva de vantagem."},
+    {q:"Qual lei alterou significativamente o art. 154-A em 2021?", a:"A Lei nº 14.155/2021."},
+    {q:"Por que a Lei 12.737/2012 é relevante para a DATAPREV como empresa pública?", a:"Porque uma invasão contra seus sistemas configuraria hipótese de ação penal pública incondicionada, dispensando representação para a persecução penal."},
+    {q:"O objeto material do crime do art. 154-A abrange apenas computadores conectados à internet?", a:"Não — abrange dispositivo informático alheio, conectado ou não à rede de computadores."},
+    {q:"Qual era o percentual de aumento do §2º no texto original de 2012?", a:"De um sexto a um terço (alterado para 1/3 a 2/3 pela Lei 14.155/2021)."},
+    {q:"A pena do §3º (qualificada) é maior ou menor que a pena-base do caput?", a:"É estruturalmente diferente e, no patamar mínimo e máximo, menor em números absolutos (6 meses a 2 anos) — mas é uma pena própria e autônoma, não um simples aumento sobre o caput."},
+    {q:"Quem responde pela mesma pena do caput sem ter realizado pessoalmente a invasão?", a:"Quem produz, oferece, distribui, vende ou difunde dispositivo/programa com o intuito de permitir a invasão (figura equiparada do §1º)."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Contexto histórico", texto:"—", enun:"A Lei nº 12.737/2012 ficou popularmente conhecida como:", alts:["Lei do Marco Civil","Lei Carolina Dieckmann","Lei de Acesso à Informação","Lei Geral de Proteção de Dados","Lei do Habeas Data"], correta:1, coment:"A lei recebeu esse apelido popular em razão do caso da atriz Carolina Dieckmann, cujo computador foi invadido e fotos íntimas foram divulgadas sem autorização, episódio que impulsionou a tramitação do projeto de lei."},
+    {tema:"Inserção legislativa", texto:"—", enun:"O art. 2º da Lei nº 12.737/2012 insere no Código Penal:", alts:["Apenas o art. 154-A","Os arts. 154-A e 154-B","Apenas o art. 266","Os arts. 266 e 298","O art. 171 (estelionato)"], correta:1, coment:"O art. 2º da Lei 12.737/2012 insere tanto o art. 154-A (tipo penal de invasão de dispositivo) quanto o art. 154-B (regra de ação penal) no Código Penal."},
+    {tema:"Pena do caput (texto vigente)", texto:"—", enun:"Segundo o texto atualmente vigente do art. 154-A, caput, a pena para a invasão simples de dispositivo informático é:", alts:["Detenção, de 3 meses a 1 ano, e multa","Reclusão, de 1 a 4 anos, e multa","Reclusão, de 6 meses a 2 anos, e multa","Detenção, de 6 meses a 2 anos, sem multa","Reclusão, de 2 a 8 anos, e multa"], correta:1, coment:"A pena vigente (após a Lei nº 14.155/2021) é de reclusão, de 1 a 4 anos, e multa — bem mais grave que a pena original de 2012 (detenção, 3 meses a 1 ano)."},
+    {tema:"Alteração legislativa", texto:"—", enun:"A exigência de 'violação indevida de mecanismo de segurança', presente no texto original de 2012, permanece no caput do art. 154-A vigente?", alts:["Sim, permanece inalterada.","Não — foi removida pela Lei nº 14.155/2021.","Sim, mas apenas para pessoas jurídicas.","Não, nunca existiu essa exigência.","Sim, mas apenas na forma qualificada."], correta:1, coment:"A Lei nº 14.155/2021 removeu do caput a exigência de que a invasão ocorra mediante violação indevida de mecanismo de segurança, ampliando o alcance do tipo penal."},
+    {tema:"Figura equiparada", texto:"—", enun:"Segundo o §1º do art. 154-A, incorre na mesma pena do caput quem:", alts:["Apenas invade pessoalmente o dispositivo.","Produz, oferece, distribui, vende ou difunde dispositivo ou programa com o intuito de permitir a invasão.","Apenas obtém prejuízo econômico com a invasão.","Apenas divulga dados obtidos por terceiros.","Nenhuma das alternativas anteriores."], correta:1, coment:"O §1º trata da figura equiparada, aplicando a mesma pena do caput a quem produz ou distribui ferramentas destinadas a viabilizar a invasão, mesmo sem realizar a invasão pessoalmente."},
+    {tema:"Aumento por prejuízo econômico", texto:"—", enun:"Segundo o §2º do art. 154-A (texto vigente), se da invasão resultar prejuízo econômico, a pena é aumentada em:", alts:["1/6 a 1/3","1/3 a 2/3","1/2 a 2/3","Dobro","1/4 a 1/2"], correta:1, coment:"O texto vigente (pós Lei 14.155/2021) prevê aumento de 1/3 a 2/3; o texto original de 2012 previa apenas 1/6 a 1/3 — mudança relevante para provas."},
+    {tema:"Forma qualificada", texto:"—", enun:"A forma qualificada prevista no §3º do art. 154-A ocorre quando a invasão resulta na obtenção de:", alts:["Qualquer tipo de dado, sem exceção.","Conteúdo de comunicações eletrônicas privadas, segredos comerciais/industriais, informações sigilosas, ou controle remoto não autorizado do dispositivo.","Apenas fotografias pessoais.","Apenas dados financeiros bancários.","Apenas senhas de acesso a redes sociais."], correta:1, coment:"O §3º descreve especificamente as hipóteses que qualificam o crime: obtenção de conteúdo de comunicações privadas, segredos comerciais/industriais, informações sigilosas definidas em lei, ou controle remoto não autorizado do dispositivo."},
+    {tema:"Pena da forma qualificada", texto:"—", enun:"A pena prevista para a forma qualificada do §3º do art. 154-A é:", alts:["Reclusão, de 1 a 4 anos, e multa","Reclusão, de 6 meses a 2 anos, e multa","Detenção, de 3 meses a 1 ano, e multa","Reclusão, de 2 a 6 anos, sem multa","Detenção, de 1 a 4 anos, e multa"], correta:1, coment:"O §3º estabelece pena própria e autônoma de reclusão, 6 meses a 2 anos, e multa, aplicável quando não constituir crime mais grave."},
+    {tema:"Aumento por divulgação", texto:"—", enun:"Segundo o §4º do art. 154-A, a pena é aumentada de 1/3 a 2/3 quando ocorre:", alts:["Qualquer forma de invasão.","Divulgação, comercialização ou transmissão a terceiro dos dados ou informações obtidos com a invasão.","Invasão sem qualquer finalidade específica.","Invasão de dispositivo desconectado da rede.","Invasão cometida por menor de idade."], correta:1, coment:"O §4º prevê aumento de pena especificamente para os casos em que os dados obtidos com a invasão são divulgados, comercializados ou transmitidos a terceiros."},
+    {tema:"Aumento por vítima qualificada", texto:"—", enun:"Segundo o §5º do art. 154-A, a pena é aumentada de 1/3 à metade quando o crime é cometido contra:", alts:["Qualquer cidadão comum.","Presidente da República, governadores, prefeitos e dirigentes máximos da administração pública, entre outras autoridades listadas.","Apenas empresas privadas de grande porte.","Apenas menores de idade.","Apenas idosos, sem exceção."], correta:1, coment:"O §5º prevê aumento de pena quando a vítima é autoridade de alto escalão, como Presidente da República, governadores, prefeitos, Presidente do STF e dirigentes máximos da administração pública direta ou indireta."},
+    {tema:"Ação penal — regra geral", texto:"—", enun:"Segundo o art. 154-B do Código Penal, a regra geral para os crimes do art. 154-A é:", alts:["Ação penal pública incondicionada, sempre.","Ação penal pública condicionada à representação da vítima.","Ação penal exclusivamente privada.","Ação penal apenas mediante decisão de ofício do juiz.","Não há previsão sobre o tipo de ação penal."], correta:1, coment:"A regra geral é que os crimes do art. 154-A dependem de representação da vítima para que o Ministério Público possa oferecer a denúncia — ação penal pública condicionada."},
+    {tema:"Ação penal — exceção", texto:"—", enun:"A ação penal se torna pública incondicionada quando o crime do art. 154-A é cometido contra:", alts:["Qualquer pessoa física maior de idade.","A administração pública direta ou indireta, de qualquer Poder ou esfera, ou contra empresas concessionárias de serviços públicos.","Apenas empresas privadas listadas em bolsa.","Apenas instituições religiosas.","Apenas partidos políticos."], correta:1, coment:"O art. 154-B prevê expressamente essa exceção: quando a vítima é a administração pública (direta ou indireta) ou empresa concessionária de serviço público, a ação penal é incondicionada, dispensando representação."},
+    {tema:"Consumação do crime", texto:"—", enun:"Para a consumação do crime do art. 154-A, é necessário que o invasor efetivamente obtenha vantagem com a invasão?", alts:["Sim, é elemento essencial.","Não — basta a invasão com a finalidade específica exigida pelo tipo, independentemente de obtenção efetiva de vantagem.","Sim, mas apenas na forma qualificada.","Não há necessidade de qualquer finalidade específica.","Sim, e a vantagem deve ser necessariamente financeira."], correta:1, coment:"O crime se consuma com a invasão realizada com a finalidade específica prevista no caput, não sendo necessário que o invasor efetivamente obtenha a vantagem pretendida."},
+    {tema:"Objeto material do crime", texto:"—", enun:"O objeto material do crime previsto no art. 154-A abrange:", alts:["Apenas computadores conectados à internet.","Dispositivo informático alheio, conectado ou não à rede de computadores.","Apenas smartphones de última geração.","Apenas servidores de empresas privadas.","Apenas dispositivos com sistema operacional específico."], correta:1, coment:"O tipo penal abrange qualquer dispositivo informático alheio, independentemente de estar conectado ou não a uma rede de computadores — abrangendo computadores, celulares, tablets e dispositivos similares."},
+    {tema:"Aplicação institucional", texto:"—", enun:"Considerando o perfil da DATAPREV como empresa pública federal, uma invasão cometida contra seus sistemas de informação configuraria, em regra:", alts:["Ação penal exclusivamente privada, dependendo de queixa-crime da empresa.","Ação penal pública incondicionada, dispensando representação.","Nenhuma consequência penal, por se tratar de empresa pública.","Ação penal condicionada à representação do Ministério Público.","Aplicação exclusiva de sanções administrativas, sem persecução penal."], correta:1, coment:"Por se tratar de empresa pública federal (integrante da administração pública indireta), uma invasão contra os sistemas da DATAPREV configuraria hipótese de ação penal pública incondicionada, conforme o art. 154-B."},
+    {tema:"Comparação de penas", texto:"—", enun:"Comparando a pena do caput (reclusão, 1 a 4 anos) com a pena da forma qualificada do §3º (reclusão, 6 meses a 2 anos), é correto afirmar que:", alts:["A pena do §3º é sempre necessariamente maior em qualquer hipótese.","O §3º prevê pena própria e autônoma, estruturalmente distinta do caput, não sendo um simples 'aumento' sobre ele.","O §3º revoga tacitamente o caput.","Não há qualquer diferença prática entre as duas penas.","O §3º só se aplica quando não há dolo do agente."], correta:1, coment:"A forma qualificada do §3º possui pena própria e independente, distinta da lógica de 'aumento fracionário' aplicada nos §§2º, 4º e 5º sobre a pena do caput."},
+    {tema:"Distinção §1º x §3º", texto:"—", enun:"Assinale a alternativa que diferencia corretamente as figuras dos §1º e §3º do art. 154-A:", alts:["São exatamente a mesma conduta, com nomes diferentes.","O §1º trata de quem produz/distribui ferramenta de invasão (equiparação); o §3º trata da forma qualificada, quando a invasão resulta em obtenção de conteúdo sigiloso.","O §1º é mais grave que o §3º em qualquer hipótese.","O §3º se aplica apenas a menores de idade.","O §1º não prevê qualquer pena."], correta:1, coment:"São dispositivos com funções distintas: o §1º amplia a responsabilização para quem fabrica/distribui ferramentas de invasão (equiparação ao autor); o §3º qualifica o crime quando o resultado da invasão envolve conteúdo especialmente sensível."},
+    {tema:"Lei alteradora", texto:"—", enun:"Qual lei promoveu alterações relevantes no art. 154-A do Código Penal, elevando penas e modificando elementos do tipo?", alts:["Lei nº 13.709/2018 (LGPD)","Lei nº 14.155/2021","Lei nº 12.965/2014 (Marco Civil)","Lei nº 12.527/2011 (LAI)","Lei nº 13.964/2019 (Pacote Anticrime)"], correta:1, coment:"A Lei nº 14.155, de 27 de maio de 2021, promoveu as alterações relevantes no art. 154-A, elevando a pena do caput e removendo a exigência de violação de mecanismo de segurança."},
+    {tema:"Cenário aplicado — ação penal", texto:"—", enun:"Um particular tem seu smartphone invadido por um conhecido, sem qualquer vínculo com órgão público. Para que haja persecução penal, é necessário, em regra:", alts:["Que o Ministério Público atue de ofício, sem qualquer manifestação da vítima.","Que a vítima apresente representação, pois se trata de ação penal pública condicionada.","Que haja decisão judicial prévia autorizando a investigação.","Nenhuma ação é necessária, pois o crime se persegue automaticamente.","Apenas ação penal privada exclusiva, mediante queixa-crime."], correta:1, coment:"Tratando-se de vítima particular, sem relação com administração pública ou concessionária de serviço público, aplica-se a regra geral do art. 154-B: ação penal pública condicionada à representação da vítima."},
+    {tema:"Percentuais de aumento — texto original x vigente", texto:"—", enun:"Assinale a alternativa que apresenta corretamente a mudança no percentual de aumento do §2º do art. 154-A entre o texto original (2012) e o texto vigente (pós-2021):", alts:["Original: 1/3 a 2/3; vigente: 1/6 a 1/3.","Original: 1/6 a 1/3; vigente: 1/3 a 2/3.","Não houve qualquer alteração nesse percentual.","Original: dobro; vigente: triplo.","Original: 1/2; vigente: 1/4."], correta:1, coment:"O texto original de 2012 previa aumento de 1/6 a 1/3; a Lei 14.155/2021 elevou esse aumento para 1/3 a 2/3 — mudança frequentemente explorada em provas de concurso."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Um agente invade o sistema de uma autarquia federal, obtém conteúdo de comunicações privadas sigilosas e posteriormente divulga esse conteúdo a terceiros. Considerando os dispositivos estudados, essa conduta pode envolver, cumulativamente:", alts:["Apenas a figura simples do caput, sem qualquer outro dispositivo aplicável.","A forma qualificada do §3º (obtenção de conteúdo sigiloso), o aumento do §4º (divulgação a terceiros) e ação penal pública incondicionada (art. 154-B, por se tratar de administração pública).","Apenas a figura equiparada do §1º, isoladamente.","Nenhum dispositivo da Lei 12.737/2012, por se tratar de autarquia.","Apenas o aumento do §5º, isoladamente, sem qualquer outro dispositivo."], correta:1, coment:"O cenário combina múltiplos dispositivos estudados: a obtenção de conteúdo sigiloso caracteriza a forma qualificada do §3º; a divulgação a terceiros ativa o aumento do §4º; e por se tratar de vítima da administração pública (autarquia federal), a ação penal é incondicionada nos termos do art. 154-B."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"A Lei 12.737/2012 é popularmente conhecida como:", alts:["Lei do Marco Civil","Lei Carolina Dieckmann","Lei de Acesso à Informação","LGPD","Lei do Habeas Data"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O art. 2º da Lei 12.737/2012 insere no CP:", alts:["Art. 154-A e 154-B","Apenas art. 154-A","Art. 266 apenas","Art. 298 apenas","Art. 171"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Pena do caput do art. 154-A (texto vigente):", alts:["Detenção, 3m a 1a","Reclusão, 1 a 4 anos","Reclusão, 6m a 2a","Detenção, 6m a 2a","Reclusão, 2 a 8 anos"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Pena original de 2012 do caput do art. 154-A:", alts:["Reclusão, 1 a 4 anos","Detenção, 3 meses a 1 ano","Reclusão, 6m a 2a","Detenção, 1 a 4 anos","Reclusão, 2 a 6 anos"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Qual lei alterou o art. 154-A em 2021?", alts:["Lei 13.709/2018","Lei 14.155/2021","Lei 12.965/2014","Lei 12.527/2011","Lei 13.964/2019"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O §1º do art. 154-A trata de:", alts:["Aumento por prejuízo econômico","Figura equiparada (produção/distribuição de ferramenta)","Forma qualificada","Ação penal","Aumento por vítima autoridade"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O §2º do art. 154-A trata de:", alts:["Figura equiparada","Aumento por prejuízo econômico","Forma qualificada","Ação penal","Consumação do crime"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O §3º do art. 154-A trata de:", alts:["Aumento por divulgação","Forma qualificada (obtenção de conteúdo sigiloso)","Figura equiparada","Ação penal","Aumento por prejuízo econômico"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O art. 154-B trata de:", alts:["Pena da forma qualificada","Regras de ação penal","Aumento por prejuízo econômico","Figura equiparada","Objeto material do crime"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Regra geral de ação penal nos crimes do art. 154-A:", alts:["Incondicionada sempre","Condicionada à representação","Privada exclusiva","Não há ação penal prevista","De ofício, sem qualquer manifestação"], correta:1},
+    {d:"Média", texto:"—", enun:"A ação penal se torna incondicionada quando o crime é cometido contra:", alts:["Qualquer pessoa física","Administração pública ou concessionária de serviço público","Apenas menores de idade","Apenas empresas privadas","Apenas partidos políticos"], correta:1},
+    {d:"Média", texto:"—", enun:"O caput do art. 154-A (texto vigente) ainda exige violação de mecanismo de segurança?", alts:["Sim, sempre","Não, foi removida em 2021","Sim, apenas para pessoa jurídica","Não, nunca existiu essa exigência","Sim, apenas na forma qualificada"], correta:1},
+    {d:"Média", texto:"—", enun:"Pena da forma qualificada do §3º:", alts:["Reclusão, 1 a 4 anos","Reclusão, 6 meses a 2 anos","Detenção, 3 meses a 1 ano","Reclusão, 2 a 8 anos","Detenção, 6 meses a 2 anos"], correta:1},
+    {d:"Média", texto:"—", enun:"Aumento de pena previsto no §2º (texto vigente):", alts:["1/6 a 1/3","1/3 a 2/3","1/2 a 2/3","Dobro","1/4 a 1/2"], correta:1},
+    {d:"Média", texto:"—", enun:"Aumento de pena previsto no §4º (divulgação dos dados obtidos):", alts:["1/6 a 1/3","1/3 a 2/3","Dobro","1/2","Triplo"], correta:1},
+    {d:"Média", texto:"—", enun:"Aumento de pena previsto no §5º (vítima autoridade de alto escalão):", alts:["1/6 a 1/3","1/3 à metade","Dobro","1/2 a 2/3","Triplo"], correta:1},
+    {d:"Média", texto:"—", enun:"É necessário obter efetivamente vantagem para consumar o crime do art. 154-A?", alts:["Sim, sempre","Não — basta a invasão com finalidade específica","Sim, apenas na forma simples","Sim, apenas na forma qualificada","Não há necessidade de finalidade alguma"], correta:1},
+    {d:"Média", texto:"—", enun:"O objeto material do crime do art. 154-A abrange dispositivos:", alts:["Apenas conectados à internet","Conectados ou não à rede de computadores","Apenas smartphones","Apenas servidores corporativos","Apenas dispositivos com sistema Windows"], correta:1},
+    {d:"Média", texto:"—", enun:"Quem produz e distribui um programa destinado a viabilizar invasões responde:", alts:["Sem qualquer pena, por não invadir pessoalmente","Com a mesma pena do caput (figura equiparada, §1º)","Apenas com pena administrativa","Com pena reduzida à metade automaticamente","Não há previsão para essa conduta"], correta:1},
+    {d:"Média", texto:"—", enun:"Uma invasão contra sistemas da DATAPREV (empresa pública federal) configura, em regra:", alts:["Ação penal condicionada à representação da empresa","Ação penal pública incondicionada","Ação penal exclusivamente privada","Nenhuma consequência penal específica","Necessidade de autorização do Congresso Nacional"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Comparando a pena do caput (1-4 anos) com a do §3º (6 meses-2 anos), é correto dizer que:", alts:["O §3º é sempre um simples aumento fracionário sobre o caput.","O §3º prevê pena própria e autônoma, estruturalmente distinta da lógica de aumento fracionário dos demais parágrafos.","O §3º revoga o caput.","Não há diferença de regime entre os dispositivos.","O §3º só se aplica a menores de idade."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a diferença correta entre os §§1º e 3º do art. 154-A:", alts:["São idênticos, com nomes diferentes.","O §1º trata de quem produz/distribui ferramenta de invasão; o §3º trata da forma qualificada por obtenção de conteúdo sigiloso.","O §1º é sempre mais grave que o §3º.","O §3º só se aplica a pessoas jurídicas.","O §1º não prevê qualquer pena."], correta:1},
+    {d:"Difícil", texto:"—", enun:"O percentual de aumento do §2º no texto original de 2012 era:", alts:["1/3 a 2/3","1/6 a 1/3","Dobro","1/2","Triplo"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um agente invade sistema de autarquia federal, obtém conteúdo sigiloso e divulga a terceiros. Isso pode envolver cumulativamente:", alts:["Apenas a figura simples, isoladamente.","Forma qualificada (§3º) + aumento por divulgação (§4º) + ação penal incondicionada (art. 154-B).","Apenas a figura equiparada (§1º).","Nenhum dispositivo da lei, por se tratar de autarquia.","Apenas o §5º, isoladamente."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um particular invade o celular de um conhecido, sem qualquer vínculo institucional público. Para a persecução penal, em regra, é necessário:", alts:["Atuação de ofício do MP, sem qualquer manifestação da vítima.","Representação da vítima (ação penal pública condicionada).","Decisão judicial prévia autorizando a ação penal.","Nenhuma ação, pois se persegue automaticamente.","Queixa-crime exclusiva, sem participação do MP."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente a evolução legislativa do caput do art. 154-A:", alts:["A pena diminuiu e a exigência de violação de segurança foi mantida.","A pena aumentou (de detenção 3m-1a para reclusão 1-4a) e a exigência de violação de mecanismo de segurança foi removida.","Não houve qualquer alteração desde 2012.","A pena aumentou, mas a exigência de violação de segurança foi mantida e ampliada.","A pena diminuiu e a exigência de violação de segurança foi removida."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a hipótese que NÃO é elemento do tipo qualificado previsto no §3º do art. 154-A:", alts:["Obtenção de conteúdo de comunicações eletrônicas privadas.","Obtenção de segredos comerciais ou industriais.","Simples tentativa de invasão sem êxito, sem obtenção de qualquer conteúdo.","Obtenção de informações sigilosas definidas em lei.","Controle remoto não autorizado do dispositivo invadido."], correta:2, coment:""},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa correta sobre a relação entre o §2º (aumento por prejuízo econômico) e o §3º (forma qualificada):", alts:["São aplicáveis simultaneamente sempre, de forma cumulativa automática.","O §2º incide sobre a pena do caput/§1º; o §3º é hipótese com pena própria, tratada separadamente na estrutura do artigo.","São mutuamente exclusivos por definição legal expressa.","O §3º é apenas uma repetição do §2º.","O §2º só se aplica quando há forma qualificada."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a afirmação mais precisa sobre por que a Lei 12.737/2012 é relevante ao perfil institucional da DATAPREV:", alts:["Porque regula exclusivamente o setor privado, sem relação com empresas públicas.","Porque, como empresa pública federal processando dados sensíveis, a DATAPREV é potencial vítima de invasões que configurariam ação penal incondicionada, tema diretamente ligado à sua atuação.","Porque a lei não tem qualquer aplicação a órgãos federais.","Porque a lei trata exclusivamente de crimes contra a honra.","Porque a lei se aplica apenas a pessoas físicas, nunca a pessoas jurídicas de direito público."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Conhecer o contexto histórico da Lei 12.737/2012 ('Lei Carolina Dieckmann')",
+    "Saber que o art. 2º insere os arts. 154-A e 154-B no Código Penal",
+    "Memorizar a pena do caput no texto vigente (reclusão, 1 a 4 anos)",
+    "Saber que a exigência de violação de mecanismo de segurança foi removida em 2021",
+    "Diferenciar a figura equiparada (§1º) da forma qualificada (§3º)",
+    "Memorizar os percentuais de aumento dos §§2º, 4º e 5º",
+    "Memorizar a pena própria da forma qualificada (§3º: reclusão, 6 meses a 2 anos)",
+    "Compreender a regra geral de ação penal condicionada (art. 154-B)",
+    "Identificar a exceção de ação penal incondicionada (administração pública/concessionária)",
+    "Conectar o tema à realidade institucional da DATAPREV como empresa pública",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Achar que a exigência de 'violação de mecanismo de segurança' ainda consta do caput vigente.",
+    "Confundir a pena do caput (1 a 4 anos) com a pena da forma qualificada do §3º (6 meses a 2 anos).",
+    "Achar que toda invasão de dispositivo é de ação penal incondicionada, independentemente da vítima.",
+    "Confundir a figura equiparada do §1º com a forma qualificada do §3º.",
+    "Trocar os percentuais de aumento entre o texto original de 2012 e o texto vigente (pós-2021).",
+    "Achar que é necessário obter efetivamente vantagem para consumar o crime.",
+    "Não perceber que o art. 154-B também foi inserido pelo mesmo art. 2º que insere o art. 154-A.",
+    "Confundir a Lei 12.737/2012 com a Lei 14.155/2021, tratando-as como a mesma norma.",
+    "Ignorar que o objeto material abrange dispositivos conectados OU NÃO à rede de computadores.",
+    "Achar que apenas computadores (não celulares/tablets) são objeto material do crime.",
+    "Não reconhecer a conexão entre este tópico e o perfil institucional da DATAPREV (empresa pública).",
+    "Confundir 'prejuízo econômico' (§2º, aumento) com 'obtenção de conteúdo sigiloso' (§3º, forma qualificada).",
+    "Esquecer que o §5º trata de vítima com cargo de alto escalão, não de qualquer autoridade pública.",
+    "Não diferenciar claramente 'divulgação dos dados' (§4º) de 'obtenção do conteúdo' (§3º).",
+    "Assumir que a pena de multa não se aplica a nenhuma das figuras do art. 154-A (ela se aplica a quase todas).",
+    "Ignorar o contexto histórico (caso Carolina Dieckmann) como possível gancho de questão contextualizada.",
+    "Confundir concessionária de serviço público com empresa privada comum, para fins do art. 154-B.",
+    "Não perceber que o §1º é uma equiparação, não uma qualificadora.",
+    "Tentar aplicar penas do Código Penal comum sem verificar a redação específica do art. 154-A.",
+    "Negligenciar a leitura literal do texto legal ao responder questões sobre elementos do tipo penal.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Invasão de dispositivo informático","Crime previsto no art. 154-A do CP, consistente em invadir dispositivo alheio com finalidade específica de obter, adulterar ou destruir dados."],
+    ["Figura equiparada","Hipótese do §1º em que quem produz/distribui ferramenta de invasão recebe a mesma pena do autor da invasão."],
+    ["Forma qualificada","Hipótese do §3º em que a invasão resulta em obtenção de conteúdo especialmente sensível, com pena própria."],
+    ["Ação penal condicionada","Regime em que a persecução penal depende de representação da vítima — regra geral do art. 154-B."],
+    ["Ação penal incondicionada","Regime em que a persecução penal não depende de representação — aplica-se quando a vítima é administração pública ou concessionária de serviço público."],
+    ["Representação","Manifestação de vontade da vítima autorizando o início da persecução penal, exigida na ação penal condicionada."],
+    ["Elemento subjetivo do tipo (dolo específico)","Finalidade especial exigida pelo tipo penal — no art. 154-A, a intenção de obter, adulterar, destruir dados ou instalar vulnerabilidades."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>
