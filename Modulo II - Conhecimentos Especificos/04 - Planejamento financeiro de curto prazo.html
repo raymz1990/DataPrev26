@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planejamento Financeiro de Curto Prazo | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Administração Financeira</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">04 - Planejamento financeiro de curto prazo</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceitos básicos de administração financeira.html">01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html">02 - Finanças corporativas</option>
+    <option value="03 - Alavancagem operacional e financeira.html">03 - Alavancagem</option>
+    <option value="04 - Planejamento financeiro de curto prazo.html" selected>04 - Planejamento de curto prazo</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Planejamento Financeiro de Curto Prazo</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Administração Financeira<br>Tópico 04 de 10<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Planejamento Financeiro de Curto Prazo</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Administração Financeira</b> &nbsp;›&nbsp; Tópico 04</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">9h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 1 a 3 desta disciplina</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Muito alto — tema recorrente, com múltiplos subtemas cobráveis</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Compreender o conceito de <b>capital de giro</b> e calcular o <b>Capital de Giro Líquido (CGL)</b>.</li>
+            <li>Compreender e calcular a <b>Necessidade de Capital de Giro (NCG)</b>.</li>
+            <li>Compreender os <b>ciclos operacional, econômico e financeiro (ciclo de caixa)</b> de uma empresa.</li>
+            <li>Calcular e interpretar o <b>PMRE, PMRV e PMPC</b> (prazos médios) usados nesses ciclos.</li>
+            <li>Compreender a <b>gestão de disponibilidades</b> (caixa) e os motivos clássicos de retenção de caixa.</li>
+            <li>Conhecer as principais modalidades de <b>relacionamento bancário</b> e linhas de crédito de curto prazo.</li>
+            <li>Compreender princípios de <b>gestão de contas a receber</b> (política de crédito, análise de crédito) e <b>contas a pagar</b>.</li>
+            <li>Compreender o papel da <b>tesouraria</b> na gestão financeira de curto prazo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>O <b>Capital de Giro Líquido (CGL)</b> é a diferença entre o Ativo Circulante e o Passivo Circulante, representando a folga financeira de curto prazo da empresa. Já a <b>Necessidade de Capital de Giro (NCG)</b> considera apenas os itens operacionais desses grupos (excluindo, por exemplo, aplicações financeiras e empréstimos de curto prazo), medindo o volume de recursos que o ciclo operacional da empresa efetivamente demanda.</p>
+          <p>O <b>ciclo operacional</b> de uma empresa vai da compra de matéria-prima/mercadoria até o recebimento da venda, sendo a soma do <b>Prazo Médio de Renovação de Estoques (PMRE)</b> com o <b>Prazo Médio de Recebimento de Vendas (PMRV)</b>. O <b>ciclo financeiro (ou ciclo de caixa)</b> é o período entre o efetivo desembolso de caixa (pagamento a fornecedores) e o efetivo recebimento de caixa (das vendas), calculado como o ciclo operacional menos o <b>Prazo Médio de Pagamento a Fornecedores/Compras (PMPC)</b>. Quanto maior o ciclo financeiro, maior a necessidade de capital de giro da empresa.</p>
+          <p>A <b>gestão de disponibilidades</b> trata da administração do caixa e equivalentes de caixa, equilibrando os três motivos clássicos de retenção de caixa (segundo Keynes): <b>transação</b> (pagamentos do dia a dia), <b>precaução</b> (imprevistos) e <b>especulação</b> (aproveitar oportunidades). Manter caixa em excesso gera custo de oportunidade; manter caixa insuficiente gera risco de insolvência técnica.</p>
+          <p>O <b>relacionamento bancário</b> envolve o acesso a diferentes linhas de crédito de curto prazo — capital de giro, conta garantida, hot money, desconto de duplicatas, factoring — cada uma com características de prazo, custo e garantia próprias.</p>
+          <p>A <b>gestão de contas a receber</b> envolve a definição de política de crédito (prazo de concessão, análise de crédito com base nos <b>5 Cs do crédito</b>: caráter, capacidade, capital, colateral e condições) e o monitoramento da inadimplência. A <b>gestão de contas a pagar</b> busca otimizar prazos com fornecedores, sem comprometer a relação comercial nem incorrer em custos de atraso.</p>
+          <p>A <b>tesouraria</b> é a área responsável pela execução prática da gestão financeira de curto prazo: controle diário de caixa, fluxo de caixa projetado e realizado, conciliação bancária e execução das decisões de captação/aplicação de recursos de curto prazo.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Planejamento Financeiro<br>de Curto Prazo</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Capital de giro</h4><ul><li>CGL</li><li>NCG</li></ul></div>
+              <div class="mm-node"><h4>Ciclos</h4><ul><li>Operacional</li><li>Financeiro (caixa)</li><li>PMRE, PMRV, PMPC</li></ul></div>
+              <div class="mm-node"><h4>Disponibilidades</h4><ul><li>Transação</li><li>Precaução</li><li>Especulação</li></ul></div>
+              <div class="mm-node"><h4>Relacionamento bancário</h4><ul><li>Capital de giro</li><li>Conta garantida</li><li>Hot money</li><li>Desconto/factoring</li></ul></div>
+              <div class="mm-node"><h4>Contas a receber/pagar</h4><ul><li>Política de crédito</li><li>5 Cs do crédito</li></ul></div>
+              <div class="mm-node"><h4>Tesouraria</h4><ul><li>Fluxo de caixa</li><li>Conciliação bancária</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Capital de Giro Líquido (CGL)</h3>
+          <div class="box info">
+            <div class="box-title">📘 Fórmula do CGL</div>
+            <p>CGL = Ativo Circulante − Passivo Circulante</p>
+          </div>
+          <table>
+            <thead><tr><th>Resultado do CGL</th><th>Interpretação</th></tr></thead>
+            <tbody>
+              <tr><td>CGL positivo</td><td>Parte do ativo circulante é financiada por recursos de longo prazo — margem de segurança financeira</td></tr>
+              <tr><td>CGL negativo</td><td>Parte do ativo não circulante está sendo financiada por passivo circulante — situação de maior risco financeiro</td></tr>
+              <tr><td>CGL igual a zero</td><td>Ativo circulante exatamente igual ao passivo circulante</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.2 Necessidade de Capital de Giro (NCG)</h3>
+          <div class="box info">
+            <div class="box-title">📘 Fórmula da NCG</div>
+            <p>NCG = Ativo Circulante Operacional − Passivo Circulante Operacional</p>
+            <p>O Ativo Circulante Operacional inclui itens como estoques e contas a receber (excluindo aplicações financeiras); o Passivo Circulante Operacional inclui fornecedores e obrigações operacionais (excluindo empréstimos e financiamentos de curto prazo).</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>NCG e CGL <b>não são a mesma coisa</b>: o CGL usa o ativo e o passivo circulante TOTAIS, enquanto a NCG usa apenas os itens circulantes de natureza OPERACIONAL (excluindo itens financeiros, como aplicações e empréstimos). A banca costuma testar essa distinção diretamente.</p>
+          </div>
+
+          <h3>4.3 Ciclos: operacional, econômico e financeiro</h3>
+          <table>
+            <thead><tr><th>Prazo médio</th><th>Sigla</th><th>O que mede</th></tr></thead>
+            <tbody>
+              <tr><td>Prazo Médio de Renovação de Estoques</td><td>PMRE</td><td>Tempo médio entre a compra e a venda da mercadoria/produto</td></tr>
+              <tr><td>Prazo Médio de Recebimento de Vendas</td><td>PMRV</td><td>Tempo médio entre a venda e o efetivo recebimento do cliente</td></tr>
+              <tr><td>Prazo Médio de Pagamento a Fornecedores</td><td>PMPC</td><td>Tempo médio entre a compra e o efetivo pagamento ao fornecedor</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Fórmulas dos ciclos</div>
+            <p><b>Ciclo Operacional</b> = PMRE + PMRV</p>
+            <p><b>Ciclo Financeiro (Ciclo de Caixa)</b> = Ciclo Operacional − PMPC = PMRE + PMRV − PMPC</p>
+          </div>
+          <div class="box tip">
+            <div class="box-title">✅ Exemplo resolvido</div>
+            <p>Se PMRE = 40 dias, PMRV = 30 dias e PMPC = 25 dias: Ciclo Operacional = 40+30 = 70 dias. Ciclo Financeiro = 70−25 = 45 dias — ou seja, a empresa precisa financiar suas operações (com capital próprio ou de terceiros) por 45 dias, entre o pagamento aos fornecedores e o recebimento das vendas.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>Quanto <b>maior</b> o ciclo financeiro, <b>maior</b> a necessidade de capital de giro da empresa — pois mais tempo se passa entre o desembolso de caixa e seu recebimento. Reduzir o PMRE e o PMRV, ou aumentar o PMPC (dentro de limites saudáveis com fornecedores), reduz o ciclo financeiro e a NCG.</p>
+          </div>
+
+          <h3>4.4 Gestão de disponibilidades</h3>
+          <p>Segundo a teoria clássica de John Maynard Keynes, existem <b>três motivos</b> para uma empresa (ou indivíduo) manter caixa disponível:</p>
+          <table>
+            <thead><tr><th>Motivo</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td>Transação</td><td>Necessidade de caixa para honrar compromissos rotineiros e previsíveis (folha de pagamento, fornecedores)</td></tr>
+              <tr><td>Precaução</td><td>Reserva para imprevistos e emergências não planejadas</td></tr>
+              <tr><td>Especulação</td><td>Disponibilidade para aproveitar oportunidades vantajosas inesperadas (ex.: compra com desconto à vista)</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Trade-off da gestão de caixa</div>
+            <p>Manter caixa em excesso gera <b>custo de oportunidade</b> (recursos parados que poderiam estar rendendo em outra aplicação); manter caixa insuficiente gera <b>risco de insolvência técnica</b> (incapacidade de honrar compromissos no prazo). A gestão de disponibilidades busca o equilíbrio entre esses dois riscos.</p>
+          </div>
+
+          <h3>4.5 Relacionamento bancário e linhas de crédito de curto prazo</h3>
+          <table>
+            <thead><tr><th>Linha de crédito</th><th>Característica</th></tr></thead>
+            <tbody>
+              <tr><td>Capital de giro</td><td>Empréstimo de curto/médio prazo destinado a financiar operações correntes da empresa</td></tr>
+              <tr><td>Conta garantida</td><td>Linha de crédito rotativa vinculada à conta corrente, disponível conforme a necessidade, com juros cobrados apenas sobre o valor utilizado</td></tr>
+              <tr><td>Hot money</td><td>Empréstimo de prazo muito curto (geralmente 1 a 29 dias), usado para necessidades de caixa pontuais, com custo elevado</td></tr>
+              <tr><td>Desconto de duplicatas</td><td>Antecipação de recebíveis (duplicatas) junto ao banco, mediante desconto de juros, transferindo o direito de cobrança</td></tr>
+              <tr><td>Factoring</td><td>Venda de recebíveis a uma empresa de fomento mercantil (factoring), que assume o risco de inadimplência (em geral) e antecipa o recurso à empresa</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.6 Gestão de contas a receber</h3>
+          <p>A gestão de contas a receber envolve a definição da <b>política de crédito</b> da empresa: a quem conceder crédito, em que prazo e sob quais condições. A análise de crédito tradicional se baseia nos <b>5 Cs do crédito</b>:</p>
+          <table>
+            <thead><tr><th>C</th><th>O que avalia</th></tr></thead>
+            <tbody>
+              <tr><td>Caráter</td><td>Histórico de pontualidade e idoneidade do cliente/tomador</td></tr>
+              <tr><td>Capacidade</td><td>Capacidade financeira/operacional de honrar o compromisso</td></tr>
+              <tr><td>Capital</td><td>Situação patrimonial e estrutura de capital do cliente</td></tr>
+              <tr><td>Colateral</td><td>Garantias oferecidas em caso de inadimplência</td></tr>
+              <tr><td>Condições</td><td>Contexto econômico e setorial que pode afetar a capacidade de pagamento</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Mnemônico dos 5 Cs</div>
+            <p>C-C-C-C-C: <b>C</b>aráter, <b>C</b>apacidade, <b>C</b>apital, <b>C</b>olateral, <b>C</b>ondições.</p>
+          </div>
+
+          <h3>4.7 Gestão de contas a pagar</h3>
+          <p>A gestão de contas a pagar busca <b>otimizar os prazos de pagamento a fornecedores</b>, aproveitando ao máximo os prazos concedidos (sem incorrer em multas/juros de atraso) e, quando vantajoso, avaliando descontos por pagamento antecipado, comparando-os ao custo de oportunidade do capital.</p>
+
+          <h3>4.8 Tesouraria</h3>
+          <p>A <b>tesouraria</b> é a área operacional responsável pela execução da gestão financeira de curto prazo: controle diário do saldo de caixa, elaboração e acompanhamento do <b>fluxo de caixa</b> (projetado x realizado), <b>conciliação bancária</b> (comparação entre os registros internos e os extratos bancários) e execução das decisões de captação ou aplicação de recursos no curto prazo.</p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo FGV</div>
+            <p>A FGV costuma combinar o cálculo de PMRE/PMRV/PMPC e ciclos com pequenas tabelas de dados, e cobrar conceitualmente a distinção entre CGL e NCG, além das diferentes linhas de crédito bancário de curto prazo, num contexto de gestão pública.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV combina cálculo (CGL, NCG, ciclos, prazos médios) com questões conceituais sobre gestão de disponibilidades, linhas de crédito e política de crédito — um dos tópicos mais ricos em subtemas cobráveis da disciplina.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Cálculo de CGL e NCG a partir de dados de balanço simplificado.</li>
+            <li>Cálculo de PMRE, PMRV, PMPC e dos ciclos operacional/financeiro.</li>
+            <li>Identificação da linha de crédito bancária adequada a um cenário descrito.</li>
+            <li>Questões sobre os 5 Cs do crédito e os três motivos de retenção de caixa (Keynes).</li>
+            <li>Dificuldade alta — grande volume de conceitos e fórmulas inter-relacionadas.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Cálculo do ciclo financeiro (ciclo de caixa)</td><td>Muito alta</td></tr>
+              <tr><td>Diferença entre CGL e NCG</td><td>Alta</td></tr>
+              <tr><td>Linhas de crédito de curto prazo (conta garantida, hot money, desconto, factoring)</td><td>Alta</td></tr>
+              <tr><td>5 Cs do crédito</td><td>Média-alta</td></tr>
+              <tr><td>Motivos de retenção de caixa (Keynes)</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Confundir CGL (ativo/passivo circulante total) com NCG (apenas itens operacionais).</li>
+            <li>Errar a fórmula do ciclo financeiro, esquecendo de subtrair o PMPC.</li>
+            <li>Confundir desconto de duplicatas com factoring (mecanismos parecidos, mas com diferenças de risco/estrutura).</li>
+            <li>Trocar a ordem dos 5 Cs ou confundir "capacidade" com "capital".</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Ao calcular NCG, sempre confira se os itens fornecidos são efetivamente operacionais (excluir aplicações financeiras e empréstimos de curto prazo).</li>
+            <li>Ao calcular o ciclo financeiro, lembre-se: Operacional (PMRE+PMRV) MENOS o PMPC.</li>
+            <li>Releia com atenção a descrição do instrumento de crédito antes de classificá-lo (prazo, garantia, quem assume o risco).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 CGL x NCG</div><p>CGL = Ativo Circulante TOTAL − Passivo Circulante TOTAL. NCG = apenas itens circulantes OPERACIONAIS.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Fórmula do ciclo financeiro</div><p>Ciclo Financeiro = PMRE + PMRV − PMPC (Operacional menos o prazo de pagamento).</p></div>
+          <div class="box tip"><div class="box-title">🧠 3 motivos de Keynes: T-P-E</div><p><b>T</b>ransação, <b>P</b>recaução, <b>E</b>speculação.</p></div>
+          <div class="box tip"><div class="box-title">🧠 5 Cs do crédito</div><p>Caráter, Capacidade, Capital, Colateral, Condições.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Hot money x conta garantida</div><p>Hot money = prazo curtíssimo (dias), custo alto. Conta garantida = rotativa, juros só sobre o usado.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>CGL = Ativo Circulante − Passivo Circulante (folga financeira total).</li>
+            <li>NCG = Ativo Circulante Operacional − Passivo Circulante Operacional (necessidade real do ciclo operacional).</li>
+            <li>Ciclo Operacional = PMRE + PMRV. Ciclo Financeiro = Ciclo Operacional − PMPC.</li>
+            <li>Quanto maior o ciclo financeiro, maior a NCG.</li>
+            <li>3 motivos de retenção de caixa (Keynes): transação, precaução, especulação.</li>
+            <li>Linhas de crédito de curto prazo: capital de giro, conta garantida, hot money, desconto de duplicatas, factoring.</li>
+            <li>5 Cs do crédito: caráter, capacidade, capital, colateral, condições.</li>
+            <li>Tesouraria: execução prática — fluxo de caixa, conciliação bancária, captação/aplicação de curto prazo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Indicador</th><th>Fórmula</th></tr></thead>
+            <tbody>
+              <tr><td>CGL</td><td>Ativo Circulante − Passivo Circulante</td></tr>
+              <tr><td>NCG</td><td>Ativo Circulante Operacional − Passivo Circulante Operacional</td></tr>
+              <tr><td>Ciclo Operacional</td><td>PMRE + PMRV</td></tr>
+              <tr><td>Ciclo Financeiro (de Caixa)</td><td>PMRE + PMRV − PMPC</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Linhas de crédito de curto prazo — comparação</h3>
+          <table>
+            <thead><tr><th>Linha</th><th>Prazo típico</th><th>Custo relativo</th></tr></thead>
+            <tbody>
+              <tr><td>Capital de giro</td><td>Curto/médio prazo</td><td>Moderado</td></tr>
+              <tr><td>Conta garantida</td><td>Rotativo (uso conforme necessidade)</td><td>Moderado a alto</td></tr>
+              <tr><td>Hot money</td><td>Muito curto (dias)</td><td>Alto</td></tr>
+              <tr><td>Desconto de duplicatas</td><td>Prazo do título antecipado</td><td>Moderado</td></tr>
+              <tr><td>Factoring</td><td>Prazo do título vendido</td><td>Variável (inclui transferência de risco)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Sobre a FGV</div><p>Questões sobre gestão de capital de giro costumam usar dados de empresas de varejo ou indústria, setores com ciclos operacionais mais longos e didáticos para ilustrar o conceito, mesmo em provas de perfis mais amplos de gestão pública.</p></div>
+        <div class="box curio"><div class="box-title">📚 Curiosidade histórica</div><p>Os três motivos para retenção de caixa (transação, precaução, especulação) foram formulados por John Maynard Keynes em sua obra "A Teoria Geral do Emprego, do Juro e da Moeda" (1936), tornando-se um dos fundamentos clássicos da teoria de gestão de caixa.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Curiosidade acadêmica</div><p>O modelo de Baumol (1952) e o modelo de Miller-Orr (1966) são extensões matemáticas da teoria de gestão de caixa, aplicando conceitos de gestão de estoques para determinar o saldo ótimo de caixa a manter — embora raramente cobrados em detalhe em concursos, sua existência costuma aparecer como referência conceitual.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Finanças corporativas (Tópico 2)</td><td>O relacionamento bancário aqui detalhado é uma das fontes de financiamento de curto prazo introduzidas ali</td></tr>
+              <tr><td>Planejamento financeiro de longo prazo (Tópico 5)</td><td>Contraponto direto — planejamento de curto prazo trata do dia a dia; longo prazo trata de decisões estruturais</td></tr>
+              <tr><td>Fontes de financiamento a longo prazo (Tópico 8)</td><td>Complementa as linhas de crédito de curto prazo estudadas aqui</td></tr>
+              <tr><td>Contabilidade Empresarial (matéria própria)</td><td>Os dados de Ativo e Passivo Circulante usados nos cálculos vêm diretamente do Balanço Patrimonial</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler o resumo de 5 minutos e memorizar as fórmulas de CGL, NCG e dos ciclos.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, praticando o cálculo de PMRE, PMRV, PMPC e dos ciclos.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar antes de avançar para o Tópico 5 (Planejamento financeiro de longo prazo).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ASSAF NETO, Alexandre; SILVA, César Augusto Tibúrcio. <i>Administração do Capital de Giro</i>. São Paulo: Atlas.</li>
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey. <i>Administração Financeira</i>. Porto Alegre: AMGH.</li>
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson.</li>
+            <li>KEYNES, John Maynard. <i>A Teoria Geral do Emprego, do Juro e da Moeda</i>. São Paulo: Saraiva, 1936 (edições posteriores).</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Administração Financeira · Tópico 04/10</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_admfin_t04";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Qual a fórmula do Capital de Giro Líquido (CGL)?", a:"CGL = Ativo Circulante − Passivo Circulante."},
+    {q:"Qual a fórmula da Necessidade de Capital de Giro (NCG)?", a:"NCG = Ativo Circulante Operacional − Passivo Circulante Operacional."},
+    {q:"Qual a diferença central entre CGL e NCG?", a:"CGL usa o ativo/passivo circulante TOTAIS; NCG usa apenas os itens circulantes de natureza OPERACIONAL."},
+    {q:"O que mede o PMRE?", a:"O Prazo Médio de Renovação de Estoques — tempo médio entre a compra e a venda da mercadoria."},
+    {q:"O que mede o PMRV?", a:"O Prazo Médio de Recebimento de Vendas — tempo médio entre a venda e o efetivo recebimento."},
+    {q:"O que mede o PMPC?", a:"O Prazo Médio de Pagamento a Fornecedores/Compras — tempo médio entre a compra e o efetivo pagamento."},
+    {q:"Qual a fórmula do Ciclo Operacional?", a:"Ciclo Operacional = PMRE + PMRV."},
+    {q:"Qual a fórmula do Ciclo Financeiro (Ciclo de Caixa)?", a:"Ciclo Financeiro = PMRE + PMRV − PMPC."},
+    {q:"O que ocorre com a NCG quando o ciclo financeiro aumenta?", a:"A NCG aumenta — mais tempo entre desembolso e recebimento de caixa exige mais capital de giro."},
+    {q:"Quais são os três motivos clássicos de retenção de caixa, segundo Keynes?", a:"Transação, precaução e especulação."},
+    {q:"O que é a linha de crédito 'conta garantida'?", a:"Linha de crédito rotativa vinculada à conta corrente, com juros cobrados apenas sobre o valor efetivamente utilizado."},
+    {q:"O que é 'hot money'?", a:"Empréstimo de prazo muito curto (geralmente 1 a 29 dias), usado para necessidades de caixa pontuais, com custo elevado."},
+    {q:"O que é desconto de duplicatas?", a:"Antecipação de recebíveis junto ao banco, mediante desconto de juros, transferindo o direito de cobrança."},
+    {q:"O que é factoring?", a:"Venda de recebíveis a uma empresa de fomento mercantil, que geralmente assume o risco de inadimplência e antecipa o recurso à empresa."},
+    {q:"Quais são os 5 Cs do crédito?", a:"Caráter, Capacidade, Capital, Colateral e Condições."},
+    {q:"O que avalia o 'C' de Caráter, na análise de crédito?", a:"O histórico de pontualidade e idoneidade do cliente/tomador."},
+    {q:"O que avalia o 'C' de Colateral, na análise de crédito?", a:"As garantias oferecidas em caso de inadimplência."},
+    {q:"Qual a função da tesouraria em uma empresa?", a:"Executar a gestão financeira de curto prazo: controle de caixa, fluxo de caixa, conciliação bancária e captação/aplicação de recursos de curto prazo."},
+    {q:"O que é conciliação bancária?", a:"A comparação entre os registros internos da empresa e os extratos bancários, para verificar consistência."},
+    {q:"Quem formulou originalmente os três motivos para retenção de caixa?", a:"John Maynard Keynes, em sua obra 'A Teoria Geral do Emprego, do Juro e da Moeda' (1936)."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"CGL — cálculo", texto:"Uma empresa possui Ativo Circulante de R$ 500.000 e Passivo Circulante de R$ 300.000.", enun:"O Capital de Giro Líquido (CGL) dessa empresa é de:", alts:["R$ 200.000","R$ 300.000","R$ 500.000","R$ 800.000","R$ 100.000"], correta:0, coment:"CGL = Ativo Circulante − Passivo Circulante = 500.000−300.000 = R$ 200.000."},
+    {tema:"NCG — conceito", texto:"—", enun:"A Necessidade de Capital de Giro (NCG) se diferencia do CGL por:", alts:["Ser sempre um valor negativo.","Considerar apenas os itens circulantes de natureza operacional, excluindo itens financeiros.","Ser calculada exclusivamente com dados da DRE.","Ignorar completamente o passivo circulante.","Ser idêntica ao Capital de Giro Líquido em qualquer situação."], correta:1, coment:"A NCG considera apenas o Ativo e o Passivo Circulante de natureza OPERACIONAL, excluindo itens financeiros como aplicações e empréstimos de curto prazo — diferente do CGL, que usa os totais."},
+    {tema:"Ciclo operacional", texto:"Uma empresa tem PMRE de 35 dias e PMRV de 25 dias.", enun:"O Ciclo Operacional dessa empresa é de:", alts:["10 dias","25 dias","35 dias","60 dias","85 dias"], correta:3, coment:"Ciclo Operacional = PMRE + PMRV = 35+25 = 60 dias."},
+    {tema:"Ciclo financeiro", texto:"Uma empresa tem PMRE de 40 dias, PMRV de 20 dias e PMPC de 30 dias.", enun:"O Ciclo Financeiro (Ciclo de Caixa) dessa empresa é de:", alts:["10 dias","30 dias","50 dias","60 dias","90 dias"], correta:2, coment:"Ciclo Financeiro = PMRE + PMRV − PMPC = 40+20−30 = 50 dias."},
+    {tema:"Relação ciclo financeiro e NCG", texto:"—", enun:"Quanto maior o ciclo financeiro de uma empresa, o que ocorre com sua necessidade de capital de giro?", alts:["Diminui","Aumenta","Permanece inalterada","Torna-se negativa automaticamente","Não há relação entre os dois"], correta:1, coment:"Quanto maior o ciclo financeiro, mais tempo se passa entre o desembolso de caixa (pagamento a fornecedores) e o recebimento das vendas, exigindo maior capital de giro."},
+    {tema:"Motivos de retenção de caixa", texto:"—", enun:"Segundo a teoria de Keynes, os três motivos clássicos para retenção de caixa são:", alts:["Transação, investimento e especulação.","Transação, precaução e especulação.","Precaução, investimento e produção.","Especulação, produção e consumo.","Transação, produção e precaução apenas."], correta:1, coment:"Os três motivos formulados por Keynes são: transação (compromissos rotineiros), precaução (imprevistos) e especulação (aproveitar oportunidades)."},
+    {tema:"Conta garantida", texto:"—", enun:"A linha de crédito conhecida como 'conta garantida' se caracteriza por:", alts:["Ser um empréstimo de prazo fixo, sem possibilidade de uso parcial.","Ser uma linha rotativa vinculada à conta corrente, com juros cobrados apenas sobre o valor utilizado.","Ter prazo de apenas 1 a 5 dias.","Exigir sempre a venda integral dos recebíveis da empresa.","Ser exclusiva de empresas do setor público."], correta:1, coment:"A conta garantida é uma linha de crédito rotativa vinculada à conta corrente da empresa, na qual os juros incidem apenas sobre o valor efetivamente utilizado, não sobre o limite total disponível."},
+    {tema:"Hot money", texto:"—", enun:"O 'hot money' é uma modalidade de crédito caracterizada por:", alts:["Prazo muito longo, superior a 5 anos.","Prazo muito curto (geralmente 1 a 29 dias) e custo elevado.","Ausência total de juros.","Ser destinado exclusivamente a investimentos de longo prazo.","Exigir garantia real obrigatória em todos os casos."], correta:1, coment:"O hot money é uma linha de crédito de prazo muito curto (tipicamente entre 1 e 29 dias), usada para suprir necessidades pontuais de caixa, com custo elevado dado o curtíssimo prazo."},
+    {tema:"Desconto de duplicatas x factoring", texto:"—", enun:"Assinale a alternativa que diferencia corretamente desconto de duplicatas de factoring:", alts:["São exatamente a mesma operação, com nomes diferentes.","No desconto de duplicatas, o risco de inadimplência costuma permanecer com a empresa (dependendo do contrato); no factoring, geralmente é assumido pela empresa de fomento mercantil.","No factoring, é sempre o banco que realiza a operação, nunca uma empresa especializada.","O desconto de duplicatas nunca envolve antecipação de recebíveis.","Apenas o factoring pode ser realizado por instituições financeiras reguladas pelo Banco Central."], correta:1, coment:"Embora ambos envolvam antecipação de recebíveis, no desconto de duplicatas o risco de inadimplência costuma permanecer com a empresa cedente (operação bancária tradicional, com direito de regresso), enquanto no factoring a empresa de fomento mercantil geralmente assume esse risco."},
+    {tema:"5 Cs do crédito", texto:"—", enun:"Assinale a alternativa que apresenta corretamente um dos '5 Cs do crédito' usados na análise de concessão de crédito:", alts:["Comunicação","Colateral","Competitividade","Custo","Concorrência"], correta:1, coment:"Colateral (as garantias oferecidas em caso de inadimplência) é um dos 5 Cs do crédito, junto com Caráter, Capacidade, Capital e Condições."},
+    {tema:"C de Capacidade", texto:"—", enun:"O 'C' de Capacidade, na análise de crédito, avalia principalmente:", alts:["O histórico de pontualidade do cliente.","A capacidade financeira/operacional do cliente de honrar o compromisso.","As garantias oferecidas.","O contexto macroeconômico geral.","A estrutura patrimonial do cliente."], correta:1, coment:"Capacidade refere-se à capacidade financeira ou operacional do cliente/tomador de gerar recursos suficientes para honrar o compromisso assumido."},
+    {tema:"Gestão de disponibilidades — trade-off", texto:"—", enun:"Manter caixa em excesso gera principalmente:", alts:["Risco de insolvência técnica.","Custo de oportunidade, por recursos parados que poderiam estar em outra aplicação.","Aumento automático do lucro líquido.","Redução automática do ciclo financeiro.","Eliminação total do risco de crédito."], correta:1, coment:"Manter caixa em excesso gera custo de oportunidade, já que os recursos parados poderiam estar aplicados de forma mais rentável — o oposto de caixa insuficiente, que gera risco de insolvência técnica."},
+    {tema:"NCG — cálculo aplicado", texto:"Uma empresa tem Ativo Circulante Operacional de R$ 350.000 e Passivo Circulante Operacional de R$ 200.000.", enun:"A NCG dessa empresa é de:", alts:["R$ 100.000","R$ 150.000","R$ 200.000","R$ 350.000","R$ 550.000"], correta:1, coment:"NCG = Ativo Circulante Operacional − Passivo Circulante Operacional = 350.000−200.000 = R$ 150.000."},
+    {tema:"Redução do ciclo financeiro", texto:"—", enun:"Assinale a ação que tenderia a REDUZIR o ciclo financeiro de uma empresa:", alts:["Aumentar o prazo de recebimento dos clientes.","Aumentar o prazo de estocagem dos produtos.","Negociar um prazo maior de pagamento com fornecedores (dentro de limites saudáveis).","Reduzir o prazo de pagamento a fornecedores.","Aumentar simultaneamente PMRE e PMRV."], correta:2, coment:"Como o ciclo financeiro é PMRE+PMRV−PMPC, aumentar o PMPC (prazo de pagamento a fornecedores) reduz o ciclo financeiro, desde que a negociação seja saudável e não prejudique a relação comercial."},
+    {tema:"Tesouraria — função", texto:"—", enun:"Assinale a alternativa que descreve corretamente uma função típica da tesouraria:", alts:["Definir exclusivamente a política tributária da empresa.","Realizar a conciliação bancária e o controle do fluxo de caixa.","Elaborar exclusivamente demonstrações contábeis anuais.","Substituir integralmente o papel do conselho de administração.","Ser responsável apenas por decisões de longo prazo."], correta:1, coment:"A tesouraria é responsável pela execução prática da gestão financeira de curto prazo, incluindo conciliação bancária, controle e projeção de fluxo de caixa."},
+    {tema:"CGL negativo", texto:"—", enun:"Um CGL negativo indica que:", alts:["A empresa tem excesso de caixa disponível.","Parte do ativo não circulante está sendo financiada por passivo circulante, indicando maior risco financeiro.","A empresa não possui qualquer passivo circulante.","O ciclo financeiro é necessariamente igual a zero.","A empresa está automaticamente insolvente."], correta:1, coment:"Um CGL negativo indica que o passivo circulante é maior que o ativo circulante, sugerindo que parte do ativo não circulante está sendo financiada por recursos de curto prazo — situação de maior risco financeiro, embora não signifique insolvência automática."},
+    {tema:"Aplicação combinada — ciclos", texto:"Uma empresa reduz seu PMRE de 50 para 30 dias, mantendo PMRV em 20 dias e PMPC em 25 dias.", enun:"Qual o novo Ciclo Financeiro dessa empresa?", alts:["15 dias","25 dias","45 dias","55 dias","75 dias"], correta:1, coment:"Novo Ciclo Financeiro = PMRE+PMRV−PMPC = 30+20−25 = 25 dias (uma redução em relação ao ciclo anterior, que seria 50+20−25=45 dias)."},
+    {tema:"Aplicação institucional", texto:"—", enun:"Para uma empresa pública prestadora de serviços de TI, com baixo ou nenhum estoque físico relevante, a gestão de capital de giro tende a ser mais influenciada por:", alts:["O prazo de renovação de estoques (PMRE), exclusivamente.","Os prazos de recebimento e pagamento (PMRV e PMPC), dado o baixo peso do PMRE.","Nenhum dos prazos médios estudados.","Exclusivamente a política de dividendos.","Apenas o custo de capital de terceiros."], correta:1, coment:"Empresas de serviços, com baixo ou nenhum estoque físico relevante, têm o PMRE com peso reduzido na gestão do capital de giro, tornando os prazos de recebimento (PMRV) e pagamento (PMPC) os fatores mais relevantes."},
+    {tema:"Custo de oportunidade em disponibilidades", texto:"—", enun:"O trade-off central na gestão de disponibilidades envolve equilibrar:", alts:["Risco de crédito e risco cambial.","Custo de oportunidade de manter caixa em excesso e risco de insolvência técnica por caixa insuficiente.","Prazo de estocagem e prazo de recebimento apenas.","Estrutura de capital e política de dividendos.","Nenhum trade-off relevante existe nessa gestão."], correta:1, coment:"A gestão de disponibilidades busca equilibrar o custo de oportunidade de manter caixa parado (que poderia estar rendendo em outra aplicação) com o risco de insolvência técnica decorrente de caixa insuficiente para honrar compromissos."},
+    {tema:"Aplicação combinada final", texto:"—", enun:"Assinale a alternativa que combina corretamente conceitos estudados neste tópico:", alts:["CGL e NCG são exatamente o mesmo indicador, calculados da mesma forma.","O Ciclo Financeiro é calculado como PMRE + PMRV − PMPC, e quanto maior esse ciclo, maior a necessidade de capital de giro da empresa.","Hot money é uma linha de crédito de longuíssimo prazo, com custo baixo.","Os 5 Cs do crédito incluem 'Comunicação' e 'Concorrência'.","A tesouraria trata exclusivamente de decisões de longuíssimo prazo, sem relação com o caixa diário."], correta:1, coment:"A alternativa correta combina corretamente a fórmula do ciclo financeiro com sua implicação direta sobre a necessidade de capital de giro — as demais alternativas contêm erros conceituais estudados ao longo do capítulo."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"A fórmula do CGL é:", alts:["Ativo Circulante − Passivo Circulante","Passivo Circulante − Ativo Circulante","Ativo Total − Passivo Total","PL / Ativo Total","Receita − Custos"], correta:0},
+    {d:"Fácil", texto:"—", enun:"A fórmula da NCG é:", alts:["Ativo Total − Passivo Total","Ativo Circulante Operacional − Passivo Circulante Operacional","Ativo Circulante − Passivo Circulante Total","PL − Capital de Terceiros","Receita − Despesas"], correta:1},
+    {d:"Fácil", texto:"—", enun:"PMRE significa:", alts:["Prazo Médio de Recebimento de Vendas","Prazo Médio de Renovação de Estoques","Prazo Médio de Pagamento a Fornecedores","Prazo Médio de Retenção de Especulação","Prazo Médio de Rendimento Esperado"], correta:1},
+    {d:"Fácil", texto:"—", enun:"PMRV significa:", alts:["Prazo Médio de Renovação de Estoques","Prazo Médio de Recebimento de Vendas","Prazo Médio de Pagamento a Fornecedores","Prazo Médio de Retorno de Valores","Prazo Médio de Regularização"], correta:1},
+    {d:"Fácil", texto:"—", enun:"PMPC significa:", alts:["Prazo Médio de Pagamento a Fornecedores/Compras","Prazo Médio de Recebimento de Clientes","Prazo Médio de Produção Contínua","Prazo Médio de Pagamento Contábil","Prazo Médio de Precificação de Custos"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Ciclo Operacional é igual a:", alts:["PMRE + PMPC","PMRE + PMRV","PMRV − PMPC","PMRE − PMPC","PMRE × PMRV"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Ciclo Financeiro é igual a:", alts:["PMRE + PMRV + PMPC","PMRE + PMRV − PMPC","PMPC − PMRE − PMRV","PMRE × PMRV × PMPC","PMRE − PMRV + PMPC"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Os três motivos de Keynes para retenção de caixa são:", alts:["Transação, precaução, especulação","Investimento, produção, consumo","Crédito, débito, poupança","Compra, venda, estoque","Lucro, prejuízo, equilíbrio"], correta:0},
+    {d:"Fácil", texto:"—", enun:"São os 5 Cs do crédito:", alts:["Caráter, Capacidade, Capital, Colateral, Condições","Comunicação, Competência, Custo, Crédito, Confiança","Caráter, Custo, Capital, Crédito, Condições","Capacidade, Comunicação, Colateral, Custo, Crédito","Nenhuma das anteriores"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Hot money é caracterizado por:", alts:["Prazo muito longo","Prazo muito curto e custo elevado","Ausência de juros","Uso exclusivo em investimentos de longo prazo","Ser gratuito"], correta:1},
+    {d:"Média", texto:"Ativo Circulante R$ 600.000; Passivo Circulante R$ 400.000.", enun:"O CGL é de:", alts:["R$ 100.000","R$ 200.000","R$ 400.000","R$ 600.000","R$ 1.000.000"], correta:1},
+    {d:"Média", texto:"Ativo Circulante Operacional R$ 300.000; Passivo Circulante Operacional R$ 180.000.", enun:"A NCG é de:", alts:["R$ 100.000","R$ 120.000","R$ 180.000","R$ 300.000","R$ 480.000"], correta:1},
+    {d:"Média", texto:"PMRE 30 dias; PMRV 20 dias.", enun:"O Ciclo Operacional é de:", alts:["10 dias","20 dias","30 dias","50 dias","60 dias"], correta:3},
+    {d:"Média", texto:"PMRE 45 dias; PMRV 15 dias; PMPC 20 dias.", enun:"O Ciclo Financeiro é de:", alts:["10 dias","20 dias","40 dias","60 dias","80 dias"], correta:2},
+    {d:"Média", texto:"—", enun:"CGL e NCG são conceitos idênticos?", alts:["Sim, sempre","Não — CGL usa totais circulantes; NCG usa apenas itens operacionais","Sim, apenas em empresas públicas","Sim, apenas no setor de serviços","Não há relação entre os dois"], correta:1},
+    {d:"Média", texto:"—", enun:"Conta garantida cobra juros sobre:", alts:["O limite total disponível, mesmo sem uso","Apenas o valor efetivamente utilizado","Um valor fixo mensal, independente do uso","Nunca cobra juros","Apenas sobre garantias reais oferecidas"], correta:1},
+    {d:"Média", texto:"—", enun:"No factoring, o risco de inadimplência geralmente é assumido por:", alts:["A empresa cedente, sempre","A empresa de fomento mercantil (factoring)","O cliente devedor, exclusivamente","O Banco Central","Nenhuma das partes"], correta:1},
+    {d:"Média", texto:"—", enun:"O 'C' de Condições, na análise de crédito, avalia:", alts:["O histórico de pontualidade do cliente","O contexto econômico e setorial que pode afetar a capacidade de pagamento","As garantias oferecidas","A estrutura patrimonial do cliente","A capacidade financeira isolada do cliente"], correta:1},
+    {d:"Média", texto:"—", enun:"Manter caixa insuficiente gera principalmente:", alts:["Custo de oportunidade elevado","Risco de insolvência técnica","Aumento automático do lucro","Redução do ciclo operacional","Eliminação do risco de crédito"], correta:1},
+    {d:"Média", texto:"—", enun:"A conciliação bancária compara:", alts:["Lucro contábil e fluxo de caixa","Registros internos da empresa e extratos bancários","Ativo e passivo circulante","Receita e despesa do período","PMRE e PMRV"], correta:1},
+    {d:"Difícil", texto:"PMRE 60 dias; PMRV 10 dias; PMPC 35 dias.", enun:"O Ciclo Financeiro é de:", alts:["15 dias","25 dias","35 dias","45 dias","95 dias"], correta:2},
+    {d:"Difícil", texto:"—", enun:"Uma empresa aumenta seu PMPC de 20 para 35 dias, mantendo PMRE e PMRV constantes. O efeito esperado sobre o Ciclo Financeiro é:", alts:["Aumento do ciclo financeiro","Redução do ciclo financeiro","Nenhum efeito sobre o ciclo financeiro","Aumento do ciclo operacional apenas","Eliminação total do ciclo financeiro"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que diferencia corretamente desconto de duplicatas de factoring quanto ao risco:", alts:["São idênticos quanto ao risco assumido.","No desconto de duplicatas, o risco tende a permanecer com a empresa cedente; no factoring, geralmente é assumido pela empresa de fomento.","No factoring, o risco é sempre do banco.","No desconto de duplicatas, não há qualquer possibilidade de regresso à empresa.","Nenhuma das duas operações envolve risco de inadimplência."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Considerando o trade-off de disponibilidades, uma empresa que mantém caixa muito acima do necessário para transação e precaução, sem qualquer estratégia de aplicação, incorre principalmente em:", alts:["Risco de insolvência técnica.","Custo de oportunidade elevado, por deixar de aplicar recursos ociosos.","Redução automática do ciclo financeiro.","Eliminação do risco de crédito de seus clientes.","Aumento do PMRE."], correta:1},
+    {d:"Difícil", texto:"Ativo Circulante R$ 800.000 (incluindo R$ 100.000 de aplicações financeiras); Passivo Circulante R$ 500.000 (incluindo R$ 80.000 de empréstimo de curto prazo).", enun:"Considerando que os demais itens são operacionais, a NCG dessa empresa é de:", alts:["R$ 280.000","R$ 300.000","R$ 320.000","R$ 700.000","R$ 420.000"], correta:0},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor descreve a relação entre o ciclo financeiro e a linha de crédito 'capital de giro':", alts:["Não há qualquer relação entre os dois conceitos.","Empresas com ciclo financeiro longo frequentemente recorrem a linhas de capital de giro para financiar o período entre o desembolso e o recebimento de caixa.","O capital de giro bancário elimina automaticamente o ciclo financeiro.","O ciclo financeiro só existe em empresas sem qualquer linha de crédito.","Linhas de capital de giro só se aplicam a empresas com ciclo financeiro negativo."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que aplica corretamente o conceito de 5 Cs a um cenário de concessão de crédito comercial:", alts:["Avaliar apenas o histórico de pontualidade (Caráter) é suficiente para uma análise de crédito completa.","Uma análise de crédito robusta considera conjuntamente Caráter, Capacidade, Capital, Colateral e Condições, e não apenas um desses fatores isoladamente.","Apenas o Colateral (garantias) deve ser considerado em qualquer análise de crédito.","Os 5 Cs se aplicam exclusivamente a empresas do setor público.","Condições refere-se exclusivamente ao histórico pessoal do cliente."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Para uma empresa pública de tecnologia, com prestação de serviços e baixo estoque físico, mas com prazos de recebimento de contratos governamentais tipicamente longos, o principal fator a monitorar na gestão de capital de giro tende a ser:", alts:["O PMRE, dado o alto volume de estoques.","O PMRV, dado o prazo de recebimento potencialmente longo em contratos com o setor público.","Exclusivamente a política de dividendos.","O custo de capital de terceiros, exclusivamente.","Nenhum fator específico, pois empresas públicas não têm ciclo financeiro."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a alternativa que sintetiza corretamente a relação entre gestão de capital de giro e o papel da tesouraria:", alts:["A tesouraria não tem qualquer relação com a gestão do capital de giro.","A tesouraria executa, no dia a dia, as decisões relacionadas à gestão de capital de giro, incluindo controle de caixa e captação de recursos de curto prazo quando necessário.","A gestão de capital de giro é responsabilidade exclusiva do conselho de administração, sem envolvimento da tesouraria.","A tesouraria trata apenas de decisões de investimento de longuíssimo prazo.","O capital de giro é um conceito exclusivamente contábil, sem relação com a tesouraria."], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Calcular o Capital de Giro Líquido (CGL)",
+    "Calcular a Necessidade de Capital de Giro (NCG)",
+    "Diferenciar CGL de NCG",
+    "Calcular PMRE, PMRV e PMPC",
+    "Calcular o Ciclo Operacional e o Ciclo Financeiro",
+    "Compreender a relação entre ciclo financeiro e necessidade de capital de giro",
+    "Conhecer os três motivos de retenção de caixa (Keynes)",
+    "Diferenciar as linhas de crédito de curto prazo (capital de giro, conta garantida, hot money, desconto, factoring)",
+    "Conhecer os 5 Cs do crédito",
+    "Compreender o papel da tesouraria na gestão financeira de curto prazo",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Confundir CGL (totais circulantes) com NCG (apenas itens operacionais).",
+    "Errar a fórmula do ciclo financeiro, esquecendo de subtrair o PMPC.",
+    "Confundir desconto de duplicatas com factoring, ignorando a diferença de risco assumido.",
+    "Trocar a ordem ou o significado dos 5 Cs do crédito.",
+    "Confundir os três motivos de retenção de caixa de Keynes com outros conceitos financeiros.",
+    "Não perceber que aumentar o PMPC reduz o ciclo financeiro (dentro de limites saudáveis).",
+    "Confundir conta garantida com hot money quanto a prazo e forma de cobrança de juros.",
+    "Não excluir itens financeiros (aplicações, empréstimos de curto prazo) ao calcular a NCG.",
+    "Achar que CGL negativo significa insolvência automática, quando indica apenas maior risco.",
+    "Confundir Ciclo Operacional com Ciclo Financeiro.",
+    "Não perceber a relação entre ciclo financeiro longo e maior necessidade de linhas de crédito de curto prazo.",
+    "Ignorar o trade-off entre custo de oportunidade e risco de insolvência na gestão de disponibilidades.",
+    "Não memorizar corretamente as fórmulas de PMRE, PMRV e PMPC individualmente.",
+    "Confundir a função da tesouraria com a função do departamento contábil.",
+    "Achar que a conciliação bancária é sinônimo de fluxo de caixa projetado.",
+    "Ignorar a ligação deste tópico com Fontes de financiamento a longo prazo (Tópico 8).",
+    "Não relacionar os dados de balanço fornecidos corretamente aos itens operacionais x financeiros.",
+    "Assumir que todo aumento no prazo de pagamento a fornecedores é sempre positivo, sem considerar o relacionamento comercial.",
+    "Negligenciar a prática de cálculo numérico, focando apenas na teoria.",
+    "Não revisar a hierarquia dos conceitos (CGL, NCG, ciclos) antes da prova.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Capital de Giro Líquido (CGL)","Diferença entre o Ativo Circulante e o Passivo Circulante, representando a folga financeira de curto prazo."],
+    ["Necessidade de Capital de Giro (NCG)","Diferença entre o Ativo Circulante Operacional e o Passivo Circulante Operacional."],
+    ["Ciclo Operacional","Soma do Prazo Médio de Renovação de Estoques (PMRE) com o Prazo Médio de Recebimento de Vendas (PMRV)."],
+    ["Ciclo Financeiro (Ciclo de Caixa)","Ciclo Operacional menos o Prazo Médio de Pagamento a Fornecedores (PMPC)."],
+    ["PMRE","Prazo Médio de Renovação de Estoques."],
+    ["PMRV","Prazo Médio de Recebimento de Vendas."],
+    ["PMPC","Prazo Médio de Pagamento a Fornecedores/Compras."],
+    ["Conta garantida","Linha de crédito rotativa vinculada à conta corrente, com juros sobre o valor utilizado."],
+    ["Hot money","Empréstimo de prazo muito curto, usado para necessidades de caixa pontuais."],
+    ["Desconto de duplicatas","Antecipação de recebíveis junto ao banco, com desconto de juros."],
+    ["Factoring","Venda de recebíveis a uma empresa de fomento mercantil, que geralmente assume o risco de inadimplência."],
+    ["5 Cs do crédito","Caráter, Capacidade, Capital, Colateral e Condições — critérios clássicos de análise de crédito."],
+    ["Tesouraria","Área responsável pela gestão prática do caixa, fluxo de caixa e conciliação bancária no curto prazo."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>
