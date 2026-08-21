@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indicadores: VPL, TIR e Payback | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">07 - Indicadores: VPL, TIR, payback</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html">06 - Parâmetros para análise de projetos</option>
+    <option value="07 - Indicadores econômicos de projetos (VPL, TIR, payback).html" selected>07 - Indicadores: VPL, TIR, payback</option>
+    <option value="" disabled>08 - Análise de sensibilidade e cenários (em breve)</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Indicadores: VPL, TIR e Payback</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 07 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Indicadores Econômicos de Projetos: VPL, TIR e Payback</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 07</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 6 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Média-alta <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Tópicos 04–06 (métodos, TMA, parâmetros) + VDT (Adm. Fin. 06)</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Altíssimo — cálculo de VPL, TIR e payback é o coração da matéria</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Definir <b>VPL</b>, <b>TIR</b> e <b>payback</b> (simples e descontado) e explicar o que cada indicador mede.</li>
+            <li>Calcular o <b>VPL</b> de fluxos uniformes e não uniformes, aplicando a regra de decisão (VPL &gt; 0 aceita).</li>
+            <li>Encontrar a <b>TIR</b> por tentativa e erro com interpolação linear — o método exigido em prova sem calculadora financeira.</li>
+            <li>Calcular o <b>payback simples</b> e o <b>payback descontado</b>, inclusive com interpolação na fração de período.</li>
+            <li>Reconhecer os <b>problemas da TIR</b> (múltiplas taxas, escala, timing) e por que o VPL é o critério-mestre.</li>
+            <li>Integrar os três indicadores em uma decisão de aceitar/rejeitar e em comparação de projetos mutuamente excludentes.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Os três indicadores clássicos de avaliação de projetos respondem a perguntas diferentes sobre o mesmo fluxo de caixa:</p>
+          <ul class="styled">
+            <li><b>VPL (Valor Presente Líquido)</b> — <i>quanto valor o projeto cria</i>, em reais de hoje: soma dos fluxos descontados pela TMA menos o investimento. Regra: <b>VPL &gt; 0 → aceita</b>; VPL &lt; 0 → rejeita; VPL = 0 → indiferente (remunera exatamente a TMA). É o <b>critério-mestre</b>: aditivo, mede criação de riqueza e nunca contradiz o objetivo de maximizar valor.</li>
+            <li><b>TIR (Taxa Interna de Retorno)</b> — <i>qual a taxa de rentabilidade do projeto</i>: é a taxa de desconto que <b>zera o VPL</b>. Regra: <b>TIR &gt; TMA → aceita</b>. Problemas: fluxos não convencionais podem gerar <b>múltiplas TIRs</b> ou nenhuma; em projetos mutuamente excludentes pode <b>conflitar com o VPL</b> (escala e timing); pressupõe reinvestimento à própria TIR.</li>
+            <li><b>Payback</b> — <i>quanto tempo leva para recuperar o investimento</i>. <b>Simples</b>: usa os fluxos nominais (ignora o valor do dinheiro no tempo e tudo o que vem depois do retorno). <b>Descontado</b>: usa fluxos trazidos a valor presente pela TMA — corrige o VDT, mas continua ignorando o pós-payback. Serve como medida de <b>risco/liquidez</b>, não de rentabilidade.</li>
+          </ul>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Em fluxos convencionais e projetos independentes, VPL e TIR <b>sempre concordam</b> (VPL &gt; 0 ⇔ TIR &gt; TMA). Quando a questão força um conflito — projetos excludentes de tamanhos diferentes — a resposta correta é <b>ficar com o VPL</b>.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Indicadores<br>VPL · TIR · Payback</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>VPL</h4><ul><li>Σ FCₜ/(1+k)ᵗ − I₀</li><li>Aceita se &gt; 0</li><li>Critério-mestre</li><li>Aditivo: VPL(A+B) = VPL(A)+VPL(B)</li></ul></div>
+            <div class="mm-node"><h4>TIR</h4><ul><li>Taxa que zera o VPL</li><li>Aceita se TIR &gt; TMA</li><li>Tentativa + interpolação</li><li>Problemas: múltiplas TIRs, escala, timing</li></ul></div>
+            <div class="mm-node"><h4>Payback simples</h4><ul><li>Tempo de recuperação nominal</li><li>Interpola fração do período</li><li>Ignora VDT e pós-payback</li></ul></div>
+            <div class="mm-node"><h4>Payback descontado</h4><ul><li>Mesma lógica com FC descontados</li><li>Sempre ≥ payback simples</li><li>Se VPL &lt; 0, não existe</li></ul></div>
+            <div class="mm-node"><h4>Decisão integrada</h4><ul><li>Independentes: VPL e TIR concordam</li><li>Excludentes: manda o VPL</li><li>Payback = filtro de liquidez/risco</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 VPL — valor presente líquido, passo a passo</h3>
+        <div class="card">
+          <p>O <b>VPL</b> traz todos os fluxos de caixa do projeto a valor presente pela taxa mínima de atratividade (TMA = k) e subtrai o investimento inicial:</p>
+          <p style="text-align:center"><b>VPL = −I₀ + Σ<sub>t=1..n</sub> FCₜ / (1 + k)ᵗ</b></p>
+          <p><b>Exemplo-base (usado em toda a seção):</b> investimento de R$ 1.000 hoje, com entradas de R$ 500 ao fim de cada um dos próximos 3 anos; TMA de 10% a.a.</p>
+          <ol class="styled">
+            <li><b>Desconte cada fluxo:</b> FC₁ = 500/1,10¹ = 454,55; FC₂ = 500/1,10² = 413,22; FC₃ = 500/1,10³ = 375,66.</li>
+            <li><b>Some os valores presentes:</b> 454,55 + 413,22 + 375,66 = <b>1.243,43</b>. (Atalho para fluxos iguais: 500 × fator de anuidade(3 períodos; 10%) = 500 × 2,4869 = 1.243,43.)</li>
+            <li><b>Subtraia o investimento:</b> VPL = 1.243,43 − 1.000 = <b>+ R$ 243,43</b>.</li>
+            <li><b>Decida:</b> VPL &gt; 0 → o projeto <b>cria R$ 243,43 de riqueza</b> já em valores de hoje, depois de remunerar o capital a 10% a.a. <b>Aceita-se.</b></li>
+          </ol>
+          <div class="box ok"><div class="box-title">Interpretação econômica</div><p>VPL = 0 não significa "lucro zero": significa que o projeto paga o investimento, remunera o capital exatamente à TMA e não sobra nada. VPL &gt; 0 é o <b>excedente</b> além dessa remuneração mínima.</p></div>
+          <div class="box info"><div class="box-title">Propriedade que a FGV adora</div><p>O VPL é <b>aditivo</b>: VPL(A + B) = VPL(A) + VPL(B). Nenhum outro indicador (TIR, payback, IL) tem essa propriedade — é por isso que o VPL é o critério-mestre em orçamento de capital.</p></div>
+        </div>
+
+        <h3>4.2 TIR — taxa interna de retorno, por tentativa e interpolação</h3>
+        <div class="card">
+          <p>A <b>TIR</b> é a taxa de desconto que torna o VPL igual a zero — ou seja, a taxa de rentabilidade intrínseca do projeto:</p>
+          <p style="text-align:center"><b>0 = −I₀ + Σ FCₜ / (1 + TIR)ᵗ</b> &nbsp;&nbsp;→&nbsp;&nbsp; regra: <b>TIR &gt; TMA → aceita</b></p>
+          <p>Sem calculadora financeira, resolve-se por <b>tentativa e erro com interpolação linear</b>. No exemplo-base (−1.000; +500 × 3):</p>
+          <ol class="styled">
+            <li><b>Chute uma taxa e calcule o VPL.</b> A 20% a.a.: VP = 500 × 2,1065 = 1.053,24 → VPL = <b>+53,24</b> (positivo: a TIR é maior que 20%).</li>
+            <li><b>Suba a taxa até o VPL ficar negativo.</b> A 25% a.a.: VP = 500 × 1,9520 = 976,00 → VPL = <b>−24,00</b> (a TIR está entre 20% e 25%).</li>
+            <li><b>Interpole:</b> TIR ≈ 20% + 5% × [53,24 / (53,24 + 24,00)] = 20% + 5% × 0,6894 ≈ <b>23,45%</b> (valor exato: 23,38% — a interpolação aproxima muito bem para intervalos curtos).</li>
+            <li><b>Compare com a TMA:</b> 23,4% &gt; 10% → <b>aceita</b> — a mesma conclusão do VPL.</li>
+          </ol>
+          <div class="box warn"><div class="box-title">Atenção</div><p>A interpolação linear supõe reta onde a função VPL é curva — quanto <b>menor o intervalo</b> entre as taxas-teste, melhor a aproximação. Em prova, se houver alternativa exata, marque a mais próxima do interpolado.</p></div>
+        </div>
+
+        <h3>4.3 Payback — simples e descontado</h3>
+        <div class="card">
+          <p>O <b>payback</b> mede o tempo necessário para as entradas acumuladas igualarem o investimento.</p>
+          <p><b>Payback simples</b> (fluxos nominais): no exemplo-base, 500 + 500 = 1.000 ao fim do ano 2 → <b>payback = 2,0 anos</b>. Quando a recuperação ocorre no meio do período, interpola-se: projeto de R$ 1.000 com fluxos de 500 e 700 → recupera 500 no ano 1 e faltam 500 dos 700 do ano 2 → payback = 1 + 500/700 = <b>1,71 ano</b>.</p>
+          <p><b>Payback descontado</b> (fluxos a valor presente pela TMA de 10%): no exemplo-base, acumulam-se 454,55 (ano 1) e 867,77 (ano 2); faltam 132,23 dos 375,66 descontados do ano 3 → payback descontado = 2 + 132,23/375,66 ≈ <b>2,35 anos</b>.</p>
+          <table>
+            <tr><th>Critério</th><th>Usa VDT?</th><th>Considera pós-payback?</th><th>Leitura</th></tr>
+            <tr><td>Payback simples</td><td>Não</td><td>Não</td><td>2,0 anos</td></tr>
+            <tr><td>Payback descontado</td><td>Sim (TMA)</td><td>Não</td><td>≈ 2,35 anos — sempre ≥ simples</td></tr>
+          </table>
+          <div class="box fgv"><div class="box-title">Pegadinha clássica</div><p>Se o <b>VPL é negativo</b>, o payback descontado <b>não existe</b> (os fluxos descontados jamais cobrem o investimento), embora o payback simples possa existir. A FGV já cobrou exatamente essa armadilha.</p></div>
+          <div class="box info"><div class="box-title">Para que serve, então?</div><p>O payback é medida de <b>risco e liquidez</b>: quanto mais curto, menos tempo o capital fica exposto. Empresas o usam como <b>filtro</b> (payback máximo aceitável), nunca como critério único — ele não diz nada sobre quanto valor o projeto cria depois do retorno.</p></div>
+        </div>
+
+        <h3>4.4 Fluxos não uniformes — segundo exemplo completo</h3>
+        <div class="card">
+          <p>Projeto: investimento de R$ 1.000; entradas de R$ 500 no ano 1 e R$ 700 no ano 2; TMA de 10% a.a.</p>
+          <ul class="styled">
+            <li><b>VPL:</b> 500/1,10 + 700/1,10² − 1.000 = 454,55 + 578,51 − 1.000 = <b>+ R$ 33,06</b> → aceita.</li>
+            <li><b>TIR:</b> a taxa que zera −1.000 + 500/(1+i) + 700/(1+i)² ≈ <b>12,3%</b> &gt; 10% → aceita (concorda com o VPL).</li>
+            <li><b>Payback simples:</b> 1 + 500/700 = <b>1,71 ano</b>.</li>
+            <li><b>Payback descontado:</b> VP(ano 1) = 454,55; faltam 545,45 dos 578,51 do ano 2 → 1 + 545,45/578,51 ≈ <b>1,94 ano</b>.</li>
+          </ul>
+          <p>Repare: com VPL positivo "de raspão", o payback descontado (1,94) fica muito próximo da vida do projeto (2 anos) — coerente: sobra pouco valor depois de remunerar a TMA.</p>
+        </div>
+
+        <h3>4.5 O problema das múltiplas TIRs (fluxos não convencionais)</h3>
+        <div class="card">
+          <p>Um fluxo <b>convencional</b> tem um único sinal negativo (o investimento) seguido de entradas positivas. Quando há <b>mais de uma troca de sinal</b> no fluxo (ex.: projeto que exige desinvestimento/desmontagem cara no fim), a equação do VPL = 0 pode ter <b>mais de uma raiz</b> — várias TIRs.</p>
+          <p><b>Exemplo numérico:</b> fluxo −100; +230; −132 (investe 100, recebe 230 no ano 1, paga 132 de encerramento no ano 2).</p>
+          <ul class="styled">
+            <li>A <b>10%</b>: −100 + 230/1,10 − 132/1,10² = −100 + 209,09 − 109,09 = <b>0</b> → TIR = 10%.</li>
+            <li>A <b>20%</b>: −100 + 230/1,20 − 132/1,20² = −100 + 191,67 − 91,67 = <b>0</b> → TIR = 20%.</li>
+          </ul>
+          <p>Duas TIRs igualmente "válidas" — qual comparar com a TMA? Não há resposta: a TIR <b>não decide</b> nesse caso. O VPL decide: se a TMA estiver <b>entre</b> 10% e 20%, o VPL é positivo (aceita); fora desse intervalo, negativo (rejeita). Regra prática: <b>número máximo de TIRs = número de trocas de sinal</b> do fluxo.</p>
+          <div class="box warn"><div class="box-title">Outros dois problemas da TIR</div><p><b>Escala:</b> projeto A (−1.000 → +1.500 no ano 1) tem TIR de 50%; projeto B (−5.000 → +6.500 no ano 1) tem TIR de 30%. Pela TIR, A vence; pelo VPL a 10%, A = +363,64 e B = +909,09 — <b>B cria mais valor</b>. <b>Timing:</b> projetos com mesmo investimento, mas um paga cedo e outro tarde, podem inverter o ranking conforme a taxa. Em <b>projetos mutuamente excludentes, fique com o VPL</b> (ou analise o fluxo incremental).</p></div>
+        </div>
+
+        <h3>4.6 Integração dos indicadores na decisão</h3>
+        <div class="card">
+          <table>
+            <tr><th>Situação</th><th>VPL</th><th>TIR</th><th>Payback</th></tr>
+            <tr><td>Projeto independente, fluxo convencional</td><td>Decide (aceita se &gt; 0)</td><td>Concorda sempre (TIR &gt; TMA ⇔ VPL &gt; 0)</td><td>Filtro auxiliar de liquidez</td></tr>
+            <tr><td>Projetos mutuamente excludentes</td><td><b>Critério decisório</b> (maior VPL)</td><td>Pode conflitar (escala/timing) — não usar sozinha</td><td>Desempate de risco, no máximo</td></tr>
+            <tr><td>Fluxo não convencional</td><td>Funciona normalmente</td><td>Múltiplas ou nenhuma — não decide</td><td>Funciona (simples)</td></tr>
+            <tr><td>Racionamento de capital</td><td>Maximizar Σ VPL da carteira (ou IL)</td><td>Não adequada</td><td>Auxiliar</td></tr>
+          </table>
+          <div class="box fgv"><div class="box-title">Resumo para a prova</div><p><b>VPL</b> responde "quanto?" (valor, em R$); <b>TIR</b> responde "a que taxa?" (% — boa para comunicar, ruim para decidir sozinha); <b>payback</b> responde "quando?" (tempo — risco/liquidez). Questão de conflito → VPL. Questão de múltiplas TIRs → fluxo não convencional (trocas de sinal). Questão de payback descontado inexistente → VPL &lt; 0.</p></div>
+        </div>
+      </section>
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Cálculo direto de VPL</b> com 3–4 fluxos e TMA redonda (10% ou 12%), cobrando o desconto fluxo a fluxo e a decisão final — erro típico da banca nas alternativas: esquecer de subtrair o investimento ou descontar o I₀.</li>
+            <li><b>TIR por interpolação</b>: dá dois VPLs (um positivo, um negativo) e pede a taxa — ou pede para identificar em qual intervalo está a TIR.</li>
+            <li><b>Conceito de TIR</b>: "a taxa que torna o VPL igual a zero" e a equivalência <b>TIR = TMA ⇔ VPL = 0</b> caem como assertivas certo/errado.</li>
+            <li><b>Payback com fração de período</b>: fluxos não uniformes exigindo interpolação (1 + 500/700 = 1,71) — a distração é arredondar para cima ou ignorar a fração.</li>
+            <li><b>Múltiplas TIRs</b>: fluxo com duas trocas de sinal; a resposta correta é "o projeto tem duas TIRs / a TIR não deve ser usada / use o VPL".</li>
+            <li><b>Conflito VPL × TIR</b> em excludentes: o projeto de maior TIR nem sempre é o de maior VPL (escala); a banca espera "escolhe-se o de maior VPL".</li>
+            <li><b>Defeitos do payback</b>: ignora o valor do dinheiro no tempo (simples) e ignora os fluxos após o retorno (ambos) — formulação recorrente em julgamento de itens.</li>
+            <li><b>Payback descontado inexistente</b> quando VPL &lt; 0 — pegadinha sofisticada, já vista em provas recentes da banca.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>VPL = −I₀ + Σ FCₜ/(1+k)ᵗ.</b> Aceita se VPL &gt; 0; rejeita se &lt; 0; indiferente se = 0.</li>
+            <li><b>TIR = taxa que zera o VPL.</b> Aceita se TIR &gt; TMA. Sem calculadora: tentativa + interpolação linear.</li>
+            <li><b>Equivalência:</b> em fluxo convencional, VPL &gt; 0 ⇔ TIR &gt; TMA; VPL = 0 ⇔ TIR = TMA; VPL &lt; 0 ⇔ TIR &lt; TMA.</li>
+            <li><b>Payback simples</b> = tempo até Σ FC nominal = I₀. <b>Payback descontado</b> = idem com FC descontados — <b>sempre maior ou igual</b> ao simples.</li>
+            <li><b>VPL &lt; 0 → não existe payback descontado</b> (mas pode existir o simples).</li>
+            <li><b>Nº máximo de TIRs = nº de trocas de sinal</b> do fluxo de caixa.</li>
+            <li><b>Excludentes: manda o VPL</b> — TIR sofre de escala e timing; VPL é aditivo e mede riqueza criada.</li>
+            <li><b>Payback não mede rentabilidade</b> — mede risco/liquidez; ignora tudo após o retorno.</li>
+            <li>TIR pressupõe <b>reinvestimento à própria TIR</b>; o VPL pressupõe reinvestimento à TMA (mais realista).</li>
+            <li>Fatores de anuidade úteis (n = 3; 10%) = 2,4869; (n = 4; 10%) = 3,1699; (n = 3; 12%) = 2,4018.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>VPL:</b> desconte cada FC pela TMA, some e subtraia I₀. Positivo → aceita. Mede valor criado em R$ de hoje.</li>
+            <li><b>Fluxos iguais:</b> use o fator de anuidade — VP = PMT × [(1 − (1+k)⁻ⁿ)/k].</li>
+            <li><b>TIR:</b> taxa que zera o VPL. Ache duas taxas com VPLs de sinais opostos e interpole: k₁ + (k₂ − k₁) × VPL₁/(VPL₁ − VPL₂).</li>
+            <li><b>Decisão pela TIR:</b> TIR &gt; TMA aceita. Em fluxo convencional, nunca contradiz o VPL.</li>
+            <li><b>Payback simples:</b> acumule os FC nominais até cobrir I₀; fração = valor que falta ÷ FC do período seguinte.</li>
+            <li><b>Payback descontado:</b> idem com FC/(1+k)ᵗ. Sempre ≥ simples; não existe se VPL &lt; 0.</li>
+            <li><b>Múltiplas TIRs:</b> surgem com mais de uma troca de sinal (ex.: −100; +230; −132 → TIRs de 10% e 20%). Solução: usar o VPL.</li>
+            <li><b>Excludentes:</b> maior TIR ≠ melhor projeto (escala/timing). Escolha o <b>maior VPL</b>.</li>
+            <li><b>Payback:</b> mede risco/liquidez, não rentabilidade; ignora o pós-retorno; o simples ignora também o VDT.</li>
+            <li><b>Resumo:</b> VPL = quanto valor; TIR = que taxa; payback = em quanto tempo. Dúvida na prova → VPL.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Regra de decisão</th></tr>
+            <tr><td><b>VPL</b></td><td>−I₀ + Σ FCₜ/(1+k)ᵗ</td><td>&gt; 0 aceita · &lt; 0 rejeita · = 0 indiferente</td></tr>
+            <tr><td><b>VPL (fluxos iguais)</b></td><td>−I₀ + PMT × [(1 − (1+k)⁻ⁿ)/k]</td><td>idem</td></tr>
+            <tr><td><b>TIR</b></td><td>taxa i tal que −I₀ + Σ FCₜ/(1+i)ᵗ = 0</td><td>TIR &gt; TMA aceita</td></tr>
+            <tr><td><b>Interpolação da TIR</b></td><td>k₁ + (k₂ − k₁) × VPL₁/(VPL₁ − VPL₂)</td><td>VPL₁ &gt; 0 e VPL₂ &lt; 0</td></tr>
+            <tr><td><b>Payback simples</b></td><td>menor n tal que Σ FCₜ ≥ I₀ (interpola a fração)</td><td>payback ≤ prazo máximo aceitável</td></tr>
+            <tr><td><b>Payback descontado</b></td><td>menor n tal que Σ FCₜ/(1+k)ᵗ ≥ I₀</td><td>idem; inexistente se VPL &lt; 0</td></tr>
+            <tr><td><b>Fração do período</b></td><td>(I₀ − acumulado) ÷ FC do período seguinte</td><td>soma ao último período completo</td></tr>
+            <tr><td><b>Equivalência VPL × TIR</b></td><td>VPL = 0 ⇔ TIR = TMA</td><td>fluxo convencional, projeto independente</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">Fatores de anuidade para prova</div><p>(n=3; 10%) = 2,4869 · (n=4; 10%) = 3,1699 · (n=3; 12%) = 2,4018 · (n=4; 12%) = 3,0373. Com eles, o VPL de fluxos uniformes sai em uma única multiplicação.</p></div>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>Comparativo definitivo dos três indicadores</h4>
+          <table>
+            <tr><th>Critério</th><th>VPL</th><th>TIR</th><th>Payback simples</th><th>Payback descontado</th></tr>
+            <tr><td>Unidade</td><td>Moeda (R$)</td><td>Taxa (%)</td><td>Tempo</td><td>Tempo</td></tr>
+            <tr><td>Considera VDT</td><td>Sim</td><td>Sim</td><td><b>Não</b></td><td>Sim</td></tr>
+            <tr><td>Todos os fluxos</td><td>Sim</td><td>Sim</td><td>Não (até o retorno)</td><td>Não (até o retorno)</td></tr>
+            <tr><td>Regra de aceite</td><td>&gt; 0</td><td>&gt; TMA</td><td>≤ limite</td><td>≤ limite</td></tr>
+            <tr><td>Excludentes</td><td><b>Confiável</b></td><td>Pode conflitar</td><td>Não recomendado</td><td>Não recomendado</td></tr>
+            <tr><td>Fluxo não convencional</td><td>Funciona</td><td>Múltiplas/nenhuma</td><td>Funciona</td><td>Pode não existir</td></tr>
+            <tr><td>Hipótese de reinvestimento</td><td>À TMA (realista)</td><td>À própria TIR</td><td>—</td><td>—</td></tr>
+          </table>
+          <h4>Exemplo-base consolidado (−1.000; +500 × 3; TMA 10%)</h4>
+          <table>
+            <tr><th>Ano</th><th>FC nominal</th><th>FC acumulado</th><th>FC descontado</th><th>Descontado acumulado</th></tr>
+            <tr><td>0</td><td>−1.000,00</td><td>−1.000,00</td><td>−1.000,00</td><td>−1.000,00</td></tr>
+            <tr><td>1</td><td>+500,00</td><td>−500,00</td><td>+454,55</td><td>−545,45</td></tr>
+            <tr><td>2</td><td>+500,00</td><td>0,00 ← payback simples</td><td>+413,22</td><td>−132,23</td></tr>
+            <tr><td>3</td><td>+500,00</td><td>+500,00</td><td>+375,66</td><td>+243,43 ← VPL</td></tr>
+          </table>
+          <p>Payback descontado = 2 + 132,23/375,66 ≈ <b>2,35 anos</b> · TIR ≈ <b>23,4%</b> · IL = 1.243,43/1.000 = <b>1,24</b>.</p>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">A TIR é um polinômio disfarçado</div><p>A equação VPL = 0 é um polinômio de grau n na variável 1/(1+i). Por isso pode ter até n raízes — e por isso, antes das planilhas, calcular TIR era um ritual de tentativa e erro que consumia horas dos analistas.</p></div>
+          <div class="box curio"><div class="box-title">Payback: o critério que sobreviveu a si mesmo</div><p>Estudos com grandes empresas mostram que, mesmo sabendo dos defeitos teóricos, a maioria ainda usa o payback como filtro — principalmente as menores e as de capital restrito, para as quais "morrer de sede" antes do retorno é um risco real. A teoria condena; a prática mantém. A FGV cobra os dois lados.</p></div>
+          <div class="box curio"><div class="box-title">O VPL veio antes do computador</div><p>A lógica do valor presente líquido foi formalizada por Irving Fisher (1907) e popularizada em orçamento de capital nos anos 1950 — décadas antes de existir planilha eletrônica. As tabelas de fatores de anuidade eram o "Excel" da época.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: TIR altíssima de projeto minúsculo</div><p>Investir R$ 10 para receber R$ 20 no ano seguinte dá TIR de 100% — e cria só R$ 8,18 de valor a 10%. TIR mede <b>eficiência</b>, não <b>grandeza</b>. Em excludentes, escala manda: compare VPLs.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: "payback menor que a vida do projeto"</div><p>Afirmar que o payback descontado é menor que a vida útil equivale a dizer que o VPL é positivo — as duas afirmações carregam a mesma informação. Se a questão der um e perguntar o outro, é essa a ponte.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>→ Tópico 04 (Metodologias):</b> aqui aprofundamos o cálculo dos três indicadores apresentados lá; o IL e a TIRM completam a caixa de ferramentas.</li>
+            <li><b>→ Tópico 05 (TMA):</b> toda taxa de desconto deste tópico é a TMA construída lá (CAPM, WACC). Sem TMA não há VPL nem payback descontado.</li>
+            <li><b>→ Tópico 06 (Parâmetros):</b> os fluxos descontados aqui já vêm líquidos de depreciação, escudo fiscal, valor residual e capital de giro — o tópico 06 constrói o FC que este tópico desconta.</li>
+            <li><b>→ Tópico 08 (Sensibilidade e cenários):</b> o VPL calculado aqui será estressado lá (e se a TMA subir 2 p.p.? e se as entradas caírem 10%?).</li>
+            <li><b>→ Tópico 09 (Risco e incerteza):</b> a taxa ajustada ao risco e a árvore de decisão refinam o k usado no desconto.</li>
+            <li><b>↔ Administração Financeira (VDT, Juros):</b> descontar FCₜ/(1+k)ᵗ é a mesma matemática do valor presente de Matemática Financeira — muda apenas a interpretação gerencial.</li>
+            <li><b>↔ Orçamento (Módulo II):</b> no setor público, o "VPL social" com taxa social de desconto embasa a escolha de projetos no PPA — conexão direta com o Tópico 10 (projetos sociais).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1 e 4.2 com calma; refazer o exemplo-base de VPL e a interpolação da TIR à mão</td><td>VPL de −1.000/500×3/10% sai sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.3 (paybacks) e 4.4; resolver os 20 flashcards</td><td>Payback com fração sem erro</td></tr>
+            <tr><td>3</td><td>Estudar 4.5 e 4.6 (múltiplas TIRs, conflitos); resolver as 20 questões comentadas</td><td>≥ 80% de acerto</td></tr>
+            <tr><td>4</td><td>Fazer o mini-simulado de 30 questões com cronômetro</td><td>≥ 24 acertos; revisar todos os erros</td></tr>
+            <tr><td>5</td><td>Revisão em 5 minutos + seção Para decorar + marcar o checklist</td><td>Recitar as regras de decisão de cor</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ROSS, S. A.; WESTERFIELD, R. W.; JORDAN, B. D. <b>Princípios de Administração Financeira</b>. São Paulo: Atlas — capítulos de orçamento de capital (VPL, TIR, payback).</li>
+            <li>GITMAN, L. J. <b>Princípios de Administração Financeira</b>. Pearson — técnicas de orçamento de capital.</li>
+            <li>ASSAF NETO, A.; LIMA, F. G. <b>Curso de Administração Financeira</b>. Atlas — abordagem brasileira mais alinhada à linguagem FGV.</li>
+            <li>BREALEY, R.; MYERS, S.; ALLEN, F. <b>Princípios de Finanças Corporativas</b>. McGraw-Hill — análise dos defeitos da TIR e do payback.</li>
+            <li>LAPOPONI, M. et al. <b>Avaliação Econômica de Projetos</b> (apostilas de engenharia econômica) — exemplos numéricos passo a passo.</li>
+            <li>Provas anteriores FGV (CEBRASPE-style não se aplica): questões de VPL/TIR/payback em concursos de gestão financeira (BNB, BNDES, DATAPREV, SEFAZ).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 07/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t07";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que é o VPL de um projeto?",
+          "a": "A soma dos fluxos de caixa futuros trazidos a valor presente pela TMA, menos o investimento inicial: VPL = −I₀ + Σ FCₜ/(1+k)ᵗ. Mede a riqueza criada pelo projeto, em reais de hoje."
+      },
+      {
+          "q": "Qual é a regra de decisão do VPL?",
+          "a": "VPL > 0 → aceita (cria valor); VPL < 0 → rejeita (destrói valor); VPL = 0 → indiferente (remunera exatamente a TMA)."
+      },
+      {
+          "q": "O que significa dizer que o VPL é aditivo?",
+          "a": "Que VPL(A + B) = VPL(A) + VPL(B). Propriedade exclusiva do VPL entre os critérios clássicos — é um dos motivos de ele ser o critério-mestre."
+      },
+      {
+          "q": "O que é a TIR?",
+          "a": "A taxa de desconto que torna o VPL igual a zero — a taxa de rentabilidade intrínseca do projeto."
+      },
+      {
+          "q": "Qual é a regra de decisão da TIR?",
+          "a": "TIR > TMA → aceita; TIR < TMA → rejeita; TIR = TMA → indiferente (equivale a VPL = 0)."
+      },
+      {
+          "q": "Como se calcula a TIR sem calculadora financeira?",
+          "a": "Por tentativa e erro: acha-se uma taxa com VPL positivo e outra com VPL negativo e interpola-se: TIR ≈ k₁ + (k₂−k₁) × VPL₁/(VPL₁ − VPL₂)."
+      },
+      {
+          "q": "Quando VPL e TIR podem divergir na decisão?",
+          "a": "Em projetos mutuamente excludentes (problemas de escala e de timing dos fluxos). Nesse caso, decide-se pelo maior VPL."
+      },
+      {
+          "q": "O que são múltiplas TIRs e quando ocorrem?",
+          "a": "Mais de uma taxa que zera o VPL. Ocorrem em fluxos não convencionais — o número máximo de TIRs é igual ao número de trocas de sinal do fluxo. Solução: usar o VPL."
+      },
+      {
+          "q": "O que é payback simples?",
+          "a": "O tempo necessário para a soma dos fluxos de caixa nominais igualar o investimento inicial. Ignora o valor do dinheiro no tempo e os fluxos após o retorno."
+      },
+      {
+          "q": "O que é payback descontado?",
+          "a": "O mesmo conceito do payback simples, mas usando os fluxos descontados pela TMA. É sempre maior ou igual ao simples."
+      },
+      {
+          "q": "Quando o payback descontado não existe?",
+          "a": "Quando o VPL é negativo: os fluxos descontados jamais cobrem o investimento inicial. O payback simples, porém, pode existir."
+      },
+      {
+          "q": "Quais são as duas limitações do payback simples?",
+          "a": "(1) Ignora o valor do dinheiro no tempo; (2) ignora todos os fluxos que ocorrem após o período de retorno. Por isso mede risco/liquidez, não rentabilidade."
+      },
+      {
+          "q": "Projeto: −1.000 hoje; +500 por 3 anos; TMA 10%. Qual o VPL?",
+          "a": "VP = 500 × 2,4869 = 1.243,43 → VPL = 1.243,43 − 1.000 = +243,43. Aceita-se."
+      },
+      {
+          "q": "No mesmo projeto, qual o payback simples?",
+          "a": "500 + 500 = 1.000 ao fim do ano 2 → payback = 2,0 anos."
+      },
+      {
+          "q": "E o payback descontado desse projeto?",
+          "a": "Acumulado descontado: 454,55 (ano 1), 867,77 (ano 2); faltam 132,23 dos 375,66 do ano 3 → 2 + 132,23/375,66 ≈ 2,35 anos."
+      },
+      {
+          "q": "Qual a TIR aproximada de −1.000; +500 × 3?",
+          "a": "≈ 23,4% a.a. (a 20% o VPL é +53,24; a 25% é −24,00; interpolação ≈ 23,45%; exato 23,38%)."
+      },
+      {
+          "q": "O fluxo −100; +230; −132 tem quantas TIRs?",
+          "a": "Duas: 10% e 20% — ambas zeram o VPL. Fluxo com duas trocas de sinal → duas raízes. A decisão deve ser tomada pelo VPL."
+      },
+      {
+          "q": "O que a TIR pressupõe sobre o reinvestimento dos fluxos?",
+          "a": "Que os fluxos intermediários são reinvestidos à própria TIR — hipótese irrealista quando a TIR é muito alta. O VPL pressupõe reinvestimento à TMA, mais verossímil."
+      },
+      {
+          "q": "Payback descontado menor que a vida do projeto equivale a quê?",
+          "a": "A VPL positivo: se os fluxos descontados cobrem o investimento antes do fim, sobra valor presente — as duas afirmações carregam a mesma informação."
+      },
+      {
+          "q": "Projeto A: TIR 50%, VPL +364. Projeto B: TIR 30%, VPL +909. Excludentes, TMA 10%. Qual escolher?",
+          "a": "B. Em projetos mutuamente excludentes decide-se pelo maior VPL — a TIR ignora a escala do investimento."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "VPL — cálculo",
+          "texto": "Considere um projeto com investimento inicial de R$ 1.000 e entradas de caixa de R$ 500 ao fim de cada um dos três anos seguintes. A taxa mínima de atratividade é de 10% a.a. O valor presente líquido do projeto é, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "R$ 500,00",
+              "R$ 243,43",
+              "R$ 1.243,43",
+              "−R$ 26,30",
+              "R$ 53,24"
+          ],
+          "correta": 1,
+          "coment": "VP das entradas = 500/1,10 + 500/1,10² + 500/1,10³ = 454,55 + 413,22 + 375,66 = 1.243,43. VPL = 1.243,43 − 1.000 = +243,43. A alternativa C é a pegadinha de quem esquece de subtrair o investimento."
+      },
+      {
+          "tema": "VPL — regra de decisão",
+          "texto": "Sobre o critério do valor presente líquido, é correto afirmar:",
+          "enun": "",
+          "alts": [
+              "Aceita-se o projeto sempre que o VPL for menor que zero.",
+              "VPL igual a zero significa ausência de lucro contábil.",
+              "Aceita-se o projeto quando o VPL for positivo, pois ele cria valor além de remunerar a TMA.",
+              "O VPL não depende da taxa de desconto utilizada.",
+              "O VPL não pode ser usado para comparar projetos independentes."
+          ],
+          "correta": 2,
+          "coment": "VPL > 0 significa que o projeto paga o investimento, remunera o capital à TMA e ainda sobra valor. VPL = 0 não é “lucro zero”: é remuneração exata à TMA. O VPL depende totalmente da taxa de desconto."
+      },
+      {
+          "tema": "TIR — conceito",
+          "texto": "A taxa interna de retorno de um projeto é:",
+          "enun": "",
+          "alts": [
+              "A taxa mínima exigida pelos acionistas.",
+              "A taxa de desconto que torna o VPL igual a zero.",
+              "A taxa de juros do financiamento do projeto.",
+              "A taxa de crescimento das entradas de caixa.",
+              "A taxa Selic acumulada no período."
+          ],
+          "correta": 1,
+          "coment": "Definição: a TIR é a taxa que zera o VPL. A taxa exigida pelos financiadores é a TMA — com a qual a TIR será comparada."
+      },
+      {
+          "tema": "TIR — equivalência",
+          "texto": "Para um projeto de fluxo convencional, se a TIR é exatamente igual à TMA, então:",
+          "enun": "",
+          "alts": [
+              "O VPL é positivo.",
+              "O VPL é negativo.",
+              "O VPL é zero.",
+              "O payback descontado não existe.",
+              "O índice de lucratividade é maior que 1."
+          ],
+          "correta": 2,
+          "coment": "TIR = TMA ⇔ VPL = 0: a taxa que zera o VPL é justamente a que está sendo usada para descontar. IL = 1 nesse ponto, e o payback descontado ocorre exatamente no fim da vida do projeto."
+      },
+      {
+          "tema": "TIR — interpolação",
+          "texto": "Um analista calculou o VPL de um projeto a duas taxas: a 20% a.a., VPL = +R$ 53,24; a 25% a.a., VPL = −R$ 24,00. A TIR do projeto, por interpolação linear, é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "21,0%",
+              "22,2%",
+              "23,4%",
+              "24,1%",
+              "25,0%"
+          ],
+          "correta": 2,
+          "coment": "TIR ≈ 20% + 5% × 53,24/(53,24 + 24,00) = 20% + 5% × 0,6894 ≈ 23,4%. (Exato: 23,38%.)"
+      },
+      {
+          "tema": "Payback simples",
+          "texto": "Um projeto exige R$ 1.000 iniciais e gera R$ 500 no ano 1 e R$ 700 no ano 2. Seu payback simples é:",
+          "enun": "",
+          "alts": [
+              "1,50 ano",
+              "1,71 ano",
+              "2,00 anos",
+              "1,94 ano",
+              "2,40 anos"
+          ],
+          "correta": 1,
+          "coment": "Ano 1 recupera 500; faltam 500 dos 700 do ano 2 → 1 + 500/700 = 1,71 ano. A alternativa D é o payback descontado (a 10%) — confusão clássica."
+      },
+      {
+          "tema": "Payback descontado",
+          "texto": "No mesmo projeto (−1.000; +500; +700; TMA 10%), o payback descontado é, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "1,71 ano",
+              "1,50 ano",
+              "2,00 anos",
+              "1,94 ano",
+              "2,35 anos"
+          ],
+          "correta": 3,
+          "coment": "VP(ano 1) = 500/1,10 = 454,55; faltam 545,45 dos 700/1,21 = 578,51 → 1 + 545,45/578,51 ≈ 1,94 ano."
+      },
+      {
+          "tema": "Payback — limitações",
+          "texto": "O defeito do payback simples que o payback descontado NÃO corrige é:",
+          "enun": "",
+          "alts": [
+              "Ignorar o valor do dinheiro no tempo.",
+              "Ignorar os fluxos de caixa posteriores ao período de retorno.",
+              "Usar fluxos nominais.",
+              "Não considerar a TMA.",
+              "Confundir receitas com fluxos de caixa."
+          ],
+          "correta": 1,
+          "coment": "O payback descontado corrige o VDT, mas ambos os paybacks ignoram tudo o que acontece depois do retorno — por isso nenhum deles mede rentabilidade."
+      },
+      {
+          "tema": "Múltiplas TIRs",
+          "texto": "Um projeto tem fluxos de −100 (hoje), +230 (ano 1) e −132 (ano 2). Sobre suas taxas internas de retorno:",
+          "enun": "",
+          "alts": [
+              "Não existe TIR para esse projeto.",
+              "Há uma única TIR, de 15%.",
+              "Há duas TIRs: 10% e 20%.",
+              "A TIR é negativa.",
+              "Há infinitas TIRs."
+          ],
+          "correta": 2,
+          "coment": "A 10%: −100 + 209,09 − 109,09 = 0. A 20%: −100 + 191,67 − 91,67 = 0. Duas trocas de sinal → duas raízes. A decisão deve usar o VPL."
+      },
+      {
+          "tema": "Múltiplas TIRs — causa",
+          "texto": "O fenômeno das múltiplas taxas internas de retorno está associado a:",
+          "enun": "",
+          "alts": [
+              "Fluxos de caixa uniformes.",
+              "Projetos de longa duração.",
+              "Fluxos com mais de uma mudança de sinal.",
+              "Taxas de desconto elevadas.",
+              "Projetos com capital de giro nulo."
+          ],
+          "correta": 2,
+          "coment": "Regra de Descartes: o número máximo de TIRs reais positivas é igual ao número de trocas de sinal do fluxo de caixa. Fluxo convencional (uma troca) → TIR única."
+      },
+      {
+          "tema": "Conflito VPL × TIR",
+          "texto": "O projeto A requer R$ 1.000 e devolve R$ 1.500 em um ano (TIR = 50%; VPL a 10% = +363,64). O projeto B requer R$ 5.000 e devolve R$ 6.500 em um ano (TIR = 30%; VPL a 10% = +909,09). Sendo mutuamente excludentes, deve-se escolher:",
+          "enun": "",
+          "alts": [
+              "A, pois tem maior TIR.",
+              "A, pois exige menos capital.",
+              "B, pois tem maior VPL.",
+              "B, pois tem maior TIR.",
+              "Nenhum, pois as TIRs divergem."
+          ],
+          "correta": 2,
+          "coment": "Em excludentes, o objetivo é maximizar riqueza: maior VPL vence. A TIR de A é maior porque mede eficiência sobre uma base pequena (problema de escala)."
+      },
+      {
+          "tema": "VPL — fluxos iguais",
+          "texto": "Investindo R$ 10.000 hoje para receber R$ 4.000 ao fim de cada um dos próximos 4 anos, com TMA de 10% a.a. (fator de anuidade = 3,1699), o VPL é, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 6.000,00",
+              "+R$ 2.679,46",
+              "−R$ 2.679,46",
+              "+R$ 12.679,46",
+              "+R$ 1.509,60"
+          ],
+          "correta": 1,
+          "coment": "VP = 4.000 × 3,1699 = 12.679,46; VPL = 12.679,46 − 10.000 = +2.679,46. Aceita-se."
+      },
+      {
+          "tema": "Payback descontado inexistente",
+          "texto": "Um projeto de R$ 5.000 gera R$ 2.000 ao ano por 3 anos; a TMA é 10%. Sobre o payback descontado, é correto afirmar que:",
+          "enun": "",
+          "alts": [
+              "É de 2,5 anos.",
+              "É de 2,35 anos.",
+              "Não existe, pois o VPL é negativo.",
+              "É de 3,0 anos.",
+              "É menor que o payback simples."
+          ],
+          "correta": 2,
+          "coment": "VP acumulado = 1.818,18 + 1.652,89 + 1.502,63 = 4.973,70 < 5.000 (VPL = −26,30). Os fluxos descontados nunca cobrem o investimento: payback descontado inexistente — embora o simples exista (2,5 anos)."
+      },
+      {
+          "tema": "VPL negativo",
+          "texto": "Investindo R$ 2.000 para receber R$ 800 ao ano por 3 anos, com TMA de 12% a.a. (fator de anuidade = 2,4018), a decisão correta é:",
+          "enun": "",
+          "alts": [
+              "Aceitar, pois o total recebido (2.400) supera o investido.",
+              "Rejeitar, pois o VPL é aproximadamente −R$ 78,53.",
+              "Aceitar, pois a TIR é de 12%.",
+              "Rejeitar, pois o payback simples é de 2,5 anos.",
+              "Aceitar, pois o VPL é positivo."
+          ],
+          "correta": 1,
+          "coment": "VP = 800 × 2,4018 = 1.921,47; VPL = 1.921,47 − 2.000 = −78,53 < 0 → rejeita. A TIR (≈9,7%) é menor que a TMA — concordância VPL × TIR. Receber mais do que investiu em termos nominais não basta: é preciso vencer a TMA."
+      },
+      {
+          "tema": "Sensibilidade do VPL à taxa",
+          "texto": "Mantidos os fluxos de caixa, se a TMA de um projeto convencional aumenta, então:",
+          "enun": "",
+          "alts": [
+              "O VPL aumenta.",
+              "O VPL diminui.",
+              "A TIR aumenta.",
+              "O payback simples aumenta.",
+              "O VPL não se altera."
+          ],
+          "correta": 1,
+          "coment": "Taxa maior desconta mais os fluxos futuros → VP menor → VPL menor. A TIR não depende da TMA (é intrínseca ao fluxo); o payback simples nem usa taxa."
+      },
+      {
+          "tema": "Reinvestimento",
+          "texto": "A crítica clássica à hipótese de reinvestimento embutida na TIR é que ela pressupõe reinvestimento dos fluxos intermediários:",
+          "enun": "",
+          "alts": [
+              "À taxa Selic.",
+              "À TMA do projeto.",
+              "À própria TIR, ainda que ela seja muito elevada.",
+              "À taxa de inflação.",
+              "À taxa zero."
+          ],
+          "correta": 2,
+          "coment": "A TIR assume reinvestimento à própria TIR — irrealista para TIRs de 40%+. O VPL assume reinvestimento à TMA, hipótese considerada mais verossímil. A TIRM corrige esse defeito."
+      },
+      {
+          "tema": "Aditividade",
+          "texto": "A propriedade da aditividade — VPL(A + B) = VPL(A) + VPL(B) — é relevante porque:",
+          "enun": "",
+          "alts": [
+              "Permite somar taxas internas de retorno.",
+              "Garante que o valor de uma carteira de projetos é a soma dos valores individuais, coerente com maximização de riqueza.",
+              "Elimina o risco dos projetos.",
+              "Dispensa o cálculo da TMA.",
+              "Torna o payback desnecessário."
+          ],
+          "correta": 1,
+          "coment": "Só o VPL é aditivo: TIRs não se somam, paybacks não se somam. Aditividade = o VPL mede diretamente a contribuição de cada projeto para a riqueza."
+      },
+      {
+          "tema": "Decisão integrada",
+          "texto": "Um projeto convencional tem TIR de 15% e TMA de 12%. É correto concluir que:",
+          "enun": "",
+          "alts": [
+              "O VPL, a 12%, é negativo.",
+              "O VPL, a 12%, é positivo, e o payback descontado é menor que a vida do projeto.",
+              "O projeto deve ser rejeitado.",
+              "O VPL, a 15%, é positivo.",
+              "O payback simples é de 15% ao ano."
+          ],
+          "correta": 1,
+          "coment": "TIR > TMA ⇔ VPL > 0 (fluxo convencional). VPL > 0 ⇔ os fluxos descontados cobrem o investimento antes do fim ⇔ payback descontado < vida. A 15% o VPL é zero — é a definição de TIR."
+      },
+      {
+          "tema": "Interpretação do VPL",
+          "texto": "Se o VPL de um projeto é +R$ 243,43, a leitura econômica correta é:",
+          "enun": "",
+          "alts": [
+              "O lucro contábil total do projeto é R$ 243,43.",
+              "O projeto gera R$ 243,43 de riqueza em valores de hoje, após remunerar o capital à TMA.",
+              "O retorno do projeto é de 243,43% ao ano.",
+              "O projeto recupera o investimento em 243,43 dias.",
+              "O investimento inicial deve ser reduzido em R$ 243,43."
+          ],
+          "correta": 1,
+          "coment": "VPL é excedente de valor presente: depois de pagar o investimento e remunerar o capital à TMA, sobram R$ 243,43 em reais de hoje."
+      },
+      {
+          "tema": "Uso gerencial do payback",
+          "texto": "Apesar de suas limitações teóricas, o payback é amplamente usado pelas empresas principalmente como medida de:",
+          "enun": "",
+          "alts": [
+              "Rentabilidade de longo prazo.",
+              "Risco e liquidez do investimento.",
+              "Criação de valor para o acionista.",
+              "Custo de oportunidade do capital.",
+              "Eficiência fiscal do projeto."
+          ],
+          "correta": 1,
+          "coment": "Payback curto = capital exposto por menos tempo = menor risco de iliquidez. Usado como filtro complementar, nunca como critério único de valor."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "O valor presente líquido (VPL) é obtido por:",
+          "enun": "",
+          "alts": [
+              "Soma dos fluxos nominais menos o investimento.",
+              "Soma dos fluxos descontados pela TMA menos o investimento inicial.",
+              "Divisão do investimento pelo fluxo anual.",
+              "Multiplicação da TIR pela TMA.",
+              "Soma dos lucros contábeis projetados."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Se o VPL de um projeto, calculado à TMA, for negativo, a decisão é:",
+          "enun": "",
+          "alts": [
+              "Aceitar, desde que a TIR seja positiva.",
+              "Rejeitar o projeto.",
+              "Aceitar se o payback for curto.",
+              "Aceitar se houver valor residual.",
+              "Recalcular com taxa menor sempre."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A TIR é a taxa de desconto que:",
+          "enun": "",
+          "alts": [
+              "Maximiza o VPL.",
+              "Torna o VPL igual a zero.",
+              "Iguala o payback à vida do projeto.",
+              "Minimiza o investimento.",
+              "Iguala TMA e Selic."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Aceita-se um projeto pelo critério da TIR quando:",
+          "enun": "",
+          "alts": [
+              "TIR > TMA.",
+              "TIR < TMA.",
+              "TIR = 0.",
+              "TIR < inflação.",
+              "TIR = payback."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Fácil",
+          "texto": "O payback simples de um investimento de R$ 2.000 com entradas anuais constantes de R$ 1.000 é:",
+          "enun": "",
+          "alts": [
+              "1,0 ano",
+              "1,5 ano",
+              "2,0 anos",
+              "2,5 anos",
+              "3,0 anos"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "Uma limitação do payback simples, corrigida pelo payback descontado, é:",
+          "enun": "",
+          "alts": [
+              "Ignorar os fluxos após o retorno.",
+              "Ignorar o valor do dinheiro no tempo.",
+              "Depender da TMA.",
+              "Ser medido em anos.",
+              "Exigir fluxos uniformes."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Para fluxo convencional e projeto independente, VPL > 0 implica:",
+          "enun": "",
+          "alts": [
+              "TIR < TMA.",
+              "TIR = TMA.",
+              "TIR > TMA.",
+              "Payback maior que a vida do projeto.",
+              "VPL descontado negativo."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "O critério considerado teoricamente superior para maximizar a riqueza dos acionistas é o:",
+          "enun": "",
+          "alts": [
+              "Payback simples.",
+              "Payback descontado.",
+              "VPL.",
+              "Período de retorno.",
+              "Lucro contábil médio."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "O payback é melhor interpretado como medida de:",
+          "enun": "",
+          "alts": [
+              "Rentabilidade.",
+              "Criação de valor.",
+              "Risco e liquidez.",
+              "Custo de capital.",
+              "Eficiência operacional."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "Um fluxo de caixa convencional é aquele em que:",
+          "enun": "",
+          "alts": [
+              "Todos os fluxos são iguais.",
+              "Há um ou mais investimentos seguidos de entradas positivas, com uma única troca de sinal.",
+              "Não há investimento inicial.",
+              "Os fluxos crescem 10% ao ano.",
+              "O primeiro fluxo é positivo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Projeto: −R$ 1.000 hoje; +R$ 500 ao ano por 3 anos; TMA 10% a.a. O VPL é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 500,00",
+              "+R$ 243,43",
+              "−R$ 243,43",
+              "+R$ 1.243,43",
+              "+R$ 33,06"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "No mesmo projeto (−1.000; +500 × 3; 10%), o payback descontado é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "2,00 anos",
+              "2,18 anos",
+              "2,35 anos",
+              "2,50 anos",
+              "3,00 anos"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "A 20% a.a. o VPL de um projeto é +R$ 53,24; a 25% a.a. é −R$ 24,00. A TIR interpolada é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "21,5%",
+              "22,8%",
+              "23,4%",
+              "24,0%",
+              "24,7%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Um projeto de R$ 10.000 rende R$ 3.000, R$ 4.000, R$ 5.000 e R$ 6.000 nos anos 1 a 4. O payback simples é:",
+          "enun": "",
+          "alts": [
+              "2,0 anos",
+              "2,4 anos",
+              "2,6 anos",
+              "3,0 anos",
+              "3,2 anos"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Se a TIR de um projeto convencional é igual à TMA, então:",
+          "enun": "",
+          "alts": [
+              "VPL > 0 e aceita-se.",
+              "VPL < 0 e rejeita-se.",
+              "VPL = 0 e o projeto é indiferente.",
+              "O payback descontado não existe.",
+              "A TIR foi mal calculada."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "O fluxo −100; +230; −132 apresenta:",
+          "enun": "",
+          "alts": [
+              "TIR única de 15%.",
+              "Duas TIRs: 10% e 20%.",
+              "Nenhuma TIR real.",
+              "TIR negativa apenas.",
+              "VPL sempre positivo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Investindo R$ 4.000 para receber R$ 1.500 ao ano por 4 anos, com TMA de 12% (fator de anuidade 3,0373), o VPL é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "−R$ 556,02",
+              "+R$ 556,02",
+              "+R$ 2.000,00",
+              "+R$ 4.556,02",
+              "−R$ 322,41"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Um projeto de R$ 5.000 gera R$ 2.000 ao ano por 3 anos; TMA 10%. Sobre seus indicadores, é correto afirmar:",
+          "enun": "",
+          "alts": [
+              "VPL > 0 e payback descontado de 2,35 anos.",
+              "Payback simples de 2,5 anos e payback descontado inexistente (VPL ≈ −26,30).",
+              "TIR ≈ 23% e VPL > 0.",
+              "Payback descontado de 2,5 anos.",
+              "VPL = 0."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "A hipótese de reinvestimento embutida no VPL é que os fluxos intermediários são reinvestidos:",
+          "enun": "",
+          "alts": [
+              "À TIR do projeto.",
+              "À TMA (custo de oportunidade do capital).",
+              "À inflação.",
+              "À taxa zero.",
+              "À taxa de poupança."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Investindo R$ 2.000 para receber R$ 1.000 ao ano por 3 anos, com TMA de 10%, tem-se, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "VPL +486,85; TIR ≈ 23,4%; payback simples 2,0 anos.",
+              "VPL −486,85; TIR ≈ 9,7%.",
+              "VPL +1.000; TIR = 50%.",
+              "VPL +486,85; payback descontado 2,0 anos.",
+              "VPL +26,30; TIR = 10%."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projetos mutuamente excludentes: A custa R$ 1.000 e devolve R$ 1.500 em 1 ano; B custa R$ 5.000 e devolve R$ 6.500 em 1 ano; TMA 10%. A decisão correta e sua justificativa são:",
+          "enun": "",
+          "alts": [
+              "A, porque TIR(A) = 50% > TIR(B) = 30%.",
+              "B, porque VPL(B) = +909,09 > VPL(A) = +363,64.",
+              "A, porque o payback é menor.",
+              "Empate, pois ambos têm VPL positivo.",
+              "B, porque TIR(B) > TMA."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Considere o fluxo −100; +230; −132, com TMA de 15%. Pelo critério do VPL, o projeto deve ser:",
+          "enun": "",
+          "alts": [
+              "Rejeitado, pois há duas TIRs.",
+              "Aceito, pois o VPL a 15% é positivo (15% está entre as duas TIRs de 10% e 20%).",
+              "Rejeitado, pois o VPL a 15% é negativo.",
+              "Aceito, pois a TIR média é 15%.",
+              "Indiferente."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre o payback descontado, assinale a afirmativa correta:",
+          "enun": "",
+          "alts": [
+              "É sempre menor que o payback simples.",
+              "Existe mesmo quando o VPL é negativo.",
+              "Ser menor que a vida do projeto equivale a VPL positivo.",
+              "Considera os fluxos após o retorno.",
+              "Não depende da TMA."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto de R$ 8.000 gera R$ 3.000 ao ano por 4 anos; TMA 10% (fator de anuidade 3,1699). VPL, TIR e payback simples são, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "VPL −1.509,60; TIR 9,7%; payback 2,0 anos.",
+              "VPL +1.509,60; TIR ≈ 18,4%; payback ≈ 2,67 anos.",
+              "VPL +4.000; TIR 50%; payback 2,5 anos.",
+              "VPL +1.509,60; TIR ≈ 23,4%; payback 3,26 anos.",
+              "VPL +509,60; TIR 12%; payback 3,26 anos."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Se a TMA de um projeto convencional aumenta, o efeito sobre os indicadores é:",
+          "enun": "",
+          "alts": [
+              "VPL aumenta; TIR aumenta; payback simples não muda.",
+              "VPL diminui; TIR não muda; payback descontado aumenta.",
+              "VPL não muda; TIR diminui; payback descontado diminui.",
+              "VPL diminui; TIR diminui; payback simples aumenta.",
+              "Todos permanecem constantes."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Em relação à aditividade dos critérios de avaliação, é correto afirmar que:",
+          "enun": "",
+          "alts": [
+              "TIR(A+B) = TIR(A) + TIR(B).",
+              "Payback(A+B) = payback(A) + payback(B).",
+              "VPL(A+B) = VPL(A) + VPL(B), o que o torna coerente com a maximização de riqueza.",
+              "Nenhum critério é aditivo.",
+              "IL(A+B) = IL(A) + IL(B)."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto independente tem payback descontado de 3,26 anos e vida de 4 anos, à TMA de 10%. Conclui-se que:",
+          "enun": "",
+          "alts": [
+              "O VPL é negativo.",
+              "A TIR é menor que 10%.",
+              "O VPL é positivo e a TIR é maior que 10%.",
+              "O payback simples é maior que 3,26 anos.",
+              "O projeto deve ser rejeitado."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "O chamado “problema do timing” da TIR em projetos excludentes refere-se a:",
+          "enun": "",
+          "alts": [
+              "Projetos com datas de início diferentes não podem ser comparados.",
+              "Projetos de mesmo investimento, mas com fluxos concentrados em épocas distintas, podem ter rankings diferentes pela TIR e pelo VPL conforme a taxa de desconto.",
+              "A TIR não pode ser calculada para fluxos anuais.",
+              "O payback ignora o timing dos fluxos.",
+              "A TMA muda ao longo do projeto."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Analista encontra VPL = +R$ 217,13 (TMA 10%) para um projeto de R$ 6.000 com entradas anuais de R$ 2.500 por 3 anos. Sobre a TIR do projeto, é correto afirmar que está:",
+          "enun": "",
+          "alts": [
+              "Abaixo de 10%.",
+              "Exatamente em 10%.",
+              "Pouco acima de 10% (≈ 12%).",
+              "Acima de 20%.",
+              "Impossível de estimar."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Assinale a afirmativa INCORRETA sobre os indicadores econômicos de projetos:",
+          "enun": "",
+          "alts": [
+              "O VPL pressupõe reinvestimento à TMA.",
+              "A TIR pode não existir para certos fluxos não convencionais.",
+              "O payback descontado sempre existe quando o simples existe.",
+              "O VPL é aditivo.",
+              "Em excludentes, o maior VPL deve prevalecer sobre a maior TIR."
+          ],
+          "correta": 2
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei escrever a fórmula do VPL e aplico a regra de decisão (> 0 aceita) sem hesitar.",
+      "Calculo VPL de fluxos iguais usando o fator de anuidade e de fluxos não uniformes descontando um a um.",
+      "Sei definir TIR como a taxa que zera o VPL e aplico a regra TIR > TMA.",
+      "Encontro a TIR por tentativa e erro e faço a interpolação linear corretamente.",
+      "Calculo payback simples com interpolação da fração do período.",
+      "Calculo payback descontado e sei que ele é sempre ≥ payback simples.",
+      "Sei que VPL < 0 ⇒ payback descontado inexistente (mas o simples pode existir).",
+      "Reconheço fluxos não convencionais e sei que nº de TIRs ≤ nº de trocas de sinal.",
+      "Em projetos mutuamente excludentes, decido pelo maior VPL (nunca pela maior TIR).",
+      "Fiz o mini-simulado com ≥ 24/30 e revisei todos os erros comentados."
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Esquecer de subtrair o investimento inicial ao somar os valores presentes — confunde VP dos fluxos com VPL.",
+      "Descontar o investimento inicial, que já está em valor presente (data 0).",
+      "Somar os fluxos nominais e chamar o resultado de VPL — sem desconto não há valor presente.",
+      "Usar a TIR como taxa de desconto no lugar da TMA ao calcular o VPL.",
+      "Afirmar que VPL = 0 significa lucro zero — significa remuneração exata à TMA.",
+      "Comparar a TIR com a inflação ou com a Selic em vez de comparar com a TMA.",
+      "Na interpolação da TIR, usar duas taxas com VPLs de mesmo sinal — a interpolação exige um VPL positivo e um negativo.",
+      "Acreditar que todo fluxo tem TIR única — fluxos não convencionais podem ter várias (ou nenhuma).",
+      "Somar TIRs de projetos como se fossem VPLs — a TIR não é aditiva.",
+      "Escolher, entre projetos excludentes, o de maior TIR em vez do de maior VPL (problema de escala).",
+      "Calcular o payback descontado com fluxos nominais — sem desconto, ele é igual ao simples.",
+      "Arredondar o payback sempre para cima em vez de interpolar a fração (ex.: 1,71 ano, não 2 anos).",
+      "Afirmar que o payback descontado é menor que o simples — o desconto reduz os fluxos, logo o retorno demora mais.",
+      "Procurar payback descontado em projeto com VPL negativo — ele não existe nesse caso.",
+      "Usar o payback como medida de rentabilidade — ele mede risco/liquidez e ignora o pós-retorno.",
+      "Desprezar fluxos após o payback na decisão final — um projeto pode ter payback longo e VPL altíssimo.",
+      "Trocar o sinal de fluxos negativos intermediários (desinvestimento) e mascarar o problema das múltiplas TIRs.",
+      "Esquecer que a TIR pressupõe reinvestimento à própria TIR — hipótese cobrada como defeito do método.",
+      "Achar que a TIR muda quando a TMA muda — a TIR é intrínseca ao fluxo; quem muda é o VPL.",
+      "Ignorar a equivalência TIR = TMA ⇔ VPL = 0, atalho que resolve dezenas de assertivas teóricas."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "VPL (Valor Presente Líquido)",
+          "Soma dos fluxos de caixa futuros descontados pela TMA, menos o investimento inicial; mede a riqueza criada pelo projeto em valores de hoje."
+      ],
+      [
+          "TIR (Taxa Interna de Retorno)",
+          "Taxa de desconto que torna o VPL igual a zero; rentabilidade intrínseca do projeto, comparada à TMA para a decisão."
+      ],
+      [
+          "TMA (Taxa Mínima de Atratividade)",
+          "Custo de oportunidade do capital; taxa usada para descontar os fluxos no VPL e no payback descontado."
+      ],
+      [
+          "Payback simples",
+          "Tempo necessário para a soma dos fluxos nominais igualar o investimento inicial."
+      ],
+      [
+          "Payback descontado",
+          "Tempo necessário para a soma dos fluxos descontados pela TMA igualar o investimento inicial; não existe quando o VPL é negativo."
+      ],
+      [
+          "Fluxo convencional",
+          "Fluxo com uma única troca de sinal: saída(s) inicial(is) seguida(s) de entradas positivas. Garante TIR única."
+      ],
+      [
+          "Fluxo não convencional",
+          "Fluxo com mais de uma troca de sinal (ex.: −100; +230; −132); pode gerar múltiplas TIRs."
+      ],
+      [
+          "Múltiplas TIRs",
+          "Mais de uma taxa que zera o VPL, típica de fluxos não convencionais; o número máximo de TIRs iguala o número de trocas de sinal."
+      ],
+      [
+          "Interpolação linear",
+          "Técnica para aproximar a TIR a partir de dois VPLs de sinais opostos: k₁ + (k₂−k₁) × VPL₁/(VPL₁ − VPL₂)."
+      ],
+      [
+          "Fator de anuidade",
+          "Multiplicador [(1 − (1+k)⁻ⁿ)/k] que converte uma série de pagamentos iguais em valor presente."
+      ],
+      [
+          "Projetos mutuamente excludentes",
+          "Projetos que competem entre si: aceitar um impede aceitar o outro; a decisão deve ser feita pelo maior VPL."
+      ],
+      [
+          "Projetos independentes",
+          "Projetos cuja aceitação de um não afeta a do outro; aceitam-se todos com VPL > 0 (TIR > TMA)."
+      ],
+      [
+          "Problema de escala",
+          "Distorção da TIR ao comparar projetos de tamanhos diferentes: uma TIR alta sobre investimento pequeno pode criar menos valor que uma TIR menor sobre investimento grande."
+      ],
+      [
+          "Problema de timing",
+          "Distorção da TIR quando projetos de mesmo investimento concentram fluxos em épocas diferentes; o ranking pode inverter conforme a taxa de desconto."
+      ],
+      [
+          "Aditividade",
+          "Propriedade exclusiva do VPL: o valor de projetos combinados é a soma dos valores individuais — VPL(A+B) = VPL(A) + VPL(B)."
+      ],
+      [
+          "Hipótese de reinvestimento",
+          "Premissa sobre a taxa de reaplicação dos fluxos intermediários: TMA no VPL; a própria TIR no critério da TIR."
+      ],
+      [
+          "IL (Índice de Lucratividade)",
+          "Razão VP das entradas ÷ investimento; IL > 1 equivale a VPL > 0; útil em racionamento de capital."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

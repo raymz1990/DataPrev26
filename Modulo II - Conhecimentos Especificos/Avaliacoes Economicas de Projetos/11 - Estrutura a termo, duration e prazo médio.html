@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estrutura a Termo, Duration e Prazo Médio | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">11 - Estrutura a termo, duration e prazo médio</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html">06 - Parâmetros para análise de projetos</option>
+    <option value="07 - Indicadores econômicos de projetos (VPL, TIR, payback).html">07 - Indicadores: VPL, TIR, payback</option>
+    <option value="08 - Análise de sensibilidade e cenários.html">08 - Análise de sensibilidade e cenários</option>
+    <option value="09 - Análise de risco e incerteza na avaliação de projetos.html">09 - Risco e incerteza em projetos</option>
+    <option value="10 - Análise de projetos sociais.html">10 - Análise de projetos sociais</option>
+    <option value="11 - Estrutura a termo, duration e prazo médio.html" selected>11 - Estrutura a termo, duration e prazo médio</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Estrutura a Termo e Duration</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 11 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Estrutura a Termo, Duration e Prazo Médio</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 11</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 5 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Alta <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>VDT e juros compostos (Adm. Fin.) + Tópico 05</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Médio — duration como prazo médio e como sensibilidade é o foco</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Definir a <b>estrutura a termo das taxas de juros (ETTJ)</b> e interpretar os formatos da curva: normal, invertida e plana.</li>
+            <li>Explicar as teorias da ETTJ: <b>expectativas</b>, <b>preferência por liquidez</b> e <b>segmentação de mercados</b>.</li>
+            <li>Calcular a <b>taxa a termo (forward)</b> implícita entre duas taxas spot.</li>
+            <li>Calcular a <b>duration de Macaulay</b> como prazo médio ponderado dos fluxos de um título.</li>
+            <li>Usar a <b>duration modificada</b> para estimar a variação do preço do título quando a taxa muda: ΔP/P ≈ −D<sub>mod</sub> × Δy.</li>
+            <li>Conceituar <b>prazo médio</b> e <b>imunização</b> de carteiras (casar duration de ativo e passivo) — essencial para fundos de pensão como a DATAPREV.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Estrutura a termo (ETTJ)</b> é a relação entre taxa de juros e prazo de vencimento: quanto rende um título de 1 ano, de 2, de 5, de 10. Desenhada, vira a <b>curva de juros</b>:</p>
+          <ul class="styled">
+            <li><b>Normal (ascendente)</b> — longas &gt; curtas: situação habitual (mais prazo, mais risco, mais prêmio). Pela teoria das <b>expectativas</b>, indica que o mercado espera <b>alta</b> de juros.</li>
+            <li><b>Invertida</b> — curtas &gt; longas: mercado espera <b>queda</b> de juros; historicamente antecipa recessões.</li>
+            <li><b>Plana</b> — taxas iguais: expectativa de estabilidade.</li>
+          </ul>
+          <p><b>Duration de Macaulay</b> é o <b>prazo médio ponderado</b> de recebimento dos fluxos do título (pesos = valor presente de cada fluxo). <b>Duration modificada</b> = D<sub>Mac</sub>/(1+y) mede a <b>sensibilidade do preço à taxa</b>: ΔP/P ≈ −D<sub>mod</sub> × Δy. Regras: quanto maior o prazo, maior a duration; quanto maior o cupom, menor a duration; quanto maior a taxa, menor a duration; título <b>zero-cupom</b> tem duration igual ao prazo.</p>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Duration tem dois papéis: <b>prazo médio</b> (anos) e <b>elasticidade</b> do preço à taxa. E a curva invertida é o sinal clássico de expectativa de <b>queda de juros/recessão</b>.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">ETTJ ·<br>Duration ·<br>Prazo Médio</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Curva de juros</h4><ul><li>Normal: longas &gt; curtas</li><li>Invertida: espera queda/recessão</li><li>Plana: estabilidade</li></ul></div>
+            <div class="mm-node"><h4>Teorias</h4><ul><li>Expectativas</li><li>Preferência por liquidez</li><li>Segmentação de mercados</li></ul></div>
+            <div class="mm-node"><h4>Taxa forward</h4><ul><li>f(1,2) = (1+s₂)²/(1+s₁) − 1</li><li>Taxa implícita futura</li></ul></div>
+            <div class="mm-node"><h4>Duration</h4><ul><li>Macaulay: prazo médio ponderado</li><li>Modificada: D/(1+y)</li><li>ΔP/P ≈ −D_mod × Δy</li></ul></div>
+            <div class="mm-node"><h4>Regras e uso</h4><ul><li>Prazo ↑ → D ↑</li><li>Cupom ↑ → D ↓</li><li>Zero-cupom: D = prazo</li><li>Imunização: D(ativo) = D(passivo)</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Estrutura a termo das taxas de juros (ETTJ)</h3>
+        <div class="card">
+          <p>A ETTJ mostra, em um dado momento, a taxa de juros para cada prazo de vencimento de títulos equivalentes em risco (em geral, títulos públicos federais). Seu gráfico é a <b>curva de juros</b> — no Brasil, a curva DI da B3; nos EUA, a curva dos Treasuries.</p>
+          <table>
+            <tr><th>Formato</th><th>Relação</th><th>Leitura econômica</th></tr>
+            <tr><td><b>Normal (ascendente)</b></td><td>Taxas longas &gt; curtas</td><td>Situação habitual: prêmio por prazo/risco; pela teoria das expectativas, mercado espera <b>alta</b> de juros</td></tr>
+            <tr><td><b>Invertida</b></td><td>Taxas curtas &gt; longas</td><td>Expectativa de <b>queda</b> de juros; sinal histórico de <b>recessão</b> à frente</td></tr>
+            <tr><td><b>Plana</b></td><td>Taxas iguais nos prazos</td><td>Expectativa de estabilidade / transição entre regimes</td></tr>
+          </table>
+        </div>
+
+        <h3>4.2 Por que a curva tem esse formato? As três teorias</h3>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Teoria das expectativas</b> — a taxa longa é a média das taxas curtas esperadas. Curva ascendente ⇒ mercado espera juros maiores no futuro. <b>Taxa forward</b>: a taxa futura implícita na curva — se s₁ = 10% (1 ano) e s₂ = 11% (2 anos), a taxa implícita para o 2º ano é f = (1,11)²/(1,10) − 1 = <b>12,01%</b>.</li>
+            <li><b>Preferência por liquidez</b> — investidores exigem prêmio para imobilizar o dinheiro por mais prazo; por isso a curva tende a ser ascendente mesmo sem expectativa de alta.</li>
+            <li><b>Segmentação de mercados</b> — cada prazo tem seus próprios compradores e vendedores (bancos no curto, fundos de pensão no longo); o formato da curva reflete a oferta e a demanda em cada segmento.</li>
+          </ul>
+          <div class="box info"><div class="box-title">Nota DATAPREV</div><p>Fundos de pensão e previdência são compradores naturais do <b>longo prazo</b> (seus passivos são de décadas) — é a demanda deles que “puxa” a ponta longa da curva.</p></div>
+        </div>
+
+        <h3>4.3 Duration de Macaulay — o prazo médio dos fluxos</h3>
+        <div class="card">
+          <p>Um título de 3 anos não “volta” todo no ano 3: os cupons chegam antes. A <b>duration de Macaulay</b> mede o <b>prazo médio ponderado</b> de recebimento, ponderando cada fluxo pelo seu valor presente:</p>
+          <p style="text-align:center"><b>D = Σ [ t × VP(FCₜ) ] ÷ Preço</b></p>
+          <p><b>Exemplo passo a passo</b> — título de R$ 1.000 de valor de face, 3 anos, cupom de 10% (R$ 100/ano), taxa de 10% a.a.:</p>
+          <table>
+            <tr><th>Ano</th><th>Fluxo</th><th>VP (a 10%)</th><th>t × VP</th></tr>
+            <tr><td>1</td><td>100</td><td>90,91</td><td>90,91</td></tr>
+            <tr><td>2</td><td>100</td><td>82,64</td><td>165,29</td></tr>
+            <tr><td>3</td><td>1.100</td><td>826,45</td><td>2.479,34</td></tr>
+            <tr><td colspan="2"><b>Total</b></td><td><b>1.000,00</b> (preço)</td><td><b>2.735,54</b></td></tr>
+          </table>
+          <p>D = 2.735,54 / 1.000 = <b>2,74 anos</b> — o título “vence em 3 anos”, mas seu dinheiro volta, em média, em 2,74 anos.</p>
+          <div class="box ok"><div class="box-title">Casos extremos que a banca adora</div><p><b>Título zero-cupom</b>: um único fluxo no vencimento ⇒ duration = prazo (título de 5 anos ⇒ D = 5). <b>Perpetuidade</b>: D = (1+y)/y — a 10%, D = 11 anos.</p></div>
+        </div>
+
+        <h3>4.4 Duration modificada — a sensibilidade do preço à taxa</h3>
+        <div class="card">
+          <p>Dividindo a duration de Macaulay por (1 + y), obtém-se a <b>duration modificada</b>, que mede quanto o <b>preço</b> do título varia quando a taxa muda:</p>
+          <p style="text-align:center"><b>D<sub>mod</sub> = D / (1 + y)</b> &nbsp;&nbsp;→&nbsp;&nbsp; <b>ΔP/P ≈ −D<sub>mod</sub> × Δy</b></p>
+          <p>No exemplo: D<sub>mod</sub> = 2,7355 / 1,10 = <b>2,49</b>. Se a taxa subir 1 p.p. (10% → 11%), o preço cai aproximadamente 2,49%: 1.000 × (1 − 0,0249) ≈ <b>R$ 975,13</b> (o valor exato é 975,56 — a aproximação linear erra pouco para variações pequenas).</p>
+          <div class="box warn"><div class="box-title">Convexidade (por que a aproximação erra)</div><p>A relação preço × taxa é <b>convexa</b> (curva), não linear: a fórmula da duration é a reta tangente. Para variações grandes de taxa, a duration sozinha <b>superestima as quedas</b> e <b>subestima as altas</b>; a correção é o termo de convexidade.</p></div>
+          <table>
+            <tr><th>Regra</th><th>Efeito na duration</th></tr>
+            <tr><td>Prazo maior</td><td>Duration maior (3 anos → 2,74; 4 anos → 3,49)</td></tr>
+            <tr><td>Cupom maior</td><td>Duration menor (cupom 10% → 2,74; cupom 8% → 2,78)</td></tr>
+            <tr><td>Taxa maior</td><td>Duration menor (a 10% → 2,74; a 12% → 2,73)</td></tr>
+            <tr><td>Zero-cupom</td><td>Duration = prazo</td></tr>
+          </table>
+        </div>
+
+        <h3>4.5 Prazo médio e imunização — a lógica dos fundos de pensão</h3>
+        <div class="card">
+          <p>O <b>prazo médio</b> de uma carteira (ou de um passivo) é a duration aplicada a qualquer fluxo de caixa — não só títulos. Um fundo de previdência como os ligados à DATAPREV tem <b>passivos</b> (benefícios a pagar) com duration de 15, 20 anos. Se o <b>ativo</b> (a carteira de títulos) tiver duration muito menor, uma queda de juros dispara o valor presente do passivo sem contrapartida no ativo — descasamento de duration (o <b>mismatch</b>).</p>
+          <p><b>Imunização</b> é a estratégia de igualar a duration do ativo à do passivo: assim, qualquer movimento da taxa afeta os dois lados na mesma proporção e o <b>superávit/déficit atuarial fica protegido</b> de oscilações de juros.</p>
+          <div class="box fgv"><div class="box-title">Como a FGV cobra</div><p>“A imunização de uma carteira consiste em igualar a duration dos ativos à dos passivos, protegendo o resultado de variações da taxa de juros” — verdadeiro. Pegadinha: trocar duration por prazo de vencimento ou por valor de mercado.</p></div>
+        </div>
+
+        <h3>4.6 Ligação com a avaliação de projetos</h3>
+        <div class="card">
+          <p>Por que este tópico está em Avaliação de Projetos? Porque a mesma matemática governa os dois lados: o VPL desconta fluxos por taxas — e a <b>ETTJ diz qual taxa usar para cada prazo</b> (projetos longos deveriam ser descontados pela taxa longa, não pela curta). E a duration mede quanto o VPL de um projeto (ou o valor de uma carteira) é <b>sensível à taxa de desconto</b> — a ponte direta com a análise de sensibilidade do tópico 08 e com o VAR do tópico 12.</p>
+        </div>
+      </section>
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Formatos da curva</b>: identificar normal/invertida/plana e a leitura econômica (invertida → expectativa de queda de juros/recessão).</li>
+            <li><b>Teorias da ETTJ</b>: expectativas (taxa longa = média das curtas esperadas), preferência por liquidez (prêmio por prazo), segmentação (oferta/demanda por prazo).</li>
+            <li><b>Taxa forward</b>: cálculo f = (1+s₂)²/(1+s₁) − 1.</li>
+            <li><b>Duration de Macaulay</b>: cálculo como prazo médio ponderado pelo VP dos fluxos; zero-cupom ⇒ D = prazo.</li>
+            <li><b>Duration modificada</b>: regra ΔP/P ≈ −D_mod × Δy — quanto o preço cai/sobe quando a taxa sobe/desce.</li>
+            <li><b>Relações qualitativas</b>: prazo ↑ D ↑; cupom ↑ D ↓; taxa ↑ D ↓; preço × taxa em sentidos opostos.</li>
+            <li><b>Imunização</b>: igualar duration de ativo e passivo — cobrada em provas de previdência e estatais financeiras.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>ETTJ</b>: taxa × prazo. Normal (longas &gt; curtas), invertida (espera queda/recessão), plana (estabilidade).</li>
+            <li><b>Expectativas</b>: taxa longa = média das curtas esperadas. <b>Liquidez</b>: prêmio por prazo. <b>Segmentação</b>: oferta/demanda por prazo.</li>
+            <li><b>Forward</b>: f(1,2) = (1+s₂)²/(1+s₁) − 1. Ex.: 10% e 11% → 12,01%.</li>
+            <li><b>D<sub>Macaulay</sub></b> = Σ t×VP(FCₜ) ÷ Preço — prazo médio ponderado.</li>
+            <li><b>D<sub>modificada</sub></b> = D/(1+y) — sensibilidade: ΔP/P ≈ −D_mod × Δy.</li>
+            <li><b>Zero-cupom</b>: D = prazo. <b>Perpetuidade</b>: D = (1+y)/y (a 10% → 11 anos).</li>
+            <li>Prazo ↑ ⇒ D ↑ · Cupom ↑ ⇒ D ↓ · Taxa ↑ ⇒ D ↓ · Preço × taxa: sentidos opostos.</li>
+            <li><b>Imunização</b>: D(ativo) = D(passivo) — protege o superávit de oscilações de juros.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>ETTJ</b> = taxa por prazo; curva normal é o habitual; invertida anuncia expectativa de queda/recessão.</li>
+            <li><b>Três teorias:</b> expectativas, preferência por liquidez, segmentação.</li>
+            <li><b>Forward:</b> com s₁ = 10% e s₂ = 11%, o 2º ano rende implicitamente 12,01%.</li>
+            <li><b>Macaulay:</b> prazo médio ponderado pelo VP dos fluxos. Título 3a/10%/10% → D = 2,74 anos.</li>
+            <li><b>Modificada:</b> 2,74/1,10 = 2,49 → +1 p.p. na taxa ⇒ preço ≈ −2,49% (975,13; exato 975,56).</li>
+            <li><b>Zero-cupom</b> D = prazo; <b>perpetuidade</b> D = (1+y)/y.</li>
+            <li><b>Regras:</b> mais prazo → mais D; mais cupom → menos D; mais taxa → menos D.</li>
+            <li><b>Convexidade:</b> a relação é curva; a duration superestima quedas e subestima altas em grandes variações.</li>
+            <li><b>Imunização:</b> D(ativo) = D(passivo) — essencial para fundos de pensão (passivos longuíssimos).</li>
+            <li><b>Ponte:</b> ETTJ diz qual taxa usar por prazo; duration mede a sensibilidade do VPL/valor à taxa.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Conceito</th><th>Fórmula</th><th>Exemplo</th></tr>
+            <tr><td><b>Taxa forward</b></td><td>f(1,2) = (1+s₂)²/(1+s₁) − 1</td><td>(1,11)²/1,10 − 1 = 12,01%</td></tr>
+            <tr><td><b>Duration de Macaulay</b></td><td>D = Σ [t × VP(FCₜ)] / Preço</td><td>3 anos, cupom 10%, y 10% → 2,74 anos</td></tr>
+            <tr><td><b>Duration modificada</b></td><td>D_mod = D / (1 + y)</td><td>2,7355/1,10 = 2,49</td></tr>
+            <tr><td><b>Sensibilidade do preço</b></td><td>ΔP/P ≈ −D_mod × Δy</td><td>+1 p.p. → −2,49% (975,13)</td></tr>
+            <tr><td><b>Zero-cupom</b></td><td>D = prazo</td><td>zero de 5 anos → D = 5</td></tr>
+            <tr><td><b>Perpetuidade</b></td><td>D = (1 + y)/y</td><td>a 10% → 11 anos</td></tr>
+            <tr><td><b>Imunização</b></td><td>D(ativo) = D(passivo)</td><td>superávit protegido de Δjuros</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>Duration de Macaulay — título R$ 1.000, 3 anos, cupom 10%, taxa 10%</h4>
+          <table>
+            <tr><th>Ano</th><th>Fluxo</th><th>VP (10%)</th><th>Peso</th><th>t × VP</th></tr>
+            <tr><td>1</td><td>100</td><td>90,91</td><td>9,09%</td><td>90,91</td></tr>
+            <tr><td>2</td><td>100</td><td>82,64</td><td>8,26%</td><td>165,29</td></tr>
+            <tr><td>3</td><td>1.100</td><td>826,45</td><td>82,65%</td><td>2.479,34</td></tr>
+            <tr><td colspan="2"><b>Total</b></td><td><b>1.000,00</b></td><td><b>100%</b></td><td><b>2.735,54 → D = 2,74</b></td></tr>
+          </table>
+          <h4>Duration conforme prazo, cupom e taxa (face R$ 1.000)</h4>
+          <table>
+            <tr><th>Título</th><th>Duration</th></tr>
+            <tr><td>2 anos, cupom 10%, y 10%</td><td>1,91</td></tr>
+            <tr><td>3 anos, cupom 10%, y 10%</td><td>2,74</td></tr>
+            <tr><td>4 anos, cupom 10%, y 10%</td><td>3,49</td></tr>
+            <tr><td>3 anos, cupom 8%, y 8%</td><td>2,78</td></tr>
+            <tr><td>3 anos, cupom 10%, y 12%</td><td>2,73</td></tr>
+            <tr><td>Zero-cupom, 5 anos</td><td>5,00</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">Macaulay era economista de depressão</div><p>Frederick Macaulay criou a duration em 1938, estudando por que os preços dos títulos oscilavam tanto na Grande Depressão. A medida ficou 40 anos semi-esquecida — até a volatilidade dos juros dos anos 1970/80 a ressuscitar como ferramenta central de gestão de risco.</p></div>
+          <div class="box curio"><div class="box-title">A curva invertida que previu recessões</div><p>Nos EUA, toda recessão desde os anos 1970 foi antecedida por inversão da curva de juros (curtas acima das longas). Não é magia: a inversão revela que o mercado espera corte de juros pelo banco central — geralmente para combater uma recessão iminente.</p></div>
+          <div class="box curio"><div class="box-title">O título de 100 anos</div><p>Áustria, Argentina e México já emitiram títulos de 100 anos. Com duration altíssima, o preço desses papéis chegou a cair mais de 50% quando os juros subiram — duration não é abstração: é dinheiro.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: duration = prazo de vencimento?</div><p>Só para título zero-cupom. Com cupons, a duration é <b>sempre menor</b> que o prazo — os cupons antecipam parte do retorno. Confundir os dois é o erro mais cobrado.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: duration sobe quando a taxa sobe?</div><p>Não — é o contrário: taxa maior reduz o peso dos fluxos distantes (desconta mais), logo a duration <b>cai</b>. E o preço também cai: preço e taxa andam em sentidos opostos.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>← Administração Financeira (VDT):</b> a duration é VDT com pesos — cada fluxo entra com seu valor presente.</li>
+            <li><b>← Tópico 05 (TMA):</b> a ETTJ responde “qual TMA para cada prazo” — projetos longos pedem taxas longas.</li>
+            <li><b>← Tópico 08 (sensibilidade):</b> a duration modificada é a sensibilidade do preço à taxa — a mesma lógica do ΔVPL/ΔTMA.</li>
+            <li><b>→ Tópico 12 (VAR):</b> duration × volatilidade da taxa ≈ risco de mercado da carteira — o VAR de títulos nasce aqui.</li>
+            <li><b>↔ Legislação Previdenciária:</b> o passivo atuarial dos RPPS/RPs tem duration de décadas — imunização é tema de gestão de fundos de pensão.</li>
+            <li><b>↔ Matemática Financeira:</b> taxas spot, forward e desconto composto são a base de tudo aqui.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.2 (ETTJ e teorias); calcular 2–3 taxas forward</td><td>Interpretar a curva sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.3; refazer a tabela da duration de Macaulay à mão</td><td>D = 2,74 sai sem ajuda</td></tr>
+            <tr><td>3</td><td>Estudar 4.4–4.6; resolver os 20 flashcards</td><td>Aplicar ΔP/P ≈ −D_mod × Δy</td></tr>
+            <tr><td>4</td><td>20 questões comentadas + mini-simulado de 30</td><td>≥ 80% e ≥ 24/30</td></tr>
+            <tr><td>5</td><td>Revisão em 5 minutos + Para decorar + checklist</td><td>Recitar as regras da duration de cor</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>FABOZZI, F. J. <b>Bond Markets, Analysis, and Strategies</b>. Pearson — a referência em duration, convexidade e ETTJ.</li>
+            <li>BODIE, Z.; KANE, A.; MARCUS, A. <b>Investimentos</b>. McGraw-Hill — capítulos de preços de títulos e gestão de carteiras de renda fixa.</li>
+            <li>MACAULAY, F. R. <b>Some Theoretical Problems Suggested by the Movements of Interest Rates... </b> (1938) — o texto original da duration.</li>
+            <li>ASSAF NETO, A. <b>Mercado Financeiro</b>. Atlas — ETTJ e renda fixa no contexto brasileiro.</li>
+            <li>B3 / Tesouro Nacional: curvas DI e de títulos públicos (ETTJ brasileira em tempo real).</li>
+            <li>Provas FGV (BACEN, SUSEP, previdência): duration, imunização e formato da curva de juros.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 11/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t11";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que é a Estrutura a Termo das Taxas de Juros (ETTJ)?",
+          "a": "É a relação, num dado momento, entre as taxas de juros e os prazos de vencimento de títulos de mesma classe de risco. Mostra quanto rende um título para cada prazo — 1 ano, 2 anos, 5 anos etc. Também chamada de curva de juros (yield curve)."
+      },
+      {
+          "q": "Quais são os formatos clássicos da ETTJ?",
+          "a": "Normal (crescente): juros longos > curtos, situação mais comum. Invertida (decrescente): curtos > longos, sinal de expectativa de queda de juros/recessão. Plana: taxas iguais em todos os prazos. Corcova (humped): taxas de prazo intermediário mais altas que as de curto e de longo."
+      },
+      {
+          "q": "O que diz a Teoria das Expectativas?",
+          "a": "A taxa de longo prazo reflete a média das taxas curtas esperadas para o futuro. ETTJ crescente = mercado espera alta dos juros; invertida = espera queda. Assume que títulos de prazos diferentes são substitutos perfeitos."
+      },
+      {
+          "q": "O que diz a Teoria da Preferência por Liquidez?",
+          "a": "Investidores preferem títulos curtos (mais líquidos, menos arriscados) e só aceitam títulos longos mediante um prêmio de liquidez. Por isso a ETTJ tende a ser crescente mesmo sem expectativa de alta dos juros."
+      },
+      {
+          "q": "O que diz a Teoria da Segmentação de Mercados?",
+          "a": "Cada vencimento é um mercado à parte, com oferta e demanda próprias (bancos no curto, fundos de pensão no longo). A taxa de cada prazo é determinada isoladamente; a ETTJ pode ter qualquer formato."
+      },
+      {
+          "q": "O que é taxa forward (a termo)?",
+          "a": "É a taxa de juros futura, para um período que começa numa data futura, implícita nas taxas spot de hoje. Ex.: com s(1)=10% e s(2)=11%, a forward do ano 2 é f = (1,11²/1,10) − 1 = 12,01%."
+      },
+      {
+          "q": "Como calcular a taxa forward entre os anos 1 e 2?",
+          "a": "f(1,2) = (1+s2)²/(1+s1) − 1. Pela teoria das expectativas, investir 2 anos a s(2) deve equivaler a investir 1 ano a s(1) e rolar por mais 1 ano a f(1,2)."
+      },
+      {
+          "q": "O que é a duration de Macaulay?",
+          "a": "É o prazo médio ponderado de recebimento dos fluxos de um título, usando como pesos os valores presentes de cada fluxo sobre o preço. Mede, em anos, o 'centro de gravidade' temporal dos pagamentos. Fórmula: D = Σ [t × VP(fluxo t)] / Preço."
+      },
+      {
+          "q": "Qual a duration de Macaulay de um título de R$ 1.000, 3 anos, cupom 10% a.a., taxa 10% a.a.?",
+          "a": "D = [1×90,91 + 2×82,64 + 3×751,31]/1.000 = 2.735,49/1.000 ≈ 2,74 anos. Note que é menor que o prazo (3 anos), porque os cupons antecipam parte do retorno."
+      },
+      {
+          "q": "O que é duration modificada?",
+          "a": "É a duration de Macaulay dividida por (1 + y): D_mod = D_Mac/(1+y). Mede a sensibilidade percentual do preço à variação da taxa: ΔP/P ≈ −D_mod × Δy. Para o título-base: 2,74/1,10 ≈ 2,49."
+      },
+      {
+          "q": "O que significa D_mod = 2,49 na prática?",
+          "a": "Se a taxa subir 1 p.p. (10% → 11%), o preço cai aproximadamente 2,49%: de R$ 1.000 para ≈ R$ 975,13. Se cair 0,5 p.p., o preço sobe ≈ 1,24%. É a regra prática da duration como medida de risco de taxa de juros."
+      },
+      {
+          "q": "Qual a duration de um título zero-cupom de 5 anos?",
+          "a": "Exatamente 5 anos — igual ao prazo, pois há um único fluxo no vencimento. Zero-cupom é o único caso em que D = prazo; qualquer título com cupons tem D < prazo."
+      },
+      {
+          "q": "Qual a duration de uma perpetuidade?",
+          "a": "D = (1 + y)/y. A 10% a.a.: D = 1,10/0,10 = 11 anos. Mostra que mesmo prazo infinito gera duration finita, porque os fluxos distantes valem pouco em valor presente."
+      },
+      {
+          "q": "Como o prazo de vencimento afeta a duration?",
+          "a": "Quanto maior o prazo, maior a duration (em geral). Título de 2 anos: D ≈ 1,91; de 3 anos: 2,74; de 4 anos: 3,49 (mesmo cupom e taxa). Prazo maior = mais sensível à taxa de juros."
+      },
+      {
+          "q": "Como o cupom afeta a duration?",
+          "a": "Quanto MAIOR o cupom, MENOR a duration. Cupons altos antecipam os recebimentos, aproximando o prazo médio. Título de 3 anos com cupom 8% tem D ≈ 2,78; com cupom 10%, D ≈ 2,74."
+      },
+      {
+          "q": "Como o nível da taxa de juros (y) afeta a duration?",
+          "a": "Quanto MAIOR a taxa, MENOR a duration. Taxa alta reduz o peso dos fluxos distantes. O título-base a 10% tem D ≈ 2,74; a 12%, cai para ≈ 2,73."
+      },
+      {
+          "q": "O que é convexidade?",
+          "a": "É a curvatura da relação preço × taxa. A duration é aproximação linear: superestima a queda quando a taxa sobe e subestima a alta quando a taxa cai. A convexidade corrige esse erro — e é sempre favorável ao investidor (o título sobe mais do que cai para variações simétricas)."
+      },
+      {
+          "q": "O que é imunização de carteira?",
+          "a": "Estratégia de casar a duration dos ativos com a duration dos passivos (D_ativo = D_passivo), de modo que variações da taxa de juros afetem ambos igualmente e o valor líquido fique protegido. Essencial para fundos de pensão e seguradoras."
+      },
+      {
+          "q": "Por que duration é crucial para um fundo de pensão como os ligados à DATAPREV?",
+          "a": "Porque o passivo previdenciário (benefícios a pagar por décadas) tem duration longa. Se os ativos tiverem duration menor, uma queda dos juros aumenta o passivo mais que o ativo, gerando déficit. A gestão ALM (asset-liability management) usa duration para casar os dois lados."
+      },
+      {
+          "q": "Qual a ligação entre ETTJ e avaliação de projetos (VPL)?",
+          "a": "A ETTJ fornece a taxa de desconto adequada a cada prazo: fluxos de curto prazo são descontados à taxa curta, os de longo à taxa longa. E a duration resume o prazo médio dos fluxos do projeto — conceito análogo ao payback descontado ponderado."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Duration de Macaulay",
+          "texto": "Um título paga cupons de 10% a.a. sobre o valor de face de R$ 1.000, vence em 3 anos e é negociado exatamente ao par, com taxa de retorno exigida de 10% a.a.",
+          "enun": "O prazo médio ponderado dos recebimentos desse título (duration de Macaulay) é, aproximadamente:",
+          "alts": [
+              "3,00 anos",
+              "2,74 anos",
+              "2,49 anos",
+              "2,00 anos",
+              "1,50 anos"
+          ],
+          "correta": 1,
+          "coment": "D = Σ t×VP(fluxo)/P = [1×90,91 + 2×82,64 + 3×751,31]/1.000 = 2.735,49/1.000 ≈ 2,74 anos. A duration de Macaulay é um PRAZO MÉDIO (em anos), sempre menor que o vencimento quando há cupons. 2,49 é a duration MODIFICADA — pegadinha clássica."
+      },
+      {
+          "tema": "Duration modificada",
+          "texto": "Um título tem duration de Macaulay de 2,74 anos e rendimento (yield) de 10% a.a.",
+          "enun": "Se a taxa de juros de mercado subir de 10% para 11% a.a., a variação percentual aproximada do preço do título será de:",
+          "alts": [
+              "+2,49%",
+              "−2,74%",
+              "−2,49%",
+              "−11,00%",
+              "−1,00%"
+          ],
+          "correta": 2,
+          "coment": "D_mod = 2,74/1,10 ≈ 2,49. ΔP/P ≈ −D_mod × Δy = −2,49 × (+1%) = −2,49%. Preço vai de R$ 1.000 para ≈ R$ 975,13. Sinal negativo: preço e taxa andam em direções opostas."
+      },
+      {
+          "tema": "Convexidade",
+          "texto": "Para o título do exemplo anterior (R$ 1.000, 3 anos, cupom 10%), o preço exato recalculado com taxa de 11% a.a. é R$ 975,56, enquanto a aproximação pela duration indicava R$ 975,13.",
+          "enun": "A diferença entre os dois valores deve-se:",
+          "alts": [
+              "ao arredondamento das casas decimais",
+              "à convexidade da relação preço × taxa",
+              "à existência dos cupons semestrais",
+              "à taxa forward implícita",
+              "ao prêmio de liquidez"
+          ],
+          "correta": 1,
+          "coment": "A duration é uma aproximação LINEAR (1ª ordem) de uma relação convexa. Ela superestima a queda quando a taxa sobe (975,13 < 975,56) e subestimaria a alta se a taxa caísse. A convexidade corrige o erro e é sempre favorável ao detentor do título."
+      },
+      {
+          "tema": "Título zero-cupom",
+          "texto": "Um investidor adquire uma Letra do Tesouro com vencimento em 5 anos que não paga cupons (zero-cupom).",
+          "enun": "A duration de Macaulay desse título é:",
+          "alts": [
+              "2,5 anos",
+              "menor que 5 anos, dependendo da taxa",
+              "exatamente 5 anos",
+              "maior que 5 anos",
+              "zero"
+          ],
+          "correta": 2,
+          "coment": "Sem cupons, há um único fluxo no vencimento: o prazo médio é o próprio prazo. D = prazo APENAS para zero-cupom. Qualquer título com cupons tem D < prazo."
+      },
+      {
+          "tema": "Perpetuidade",
+          "texto": "Considere um título perpétuo que paga cupom anual constante, com taxa de retorno exigida de 10% a.a.",
+          "enun": "A duration desse título é:",
+          "alts": [
+              "infinita",
+              "10 anos",
+              "11 anos",
+              "9 anos",
+              "20 anos"
+          ],
+          "correta": 2,
+          "coment": "D_perpetuidade = (1+y)/y = 1,10/0,10 = 11 anos. Prazo infinito, mas duration finita: os fluxos muito distantes quase não têm valor presente. Fórmula que a FGV adora cobrar."
+      },
+      {
+          "tema": "Taxa forward",
+          "texto": "A ETTJ mostra taxas spot de 10% a.a. para 1 ano e de 11% a.a. para 2 anos.",
+          "enun": "Pela teoria das expectativas, a taxa forward implícita para o segundo ano é, aproximadamente:",
+          "alts": [
+              "10,50%",
+              "11,00%",
+              "12,01%",
+              "13,00%",
+              "21,00%"
+          ],
+          "correta": 2,
+          "coment": "f(1,2) = (1+s2)²/(1+s1) − 1 = 1,11²/1,10 − 1 = 1,2321/1,10 − 1 ≈ 12,01%. Investir 2 anos a 11% deve render o mesmo que 1 ano a 10% rolado por mais um ano à forward."
+      },
+      {
+          "tema": "Teoria das expectativas",
+          "texto": "Num determinado momento, a ETTJ dos títulos públicos é claramente crescente.",
+          "enun": "Segundo a teoria das expectativas, esse formato indica que:",
+          "alts": [
+              "o Banco Central vai reduzir a taxa básica",
+              "os investidores esperam alta das taxas curtas no futuro",
+              "os títulos longos estão com excesso de oferta",
+              "a inflação corrente está em queda",
+              "há preferência por títulos indexados"
+          ],
+          "correta": 1,
+          "coment": "Para a teoria das expectativas, a taxa longa é a média das curtas esperadas. Curva crescente = expectativa de elevação dos juros futuros; curva invertida = expectativa de queda."
+      },
+      {
+          "tema": "Preferência por liquidez",
+          "texto": "Duas economias têm as mesmas expectativas de juros futuros, mas em uma delas os investidores exigem prêmio para manter títulos longos.",
+          "enun": "De acordo com a teoria da preferência por liquidez, o prêmio existe porque títulos longos:",
+          "alts": [
+              "têm maior risco de crédito",
+              "são menos líquidos e mais sensíveis à taxa de juros",
+              "pagam cupons menores",
+              "são tributados mais pesadamente",
+              "têm emissão restrita a instituições financeiras"
+          ],
+          "correta": 1,
+          "coment": "Títulos longos têm maior duration (mais risco de taxa) e menor liquidez. Os investidores só os aceitam com rendimento adicional — o prêmio de liquidez —, o que torna a ETTJ crescente mesmo sem expectativa de alta dos juros."
+      },
+      {
+          "tema": "Segmentação de mercados",
+          "texto": "A teoria da segmentação de mercados explica a ETTJ de forma diferente das expectativas.",
+          "enun": "Para essa teoria, a taxa de cada prazo é determinada:",
+          "alts": [
+              "pela média das taxas esperadas",
+              "pelo prêmio de liquidez crescente",
+              "pela oferta e demanda específicas daquele vencimento",
+              "pelo Banco Central em todos os vencimentos",
+              "pela duration da carteira dos bancos"
+          ],
+          "correta": 2,
+          "coment": "Segmentação: cada vencimento é um mercado isolado, com clientelas próprias (bancos no curto prazo, fundos de pensão no longo). A curva pode assumir qualquer formato, conforme a oferta/demanda em cada segmento."
+      },
+      {
+          "tema": "ETTJ invertida",
+          "texto": "Em certo momento, os títulos de 1 ano rendem 13% a.a. e os de 5 anos, 11% a.a.",
+          "enun": "Uma estrutura a termo invertida como essa costuma sinalizar:",
+          "alts": [
+              "expectativa de alta prolongada dos juros",
+              "expectativa de queda dos juros e possível desaceleração econômica",
+              "aumento permanente do prêmio de liquidez",
+              "falta de títulos curtos no mercado",
+              "elevação do risco-país de longo prazo"
+          ],
+          "correta": 1,
+          "coment": "Curva invertida: o mercado espera juros futuros MENORES — tipicamente associada a política monetária apertada hoje e expectativa de afrouxamento/recessão à frente. É um dos preditores de recessão mais citados."
+      },
+      {
+          "tema": "Regras da duration",
+          "texto": "Dois títulos têm o mesmo prazo (3 anos) e a mesma taxa exigida, mas o título A paga cupom de 8% a.a. e o B, de 10% a.a.",
+          "enun": "Sobre as durations de A e B, é correto afirmar que:",
+          "alts": [
+              "D(A) > D(B)",
+              "D(A) < D(B)",
+              "D(A) = D(B)",
+              "D(A) = 3 anos",
+              "as durations dependem do valor de face"
+          ],
+          "correta": 0,
+          "coment": "Cupom MENOR → duration MAIOR: menos fluxo antecipado, prazo médio mais longo. De fato, D(8%) ≈ 2,78 > D(10%) ≈ 2,74. Regra: cupom e duration caminham em sentidos opostos."
+      },
+      {
+          "tema": "Regras da duration",
+          "texto": "O mesmo título (3 anos, cupom 10%) é avaliado com taxas de 10% e depois de 12% a.a.",
+          "enun": "Com a taxa a 12%, a duration do título, em relação ao cenário de 10%, será:",
+          "alts": [
+              "maior, pois o preço caiu",
+              "menor, pois os fluxos distantes perdem peso",
+              "igual, pois a duration não depende da taxa",
+              "maior, pois o risco aumentou",
+              "igual ao prazo de 3 anos"
+          ],
+          "correta": 1,
+          "coment": "Taxa MAIOR → duration MENOR: o desconto mais forte reduz o peso relativo do fluxo final. Numericamente: D cai de ≈ 2,74 (a 10%) para ≈ 2,73 (a 12%)."
+      },
+      {
+          "tema": "Regras da duration",
+          "texto": "Três títulos da mesma classe, todos com cupom de 10% e taxa de 10%, têm prazos de 2, 3 e 4 anos.",
+          "enun": "Ordenando-se pela duration, tem-se:",
+          "alts": [
+              "D(2a) > D(3a) > D(4a)",
+              "D(2a) < D(3a) < D(4a)",
+              "D(2a) = D(3a) = D(4a)",
+              "D(3a) é a maior",
+              "só é possível ordenar com os preços"
+          ],
+          "correta": 1,
+          "coment": "Prazo maior → duration maior: D(2a) ≈ 1,91; D(3a) ≈ 2,74; D(4a) ≈ 3,49. O título de 4 anos é o mais sensível a variações da taxa de juros."
+      },
+      {
+          "tema": "Sensibilidade ao juro",
+          "texto": "Um gestor precisa escolher entre o título de 2 anos (D ≈ 1,91) e o de 4 anos (D ≈ 3,49), prevendo queda de 1 p.p. na taxa de juros.",
+          "enun": "Se o objetivo é maximizar o ganho de capital com a queda prevista, ele deve escolher:",
+          "alts": [
+              "o de 2 anos, pela menor duration",
+              "o de 4 anos, pela maior duration",
+              "tanto faz, pois o cupom é igual",
+              "nenhum, pois títulos caem quando a taxa cai",
+              "o de 2 anos, pelo menor risco de crédito"
+          ],
+          "correta": 1,
+          "coment": "Ganho ≈ +D_mod × |Δy|: quanto maior a duration, maior a valorização quando a taxa CAI. Aposta direcional de queda de juros → título mais longo. Se a previsão fosse de ALTA, a escolha seria o mais curto."
+      },
+      {
+          "tema": "Cálculo de duration",
+          "texto": "Um título de 3 anos, cupom de 8% a.a., negociado ao par com taxa de 8% a.a.",
+          "enun": "Sua duration de Macaulay é, aproximadamente:",
+          "alts": [
+              "2,58 anos",
+              "2,74 anos",
+              "2,78 anos",
+              "3,00 anos",
+              "2,49 anos"
+          ],
+          "correta": 2,
+          "coment": "D = [1×74,07 + 2×68,59 + 3×793,83]/1.000 ≈ 2,78 anos. Compara com o título de cupom 10% (2,74): cupom menor → duration maior. (2,58 é a D_mod: 2,78/1,08.)"
+      },
+      {
+          "tema": "Duration modificada",
+          "texto": "Um título tem duration modificada de 2,58.",
+          "enun": "Se a taxa de juros cair 0,5 p.p., o preço do título varia aproximadamente:",
+          "alts": [
+              "−1,29%",
+              "+1,29%",
+              "+2,58%",
+              "−2,58%",
+              "+0,50%"
+          ],
+          "correta": 1,
+          "coment": "ΔP/P ≈ −D_mod × Δy = −2,58 × (−0,5%) = +1,29%. Taxa cai → preço sobe; a duration modificada dá a magnitude percentual da variação."
+      },
+      {
+          "tema": "Imunização",
+          "texto": "Um fundo de pensão tem obrigações previdenciárias com duration de 12 anos.",
+          "enun": "Para imunizar o fundo contra variações da taxa de juros, a duration da carteira de ativos deve ser:",
+          "alts": [
+              "menor que 12 anos, para reduzir risco",
+              "maior que 12 anos, para ganhar com a queda dos juros",
+              "igual a 12 anos, casando ativo e passivo",
+              "zero, aplicando tudo em renda fixa curta",
+              "metade de 12 anos, pela diversificação"
+          ],
+          "correta": 2,
+          "coment": "Imunização = casar durations (D_ativo = D_passivo). Assim, uma variação da taxa altera ativo e passivo na mesma proporção e o superávit/déficit do fundo fica protegido. É a base do ALM de fundos de pensão — tema com cara de DATAPREV."
+      },
+      {
+          "tema": "Interpretação da duration",
+          "texto": "Sobre a duration de Macaulay, analise as afirmativas: I) é medida em anos; II) representa o prazo médio ponderado dos fluxos; III) é sempre igual ao prazo de vencimento.",
+          "enun": "Está(ão) correta(s):",
+          "alts": [
+              "apenas I",
+              "apenas I e II",
+              "apenas II e III",
+              "I, II e III",
+              "apenas III"
+          ],
+          "correta": 1,
+          "coment": "I e II corretas: a duration de Macaulay é um prazo médio, medido em anos. III errada: só é igual ao vencimento em título zero-cupom; com cupons, D < prazo."
+      },
+      {
+          "tema": "ETTJ e VPL",
+          "texto": "Um projeto terá fluxos concentrados no ano 1 e outro, fluxos concentrados no ano 10. A ETTJ é crescente.",
+          "enun": "Para descontar corretamente os fluxos, o avaliador deve:",
+          "alts": [
+              "usar a mesma taxa longa para todos os fluxos",
+              "usar a taxa de cada prazo da ETTJ para o fluxo correspondente",
+              "usar sempre a taxa curta, mais conservadora",
+              "usar a média simples das taxas",
+              "usar a duration do projeto como taxa"
+          ],
+          "correta": 1,
+          "coment": "A ETTJ fornece a taxa spot de cada prazo: fluxos curtos descontados à taxa curta, fluxos longos à taxa longa. Usar taxa única é simplificação. E a duration resume o prazo médio dos fluxos — medida de quando o projeto 'devolve' o capital."
+      },
+      {
+          "tema": "Convexidade",
+          "texto": "Dois títulos têm a mesma duration modificada, mas o título X tem maior convexidade que o Y.",
+          "enun": "Para grandes variações da taxa de juros, em qualquer direção, o investidor:",
+          "alts": [
+              "prefere X, pois sobe mais e cai menos que Y",
+              "prefere Y, pois é mais estável",
+              "é indiferente, pois as durations são iguais",
+              "prefere X apenas se a taxa subir",
+              "prefere Y apenas se a taxa cair"
+          ],
+          "correta": 0,
+          "coment": "Com durations iguais, a MAIOR convexidade é sempre preferível: nas quedas de taxa o título sobe mais, e nas alturas cai menos, do que indicaria a aproximação linear. Por isso títulos mais convexos tendem a ser mais caros (menor yield)."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A Estrutura a Termo das Taxas de Juros (ETTJ) relaciona:",
+          "alts": [
+              "taxa de juros e risco de crédito",
+              "taxa de juros e prazo de vencimento",
+              "taxa de juros e inflação passada",
+              "taxa de juros e câmbio",
+              "taxa de juros e liquidez"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Uma ETTJ crescente (títulos longos rendendo mais que os curtos) é chamada de curva:",
+          "alts": [
+              "invertida",
+              "plana",
+              "normal",
+              "corcova",
+              "negativa"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Quando as taxas curtas estão ACIMA das longas, a estrutura a termo é:",
+          "alts": [
+              "normal",
+              "invertida",
+              "plana",
+              "crescente",
+              "constante"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A duration de Macaulay é expressa em:",
+          "alts": [
+              "percentual ao ano",
+              "reais",
+              "anos",
+              "pontos-base",
+              "unidades de risco"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A duration de um título zero-cupom é:",
+          "alts": [
+              "sempre 1 ano",
+              "metade do prazo",
+              "igual ao prazo de vencimento",
+              "maior que o prazo",
+              "zero"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Segundo a teoria das expectativas, a taxa de longo prazo reflete:",
+          "alts": [
+              "o prêmio de liquidez",
+              "a média das taxas curtas esperadas para o futuro",
+              "a taxa de inflação corrente",
+              "a meta da taxa básica",
+              "a oferta de títulos longos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Para títulos com cupons, a duration de Macaulay é, em relação ao prazo de vencimento:",
+          "alts": [
+              "sempre igual",
+              "sempre maior",
+              "sempre menor",
+              "maior apenas se o cupom for alto",
+              "independente do cupom"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Preço de título de renda fixa e taxa de juros de mercado variam:",
+          "alts": [
+              "na mesma direção",
+              "em direções opostas",
+              "sem relação alguma",
+              "na mesma direção apenas para cupons altos",
+              "apenas no vencimento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A teoria da segmentação de mercados afirma que as taxas de cada prazo dependem:",
+          "alts": [
+              "das expectativas de inflação",
+              "da oferta e da demanda em cada vencimento",
+              "do prêmio de liquidez uniforme",
+              "do Banco Central",
+              "da duration média do mercado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A duration modificada mede:",
+          "alts": [
+              "o prazo médio dos fluxos",
+              "a sensibilidade percentual do preço à variação da taxa",
+              "o cupom médio do título",
+              "o tempo até o vencimento",
+              "o risco de crédito"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Um título tem duration modificada de 2,49. Se a taxa de juros subir 1 p.p., o preço varia aproximadamente:",
+          "alts": [
+              "+2,49%",
+              "−2,49%",
+              "−1,00%",
+              "−24,90%",
+              "+1,00%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Quanto MAIOR o cupom de um título, sua duration será:",
+          "alts": [
+              "maior",
+              "menor",
+              "igual",
+              "independente do cupom",
+              "igual ao prazo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Quanto MAIOR o prazo de vencimento (mantidos cupom e taxa), a duration tende a ser:",
+          "alts": [
+              "maior",
+              "menor",
+              "igual",
+              "zero",
+              "negativa"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Quanto MAIOR a taxa de juros exigida pelo mercado, a duration de um título com cupons será:",
+          "alts": [
+              "maior",
+              "menor",
+              "igual",
+              "igual ao prazo",
+              "infinita"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Com taxas spot de 10% (1 ano) e 11% (2 anos), a taxa forward do 2º ano, pela teoria das expectativas, é de aproximadamente:",
+          "alts": [
+              "10,5%",
+              "11,0%",
+              "12,0%",
+              "13,2%",
+              "9,9%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Uma ETTJ invertida geralmente é interpretada pelo mercado como sinal de:",
+          "alts": [
+              "aquecimento inflacionário futuro",
+              "expectativa de queda dos juros e desaceleração",
+              "alta permanente do prêmio de liquidez",
+              "excesso de liquidez global",
+              "fortalecimento da moeda"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "A duração de uma perpetuidade com taxa de retorno de 10% a.a. é:",
+          "alts": [
+              "10 anos",
+              "infinita",
+              "11 anos",
+              "9,09 anos",
+              "5 anos"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Na imunização de uma carteira contra variações da taxa de juros, o gestor deve igualar:",
+          "alts": [
+              "o valor do ativo ao do passivo",
+              "a duration do ativo à duration do passivo",
+              "o cupom do ativo ao do passivo",
+              "o prazo de emissão dos títulos",
+              "a TIR ao custo de captação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "A aproximação ΔP/P ≈ −D_mod × Δy erra para variações grandes da taxa porque ignora:",
+          "alts": [
+              "o prêmio de liquidez",
+              "a convexidade",
+              "o risco de crédito",
+              "a inflação",
+              "a tributação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Um gestor prevê FORTE QUEDA da taxa de juros e quer maximizar o ganho de capital. Entre títulos de mesmo emissor, ele deve preferir o de:",
+          "alts": [
+              "menor duration",
+              "maior duration",
+              "maior cupom",
+              "menor prazo",
+              "maior liquidez"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Um título de R$ 1.000, 3 anos, cupom 10% a.a., ao par (y = 10%). Os valores presentes dos fluxos são 90,91; 82,64 e 751,31. A duration de Macaulay é, aproximadamente:",
+          "alts": [
+              "3,00 anos",
+              "2,74 anos",
+              "2,49 anos",
+              "2,00 anos",
+              "2,90 anos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Para esse mesmo título (D_Mac = 2,74; y = 10%), a duration modificada vale aproximadamente:",
+          "alts": [
+              "2,74",
+              "3,01",
+              "2,49",
+              "2,24",
+              "2,00"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Com D_mod = 2,49 e preço de R$ 1.000, se a taxa subir de 10% para 11%, o novo preço estimado pela duration é:",
+          "alts": [
+              "R$ 975,13",
+              "R$ 972,60",
+              "R$ 990,00",
+              "R$ 951,96",
+              "R$ 749,00"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "O preço EXATO do título anterior, recalculado a 11% a.a., é R$ 975,56 — ligeiramente ACIMA dos R$ 975,13 estimados. Isso ocorre devido:",
+          "alts": [
+              "ao arredondamento",
+              "à convexidade, sempre favorável ao investidor",
+              "à capitalização semestral",
+              "à taxa forward",
+              "ao prêmio de risco"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Títulos de 2, 3 e 4 anos, todos com cupom de 10% e y = 10%, têm durations próximas de:",
+          "alts": [
+              "1,91 / 2,74 / 3,49",
+              "2,00 / 3,00 / 4,00",
+              "2,74 / 2,74 / 2,74",
+              "3,49 / 2,74 / 1,91",
+              "1,50 / 2,00 / 2,50"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Um título de 3 anos com cupom de 8% (y = 8%) tem duration de ≈ 2,78, enquanto o de cupom 10% (y = 10%) tem ≈ 2,74. A principal explicação para D ser maior no primeiro é:",
+          "alts": [
+              "o prazo maior",
+              "o cupom menor antecipar menos os fluxos",
+              "a taxa menor aumentar o preço",
+              "o valor de face diferente",
+              "a convexidade maior"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Com spot de 8% (1 ano) e 9% (2 anos), a forward do 2º ano é, aproximadamente:",
+          "alts": [
+              "8,50%",
+              "9,00%",
+              "10,01%",
+              "11,00%",
+              "9,50%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Um título tem D_mod = 2,49. Se a taxa CAIR de 10% para 9,5%, a variação aproximada do preço é:",
+          "alts": [
+              "−1,24%",
+              "+1,24%",
+              "+2,49%",
+              "−2,49%",
+              "+0,50%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Um fundo de pensão tem passivos de duration 12 e ativos de duration 6. Se a taxa de juros CAIR 1 p.p., o fundo terá:",
+          "alts": [
+              "superávit, pois os ativos sobem",
+              "déficit, pois o passivo cresce mais que o ativo",
+              "situação inalterada",
+              "déficit apenas se a taxa subir",
+              "superávit pela convexidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Considere: I) D(zero-cupom) = prazo; II) D(perpetuidade) = (1+y)/y; III) títulos com cupom têm D < prazo. Estão corretas:",
+          "alts": [
+              "apenas I",
+              "apenas I e III",
+              "apenas II e III",
+              "I, II e III",
+              "apenas III"
+          ],
+          "correta": 3
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei definir ETTJ e identificar seus formatos (normal, invertida, plana, corcova)",
+      "Conheço as três teorias da ETTJ: expectativas, preferência por liquidez e segmentação de mercados",
+      "Sei calcular a taxa forward: f(1,2) = (1+s2)²/(1+s1) − 1",
+      "Sei que a duration de Macaulay é o prazo médio ponderado dos fluxos, em anos",
+      "Sei montar a tabela de duration: fluxo → VP → peso → t × peso",
+      "Sei que D_mod = D_Mac/(1+y) e que ΔP/P ≈ −D_mod × Δy",
+      "Decorei: zero-cupom D = prazo; perpetuidade D = (1+y)/y",
+      "Domino as três regras: prazo ↑ D ↑ | cupom ↑ D ↓ | taxa ↑ D ↓",
+      "Sei explicar convexidade e por que ela é favorável ao investidor",
+      "Sei o que é imunização (D ativo = D passivo) e sua importância para fundos de pensão"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Confundir duration de Macaulay (prazo médio, em ANOS) com duration modificada (sensibilidade percentual)",
+      "Achar que duration é sempre igual ao prazo de vencimento — só vale para zero-cupom",
+      "Errar o sinal: taxa sobe → preço CAI; a fórmula tem sinal negativo (ΔP/P ≈ −D_mod × Δy)",
+      "Esquecer de dividir por (1+y) para passar de Macaulay para modificada: D_mod = D_Mac/(1+y)",
+      "Somar os fluxos sem trazer a valor presente na hora de calcular os pesos",
+      "Usar o cupom em valor absoluto como peso, em vez do valor presente de cada fluxo",
+      "Achar que cupom maior aumenta a duration — é o contrário: cupom ↑, duration ↓",
+      "Achar que taxa maior aumenta a duration — é o contrário: taxa ↑, duration ↓",
+      "Acreditar que a perpetuidade tem duration infinita — é (1+y)/y, finita",
+      "Trocar a fórmula da forward: é (1+s2)²/(1+s1) − 1, não 2×s2 − s1",
+      "Usar média aritmética das taxas em vez da relação de capitalização composta na forward",
+      "Achar que a aproximação por duration é exata para grandes variações — ignora a convexidade",
+      "Esquecer que a convexidade é sempre favorável: sobe mais e cai menos que a previsão linear",
+      "Confundir ETTJ invertida com expectativa de ALTA de juros — invertida sinaliza expectativa de queda",
+      "Atribuir à teoria das expectativas o prêmio de liquidez — ele é da teoria da preferência por liquidez",
+      "Achar que imunização é zerar a duration — é casar D do ativo com D do passivo",
+      "Ignorar que imunização exige rebalanceamento: a duration muda com o tempo e com a taxa",
+      "Misturar duration (sensibilidade a juros) com risco de crédito — são riscos diferentes",
+      "Na prova, esquecer as unidades: Macaulay em anos; modificada em anos também, mas usada como multiplicador de Δy",
+      "Usar a taxa longa da ETTJ para descontar fluxos curtos de um projeto — cada prazo tem sua taxa spot"
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "ETTJ (Estrutura a Termo das Taxas de Juros)",
+          "Relação entre taxas de juros e prazos de vencimento, num dado momento, para títulos de mesma classe de risco; a 'curva de juros'."
+      ],
+      [
+          "Curva normal",
+          "ETTJ crescente: taxas longas acima das curtas; formato mais comum."
+      ],
+      [
+          "Curva invertida",
+          "ETTJ decrescente: taxas curtas acima das longas; sinal de expectativa de queda de juros e possível recessão."
+      ],
+      [
+          "Taxa spot",
+          "Taxa para aplicação que começa hoje e vence em t; é a taxa de desconto do prazo t."
+      ],
+      [
+          "Taxa forward (a termo)",
+          "Taxa futura implícita nas spots de hoje: f(1,2) = (1+s2)²/(1+s1) − 1."
+      ],
+      [
+          "Teoria das expectativas",
+          "A taxa longa reflete a média das taxas curtas esperadas; títulos de prazos distintos são substitutos perfeitos."
+      ],
+      [
+          "Teoria da preferência por liquidez",
+          "Investidores exigem prêmio para manter títulos longos (menos líquidos, mais sensíveis a juros); a curva tende a ser crescente."
+      ],
+      [
+          "Teoria da segmentação de mercados",
+          "Cada vencimento é um mercado isolado; a taxa de cada prazo vem da oferta e demanda daquele segmento."
+      ],
+      [
+          "Prêmio de liquidez",
+          "Rendimento adicional exigido para manter títulos mais longos e menos líquidos."
+      ],
+      [
+          "Duration de Macaulay",
+          "Prazo médio ponderado dos fluxos de um título, em anos, com pesos dados pelos valores presentes."
+      ],
+      [
+          "Duration modificada",
+          "D_Mac/(1+y); mede a variação percentual aproximada do preço para 1 p.p. de variação da taxa."
+      ],
+      [
+          "Convexidade",
+          "Curvatura da relação preço × taxa; corrige o erro da aproximação linear pela duration e é favorável ao investidor."
+      ],
+      [
+          "Título zero-cupom",
+          "Título sem pagamentos intermediários; sua duration é igual ao prazo de vencimento."
+      ],
+      [
+          "Perpetuidade",
+          "Fluxo constante e infinito; preço = C/y; duration = (1+y)/y."
+      ],
+      [
+          "Imunização",
+          "Estratégia de igualar a duration do ativo à do passivo, protegendo o resultado contra variações da taxa de juros."
+      ],
+      [
+          "ALM (Asset-Liability Management)",
+          "Gestão integrada de ativos e passivos — usada por fundos de pensão e seguradoras — baseada no casamento de durations."
+      ],
+      [
+          "Yield to maturity (y)",
+          "Taxa interna de retorno do título; taxa única que iguala o preço ao valor presente dos fluxos."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

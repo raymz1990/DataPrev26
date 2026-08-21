@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estratégias de Investimentos | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Administração Financeira</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">09 - Estratégias de investimentos</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceitos básicos de administração financeira.html">01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html">02 - Finanças corporativas</option>
+    <option value="03 - Alavancagem operacional e financeira.html">03 - Alavancagem operacional e financeira</option>
+    <option value="04 - Planejamento financeiro de curto prazo.html">04 - Planejamento financeiro de curto prazo</option>
+    <option value="05 - Planejamento financeiro de longo prazo.html">05 - Planejamento financeiro de longo prazo</option>
+    <option value="06 - Valor do dinheiro no tempo.html">06 - Valor do dinheiro no tempo</option>
+    <option value="07 - Risco x retorno.html">07 - Risco x retorno</option>
+    <option value="08 - Fontes de financiamento a longo prazo.html">08 - Fontes de financiamento a longo prazo</option>
+    <option value="09 - Estratégias de investimentos.html" selected>09 - Estratégias de investimentos</option>
+    <option value="" disabled>10 - Valuation (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Estratégias de Investimentos</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Administração Financeira<br>Tópico 09 de 10<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Estratégias de Investimentos</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Administração Financeira</b> &nbsp;›&nbsp; Tópico 09</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">7h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 07 e 08 — risco x retorno e fontes de financiamento</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — conecta risco x retorno, CAPM e valuation à decisão prática de investir</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Descrever o <b>processo de investimento</b>: objetivos, horizonte, perfil de risco e política de investimento.</li>
+            <li>Classificar os <b>perfis de investidor</b> (conservador, moderado, arrojado) e o papel do <b>suitability</b>.</li>
+            <li>Reconhecer as principais <b>classes de ativos</b> e suas características de risco e retorno.</li>
+            <li>Explicar <b>alocação de ativos</b>, <b>diversificação</b> e <b>rebalanceamento</b> da carteira.</li>
+            <li>Diferenciar <b>gestão ativa</b> de <b>gestão passiva</b> (fundos indexados e ETFs).</li>
+            <li>Distinguir <b>análise fundamentalista</b> de <b>análise técnica</b>.</li>
+            <li>Descrever as estratégias clássicas: <b>buy and hold</b>, <b>value investing</b>, <b>crescimento</b>, <b>dividendos</b> e <b>custo médio</b>.</li>
+            <li>Relacionar as estratégias à <b>hipótese dos mercados eficientes</b> e aos <b>vieses comportamentais</b>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Uma <b>estratégia de investimento</b> é o plano que orienta como alocar recursos entre ativos ao longo do tempo, dados o <b>objetivo</b>, o <b>horizonte</b> e a <b>tolerância ao risco</b> do investidor. Todo o tópico gira em torno do trade-off risco × retorno (Tópico 07): não existe estratégia "melhor" no abstrato — existe a estratégia <b>adequada ao perfil</b> (suitability): conservadores priorizam segurança e liquidez (renda fixa), arrojados aceitam volatilidade em busca de maior retorno (renda variável).</p>
+          <p>A decisão mais importante é a <b>alocação de ativos</b> — quanto da carteira vai para renda fixa, ações, imóveis etc. —, pois é ela, mais do que a escolha de ativos individuais, que explica o comportamento da carteira. A <b>diversificação</b> entre classes pouco correlacionadas reduz o risco não sistemático; o <b>rebalanceamento</b> periódico devolve a carteira aos pesos-alvo.</p>
+          <p>Na escolha dos ativos, há duas filosofias: a <b>gestão ativa</b> tenta superar o mercado por meio de <b>análise fundamentalista</b> (valor intrínseco: lucros, balanços, fluxo de caixa) ou <b>análise técnica</b> (gráficos e padrões de preço); a <b>gestão passiva</b> apenas replica um índice (fundos indexados e ETFs), com baixo custo. A <b>hipótese dos mercados eficientes</b> (fraca, semiforte, forte) sustenta que, quanto mais eficiente o mercado, mais difícil é "vencê-lo" consistentemente.</p>
+          <p>Entre as estratégias clássicas destacam-se: <b>buy and hold</b> (comprar e manter no longo prazo), <b>value investing</b> (comprar ações baratas em relação ao valor intrínseco), investimento em <b>crescimento</b> e em <b>dividendos</b>, e o <b>custo médio</b> (aportes periódicos regulares). As <b>finanças comportamentais</b> alertam para os vieses (excesso de confiança, aversão à perda, efeito manada) que sabotam qualquer estratégia.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Estratégias<br>de<br>Investimentos</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Ponto de partida</h4><ul><li>Objetivo e horizonte</li><li>Perfil de risco</li><li>Suitability</li></ul></div>
+              <div class="mm-node"><h4>Alocação de ativos</h4><ul><li>Renda fixa × variável</li><li>Diversificação</li><li>Rebalanceamento</li></ul></div>
+              <div class="mm-node"><h4>Filosofias</h4><ul><li>Gestão ativa</li><li>Gestão passiva (ETF, índice)</li></ul></div>
+              <div class="mm-node"><h4>Análises</h4><ul><li>Fundamentalista: valor intrínseco</li><li>Técnica: gráficos e preços</li></ul></div>
+              <div class="mm-node"><h4>Estratégias clássicas</h4><ul><li>Buy and hold</li><li>Value, growth, dividendos</li><li>Custo médio</li></ul></div>
+              <div class="mm-node"><h4>Mercado e comportamento</h4><ul><li>Mercados eficientes</li><li>Vieses comportamentais</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 O processo de investimento</h3>
+          <p>Investir com estratégia começa <b>antes</b> de escolher qualquer ativo. O processo tem quatro etapas:</p>
+          <ol class="styled">
+            <li><b>Definir o objetivo</b> — aposentadoria, reserva de emergência, compra de imóvel, crescimento patrimonial.</li>
+            <li><b>Definir o horizonte</b> — curto, médio ou longo prazo; horizontes longos permitem assumir mais risco (tempo recupera oscilações).</li>
+            <li><b>Avaliar a tolerância ao risco</b> — capacidade (situação financeira) e disposição (perfil psicológico) para suportar perdas temporárias.</li>
+            <li><b>Montar e executar a política de investimento</b> — alocação de ativos, seleção, acompanhamento e rebalanceamento.</li>
+          </ol>
+          <div class="box info">
+            <div class="box-title">📘 Política de investimento</div>
+            <p>Em instituições (inclusive estatais e fundos de pensão), a política de investimento é documento formal que fixa objetivos, limites de risco, alocação-alvo e regras de governança — versão institucional do processo acima.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Perfis de investidor e suitability</h3>
+          <table>
+            <thead><tr><th>Perfil</th><th>Tolerância ao risco</th><th>Alocação típica</th></tr></thead>
+            <tbody>
+              <tr><td><b>Conservador</b></td><td>Baixa — prioriza segurança e liquidez</td><td>Predominância de renda fixa</td></tr>
+              <tr><td><b>Moderado</b></td><td>Intermediária — aceita alguma volatilidade</td><td>Equilíbrio entre renda fixa e variável</td></tr>
+              <tr><td><b>Arrojado (agressivo)</b></td><td>Alta — busca retorno maior no longo prazo</td><td>Predominância de renda variável</td></tr>
+            </tbody>
+          </table>
+          <p><b>Suitability</b> é o dever de adequar o produto ao perfil do investidor: instituições financeiras devem oferecer apenas investimentos compatíveis com o objetivo, o horizonte e a tolerância ao risco do cliente — regra de conduta cobrada pela CVM e muito cobrada pela FGV.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.3 Classes de ativos</h3>
+          <table>
+            <thead><tr><th>Classe</th><th>Exemplos</th><th>Risco × retorno</th></tr></thead>
+            <tbody>
+              <tr><td><b>Renda fixa</b></td><td>Títulos públicos, CDB, debêntures</td><td>Menor risco, retorno mais previsível</td></tr>
+              <tr><td><b>Renda variável</b></td><td>Ações, ETFs de índice</td><td>Maior risco, maior retorno esperado</td></tr>
+              <tr><td><b>Fundos de investimento</b></td><td>Renda fixa, multimercado, de ações</td><td>Veículo coletivo com gestor profissional</td></tr>
+              <tr><td><b>Imobiliários</b></td><td>FIIs, imóveis</td><td>Renda (aluguel) + valorização</td></tr>
+              <tr><td><b>Câmbio e outros</b></td><td>Moedas, commodities, ouro</td><td>Proteção e diversificação</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>4.4 Alocação de ativos, diversificação e rebalanceamento</h3>
+          <p><b>Alocação de ativos</b> é a distribuição da carteira entre as classes — por exemplo, 60% em renda fixa e 40% em ações. Estudos clássicos mostram que a alocação é a principal determinante do resultado de longo prazo, mais que a seleção de ativos individuais ou o "timing" de mercado.</p>
+          <ul class="styled">
+            <li><b>Diversificação:</b> combinar ativos de baixa correlação reduz o risco não sistemático (Tópico 07) sem abrir mão de retorno esperado.</li>
+            <li><b>Rebalanceamento:</b> com o tempo, os pesos se desviam do alvo (as ações sobem e passam de 40% para 55%, por exemplo). Rebalancear é vender o que subiu demais e comprar o que ficou para trás, devolvendo a carteira à alocação-alvo.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>4.5 Gestão ativa × gestão passiva</h3>
+          <table>
+            <thead><tr><th></th><th>Gestão ativa</th><th>Gestão passiva</th></tr></thead>
+            <tbody>
+              <tr><td><b>Objetivo</b></td><td>Superar o índice de referência (benchmark)</td><td>Replicar o índice</td></tr>
+              <tr><td><b>Como</b></td><td>Seleção de ativos e timing de mercado</td><td>Comprar os mesmos ativos do índice</td></tr>
+              <tr><td><b>Custo</b></td><td>Maior (taxas de administração/performance)</td><td>Menor</td></tr>
+              <tr><td><b>Veículos típicos</b></td><td>Fundos ativos, carteiras administradas</td><td>Fundos indexados e <b>ETFs</b></td></tr>
+              <tr><td><b>Premissa</b></td><td>Mercado tem ineficiências exploráveis</td><td>Mercado é difícil de vencer consistentemente</td></tr>
+            </tbody>
+          </table>
+          <p>O <b>ETF (Exchange Traded Fund)</b> é um fundo de índice negociado em bolsa: replica um índice (ex.: Ibovespa) com baixo custo e liquidez diária.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.6 Análise fundamentalista × análise técnica</h3>
+          <table>
+            <thead><tr><th></th><th>Fundamentalista</th><th>Técnica (gráfica)</th></tr></thead>
+            <tbody>
+              <tr><td><b>Base</b></td><td>Fundamentos: lucros, balanços, fluxo de caixa, setor, economia</td><td>Preços e volumes passados, gráficos, padrões e indicadores</td></tr>
+              <tr><td><b>Premissa</b></td><td>Preço converge para o <b>valor intrínseco</b> no longo prazo</td><td>"O preço desconta tudo"; padrões tendem a se repetir</td></tr>
+              <tr><td><b>Horizonte típico</b></td><td>Longo prazo</td><td>Curto e médio prazo</td></tr>
+              <tr><td><b>Pergunta-chave</b></td><td>"A ação está barata ou cara?"</td><td>"Para onde o preço tende a ir?"</td></tr>
+            </tbody>
+          </table>
+          <p>A análise fundamentalista calcula o valor intrínseco (por exemplo, por fluxo de caixa descontado — Tópico 10) e compara com o preço de mercado: preço abaixo do valor → oportunidade de compra.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.7 Estratégias clássicas</h3>
+          <table>
+            <thead><tr><th>Estratégia</th><th>Essência</th></tr></thead>
+            <tbody>
+              <tr><td><b>Buy and hold</b></td><td>Comprar bons ativos e mantê-los por muitos anos, aproveitando juros compostos e evitando custos e erros de timing.</td></tr>
+              <tr><td><b>Value investing</b></td><td>Comprar ações com preço <b>abaixo do valor intrínseco</b> (margem de segurança) — escola de Graham e Buffett.</td></tr>
+              <tr><td><b>Growth (crescimento)</b></td><td>Comprar empresas com crescimento de lucros acima da média, mesmo com múltiplos altos.</td></tr>
+              <tr><td><b>Dividendos</b></td><td>Montar carteira de empresas boas pagadoras, buscando renda recorrente.</td></tr>
+              <tr><td><b>Custo médio</b></td><td>Aportes periódicos de valor fixo: compra-se mais quando o preço cai e menos quando sobe, reduzindo o preço médio e o risco de timing.</td></tr>
+            </tbody>
+          </table>
+          <div class="box fgv">
+            <div class="box-title">🏛 Exemplo — custo médio</div>
+            <p>Aporte de R$ 1.000/mês: no 1º mês compra a R$ 10 (100 cotas); no 2º, a R$ 8 (125 cotas). Total: 225 cotas por R$ 2.000 → <b>preço médio ≈ R$ 8,89</b>, abaixo da média simples dos preços (R$ 9,00).</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.8 Hipótese dos mercados eficientes (HME)</h3>
+          <p>A HME afirma que os preços refletem a informação disponível. Três formas:</p>
+          <table>
+            <thead><tr><th>Forma</th><th>Preços refletem</th><th>Consequência</th></tr></thead>
+            <tbody>
+              <tr><td><b>Fraca</b></td><td>Preços passados</td><td>Análise técnica não gera lucro sistemático</td></tr>
+              <tr><td><b>Semiforte</b></td><td>Toda informação pública</td><td>Análise fundamentalista também não garante lucro extra</td></tr>
+              <tr><td><b>Forte</b></td><td>Toda informação, pública e privada</td><td>Nem informação privilegiada gera lucro extra</td></tr>
+            </tbody>
+          </table>
+          <p>A HME é a base teórica da gestão passiva: se o mercado é eficiente, tentar vencê-lo é caro e frustrante — melhor replicar o índice.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.9 Finanças comportamentais: os vieses que sabotam a estratégia</h3>
+          <table>
+            <thead><tr><th>Viés</th><th>Comportamento</th></tr></thead>
+            <tbody>
+              <tr><td><b>Excesso de confiança</b></td><td>Superestimar a própria capacidade de prever o mercado; girar demais a carteira.</td></tr>
+              <tr><td><b>Aversão à perda</b></td><td>A dor da perda é maior que o prazer do ganho equivalente; o investidor segura ativos perdedores e vende os vencedores cedo demais.</td></tr>
+              <tr><td><b>Efeito manada</b></td><td>Seguir a multidão: comprar na euforia (alta) e vender no pânico (baixa).</td></tr>
+              <tr><td><b>Ancoragem</b></td><td>Fixar-se num preço de referência ("só vendo quando voltar a R$ 50").</td></tr>
+              <tr><td><b>Viés de confirmação</b></td><td>Buscar só informações que confirmam a tese de investimento.</td></tr>
+            </tbody>
+          </table>
+          <p>Uma boa estratégia inclui regras que neutralizam os vieses: alocação definida, rebalanceamento disciplinado e aportes automáticos.</p>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>Tópico de cobrança <b>conceitual e comparativa</b>: a FGV explora as diferenças entre filosofias (ativa × passiva), escolas de análise (fundamentalista × técnica), perfis de investidor e as estratégias clássicas. Eventuais cálculos são simples: preço médio de aportes e retorno de carteira.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Identificar a estratégia descrita no enunciado (value, dividendos, buy and hold, custo médio).</li>
+            <li>Comparar gestão ativa × passiva e associar ETF/fundos indexados à passiva.</li>
+            <li>Distinguir análise fundamentalista de técnica pelas premissas.</li>
+            <li>Relacionar as formas da hipótese dos mercados eficientes às análises que elas invalidam.</li>
+            <li>Classificar vieses comportamentais a partir de situações-descritas.</li>
+            <li>Dificuldade média — os erros vêm de confundir as escolas e as formas de eficiência.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Análise fundamentalista × técnica</td><td>Muito alta</td></tr>
+              <tr><td>Gestão ativa × passiva e ETFs</td><td>Alta</td></tr>
+              <tr><td>Perfis de investidor e suitability</td><td>Alta</td></tr>
+              <tr><td>Hipótese dos mercados eficientes (3 formas)</td><td>Alta</td></tr>
+              <tr><td>Estratégias clássicas (buy and hold, value, dividendos, custo médio)</td><td>Média-alta</td></tr>
+              <tr><td>Vieses comportamentais</td><td>Média-alta</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Associar análise técnica ao longo prazo — ela é tipicamente de curto prazo; fundamentalista, longo.</li>
+            <li>Dizer que gestão passiva tenta superar o índice — ela replica o índice.</li>
+            <li>Confundir a forma semiforte da HME com a fraca: na semiforte, nem análise fundamentalista garante lucro extra.</li>
+            <li>Achar que diversificação elimina o risco de mercado — elimina só o não sistemático.</li>
+            <li>Classificar "comprar na alta e vender na baixa" como estratégia — é viés (efeito manada).</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>"Valor intrínseco", "balanços", "fluxo de caixa descontado" → análise fundamentalista.</li>
+            <li>"Gráficos", "padrões de preço", "tendências" → análise técnica.</li>
+            <li>"Replica o índice", "baixo custo", "ETF" → gestão passiva.</li>
+            <li>"Aportes mensais fixos" → estratégia do custo médio.</li>
+            <li>"Adequação do produto ao perfil do cliente" → suitability.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Perfis</div><p>Conservador (segurança, renda fixa) → Moderado (equilíbrio) → Arrojado (risco, renda variável). Suitability = adequar o produto ao perfil.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Ativa × passiva</div><p>Ativa tenta <b>superar</b> o benchmark (cara); passiva <b>replica</b> o índice (barata) — fundos indexados e ETFs.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Análises</div><p>Fundamentalista: fundamentos e valor intrínseco, longo prazo. Técnica: preços e gráficos, curto prazo.</p></div>
+          <div class="box tip"><div class="box-title">🧠 HME</div><p>Fraca (preços passados) derruba a análise técnica; semiforte (informação pública) derruba a fundamentalista; forte inclui informação privilegiada.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Estratégias</div><p>Buy and hold = comprar e manter. Value = barata x valor intrínseco (margem de segurança). Dividendos = renda. Custo médio = aportes fixos periódicos.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Vieses</div><p>Excesso de confiança, aversão à perda, efeito manada, ancoragem e confirmação — o inimigo é o próprio investidor.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Estratégia começa por objetivo, horizonte e tolerância ao risco — não pela escolha do ativo.</li>
+            <li>Perfis: conservador, moderado e arrojado; suitability = adequar produto ao perfil.</li>
+            <li>Alocação de ativos é a decisão mais importante; rebalanceamento devolve a carteira aos pesos-alvo.</li>
+            <li>Diversificação entre classes pouco correlacionadas reduz o risco não sistemático.</li>
+            <li>Gestão ativa tenta superar o índice; passiva replica (fundos indexados, ETFs) com baixo custo.</li>
+            <li>Fundamentalista: valor intrínseco, fundamentos, longo prazo. Técnica: preços, gráficos, curto prazo.</li>
+            <li>Buy and hold: manter no longo prazo. Value: preço abaixo do valor intrínseco (margem de segurança). Growth: crescimento. Dividendos: renda recorrente.</li>
+            <li>Custo médio: aportes periódicos de valor fixo — compra mais na baixa e menos na alta.</li>
+            <li>HME: fraca invalida análise técnica; semiforte invalida fundamentalista; forte inclui informação privilegiada.</li>
+            <li>Vieses (excesso de confiança, aversão à perda, manada, ancoragem) sabotam a estratégia — disciplina é a defesa.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Preço médio (custo médio)</td><td>Total investido ÷ total de cotas/ações adquiridas — cai quando se compra mais barato</td></tr>
+              <tr><td>Retorno da carteira</td><td>Rp = Σ wi × Ri — média ponderada pelos pesos das classes (Tópico 07)</td></tr>
+              <tr><td>Alocação de ativos</td><td>Distribuição percentual da carteira entre classes (renda fixa, variável etc.) — principal determinante do resultado</td></tr>
+              <tr><td>Rebalanceamento</td><td>Ajuste periódico da carteira de volta à alocação-alvo: vende o que subiu demais, compra o que ficou para trás</td></tr>
+              <tr><td>Margem de segurança (value)</td><td>Comprar com preço significativamente abaixo do valor intrínseco estimado</td></tr>
+              <tr><td>Benchmark</td><td>Índice de referência que a gestão ativa tenta superar e a passiva replica (ex.: Ibovespa, CDI)</td></tr>
+              <tr><td>Suitability</td><td>Adequação obrigatória do produto ao perfil, objetivo e horizonte do investidor</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Comparativo-mestre das estratégias e filosofias</h3>
+          <table>
+            <thead><tr><th>Par comparado</th><th>Lado A</th><th>Lado B</th></tr></thead>
+            <tbody>
+              <tr><td>Gestão</td><td>Ativa: tenta superar o benchmark, custo maior</td><td>Passiva: replica o índice, custo menor (ETF)</td></tr>
+              <tr><td>Análise</td><td>Fundamentalista: valor intrínseco, longo prazo</td><td>Técnica: gráficos e preços, curto prazo</td></tr>
+              <tr><td>Estilo de ações</td><td>Value: baratas (preço &lt; valor)</td><td>Growth: crescimento acima da média</td></tr>
+              <tr><td>Postura</td><td>Buy and hold: manter por anos</td><td>Market timing: tentar acertar os ciclos</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplo numérico — custo médio</h3>
+          <table>
+            <thead><tr><th>Mês</th><th>Aporte</th><th>Preço da cota</th><th>Cotas compradas</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>R$ 1.000</td><td>R$ 10,00</td><td>100</td></tr>
+              <tr><td>2</td><td>R$ 1.000</td><td>R$ 8,00</td><td>125</td></tr>
+              <tr><td><b>Total</b></td><td><b>R$ 2.000</b></td><td>Preço médio: <b>≈ R$ 8,89</b></td><td><b>225</b></td></tr>
+            </tbody>
+          </table>
+          <h3>Hipótese dos mercados eficientes</h3>
+          <table>
+            <thead><tr><th>Forma</th><th>Preços refletem</th><th>Análise que deixa de gerar lucro extra</th></tr></thead>
+            <tbody>
+              <tr><td>Fraca</td><td>Preços passados</td><td>Técnica</td></tr>
+              <tr><td>Semiforte</td><td>Toda informação pública</td><td>Técnica + fundamentalista</td></tr>
+              <tr><td>Forte</td><td>Toda informação (pública e privada)</td><td>Nenhuma — nem informação privilegiada</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 A aposta de Buffett</div><p>Em 2007, Warren Buffett apostou US$ 1 milhão que um fundo de índice (S&amp;P 500) venceria uma cesta de fundos de gestão ativa em 10 anos. Venceu com folga — a gestão passiva superou a ativa depois dos custos. Foi a demonstração prática mais famosa da tese dos mercados eficientes.</p></div>
+        <div class="box curio"><div class="box-title">📚 O pai do value investing</div><p>Benjamin Graham, autor de "O Investidor Inteligente" (1949), criou os conceitos de valor intrínseco e margem de segurança. Seu aluno mais famoso, Warren Buffett, aplicou a estratégia por décadas — e até hoje "value investing" e buy and hold são sinônimos da escola de Graham.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Nobel por estudar nossos erros</div><p>Daniel Kahneman (2002) e Richard Thaler (2017) ganharam o Nobel de Economia por mostrar que investidores não são racionais: aversão à perda, excesso de confiança e efeito manada movem preços. Nasceram as finanças comportamentais — e a explicação de por que tantos compram na alta e vendem na baixa.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Risco x retorno (Tópico 07)</td><td>Base teórica: perfis de risco, diversificação, beta e CAPM sustentam toda a alocação</td></tr>
+              <tr><td>Valor do dinheiro no tempo (Tópico 06)</td><td>O buy and hold vive dos juros compostos; o valor intrínseco vem de fluxos descontados</td></tr>
+              <tr><td>Fontes de financiamento (Tópico 08)</td><td>Ações e debêntures, vistas aqui pelo lado do investidor, são as fontes vistas pelo lado da empresa</td></tr>
+              <tr><td>Valuation (Tópico 10)</td><td>A análise fundamentalista calcula o valor intrínseco pelos métodos de avaliação</td></tr>
+              <tr><td>Avaliações Econômicas de Projetos (matéria)</td><td>A carteira de projetos de uma empresa segue a mesma lógica de risco, retorno e alocação</td></tr>
+              <tr><td>Orçamento (matéria)</td><td>Política de investimento de estatais conecta-se ao planejamento orçamentário plurianual</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e a tabela-mestre das estratégias; refazer o exemplo do custo médio.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com foco em análise fundamentalista × técnica e nas formas da HME.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar os conceitos antes de avançar para o Tópico 10 (Valuation).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>GITMAN, Lawrence J.; JOEHNK, Michael D. <i>Fundamentos de Investimentos</i>. São Paulo: Pearson.</li>
+            <li>BODIE, Zvi; KANE, Alex; MARCUS, Alan. <i>Investimentos</i>. Porto Alegre: AMGH.</li>
+            <li>GRAHAM, Benjamin. <i>O Investidor Inteligente</i>. Rio de Janeiro: HarperCollins.</li>
+            <li>FAMA, Eugene. "Efficient Capital Markets". <i>Journal of Finance</i> (base da hipótese dos mercados eficientes).</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Administração Financeira · Tópico 09/10</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_admfin_t09";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Quais são as etapas do processo de investimento?",
+          "a": "Definir objetivo, horizonte e tolerância ao risco; montar a política de investimento (alocação); executar; acompanhar e rebalancear."
+      },
+      {
+          "q": "Quais são os três perfis clássicos de investidor?",
+          "a": "Conservador (segurança e liquidez, renda fixa), moderado (equilíbrio) e arrojado/agressivo (maior risco, renda variável)."
+      },
+      {
+          "q": "O que é suitability?",
+          "a": "Adequação obrigatória do produto de investimento ao perfil, objetivo e horizonte do cliente — regra de conduta do mercado (CVM)."
+      },
+      {
+          "q": "O que é alocação de ativos?",
+          "a": "A distribuição da carteira entre classes de ativos (renda fixa, ações, imóveis...). É a principal determinante do resultado de longo prazo."
+      },
+      {
+          "q": "O que é rebalanceamento?",
+          "a": "Ajuste periódico da carteira de volta à alocação-alvo: vende-se o que subiu demais e compra-se o que ficou para trás."
+      },
+      {
+          "q": "Qual a diferença entre gestão ativa e passiva?",
+          "a": "Ativa: tenta superar o benchmark por seleção de ativos e timing, com custo maior. Passiva: replica um índice (fundos indexados, ETFs), com custo menor."
+      },
+      {
+          "q": "O que é um ETF?",
+          "a": "Exchange Traded Fund: fundo de índice negociado em bolsa, que replica um benchmark (ex.: Ibovespa) com baixo custo e liquidez diária."
+      },
+      {
+          "q": "Qual a base da análise fundamentalista?",
+          "a": "Os fundamentos da empresa (lucros, balanços, fluxo de caixa) para estimar o valor intrínseco; o preço converge para o valor no longo prazo."
+      },
+      {
+          "q": "Qual a base da análise técnica?",
+          "a": "Preços e volumes passados, gráficos e padrões: pressupõe que o preço desconta tudo e que padrões se repetem; foco no curto prazo."
+      },
+      {
+          "q": "O que é a estratégia buy and hold?",
+          "a": "Comprar bons ativos e mantê-los por muitos anos, aproveitando os juros compostos e evitando custos e erros de market timing."
+      },
+      {
+          "q": "O que é value investing?",
+          "a": "Comprar ações com preço abaixo do valor intrínseco, com margem de segurança — escola de Benjamin Graham e Warren Buffett."
+      },
+      {
+          "q": "O que é a estratégia de dividendos?",
+          "a": "Montar carteira de empresas boas pagadoras de dividendos, buscando renda recorrente no longo prazo."
+      },
+      {
+          "q": "Como funciona a estratégia do custo médio?",
+          "a": "Aportes periódicos de valor fixo: compra-se mais cotas quando o preço cai e menos quando sobe, reduzindo o preço médio e o risco de timing."
+      },
+      {
+          "q": "O que afirma a forma fraca da hipótese dos mercados eficientes?",
+          "a": "Que os preços refletem os preços passados — a análise técnica não gera lucro sistemático."
+      },
+      {
+          "q": "E a forma semiforte?",
+          "a": "Os preços refletem toda a informação pública — nem a análise fundamentalista garante lucro extra."
+      },
+      {
+          "q": "E a forma forte?",
+          "a": "Os preços refletem toda informação, pública e privada — nem informação privilegiada gera lucro extra."
+      },
+      {
+          "q": "O que é aversão à perda?",
+          "a": "Viés comportamental: a dor de perder é maior que o prazer de ganhar o mesmo valor — leva a segurar ativos perdedores e vender vencedores cedo demais."
+      },
+      {
+          "q": "O que é o efeito manada?",
+          "a": "Viés de seguir a multidão: comprar na euforia (alta) e vender no pânico (baixa) — o oposto do comportamento racional."
+      },
+      {
+          "q": "Por que a alocação de ativos importa mais que a seleção de ativos?",
+          "a": "Estudos clássicos mostram que a divisão entre classes explica a maior parte do comportamento da carteira no longo prazo — mais que escolher papéis ou acertar timing."
+      },
+      {
+          "q": "Aporte fixo de R$ 1.000: comprou 100 cotas a R$ 10 e 125 a R$ 8. Preço médio?",
+          "a": "R$ 2.000 ÷ 225 cotas ≈ R$ 8,89 — abaixo da média simples dos preços (R$ 9,00). É a vantagem do custo médio."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Processo de investimento",
+          "texto": "—",
+          "enun": "O primeiro passo de uma estratégia de investimentos bem estruturada é:",
+          "alts": [
+              "Escolher as ações mais negociadas do dia.",
+              "Definir o objetivo, o horizonte e a tolerância ao risco do investidor.",
+              "Copiar a carteira de um influenciador.",
+              "Aplicar todo o capital em renda variável.",
+              "Esperar o melhor momento para entrar no mercado."
+          ],
+          "correta": 1,
+          "coment": "A estratégia nasce do investidor (objetivo, horizonte, risco), não do ativo. A escolha dos ativos é consequência da política de investimento definida."
+      },
+      {
+          "tema": "Perfis",
+          "texto": "—",
+          "enun": "Um investidor que prioriza segurança e liquidez, sem tolerância a oscilações, é classificado como:",
+          "alts": [
+              "Arrojado",
+              "Moderado",
+              "Conservador",
+              "Agressivo",
+              "Especulador"
+          ],
+          "correta": 2,
+          "coment": "Conservador: baixa tolerância ao risco, prioriza preservação de capital e liquidez — alocação predominantemente em renda fixa."
+      },
+      {
+          "tema": "Suitability",
+          "texto": "—",
+          "enun": "O suitability impõe à instituição financeira o dever de:",
+          "alts": [
+              "Garantir rentabilidade mínima ao cliente.",
+              "Oferecer apenas produtos adequados ao perfil, objetivo e horizonte do investidor.",
+              "Recomendar sempre o produto de maior taxa de administração.",
+              "Proibir clientes conservadores de comprar ações.",
+              "Isentar o cliente de riscos."
+          ],
+          "correta": 1,
+          "coment": "Suitability é a adequação produto-perfil: a instituição deve verificar se o investimento é compatível com o perfil de risco, os objetivos e o horizonte do cliente."
+      },
+      {
+          "tema": "Alocação de ativos",
+          "texto": "—",
+          "enun": "Estudos clássicos sobre o desempenho de carteiras mostram que o principal determinante do resultado de longo prazo é:",
+          "alts": [
+              "A seleção de ações individuais.",
+              "O market timing.",
+              "A alocação de ativos entre as classes.",
+              "A sorte do gestor.",
+              "A frequência das operações."
+          ],
+          "correta": 2,
+          "coment": "A alocação de ativos (quanto em renda fixa, ações etc.) explica a maior parte do comportamento da carteira — mais que a seleção de ativos ou o timing."
+      },
+      {
+          "tema": "Rebalanceamento",
+          "texto": "Uma carteira-alvo é 60% renda fixa e 40% ações. Após um ano de alta da bolsa, a composição passou a 50%/50%.",
+          "enun": "Para rebalancear, o investidor deve:",
+          "alts": [
+              "Manter tudo como está.",
+              "Vender ações e comprar renda fixa, voltando ao 60/40.",
+              "Vender renda fixa e comprar mais ações.",
+              "Zerar a carteira.",
+              "Migrar tudo para renda fixa."
+          ],
+          "correta": 1,
+          "coment": "Rebalancear é retornar aos pesos-alvo: vender a classe que subiu demais (ações, que passaram a 50%) e reforçar a que ficou abaixo (renda fixa)."
+      },
+      {
+          "tema": "Gestão ativa × passiva",
+          "texto": "—",
+          "enun": "A gestão passiva caracteriza-se por:",
+          "alts": [
+              "Tentar superar o Ibovespa com seleção de ações.",
+              "Replicar um índice de referência, com baixo custo — como fazem os ETFs.",
+              "Cobrar taxa de performance.",
+              "Fazer market timing constante.",
+              "Operar apenas day trade."
+          ],
+          "correta": 1,
+          "coment": "Gestão passiva = replicar o índice (benchmark), sem tentar vencê-lo; os veículos típicos são fundos indexados e ETFs, com taxas baixas."
+      },
+      {
+          "tema": "ETF",
+          "texto": "—",
+          "enun": "Um ETF (Exchange Traded Fund) é:",
+          "alts": [
+              "Um fundo de gestão ativa de alta taxa.",
+              "Um fundo de índice negociado em bolsa, que replica um benchmark com baixo custo.",
+              "Um título de dívida privada.",
+              "Uma debênture incentivada.",
+              "Um derivativo de câmbio."
+          ],
+          "correta": 1,
+          "coment": "ETF é o veículo típico da gestão passiva: fundo negociado em bolsa que espelha um índice (ex.: Ibovespa), com taxa baixa e liquidez diária."
+      },
+      {
+          "tema": "Análise fundamentalista",
+          "texto": "—",
+          "enun": "A análise fundamentalista baseia-se em:",
+          "alts": [
+              "Padrões gráficos de preços passados.",
+              "Fundamentos da empresa — lucros, balanços, fluxo de caixa — para estimar o valor intrínseco, com foco no longo prazo.",
+              "Rumores de mercado.",
+              "Indicadores de momentum.",
+              "Horóscopo financeiro."
+          ],
+          "correta": 1,
+          "coment": "Fundamentalista: valor intrínseco estimado pelos fundamentos (inclusive fluxo de caixa descontado); o preço de mercado converge para o valor no longo prazo."
+      },
+      {
+          "tema": "Análise técnica",
+          "texto": "—",
+          "enun": "A análise técnica pressupõe que:",
+          "alts": [
+              "Os balanços determinam o preço no curto prazo.",
+              "O preço desconta todas as informações e os padrões gráficos de preços e volumes tendem a se repetir.",
+              "O valor intrínseco é mensurável com precisão.",
+              "O mercado é ineficiente no longo prazo.",
+              "Dividendos são o único retorno relevante."
+          ],
+          "correta": 1,
+          "coment": "A escola técnica (gráfica) trabalha com preços, volumes e padrões históricos para projetar movimentos de curto prazo — 'o preço desconta tudo'."
+      },
+      {
+          "tema": "Buy and hold",
+          "texto": "—",
+          "enun": "A estratégia buy and hold consiste em:",
+          "alts": [
+              "Comprar e vender ações no mesmo dia.",
+              "Comprar bons ativos e mantê-los por muitos anos, minimizando giros, custos e erros de timing.",
+              "Comprar apenas na baixa e vender na alta.",
+              "Manter 100% em renda fixa.",
+              "Rebalancear a carteira toda semana."
+          ],
+          "correta": 1,
+          "coment": "Buy and hold = comprar e segurar no longo prazo, aproveitando juros compostos e o crescimento das empresas, sem tentar acertar os ciclos."
+      },
+      {
+          "tema": "Value investing",
+          "texto": "—",
+          "enun": "O value investing, escola de Graham e Buffett, consiste em:",
+          "alts": [
+              "Comprar ações de empresas em crescimento acelerado a qualquer preço.",
+              "Comprar ações com preço significativamente abaixo do valor intrínseco, com margem de segurança.",
+              "Seguir as recomendações da maioria.",
+              "Investir só em fundos de índice.",
+              "Vender a descoberto em mercados em alta."
+          ],
+          "correta": 1,
+          "coment": "Value investing: preço < valor intrínseco = oportunidade. A diferença entre valor estimado e preço pago é a margem de segurança."
+      },
+      {
+          "tema": "Custo médio",
+          "texto": "Um investidor aporta R$ 1.000 por mês em um fundo: no 1º mês a cota vale R$ 10; no 2º, R$ 8.",
+          "enun": "O preço médio de aquisição das cotas é aproximadamente:",
+          "alts": [
+              "R$ 9,00",
+              "R$ 8,89",
+              "R$ 9,50",
+              "R$ 8,00",
+              "R$ 10,00"
+          ],
+          "correta": 1,
+          "coment": "1º mês: 100 cotas; 2º mês: 125 cotas. Total: 225 cotas por R$ 2.000 → preço médio = 2.000 ÷ 225 ≈ R$ 8,89, abaixo da média simples dos preços (R$ 9,00)."
+      },
+      {
+          "tema": "HME — forma fraca",
+          "texto": "—",
+          "enun": "Pela forma fraca da hipótese dos mercados eficientes:",
+          "alts": [
+              "Nenhuma análise gera lucro extra, nem com informação privilegiada.",
+              "Os preços refletem os preços passados — a análise técnica não gera lucro sistemático.",
+              "Os preços refletem toda a informação pública.",
+              "O mercado é totalmente imprevisível.",
+              "A análise fundamentalista é inútil."
+          ],
+          "correta": 1,
+          "coment": "Forma fraca: preços passados já estão no preço atual → padrões históricos (análise técnica) não geram lucro sistemático. A fundamentalista só é invalidada na forma semiforte."
+      },
+      {
+          "tema": "HME — forma semiforte",
+          "texto": "—",
+          "enun": "Se um mercado é eficiente na forma semiforte, então:",
+          "alts": [
+              "Apenas a análise técnica deixa de gerar lucro extra.",
+              "Preços refletem toda informação pública — nem análise técnica nem fundamentalista garantem lucro extra.",
+              "Informação privilegiada não gera lucro.",
+              "Os preços são aleatórios e sem relação com informação.",
+              "Só a gestão ativa funciona."
+          ],
+          "correta": 1,
+          "coment": "Semiforte: toda informação pública já está no preço. Como fundamentalista e técnica usam informações públicas, nenhuma das duas garante retorno superior sistemático."
+      },
+      {
+          "tema": "HME — implicação prática",
+          "texto": "—",
+          "enun": "A hipótese dos mercados eficientes sustenta teoricamente:",
+          "alts": [
+              "A gestão ativa como única estratégia válida.",
+              "A gestão passiva: se é difícil vencer o mercado consistentemente, replicar o índice a baixo custo é racional.",
+              "O day trade como melhor estratégia.",
+              "A eliminação do risco sistemático.",
+              "A previsibilidade perfeita dos preços."
+          ],
+          "correta": 1,
+          "coment": "Quanto mais eficiente o mercado, mais raro é superá-lo após custos — daí a força da gestão passiva (fundos de índice e ETFs)."
+      },
+      {
+          "tema": "Vieses comportamentais",
+          "texto": "Um investidor se recusa a vender uma ação que caiu 40%, esperando 'voltar ao preço que pagou', enquanto vende rapidamente qualquer ação que sobe 5%.",
+          "enun": "O comportamento descrito ilustra o viés de:",
+          "alts": [
+              "Efeito manada",
+              "Aversão à perda",
+              "Excesso de confiança",
+              "Viés de confirmação",
+              "Suitability"
+          ],
+          "correta": 1,
+          "coment": "Aversão à perda: a dor da perda supera o prazer do ganho equivalente — o investidor 'segura' perdedores (para não realizar a perda) e realiza lucros cedo demais."
+      },
+      {
+          "tema": "Vieses comportamentais",
+          "texto": "—",
+          "enun": "Comprar ativos apenas porque 'todo mundo está comprando' e vendê-los no pânico generalizado caracteriza:",
+          "alts": [
+              "Ancoragem",
+              "Efeito manada",
+              "Buy and hold",
+              "Value investing",
+              "Rebalanceamento"
+          ],
+          "correta": 1,
+          "coment": "Efeito manada: imitar a multidão, comprando na euforia e vendendo no pânico — exatamente o oposto da lógica racional de comprar barato e vender caro."
+      },
+      {
+          "tema": "Diversificação",
+          "texto": "—",
+          "enun": "Na construção de uma carteira de investimentos, a diversificação entre ativos de baixa correlação tem como efeito:",
+          "alts": [
+              "Eliminar o risco sistemático.",
+              "Reduzir o risco não sistemático, mantendo o retorno esperado.",
+              "Garantir retorno positivo.",
+              "Aumentar o beta da carteira.",
+              "Eliminar a necessidade de rebalanceamento."
+          ],
+          "correta": 1,
+          "coment": "Diversificação elimina o risco específico (não sistemático); o risco de mercado permanece. É o benefício central da alocação entre classes pouco correlacionadas."
+      },
+      {
+          "tema": "Estratégia de dividendos",
+          "texto": "—",
+          "enun": "Um investidor que monta carteira de empresas maduras, com histórico de lucros estáveis e distribuição regular de proventos, buscando renda recorrente, adota a estratégia de:",
+          "alts": [
+              "Growth",
+              "Dividendos",
+              "Market timing",
+              "Day trade",
+              "Venda a descoberto"
+          ],
+          "correta": 1,
+          "coment": "Estratégia de dividendos: foco em boas pagadoras de proventos para gerar renda recorrente — comum para objetivos de aposentadoria."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Assinale a alternativa que combina corretamente os conceitos deste tópico:",
+          "alts": [
+              "Gestão passiva tenta superar o índice; análise técnica foca o longo prazo.",
+              "Gestão ativa replica o benchmark; a forma fraca da HME invalida a análise fundamentalista.",
+              "Gestão passiva replica o índice; análise fundamentalista estima valor intrínseco; e a forma semiforte da HME invalida o lucro extra via informação pública.",
+              "Buy and hold exige rebalanceamento diário; custo médio elimina o risco sistemático.",
+              "Suitability obriga o investidor a aceitar qualquer produto oferecido."
+          ],
+          "correta": 2,
+          "coment": "Síntese correta: passiva replica, fundamentalista busca valor intrínseco, e na forma semiforte a informação pública já está nos preços. As demais invertem os conceitos."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O investidor conservador prioriza:",
+          "alts": [
+              "Alto retorno a qualquer custo",
+              "Segurança e liquidez, com predominância de renda fixa",
+              "Ações de empresas em crescimento",
+              "Derivativos alavancados",
+              "Criptomoedas"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Suitability significa:",
+          "alts": [
+              "Garantia de rentabilidade",
+              "Adequação do produto ao perfil do investidor",
+              "Isenção de taxas",
+              "Alavancagem máxima",
+              "Rebalanceamento diário"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A gestão passiva tem como característica:",
+          "alts": [
+              "Superar o benchmark",
+              "Replicar um índice de referência com baixo custo",
+              "Selecionar ações subavaliadas",
+              "Fazer market timing",
+              "Cobrar taxa de performance"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Um ETF é:",
+          "alts": [
+              "Um título de dívida pública",
+              "Um fundo de índice negociado em bolsa",
+              "Uma ação preferencial",
+              "Uma debênture conversível",
+              "Um fundo de gestão ativa"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A análise fundamentalista estima o valor de uma ação com base em:",
+          "alts": [
+              "Gráficos de preços",
+              "Fundamentos da empresa (lucros, balanços, fluxo de caixa)",
+              "Rumores",
+              "Volumes negociados",
+              "Médias móveis"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A análise técnica tem como foco principal:",
+          "alts": [
+              "O valor intrínseco no longo prazo",
+              "Padrões de preços e volumes, no curto prazo",
+              "Os dividendos futuros",
+              "O balanço patrimonial",
+              "A estrutura de capital"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Buy and hold significa:",
+          "alts": [
+              "Comprar e vender no mesmo dia",
+              "Comprar e manter os ativos por longo prazo",
+              "Comprar na alta e vender na baixa",
+              "Operar alavancado",
+              "Rebalancear semanalmente"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A diversificação de uma carteira reduz:",
+          "alts": [
+              "O risco sistemático",
+              "O risco não sistemático",
+              "A inflação",
+              "A taxa livre de risco",
+              "O prazo dos investimentos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A hipótese dos mercados eficientes afirma que os preços:",
+          "alts": [
+              "São sempre errados",
+              "Refletem a informação disponível",
+              "São manipulados",
+              "Não têm relação com informação",
+              "Sobem sempre"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Comprar na euforia porque 'todos estão comprando' é exemplo de:",
+          "alts": [
+              "Ancoragem",
+              "Efeito manada",
+              "Suitability",
+              "Value investing",
+              "Margem de segurança"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Aporte mensal de R$ 500: no 1º mês a cota custa R$ 25; no 2º, R$ 20. O preço médio de aquisição é aproximadamente:",
+          "alts": [
+              "R$ 22,50",
+              "R$ 22,22",
+              "R$ 21,50",
+              "R$ 20,00",
+              "R$ 25,00"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Uma carteira-alvo de 70% renda fixa e 30% ações passou a 60%/40% após alta da bolsa. O rebalanceamento exige:",
+          "alts": [
+              "Comprar mais ações",
+              "Vender ações e comprar renda fixa até voltar ao 70/30",
+              "Manter a nova proporção",
+              "Vender toda a renda fixa",
+              "Nada: 60/40 é melhor"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A principal vantagem da gestão passiva sobre a ativa, para o pequeno investidor, é:",
+          "alts": [
+              "Maior retorno garantido",
+              "Baixo custo e exposição diversificada ao índice",
+              "Isenção de risco",
+              "Rentabilidade acima do índice",
+              "Proteção do FGC"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Segundo a forma fraca da HME, deixa de gerar lucro sistemático a análise:",
+          "alts": [
+              "Fundamentalista",
+              "Técnica",
+              "De balanços",
+              "De dividendos",
+              "Macroeconômica"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Na forma semiforte da HME, os preços refletem:",
+          "alts": [
+              "Apenas preços passados",
+              "Toda a informação pública",
+              "Toda a informação pública e privada",
+              "Nenhuma informação",
+              "Apenas balanços auditados"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A margem de segurança, no value investing, é:",
+          "alts": [
+              "A garantia do FGC",
+              "A diferença entre o valor intrínseco estimado e o preço pago",
+              "O stop loss da operação",
+              "O colchão de liquidez",
+              "O limite de perda diário"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O viés que leva o investidor a manter ativos perdedores por muito tempo e vender vencedores cedo demais é:",
+          "alts": [
+              "Excesso de confiança",
+              "Aversão à perda",
+              "Efeito manada",
+              "Ancoragem em alta",
+              "Viés de disponibilidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A estratégia de investir valor fixo periodicamente, independentemente do preço, é chamada de:",
+          "alts": [
+              "Market timing",
+              "Custo médio (dollar cost averaging)",
+              "Day trade",
+              "Buy and hold puro",
+              "Alavancagem"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A principal determinante do desempenho de longo prazo de uma carteira é:",
+          "alts": [
+              "A escolha de ações individuais",
+              "A alocação de ativos entre classes",
+              "O timing de entrada",
+              "A taxa de corretagem",
+              "O número de ativos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Um fundo que cobra taxa de performance e busca superar o Ibovespa por seleção de ações pratica gestão:",
+          "alts": [
+              "Passiva",
+              "Ativa",
+              "Indexada",
+              "Automática",
+              "Neutra"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Um analista estima o valor intrínseco de uma ação em R$ 50 pelo fluxo de caixa descontado e a compra a R$ 35, esperando a convergência no longo prazo. A análise e a estratégia são, respectivamente:",
+          "alts": [
+              "Técnica e day trade",
+              "Fundamentalista e value investing",
+              "Técnica e buy and hold",
+              "Fundamentalista e growth",
+              "Comportamental e custo médio"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Se o mercado for eficiente na forma forte:",
+          "alts": [
+              "A análise técnica ainda gera lucro",
+              "A análise fundamentalista ainda gera lucro",
+              "Nem mesmo informação privilegiada gera lucro extra",
+              "A gestão ativa sempre vence",
+              "Os preços não refletem informação"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Compras: 100 cotas a R$ 12 e 300 cotas a R$ 8. O preço médio é:",
+          "alts": [
+              "R$ 10,00",
+              "R$ 9,00",
+              "R$ 9,60",
+              "R$ 8,50",
+              "R$ 11,00"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Um investidor arrojado com horizonte de 20 anos deve ter carteira com:",
+          "alts": [
+              "100% em poupança",
+              "Predominância de renda variável, dada a alta tolerância ao risco e o longo prazo",
+              "100% em títulos de curtíssimo prazo",
+              "Sem diversificação",
+              "Apenas ouro"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A disciplina de rebalanceamento combate diretamente o seguinte problema comportamental:",
+          "alts": [
+              "Falta de liquidez",
+              "Comprar na euforia e vender no pânico (manada), pois impõe vender o que subiu e comprar o que caiu",
+              "O excesso de diversificação",
+              "A cobrança de taxas",
+              "A inflação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Um gestor afirma: 'preço não importa; importam os fundamentos e o valor intrínseco, que se revela no longo prazo'. Trata-se da escola:",
+          "alts": [
+              "Técnica",
+              "Fundamentalista",
+              "Comportamental",
+              "De momentum",
+              "De análise gráfica"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre custo médio e market timing, é correto afirmar que:",
+          "alts": [
+              "O custo médio exige acertar o melhor momento de compra",
+              "O market timing é uma estratégia de aportes fixos",
+              "O custo médio dispensa o timing, pois os aportes regulares compram mais na baixa e menos na alta",
+              "Ambos eliminam o risco sistemático",
+              "Ambos garantem lucro"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Estudos empíricos mostram que a maioria dos fundos de gestão ativa não supera o índice no longo prazo, após os custos. Esse achado é coerente com:",
+          "alts": [
+              "A forma fraca da HME apenas",
+              "A hipótese dos mercados eficientes e justifica a gestão passiva",
+              "A análise técnica",
+              "O efeito manada",
+              "A inexistência de risco"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Uma política de investimentos institucional (ex.: de fundo de pensão ou estatal) deve conter, essencialmente:",
+          "alts": [
+              "A lista de ações da moda",
+              "Objetivos, tolerância a risco, alocação-alvo, limites e regras de governança e rebalanceamento",
+              "A promessa de rentabilidade fixa",
+              "O histórico do gestor apenas",
+              "A senha do home broker"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Assinale a afirmativa correta:",
+          "alts": [
+              "A análise técnica é a base do value investing",
+              "Na forma semiforte da HME, a análise técnica ainda garante lucro extra",
+              "O suitability protege o investidor ao exigir produtos compatíveis com seu perfil",
+              "A diversificação elimina o risco de mercado",
+              "ETFs são veículos de gestão ativa"
+          ],
+          "correta": 2
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Descrever o processo de investimento (objetivo, horizonte, risco, política)",
+      "Classificar perfis (conservador, moderado, arrojado) e explicar suitability",
+      "Reconhecer classes de ativos e seus perfis de risco × retorno",
+      "Explicar alocação de ativos, diversificação e rebalanceamento",
+      "Diferenciar gestão ativa de passiva e identificar ETFs",
+      "Distinguir análise fundamentalista de análise técnica",
+      "Descrever buy and hold, value, growth, dividendos e custo médio",
+      "Calcular preço médio de aportes periódicos",
+      "Relacionar as 3 formas da HME às análises que elas invalidam",
+      "Identificar vieses comportamentais em situações descritas"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Escolher o ativo antes de definir objetivo, horizonte e perfil — a ordem é inversa.",
+      "Confundir suitability com garantia de rentabilidade — é adequação de produto ao perfil.",
+      "Achar que gestão passiva tenta superar o índice — ela o replica.",
+      "Classificar ETF como gestão ativa — é o veículo típico da gestão passiva.",
+      "Associar análise técnica ao longo prazo — o longo prazo é da fundamentalista.",
+      "Confundir valor intrínseco (fundamentalista) com padrão gráfico (técnica).",
+      "Achar que buy and hold exige operar toda semana — é exatamente o oposto.",
+      "Confundir value (preço abaixo do valor) com growth (crescimento acima da média).",
+      "Acreditar que o custo médio elimina o risco — ele reduz o risco de timing, não o risco de mercado.",
+      "Calcular o preço médio pela média simples dos preços, e não pelo total investido ÷ total de cotas.",
+      "Trocar as formas da HME: fraca invalida a técnica; semiforte, a fundamentalista; forte, até informação privilegiada.",
+      "Achar que mercado eficiente significa preço sempre certo — significa preço que reflete a informação disponível.",
+      "Confundir aversão à perda (segurar perdedores) com efeito manada (seguir a multidão).",
+      "Cravar que diversificação elimina todo o risco — sobra o sistemático.",
+      "Esquecer que o rebalanceamento é vender o que subiu e comprar o que caiu — não o contrário.",
+      "Achar que a seleção de ativos importa mais que a alocação de ativos no longo prazo.",
+      "Classificar 'comprar na alta e vender na baixa' como estratégia — é viés comportamental.",
+      "Tratar a margem de segurança como garantia de lucro — é proteção contra erros de estimativa.",
+      "Ignorar o custo: gestão ativa cara precisa superar o índice por margem maior para valer a pena.",
+      "Achar que perfil de investidor é fixo para sempre — objetivo e horizonte mudam, e a alocação deve acompanhar."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Estratégia de investimento",
+          "Plano que define como alocar recursos entre ativos, dados objetivo, horizonte e tolerância ao risco."
+      ],
+      [
+          "Suitability",
+          "Adequação do produto de investimento ao perfil do cliente; dever de conduta das instituições financeiras."
+      ],
+      [
+          "Perfil de investidor",
+          "Classificação da tolerância ao risco: conservador, moderado ou arrojado (agressivo)."
+      ],
+      [
+          "Alocação de ativos",
+          "Distribuição percentual da carteira entre classes de ativos; principal determinante do resultado de longo prazo."
+      ],
+      [
+          "Classe de ativos",
+          "Grupo de investimentos com comportamento semelhante: renda fixa, renda variável, imobiliários, câmbio."
+      ],
+      [
+          "Rebalanceamento",
+          "Ajuste periódico que devolve a carteira aos pesos-alvo da alocação definida."
+      ],
+      [
+          "Gestão ativa",
+          "Filosofia que busca superar o benchmark por seleção de ativos e timing; custo maior."
+      ],
+      [
+          "Gestão passiva",
+          "Filosofia que replica um índice de referência; custo menor (fundos indexados e ETFs)."
+      ],
+      [
+          "ETF",
+          "Exchange Traded Fund: fundo de índice negociado em bolsa, com baixo custo e liquidez."
+      ],
+      [
+          "Benchmark",
+          "Índice de referência de desempenho (ex.: Ibovespa, CDI)."
+      ],
+      [
+          "Análise fundamentalista",
+          "Método que estima o valor intrínseco pelos fundamentos da empresa; foco no longo prazo."
+      ],
+      [
+          "Análise técnica",
+          "Método que projeta preços futuros a partir de padrões gráficos de preços e volumes; foco no curto prazo."
+      ],
+      [
+          "Buy and hold",
+          "Estratégia de comprar bons ativos e mantê-los por muitos anos."
+      ],
+      [
+          "Value investing",
+          "Estratégia de comprar ações abaixo do valor intrínseco, com margem de segurança (Graham/Buffett)."
+      ],
+      [
+          "Custo médio",
+          "Estratégia de aportes periódicos de valor fixo, que reduz o preço médio de compra e o risco de timing."
+      ],
+      [
+          "Hipótese dos mercados eficientes",
+          "Teoria segundo a qual os preços refletem a informação disponível (formas fraca, semiforte e forte)."
+      ],
+      [
+          "Vieses comportamentais",
+          "Desvios sistemáticos da racionalidade: excesso de confiança, aversão à perda, efeito manada, ancoragem, confirmação."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

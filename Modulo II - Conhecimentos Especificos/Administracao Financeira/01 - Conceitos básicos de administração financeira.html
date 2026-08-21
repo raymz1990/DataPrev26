@@ -200,6 +200,15 @@
   <select onchange="if(this.value) location.href=this.value;">
     <option value="">Ir para tópico…</option>
     <option value="01 - Conceitos básicos de administração financeira.html" selected>01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html">02 - Finanças corporativas</option>
+    <option value="03 - Alavancagem operacional e financeira.html">03 - Alavancagem operacional e financeira</option>
+    <option value="04 - Planejamento financeiro de curto prazo.html">04 - Planejamento financeiro de curto prazo</option>
+    <option value="05 - Planejamento financeiro de longo prazo.html">05 - Planejamento financeiro de longo prazo</option>
+    <option value="06 - Valor do dinheiro no tempo.html">06 - Valor do dinheiro no tempo</option>
+    <option value="" disabled>07 - Risco x retorno (em breve)</option>
+    <option value="" disabled>08 - Fontes de financiamento a longo prazo (em breve)</option>
+    <option value="" disabled>09 - Estratégias de investimentos (em breve)</option>
+    <option value="" disabled>10 - Valuation (em breve)</option>
   </select>
 </nav>
 
@@ -799,6 +808,7 @@
     {d:"Difícil", texto:"—", enun:"Assinale a alternativa que melhor sintetiza a relação entre as três demonstrações financeiras estudadas (BP, DRE, DFC):", alts:["São documentos totalmente independentes, sem qualquer relação entre si.","O BP é uma 'fotografia' patrimonial; a DRE é um 'filme' do desempenho no período; a DFC detalha a movimentação efetiva de caixa.","Todas as três mostram exatamente a mesma informação, de formas diferentes.","Apenas a DFC é relevante para a administração financeira.","O BP e a DRE são a mesma demonstração com nomes diferentes."], correta:1},
     {d:"Difícil", texto:"—", enun:"Assinale a alternativa que descreve corretamente como o objetivo da administração financeira se aplica à DATAPREV, como empresa pública:", alts:["É idêntico ao de uma empresa privada com fins exclusivamente lucrativos.","Adapta-se para maximizar eficiência na aplicação de recursos públicos e qualidade do serviço, mantendo sustentabilidade financeira.","Não há qualquer objetivo financeiro aplicável a empresas públicas.","O objetivo é exclusivamente maximizar a distribuição de dividendos a acionistas privados.","O conceito de valor da empresa não se aplica de forma alguma ao setor público."], correta:1},
     {d:"Difícil", texto:"—", enun:"Assinale a alternativa que combina corretamente dois conceitos estudados: relação risco-retorno e problema de agência.", alts:["Gestores nunca tomam decisões relacionadas a risco.","Gestores podem ter aversão a risco diferente da desejada pelos acionistas, o que é uma manifestação do problema de agência relacionada à relação risco-retorno.","Risco e retorno não têm qualquer relação com governança corporativa.","O problema de agência elimina automaticamente qualquer risco financeiro.","Acionistas nunca se preocupam com o risco assumido pelos gestores."], correta:1},
+    {d:"Difícil", texto:"—", enun:"Sobre a relação entre lucro e valor na administração financeira, assinale a afirmativa correta:", alts:["A maximização do lucro por ação considera o risco e o valor do dinheiro no tempo","A maximização do valor da empresa depende dos fluxos de caixa esperados, do risco e do custo de oportunidade do capital","O lucro contábil é sempre igual ao fluxo de caixa livre","A maximização de valor ignora os interesses dos credores","O valor da empresa independe das decisões de investimento"], correta:1}
   ];
   const simGrid = document.getElementById("simGrid");
   simulado.forEach((q,i)=>{

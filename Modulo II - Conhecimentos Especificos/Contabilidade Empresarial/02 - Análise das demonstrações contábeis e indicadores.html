@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise das Demonstrações Contábeis e Indicadores | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Contabilidade Empresarial</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">02 - Análise das demonstrações contábeis</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Noções básicas de contabilidade.html">01 - Noções básicas de contabilidade</option>
+    <option value="02 - Análise das demonstrações contábeis e indicadores.html" selected>02 - Análise de demonstrações e indicadores</option>
+    <option value="" disabled>03 - Excel avançado (em breve)</option>
+    <option value="" disabled>04 - Linguagem R (em breve)</option>
+    <option value="" disabled>05 - Investimentos em coligadas e controladas (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Análise de Demonstrações e Indicadores</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Contabilidade Empresarial<br>Tópico 2 de 5<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Análise das Demonstrações Contábeis e Indicadores</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Contabilidade Empresarial</b> &nbsp;›&nbsp; Tópico 2</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 6 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Alta <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Tópico 01 (patrimônio, contas, regimes)</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Muito alto — indicadores são cálculo certo de prova</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Montar e interpretar o <b>Balanço Patrimonial (BP)</b> completo, com seus grupos e subgrupos.</li>
+            <li>Montar e interpretar a <b>DRE</b>, da receita bruta ao lucro líquido.</li>
+            <li>Distinguir <b>DOAR</b> (extinta para cias abertas) de <b>DFC</b> e identificar os três fluxos da DFC: operacional, investimento e financiamento.</li>
+            <li>Calcular e interpretar os indicadores de <b>liquidez</b> (corrente, seca, imediata, geral).</li>
+            <li>Calcular e interpretar os indicadores de <b>endividamento</b>, <b>atividade</b> (prazos médios e ciclo financeiro) e <b>rentabilidade</b> (margem, ROA, ROE).</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>As <b>demonstrações contábeis</b> são o produto final da contabilidade. O <b>BP</b> mostra o patrimônio numa data (estático); a <b>DRE</b> mostra o resultado do período (receitas − despesas); a <b>DFC</b> mostra as variações do caixa em três blocos — <b>operacional, investimento e financiamento</b>. A <b>DOAR</b> (origens e aplicações de recursos) <b>foi extinta</b> para as companhias abertas pela Lei 11.941/2009, substituída pela DFC — mas ainda aparece em provas como pegadinha.</p>
+          <p>A <b>análise de demonstrações</b> transforma números em decisão por meio de <b>indicadores</b>:</p>
+          <ul class="styled">
+            <li><b>Liquidez</b> — capacidade de pagar: corrente (AC/PC), seca ((AC−estoques)/PC), imediata (disponível/PC), geral ((AC+ARLP)/(PC+PNC)).</li>
+            <li><b>Endividamento</b> — quanto da empresa é de terceiros: (PC+PNC)/Ativo total.</li>
+            <li><b>Atividade</b> — velocidade do giro: PMRE, PMRV, PMPC e o <b>ciclo financeiro</b> = PMRE + PMRV − PMPC.</li>
+            <li><b>Rentabilidade</b> — retorno: margem líquida (LL/receita), ROA (LL/ativo), ROE (LL/PL).</li>
+          </ul>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Indicadores são <b>cálculo certo de prova</b>: decore as fórmulas e treine com o exemplo-base deste tópico (empresa com Ativo 500, PC 180, PNC 120, PL 200). Sobre a DFC, a pegadinha clássica é trocar o fluxo de investimento pelo de financiamento.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Demonstrações<br>e<br>Indicadores</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Demonstrações</h4><ul><li>BP: fotografia estática</li><li>DRE: resultado do período</li><li>DFC: caixa em 3 fluxos</li><li>DOAR: extinta (Lei 11.941/09)</li></ul></div>
+            <div class="mm-node"><h4>Liquidez</h4><ul><li>Corrente: AC/PC</li><li>Seca: (AC−Est.)/PC</li><li>Imediata: Disp./PC</li><li>Geral: (AC+ARLP)/(PC+PNC)</li></ul></div>
+            <div class="mm-node"><h4>Endividamento</h4><ul><li>Geral: (PC+PNC)/Ativo</li><li>Composição: PC/(PC+PNC)</li><li>Imobilização do PL</li></ul></div>
+            <div class="mm-node"><h4>Atividade</h4><ul><li>PMRE, PMRV, PMPC</li><li>Ciclo fin.: PMRE+PMRV−PMPC</li><li>Giro do ativo</li></ul></div>
+            <div class="mm-node"><h4>Rentabilidade</h4><ul><li>Margem líquida: LL/RL</li><li>ROA: LL/Ativo</li><li>ROE: LL/PL</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Balanço Patrimonial (BP)</h3>
+        <div class="card">
+          <p>O BP é a demonstração <b>estática</b>: uma fotografia do patrimônio numa data (31/12, tipicamente). Estrutura oficial (Lei 6.404/76):</p>
+          <table>
+            <tr><th>Ativo</th><th>Passivo + PL</th></tr>
+            <tr><td><b>Ativo Circulante</b>: disponibilidades, clientes, estoques, despesas antecipadas (até 12 meses)</td><td><b>Passivo Circulante</b>: fornecedores, salários, impostos, empréstimos CP (até 12 meses)</td></tr>
+            <tr><td><b>Ativo Não Circulante</b>:<br>• Realizável a longo prazo<br>• Investimentos<br>• Imobilizado<br>• Intangível</td><td><b>Passivo Não Circulante</b>: dívidas após 12 meses<br><br><b>PL</b>: capital social, reservas, lucros/prejuízos acumulados, ajustes de avaliação patrimonial, (−) ações em tesouraria</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">Nosso exemplo-base (vamos usá-lo em todos os indicadores)</div><p><b>Ativo</b>: Caixa 50 + Clientes 100 + Estoques 150 = AC 300; Realizável LP 40 + Investimentos 30 + Imobilizado 100 + Intangível 30 = ANC 200. <b>Ativo total = 500</b>.<br><b>Passivo</b>: Fornecedores 90 + demais obrigações CP 90 = PC 180; PNC 120. <b>Passivo exigível = 300</b>. <b>PL = 200</b>.</p></div>
+        </div>
+
+        <h3>4.2 DRE — Demonstração do Resultado do Exercício</h3>
+        <div class="card">
+          <p>A DRE é <b>dinâmica</b>: mostra o resultado (lucro ou prejuízo) de um período, pelo regime de competência, em formato dedutivo:</p>
+          <table>
+            <tr><td>Receita bruta de vendas</td><td>R$ 620.000</td></tr>
+            <tr><td>(−) Deduções (impostos sobre vendas, devoluções)</td><td>(R$ 20.000)</td></tr>
+            <tr><td><b>= Receita líquida</b></td><td><b>R$ 600.000</b></td></tr>
+            <tr><td>(−) CMV</td><td>(R$ 360.000)</td></tr>
+            <tr><td><b>= Lucro bruto</b></td><td><b>R$ 240.000</b></td></tr>
+            <tr><td>(−) Despesas operacionais (vendas, administrativas)</td><td>(R$ 180.000)</td></tr>
+            <tr><td><b>= EBIT / LAJIR</b> (lucro operacional antes de juros e IR)</td><td><b>R$ 60.000</b></td></tr>
+            <tr><td>(−) IR/CSLL</td><td>(R$ 15.000)</td></tr>
+            <tr><td><b>= Lucro líquido do exercício</b></td><td><b>R$ 45.000</b></td></tr>
+          </table>
+          <div class="box warn"><div class="box-title">Pegadinha</div><p><b>EBIT/LAJIR</b> = lucro ANTES do resultado financeiro e do IR — mede o desempenho <b>operacional</b>, isolado da forma de financiamento. Não confundir com lucro bruto (que vem antes das despesas operacionais).</p></div>
+        </div>
+
+        <h3>4.3 DOAR e DFC</h3>
+        <div class="card">
+          <p><b>DOAR</b> (Demonstração das Origens e Aplicações de Recursos): explicava a variação do <b>capital circulante líquido</b> (CCL = AC − PC). <b>Extinta</b> para as companhias abertas pela <b>Lei 11.941/2009</b>, que a substituiu pela DFC.</p>
+          <p><b>DFC</b> (Demonstração dos Fluxos de Caixa): explica a variação do <b>caixa e equivalentes</b> do período, em três blocos:</p>
+          <table>
+            <tr><th>Fluxo</th><th>O que entra aqui</th><th>Exemplos</th></tr>
+            <tr><td><b>Operacional</b></td><td>Atividades-fim da empresa</td><td>Recebimento de clientes, pagamento a fornecedores e salários</td></tr>
+            <tr><td><b>Investimento</b></td><td>Compra/venda de ativos de longo prazo</td><td>Compra de imobilizado, venda de investimentos</td></tr>
+            <tr><td><b>Financiamento</b></td><td>Relação com credores e sócios</td><td>Empréstimos captados/pagos, integralização de capital, dividendos pagos</td></tr>
+          </table>
+          <p>A DFC pode ser montada pelo <b>método direto</b> (lista entradas e saídas brutas do caixa) ou <b>indireto</b> (parte do lucro líquido e ajusta itens que não afetam caixa, como depreciação, e as variações do capital de giro).</p>
+          <div class="box fgv"><div class="box-title">FGV cobra</div><p>Classifique a operação no fluxo certo: <b>compra de máquina = investimento</b>; <b>empréstimo captado = financiamento</b>; <b>pagamento de salários = operacional</b>. Dividendos pagos = financiamento.</p></div>
+        </div>
+
+        <h3>4.4 Indicadores de liquidez</h3>
+        <div class="card">
+          <p>Medem a <b>capacidade de pagamento</b> da empresa. Regra geral de leitura: <b>quanto maior, melhor</b> (mais folga para pagar dívidas).</p>
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Exemplo-base</th><th>Leitura</th></tr>
+            <tr><td><b>Liquidez corrente</b></td><td>AC / PC</td><td>300/180 = <b>1,67</b></td><td>Para cada R$ 1 de dívida CP, há R$ 1,67 de ativo CP</td></tr>
+            <tr><td><b>Liquidez seca</b></td><td>(AC − Estoques) / PC</td><td>150/180 = <b>0,83</b></td><td>Sem vender estoque, faltam recursos (&lt; 1)</td></tr>
+            <tr><td><b>Liquidez imediata</b></td><td>Disponibilidades / PC</td><td>50/180 = <b>0,28</b></td><td>Só o caixa cobre 28% das dívidas CP</td></tr>
+            <tr><td><b>Liquidez geral</b></td><td>(AC + ARLP) / (PC + PNC)</td><td>340/300 = <b>1,13</b></td><td>No longo prazo, sobra 13% de folga</td></tr>
+          </table>
+          <p>A <b>seca</b> é sempre <b>menor ou igual</b> à corrente (exclui estoques). A <b>imediata</b> é a mais restritiva. Índice &lt; 1 não significa falência — significa dependência de giro/renovação.</p>
+        </div>
+
+        <h3>4.5 Indicadores de endividamento</h3>
+        <div class="card">
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Exemplo-base</th><th>Leitura</th></tr>
+            <tr><td><b>Endividamento geral</b></td><td>(PC + PNC) / Ativo total</td><td>300/500 = <b>60%</b></td><td>60% dos recursos são de terceiros</td></tr>
+            <tr><td><b>Composição do endividamento</b></td><td>PC / (PC + PNC)</td><td>180/300 = <b>60%</b></td><td>60% das dívidas vencem no curto prazo</td></tr>
+            <tr><td><b>Imobilização do PL</b></td><td>(ANC − ARLP) / PL</td><td>160/200 = <b>80%</b></td><td>80% do PL está imobilizado em ativos permanentes</td></tr>
+          </table>
+          <p>Endividamento alto amplifica risco e retorno (alavancagem financeira — ver Adm. Financeira). A <b>composição</b> importa: dívida concentrada no curto prazo é mais perigosa que no longo.</p>
+        </div>
+
+        <h3>4.6 Indicadores de atividade (prazos médios e ciclo financeiro)</h3>
+        <div class="card">
+          <p>Medem a <b>velocidade</b> do ciclo operacional, em dias (base de 360 dias):</p>
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Exemplo-base</th></tr>
+            <tr><td><b>PMRE</b> (prazo médio de renovação de estoques)</td><td>(Estoques / CMV) × 360</td><td>(150/360) × 360 = <b>150 dias</b></td></tr>
+            <tr><td><b>PMRV</b> (prazo médio de recebimento de vendas)</td><td>(Clientes / Receita) × 360</td><td>(100/600) × 360 = <b>60 dias</b></td></tr>
+            <tr><td><b>PMPC</b> (prazo médio de pagamento a fornecedores)</td><td>(Fornecedores / CMV) × 360</td><td>(90/360) × 360 = <b>90 dias</b></td></tr>
+          </table>
+          <p style="text-align:center"><b>Ciclo operacional = PMRE + PMRV = 150 + 60 = 210 dias</b></p>
+          <p style="text-align:center"><b>Ciclo financeiro (de caixa) = PMRE + PMRV − PMPC = 210 − 90 = 120 dias</b></p>
+          <p>O <b>ciclo financeiro</b> é o tempo que a empresa <b>financia com recursos próprios</b> entre pagar o fornecedor e receber do cliente — quanto menor, menor a necessidade de capital de giro. Outro indicador de atividade: <b>giro do ativo</b> = Receita / Ativo = 600/500 = <b>1,2</b> (cada real de ativo gera R$ 1,20 de vendas ao ano).</p>
+        </div>
+
+        <h3>4.7 Indicadores de rentabilidade</h3>
+        <div class="card">
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Exemplo-base</th><th>Leitura</th></tr>
+            <tr><td><b>Margem líquida</b></td><td>Lucro líquido / Receita líquida</td><td>45/600 = <b>7,5%</b></td><td>Sobram R$ 7,50 de lucro por R$ 100 vendidos</td></tr>
+            <tr><td><b>ROA</b> (retorno sobre o ativo)</td><td>Lucro líquido / Ativo total</td><td>45/500 = <b>9%</b></td><td>Eficiência do ativo em gerar lucro</td></tr>
+            <tr><td><b>ROE</b> (retorno sobre o PL)</td><td>Lucro líquido / PL</td><td>45/200 = <b>22,5%</b></td><td>Retorno do dinheiro dos sócios</td></tr>
+          </table>
+          <p>Identidade útil: <b>ROA = margem líquida × giro do ativo</b> (7,5% × 1,2 = 9%). O <b>ROE</b> é o indicador mais observado pelos sócios — compara-se com a taxa livre de risco e com o custo do capital próprio.</p>
+          <div class="box fgv"><div class="box-title">FGV cobra</div><p>Questão típica: dá um BP e uma DRE resumidos e pede 2–3 indicadores. Monte o exemplo-base à mão até sair de cor: 1,67 / 0,83 / 0,28 / 1,13 / 60% / 120 dias / 7,5% / 9% / 22,5%.</p></div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Cálculo de indicadores</b> a partir de BP/DRE resumidos — liquidez corrente e endividamento geral são os campeões.</li>
+            <li><b>Liquidez seca × corrente</b>: a seca exclui estoques — sempre ≤ corrente. A banca inverte para confundir.</li>
+            <li><b>Ciclo financeiro</b>: PMRE + PMRV − PMPC. Pegadinha: somar o PMPC em vez de subtrair.</li>
+            <li><b>ROE × ROA × margem</b>: interpretar qual mede o retorno do sócio (ROE) e qual mede eficiência do ativo (ROA).</li>
+            <li><b>DFC</b>: classificar operações nos três fluxos; DOAR extinta pela Lei 11.941/2009.</li>
+            <li><b>Estrutura da DRE</b>: ordem receita bruta → líquida → lucro bruto → EBIT → lucro líquido; o que entra em "deduções".</li>
+            <li><b>Interpretação</b>: índice &lt; 1 em liquidez não significa falência — depende do setor e do giro.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Liquidez corrente</b> = AC/PC; <b>seca</b> = (AC − Estoques)/PC; <b>imediata</b> = Disponível/PC; <b>geral</b> = (AC + ARLP)/(PC + PNC).</li>
+            <li><b>Endividamento geral</b> = (PC + PNC)/Ativo; <b>composição</b> = PC/(PC + PNC).</li>
+            <li><b>PMRE</b> = Estoques/CMV × 360; <b>PMRV</b> = Clientes/Receita × 360; <b>PMPC</b> = Fornecedores/CMV × 360.</li>
+            <li><b>Ciclo operacional</b> = PMRE + PMRV; <b>ciclo financeiro</b> = PMRE + PMRV − PMPC.</li>
+            <li><b>Margem líquida</b> = LL/Receita; <b>ROA</b> = LL/Ativo; <b>ROE</b> = LL/PL; <b>giro do ativo</b> = Receita/Ativo.</li>
+            <li><b>ROA = margem líquida × giro do ativo</b> (decomposição DuPont básica).</li>
+            <li><b>DFC</b>: operacional (atividade-fim), investimento (compra/venda de ANC), financiamento (credores e sócios). <b>DOAR: extinta</b> (Lei 11.941/2009).</li>
+            <li><b>DRE</b>: receita bruta − deduções = receita líquida − CMV = lucro bruto − despesas operacionais = EBIT − IR/CSLL = lucro líquido.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>BP</b> estático × <b>DRE</b> dinâmica × <b>DFC</b> (caixa em 3 fluxos). DOAR extinta em 2009.</li>
+            <li>Exemplo-base: Ativo 500; PC 180; PNC 120; PL 200; Receita 600; CMV 360; LL 45.</li>
+            <li><b>Liquidez</b>: 1,67 (corrente) / 0,83 (seca) / 0,28 (imediata) / 1,13 (geral).</li>
+            <li><b>Endividamento</b>: 60% do ativo é de terceiros; 60% da dívida vence no curto prazo.</li>
+            <li><b>Atividade</b>: PMRE 150 + PMRV 60 − PMPC 90 = <b>ciclo financeiro de 120 dias</b>; giro do ativo 1,2.</li>
+            <li><b>Rentabilidade</b>: margem 7,5%; ROA 9%; ROE 22,5%.</li>
+            <li>DFC: salários = operacional; compra de máquina = investimento; empréstimo e dividendos = financiamento.</li>
+            <li>Índice de liquidez &lt; 1 não é sentença de falência — é sinal de alerta de capital de giro.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Exemplo-base</th></tr>
+            <tr><td><b>Liquidez corrente</b></td><td>AC / PC</td><td>300/180 = 1,67</td></tr>
+            <tr><td><b>Liquidez seca</b></td><td>(AC − Estoques) / PC</td><td>150/180 = 0,83</td></tr>
+            <tr><td><b>Liquidez imediata</b></td><td>Disponibilidades / PC</td><td>50/180 = 0,28</td></tr>
+            <tr><td><b>Liquidez geral</b></td><td>(AC + ARLP) / (PC + PNC)</td><td>340/300 = 1,13</td></tr>
+            <tr><td><b>Endividamento geral</b></td><td>(PC + PNC) / Ativo</td><td>300/500 = 60%</td></tr>
+            <tr><td><b>Composição do endiv.</b></td><td>PC / (PC + PNC)</td><td>180/300 = 60%</td></tr>
+            <tr><td><b>PMRE</b></td><td>(Estoques / CMV) × 360</td><td>150 dias</td></tr>
+            <tr><td><b>PMRV</b></td><td>(Clientes / Receita) × 360</td><td>60 dias</td></tr>
+            <tr><td><b>PMPC</b></td><td>(Fornecedores / CMV) × 360</td><td>90 dias</td></tr>
+            <tr><td><b>Ciclo financeiro</b></td><td>PMRE + PMRV − PMPC</td><td>120 dias</td></tr>
+            <tr><td><b>Giro do ativo</b></td><td>Receita / Ativo</td><td>600/500 = 1,2</td></tr>
+            <tr><td><b>Margem líquida</b></td><td>LL / Receita líquida</td><td>45/600 = 7,5%</td></tr>
+            <tr><td><b>ROA</b></td><td>LL / Ativo</td><td>45/500 = 9%</td></tr>
+            <tr><td><b>ROE</b></td><td>LL / PL</td><td>45/200 = 22,5%</td></tr>
+            <tr><td><b>DuPont</b></td><td>ROA = margem × giro</td><td>7,5% × 1,2 = 9%</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>As quatro demonstrações lado a lado</h4>
+          <table>
+            <tr><th>Demonstração</th><th>O que mostra</th><th>Natureza</th><th>Status</th></tr>
+            <tr><td><b>BP</b></td><td>Patrimônio numa data</td><td>Estática</td><td>Obrigatória</td></tr>
+            <tr><td><b>DRE</b></td><td>Resultado do período</td><td>Dinâmica</td><td>Obrigatória</td></tr>
+            <tr><td><b>DFC</b></td><td>Variação do caixa (3 fluxos)</td><td>Dinâmica</td><td>Obrigatória (cias abertas)</td></tr>
+            <tr><td><b>DOAR</b></td><td>Variação do CCL</td><td>Dinâmica</td><td><b>Extinta</b> (Lei 11.941/2009)</td></tr>
+          </table>
+          <h4>Classificação rápida na DFC</h4>
+          <table>
+            <tr><th>Operação</th><th>Fluxo</th></tr>
+            <tr><td>Recebimento de clientes / pagamento de salários e fornecedores</td><td><b>Operacional</b></td></tr>
+            <tr><td>Compra ou venda de imobilizado, investimentos, intangível</td><td><b>Investimento</b></td></tr>
+            <tr><td>Empréstimos captados/pagos, capital integralizado, dividendos pagos</td><td><b>Financiamento</b></td></tr>
+          </table>
+          <h4>Leitura rápida dos indicadores</h4>
+          <table>
+            <tr><th>Família</th><th>Pergunta que responde</th><th>Direção boa</th></tr>
+            <tr><td>Liquidez</td><td>Consegue pagar?</td><td>Maior (em geral)</td></tr>
+            <tr><td>Endividamento</td><td>Quanto deve?</td><td>Depende do setor; composição CP baixa alivia</td></tr>
+            <tr><td>Atividade</td><td>Quão rápido gira?</td><td>Prazos e ciclo menores</td></tr>
+            <tr><td>Rentabilidade</td><td>Quanto rende?</td><td>Maior</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">A DuPont nasceu numa fábrica de explosivos</div><p>A decomposição <b>ROA = margem × giro</b> foi criada nos anos 1910 por um engenheiro da DuPont, Donaldson Brown. Um século depois, continua sendo o esqueleto da análise de rentabilidade — e assunto frequente de prova.</p></div>
+          <div class="box curio"><div class="box-title">Por que a DOAR morreu?</div><p>A convergência brasileira ao IFRS (Lei 11.638/2007 e Lei 11.941/2009) adotou a visão de <b>caixa</b> (DFC) no lugar da visão de <b>capital de giro</b> (DOAR). Investidores globais leem fluxo de caixa — e a contabilidade brasileira acompanhou.</p></div>
+          <div class="box curio"><div class="box-title">Liquidez alta demais também é problema</div><p>Uma liquidez corrente de 5,0 pode significar caixa parado ou estoques encalhados — recursos que não rendem. Análise boa olha o <b>equilíbrio</b>, não só o tamanho do índice.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: seca maior que a corrente?</div><p>Impossível no caso geral: a liquidez seca exclui estoques do numerador, logo é <b>sempre ≤ corrente</b>. Se a alternativa mostrar seca > corrente, elimine na hora.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: somar o PMPC no ciclo financeiro</div><p>O ciclo financeiro é PMRE + PMRV <b>− PMPC</b>: o prazo dado pelos fornecedores <b>financia</b> parte do ciclo, então subtrai. Somar é o erro mais cometido.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>← Tópico 01 (noções básicas):</b> equação fundamental, contas e regimes são a base de tudo aqui.</li>
+            <li><b>→ Tópico 05 (coligadas e controladas):</b> a equivalência patrimonial atualiza o investimento pelo PL da investida — que você lê no BP.</li>
+            <li><b>↔ Administração Financeira:</b> capital de giro (CCL = AC − PC), alavancagem e análise de crédito usam exatamente estes indicadores.</li>
+            <li><b>↔ Avaliações de Projetos:</b> o VPL de um projeto depende dos fluxos de caixa — a DFC é a prima contábil dessa lógica.</li>
+            <li><b>↔ Custos:</b> o CMV da DRE nasce da contabilidade de custos (matéria de Custos, à frente).</li>
+            <li><b>↔ Orçamento:</b> análise da execução orçamentária compara realizado × previsto usando estas demonstrações.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.3 (BP, DRE, DOAR/DFC); redesenhar a DRE do exemplo à mão</td><td>Montar a DRE sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.4–4.5; refazer os 7 cálculos de liquidez e endividamento</td><td>Índices do exemplo-base de cor</td></tr>
+            <tr><td>3</td><td>Estudar 4.6–4.7; refazer prazos médios, ciclo e rentabilidade; 20 flashcards</td><td>Ciclo financeiro e ROE sem ajuda</td></tr>
+            <tr><td>4</td><td>20 questões comentadas + mini-simulado de 30</td><td>≥ 80% e ≥ 24/30</td></tr>
+            <tr><td>5</td><td>Revisão de 5 minutos + Para decorar + checklist</td><td>Recitar as 15 fórmulas de cor</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>MATARAZZO, D. C. <b>Análise Financeira de Balanços</b>. Atlas — a referência brasileira em indicadores.</li>
+            <li>IUDÍCIBUS, S. <b>Análise de Balanços</b>. Atlas — clássico da análise de demonstrações.</li>
+            <li><b>Lei 6.404/76</b> (alterada pelas Leis 11.638/2007 e 11.941/2009) — estrutura oficial das demonstrações e extinção da DOAR.</li>
+            <li><b>CPC 03 (R2)</b> — Demonstração dos Fluxos de Caixa.</li>
+            <li>ASSAF NETO, A. <b>Estrutura, Administração e Análise das Demonstrações Contábeis</b>. Atlas.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Contabilidade Empresarial · Tópico 2/5</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_contab_t02";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que diferencia BP, DRE e DFC?",
+          "a": "BP: estático, fotografia do patrimônio numa data. DRE: dinâmica, resultado (lucro/prejuízo) do período. DFC: dinâmica, variação do caixa em 3 fluxos (operacional, investimento, financiamento)."
+      },
+      {
+          "q": "O que aconteceu com a DOAR?",
+          "a": "Foi extinta para as companhias abertas pela Lei 11.941/2009, substituída pela DFC. Ainda cai em prova como pegadinha."
+      },
+      {
+          "q": "Quais são os três fluxos da DFC?",
+          "a": "Operacional (atividade-fim: clientes, salários, fornecedores), Investimento (compra/venda de imobilizado e investimentos) e Financiamento (empréstimos, capital, dividendos)."
+      },
+      {
+          "q": "Qual a estrutura da DRE?",
+          "a": "Receita bruta − deduções = receita líquida − CMV = lucro bruto − despesas operacionais = EBIT/LAJIR − IR/CSLL = lucro líquido."
+      },
+      {
+          "q": "O que é EBIT (LAJIR)?",
+          "a": "Lucro antes dos juros (resultado financeiro) e do imposto de renda — mede o desempenho operacional puro, isolado da estrutura de financiamento."
+      },
+      {
+          "q": "Fórmula da liquidez corrente?",
+          "a": "AC / PC. Exemplo-base: 300/180 = 1,67 — para cada R$ 1 de dívida de curto prazo, há R$ 1,67 de ativo circulante."
+      },
+      {
+          "q": "Fórmula da liquidez seca?",
+          "a": "(AC − Estoques) / PC. Exemplo-base: 150/180 = 0,83. Sempre ≤ corrente, pois exclui estoques."
+      },
+      {
+          "q": "Fórmula da liquidez imediata?",
+          "a": "Disponibilidades / PC. Exemplo-base: 50/180 = 0,28. A mais restritiva: só caixa e equivalentes."
+      },
+      {
+          "q": "Fórmula da liquidez geral?",
+          "a": "(AC + Ativo Realizável a Longo Prazo) / (PC + PNC). Exemplo-base: 340/300 = 1,13."
+      },
+      {
+          "q": "Fórmula do endividamento geral?",
+          "a": "(PC + PNC) / Ativo total. Exemplo-base: 300/500 = 60% — 60% dos recursos são de terceiros."
+      },
+      {
+          "q": "O que mede a composição do endividamento?",
+          "a": "PC / (PC + PNC) — quanto da dívida total vence no curto prazo. Exemplo-base: 180/300 = 60%."
+      },
+      {
+          "q": "Fórmulas dos prazos médios (PMRE, PMRV, PMPC)?",
+          "a": "PMRE = (Estoques/CMV) × 360; PMRV = (Clientes/Receita) × 360; PMPC = (Fornecedores/CMV) × 360. Base: ano comercial de 360 dias."
+      },
+      {
+          "q": "O que é o ciclo financeiro (ciclo de caixa)?",
+          "a": "PMRE + PMRV − PMPC: o tempo que a empresa financia com recursos próprios entre pagar fornecedores e receber de clientes. Exemplo-base: 150 + 60 − 90 = 120 dias."
+      },
+      {
+          "q": "Qual a diferença entre ciclo operacional e ciclo financeiro?",
+          "a": "Ciclo operacional = PMRE + PMRV (da compra do insumo ao recebimento da venda). Ciclo financeiro = ciclo operacional − PMPC (desconta o prazo dado pelos fornecedores)."
+      },
+      {
+          "q": "Fórmulas de margem líquida, ROA e ROE?",
+          "a": "Margem líquida = LL/Receita líquida; ROA = LL/Ativo total; ROE = LL/PL. Exemplo-base: 7,5% / 9% / 22,5%."
+      },
+      {
+          "q": "Qual indicador mede o retorno do dinheiro dos sócios?",
+          "a": "O ROE (return on equity): lucro líquido / PL. É o mais observado pelos acionistas — compara-se com a taxa livre de risco."
+      },
+      {
+          "q": "O que é a decomposição DuPont?",
+          "a": "ROA = margem líquida × giro do ativo. Exemplo-base: 7,5% × 1,2 = 9%. Mostra que a rentabilidade vem de margem, de giro, ou de ambos."
+      },
+      {
+          "q": "Liquidez corrente abaixo de 1 significa falência?",
+          "a": "Não necessariamente. Indica que o ativo circulante não cobre as dívidas de curto prazo — sinal de alerta de capital de giro, mas empresas com giro rápido operam assim normalmente."
+      },
+      {
+          "q": "Na DFC, a compra de uma máquina à vista entra em qual fluxo?",
+          "a": "Investimento (aquisição de ativo não circulante). Salários = operacional; empréstimo captado ou dividendos pagos = financiamento."
+      },
+      {
+          "q": "Quais os subgrupos do Ativo Não Circulante?",
+          "a": "Realizável a longo prazo, Investimentos, Imobilizado e Intangível."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Demonstrações",
+          "texto": "Sobre as demonstrações contábeis, julgue: I) o BP é uma demonstração estática; II) a DRE apura o resultado de um período; III) a DOAR é obrigatória para companhias abertas desde 2009.",
+          "enun": "Está(ão) correta(s):",
+          "alts": [
+              "apenas I",
+              "apenas I e II",
+              "apenas II e III",
+              "I, II e III",
+              "apenas III"
+          ],
+          "correta": 1,
+          "coment": "I e II corretas. III errada: a DOAR foi EXTINTA para cias abertas justamente pela Lei 11.941/2009, substituída pela DFC."
+      },
+      {
+          "tema": "DFC",
+          "texto": "Na Demonstração dos Fluxos de Caixa, as operações devem ser classificadas em três fluxos.",
+          "enun": "A compra de uma máquina para a fábrica, paga à vista, pertence ao fluxo:",
+          "alts": [
+              "operacional",
+              "de investimento",
+              "de financiamento",
+              "de capital",
+              "de resultado"
+          ],
+          "correta": 1,
+          "coment": "Aquisição de ativo não circulante (imobilizado) = fluxo de INVESTIMENTO. Operacional é a atividade-fim; financiamento envolve credores e sócios."
+      },
+      {
+          "tema": "DFC",
+          "texto": "A empresa captou um empréstimo bancário de R$ 200 mil e pagou dividendos de R$ 50 mil.",
+          "enun": "Ambas as operações pertencem ao fluxo:",
+          "alts": [
+              "operacional",
+              "de investimento",
+              "de financiamento",
+              "de caixa livre",
+              "de resultado"
+          ],
+          "correta": 2,
+          "coment": "Relações com credores (empréstimos) e com sócios (dividendos) = fluxo de FINANCIAMENTO."
+      },
+      {
+          "tema": "DRE",
+          "texto": "Receita bruta R$ 620 mil; deduções R$ 20 mil; CMV R$ 360 mil; despesas operacionais R$ 180 mil; IR/CSLL R$ 15 mil.",
+          "enun": "O lucro bruto e o lucro líquido são, respectivamente:",
+          "alts": [
+              "R$ 240 mil e R$ 45 mil",
+              "R$ 600 mil e R$ 60 mil",
+              "R$ 240 mil e R$ 60 mil",
+              "R$ 220 mil e R$ 45 mil",
+              "R$ 600 mil e R$ 45 mil"
+          ],
+          "correta": 0,
+          "coment": "620 − 20 = 600 (receita líquida); 600 − 360 = 240 (LUCRO BRUTO); 240 − 180 = 60 (EBIT); 60 − 15 = 45 (LUCRO LÍQUIDO)."
+      },
+      {
+          "tema": "DRE",
+          "texto": "Na estrutura da DRE, as “deduções da receita bruta” incluem:",
+          "alts": [
+              "CMV e despesas de vendas",
+              "impostos sobre vendas, devoluções e abatimentos",
+              "IR e CSLL",
+              "despesas financeiras",
+              "depreciação"
+          ],
+          "correta": 1,
+          "coment": "Deduções = impostos sobre vendas (ICMS, PIS, Cofins, IPI destacado), devoluções e abatimentos. CMV vem depois da receita líquida; IR vem lá no fim."
+      },
+      {
+          "tema": "Liquidez corrente",
+          "texto": "Ativo Circulante = R$ 300 mil; Passivo Circulante = R$ 180 mil.",
+          "enun": "A liquidez corrente é:",
+          "alts": [
+              "0,60",
+              "1,67",
+              "1,20",
+              "0,83",
+              "2,67"
+          ],
+          "correta": 1,
+          "coment": "AC/PC = 300/180 = 1,67. Para cada R$ 1 de dívida de curto prazo, a empresa tem R$ 1,67 em ativos circulantes."
+      },
+      {
+          "tema": "Liquidez seca",
+          "texto": "Com os mesmos dados (AC = 300, PC = 180), os estoques somam R$ 150 mil.",
+          "enun": "A liquidez seca é:",
+          "alts": [
+              "1,67",
+              "0,83",
+              "1,00",
+              "0,28",
+              "1,50"
+          ],
+          "correta": 1,
+          "coment": "(AC − Estoques)/PC = (300 − 150)/180 = 150/180 = 0,83. Sempre ≤ corrente. Abaixo de 1: sem vender estoque, o circulante não cobre as dívidas CP."
+      },
+      {
+          "tema": "Liquidez imediata",
+          "texto": "Disponibilidades = R$ 50 mil; PC = R$ 180 mil.",
+          "enun": "A liquidez imediata é:",
+          "alts": [
+              "0,28",
+              "0,83",
+              "1,67",
+              "3,60",
+              "0,50"
+          ],
+          "correta": 0,
+          "coment": "Disponível/PC = 50/180 ≈ 0,28. A mais restritiva das liquidez: mede quanto das dívidas CP se paga agora, sem vender nada nem receber nada."
+      },
+      {
+          "tema": "Liquidez geral",
+          "texto": "AC = 300; Ativo Realizável a Longo Prazo = 40; PC = 180; PNC = 120.",
+          "enun": "A liquidez geral é:",
+          "alts": [
+              "1,67",
+              "1,13",
+              "0,83",
+              "1,89",
+              "0,28"
+          ],
+          "correta": 1,
+          "coment": "(AC + ARLP)/(PC + PNC) = 340/300 = 1,13. Única das liquidez que inclui o longo prazo nos dois lados."
+      },
+      {
+          "tema": "Endividamento",
+          "texto": "Passivo exigível total (PC + PNC) = R$ 300 mil; Ativo total = R$ 500 mil.",
+          "enun": "O endividamento geral é:",
+          "alts": [
+              "60%",
+              "40%",
+              "150%",
+              "167%",
+              "66,7%"
+          ],
+          "correta": 0,
+          "coment": "(PC + PNC)/Ativo = 300/500 = 60%: 60% dos recursos totais vêm de terceiros; 40% são capital próprio (PL = 200)."
+      },
+      {
+          "tema": "Composição do endividamento",
+          "texto": "PC = 180; PNC = 120.",
+          "enun": "A composição do endividamento é:",
+          "alts": [
+              "40%",
+              "60%",
+              "150%",
+              "66,7%",
+              "33,3%"
+          ],
+          "correta": 1,
+          "coment": "PC/(PC + PNC) = 180/300 = 60%: 60% das dívidas vencem no curto prazo. Quanto maior, mais pressão de caixa no curto prazo."
+      },
+      {
+          "tema": "Prazos médios",
+          "texto": "Clientes = 100; Receita líquida anual = 600 (ano comercial de 360 dias).",
+          "enun": "O prazo médio de recebimento de vendas (PMRV) é:",
+          "alts": [
+              "100 dias",
+              "60 dias",
+              "30 dias",
+              "6 dias",
+              "600 dias"
+          ],
+          "correta": 1,
+          "coment": "PMRV = (Clientes/Receita) × 360 = (100/600) × 360 = 60 dias. A empresa leva, em média, 60 dias para receber as vendas."
+      },
+      {
+          "tema": "Ciclo financeiro",
+          "texto": "PMRE = 150 dias; PMRV = 60 dias; PMPC = 90 dias.",
+          "enun": "O ciclo financeiro (ciclo de caixa) é:",
+          "alts": [
+              "300 dias",
+              "210 dias",
+              "120 dias",
+              "90 dias",
+              "240 dias"
+          ],
+          "correta": 2,
+          "coment": "Ciclo financeiro = PMRE + PMRV − PMPC = 150 + 60 − 90 = 120 dias. Pegadinha clássica: SOMAR o PMPC (daria 300). O fornecedor financia parte do ciclo, por isso subtrai."
+      },
+      {
+          "tema": "Rentabilidade",
+          "texto": "Lucro líquido = 45; Receita líquida = 600; Ativo = 500; PL = 200.",
+          "enun": "A margem líquida, o ROA e o ROE são, respectivamente:",
+          "alts": [
+              "7,5% / 9% / 22,5%",
+              "9% / 7,5% / 22,5%",
+              "7,5% / 22,5% / 9%",
+              "22,5% / 9% / 7,5%",
+              "7,5% / 9% / 12%"
+          ],
+          "correta": 0,
+          "coment": "Margem = 45/600 = 7,5%; ROA = 45/500 = 9%; ROE = 45/200 = 22,5%. Decore quem divide por quem: receita (margem), ativo (ROA), PL (ROE)."
+      },
+      {
+          "tema": "DuPont",
+          "texto": "Uma empresa tem margem líquida de 7,5% e giro do ativo de 1,2.",
+          "enun": "Pela decomposição DuPont, seu ROA é:",
+          "alts": [
+              "6,3%",
+              "9%",
+              "16%",
+              "8,7%",
+              "7,5%"
+          ],
+          "correta": 1,
+          "coment": "ROA = margem líquida × giro do ativo = 7,5% × 1,2 = 9%. Mostra que rentabilidade do ativo vem de margem (preço/custos) e/ou giro (volume)."
+      },
+      {
+          "tema": "Interpretação de liquidez",
+          "texto": "Uma empresa apresenta liquidez corrente de 0,90.",
+          "enun": "A interpretação correta é:",
+          "alts": [
+              "a empresa está falida",
+              "o ativo circulante cobre 90% das dívidas de curto prazo — sinal de alerta, não de falência",
+              "a empresa tem lucro de 90%",
+              "90% do ativo é de terceiros",
+              "a dívida total é de 90%"
+          ],
+          "correta": 1,
+          "coment": "0,90 significa R$ 0,90 de ativo circulante para cada R$ 1 de dívida CP. É sinal de alerta de capital de giro — NÃO significa falência: depende do giro e do setor."
+      },
+      {
+          "tema": "Giro do ativo",
+          "texto": "Receita líquida = 600; Ativo total = 500.",
+          "enun": "O giro do ativo é:",
+          "alts": [
+              "0,83",
+              "1,20",
+              "1,67",
+              "5,00",
+              "0,60"
+          ],
+          "correta": 1,
+          "coment": "Giro = Receita/Ativo = 600/500 = 1,2: cada real investido no ativo gera R$ 1,20 de receita ao ano. Mede a EFICIÊNCIA do uso dos ativos."
+      },
+      {
+          "tema": "BP — classificação",
+          "texto": "Um empréstimo bancário com vencimento em 3 anos classifica-se no:",
+          "alts": [
+              "passivo circulante",
+              "passivo não circulante",
+              "patrimônio líquido",
+              "ativo não circulante",
+              "resultado do exercício"
+          ],
+          "correta": 1,
+          "coment": "Obrigações com vencimento após 12 meses do balanço → PASSIVO NÃO CIRCULANTE. O corte circulante/não circulante é sempre o exercício seguinte (12 meses)."
+      },
+      {
+          "tema": "DFC — métodos",
+          "texto": "A DFC pode ser elaborada pelo método direto ou indireto.",
+          "enun": "O método indireto parte:",
+          "alts": [
+              "das entradas brutas de caixa",
+              "do lucro líquido, ajustando itens sem efeito-caixa (como depreciação) e variações do capital de giro",
+              "do caixa final do período",
+              "das vendas a prazo",
+              "do patrimônio líquido"
+          ],
+          "correta": 1,
+          "coment": "Indireto: parte do LUCRO LÍQUIDO e ajusta — soma depreciação (despesa sem saída de caixa), ajusta variações de clientes/estoques/fornecedores. O direto lista entradas e saídas brutas."
+      },
+      {
+          "tema": "ROE",
+          "texto": "Duas empresas têm o mesmo lucro líquido de R$ 45 mil, mas a empresa A tem PL de R$ 200 mil e a B, PL de R$ 450 mil.",
+          "enun": "Sobre o ROE das duas:",
+          "alts": [
+              "A (22,5%) supera B (10%): A remunera melhor o capital dos sócios",
+              "B supera A, pois tem mais PL",
+              "são iguais, pois o lucro é igual",
+              "o ROE não depende do PL",
+              "A supera B em margem líquida"
+          ],
+          "correta": 0,
+          "coment": "ROE_A = 45/200 = 22,5%; ROE_B = 45/450 = 10%. Mesmo lucro, bases diferentes: o ROE mede retorno sobre o capital PRÓPRIO investido — quanto menor o PL para o mesmo lucro, maior o ROE."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O Balanço Patrimonial é uma demonstração:",
+          "alts": [
+              "dinâmica",
+              "estática (fotografia de uma data)",
+              "de fluxo de caixa",
+              "de resultado",
+              "fiscal"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A DRE apura:",
+          "alts": [
+              "o patrimônio numa data",
+              "o resultado (lucro ou prejuízo) de um período",
+              "a variação do caixa",
+              "as origens de recursos",
+              "o capital social"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A DOAR, para companhias abertas, foi:",
+          "alts": [
+              "tornada obrigatória em 2009",
+              "extinta pela Lei 11.941/2009",
+              "substituída pelo BP",
+              "unida à DRE",
+              "renomeada de DMPL"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Os três fluxos da DFC são:",
+          "alts": [
+              "operacional, investimento e financiamento",
+              "caixa, banco e clientes",
+              "curto, médio e longo prazo",
+              "bruto, líquido e operacional",
+              "entrada, saída e saldo"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Fórmula da liquidez corrente:",
+          "alts": [
+              "PC / AC",
+              "AC / PC",
+              "AC / Ativo",
+              "PL / PC",
+              "Disponível / PC"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A liquidez seca difere da corrente porque exclui:",
+          "alts": [
+              "os clientes",
+              "os estoques",
+              "as disponibilidades",
+              "as despesas antecipadas",
+              "o longo prazo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O ROE mede o retorno sobre:",
+          "alts": [
+              "o ativo total",
+              "a receita",
+              "o patrimônio líquido",
+              "o endividamento",
+              "o caixa"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O ciclo financeiro é igual a:",
+          "alts": [
+              "PMRE + PMRV + PMPC",
+              "PMRE + PMRV − PMPC",
+              "PMRE − PMRV + PMPC",
+              "PMRV + PMPC",
+              "PMRE − PMPC"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Pagamento de salários, na DFC, é fluxo:",
+          "alts": [
+              "de investimento",
+              "de financiamento",
+              "operacional",
+              "de capital",
+              "extraordinário"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "São características da DRE, EXCETO:",
+          "alts": [
+              "é dinâmica",
+              "usa regime de competência",
+              "mostra receitas e despesas",
+              "é uma fotografia estática",
+              "apura lucro ou prejuízo"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "AC = 300; PC = 180. Liquidez corrente:",
+          "alts": [
+              "0,60",
+              "1,67",
+              "1,20",
+              "0,83",
+              "2,67"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "AC = 300; Estoques = 150; PC = 180. Liquidez seca:",
+          "alts": [
+              "1,67",
+              "0,83",
+              "1,00",
+              "0,28",
+              "1,50"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "PC + PNC = 300; Ativo = 500. Endividamento geral:",
+          "alts": [
+              "40%",
+              "60%",
+              "150%",
+              "66,7%",
+              "167%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "PC = 180; PNC = 120. Composição do endividamento:",
+          "alts": [
+              "40%",
+              "60%",
+              "150%",
+              "66,7%",
+              "33,3%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Clientes = 100; Receita = 600; ano = 360 dias. PMRV:",
+          "alts": [
+              "100 dias",
+              "60 dias",
+              "30 dias",
+              "6 dias",
+              "16,7 dias"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "PMRE = 150; PMRV = 60; PMPC = 90. Ciclo financeiro:",
+          "alts": [
+              "300 dias",
+              "210 dias",
+              "120 dias",
+              "90 dias",
+              "240 dias"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "LL = 45; Receita = 600; Ativo = 500; PL = 200. ROE:",
+          "alts": [
+              "7,5%",
+              "9%",
+              "22,5%",
+              "12%",
+              "45%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Margem líquida = 7,5%; giro do ativo = 1,2. ROA (DuPont):",
+          "alts": [
+              "6,3%",
+              "9%",
+              "16%",
+              "8,7%",
+              "7,5%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Receita bruta 620; deduções 20; CMV 360; despesas op. 180; IR 15. Lucro líquido:",
+          "alts": [
+              "R$ 240 mil",
+              "R$ 60 mil",
+              "R$ 45 mil",
+              "R$ 600 mil",
+              "R$ 30 mil"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Compra de imobilizado à vista, na DFC, classifica-se no fluxo:",
+          "alts": [
+              "operacional",
+              "de investimento",
+              "de financiamento",
+              "de resultado",
+              "de caixa livre"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Empréstimo captado e dividendos pagos, na DFC, pertencem ao fluxo:",
+          "alts": [
+              "operacional",
+              "de investimento",
+              "de financiamento",
+              "de resultado",
+              "de capital de giro"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "O método indireto da DFC parte de:",
+          "alts": [
+              "entradas brutas de caixa",
+              "lucro líquido, ajustando itens sem efeito-caixa e variações do capital de giro",
+              "caixa final",
+              "vendas a prazo",
+              "patrimônio líquido"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "AC = 300; ARLP = 40; PC = 180; PNC = 120. Liquidez geral:",
+          "alts": [
+              "1,67",
+              "1,13",
+              "0,83",
+              "1,89",
+              "0,28"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Disponibilidades = 50; PC = 180. Liquidez imediata:",
+          "alts": [
+              "0,28",
+              "0,83",
+              "1,67",
+              "3,60",
+              "0,50"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Liquidez corrente = 0,90. Interpretação correta:",
+          "alts": [
+              "a empresa está falida",
+              "ativo circulante cobre 90% das dívidas CP — alerta, não falência",
+              "lucro de 90%",
+              "90% do ativo é de terceiros",
+              "dívida de 90%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "LL igual a R$ 45 mil; A tem PL 200 e B tem PL 450. Sobre o ROE:",
+          "alts": [
+              "A (22,5%) > B (10%): A remunera melhor os sócios",
+              "B > A",
+              "iguais",
+              "ROE não depende do PL",
+              "A tem maior margem"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "EBIT (LAJIR) é o lucro:",
+          "alts": [
+              "antes do resultado financeiro e do IR",
+              "antes do CMV",
+              "após o IR",
+              "antes das deduções",
+              "líquido do exercício"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "As 'deduções da receita bruta' incluem:",
+          "alts": [
+              "CMV e fretes",
+              "impostos sobre vendas, devoluções e abatimentos",
+              "IR e CSLL",
+              "despesas financeiras",
+              "depreciação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Empréstimo com vencimento em 3 anos classifica-se no:",
+          "alts": [
+              "passivo circulante",
+              "passivo não circulante",
+              "PL",
+              "ativo não circulante",
+              "resultado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Receita = 600; Ativo = 500. Giro do ativo:",
+          "alts": [
+              "0,83",
+              "1,20",
+              "1,67",
+              "5,00",
+              "0,60"
+          ],
+          "correta": 1
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei montar o BP com AC/ANC e PC/PNC/PL e o corte de 12 meses",
+      "Sei montar a DRE da receita bruta ao lucro líquido, identificando deduções, CMV, EBIT e IR",
+      "Sei que a DOAR foi extinta (Lei 11.941/2009) e substituída pela DFC",
+      "Sei classificar operações nos 3 fluxos da DFC (operacional/investimento/financiamento)",
+      "Sei as 4 liquidez de cor: corrente 1,67 / seca 0,83 / imediata 0,28 / geral 1,13",
+      "Sei endividamento geral (60%) e composição (60%) do exemplo-base",
+      "Sei PMRE, PMRV, PMPC e o ciclo financeiro (120 dias) do exemplo-base",
+      "Sei margem líquida (7,5%), ROA (9%) e ROE (22,5%) do exemplo-base",
+      "Sei a decomposição DuPont: ROA = margem × giro",
+      "Sei interpretar índices (< 1 não é falência; maior nem sempre é melhor)"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Trocar o numerador com o denominador: é AC/PC, não PC/AC",
+      "Incluir estoques na liquidez seca — a seca justamente EXCLUI estoques",
+      "Incluir o realizável a longo prazo na liquidez corrente — ARLP só entra na liquidez GERAL",
+      "Somar o PMPC no ciclo financeiro — subtrai: o fornecedor financia parte do ciclo",
+      "Confundir ciclo operacional (PMRE + PMRV) com ciclo financeiro (subtrai PMPC)",
+      "Trocar ROA com ROE: ROA divide pelo Ativo; ROE divide pelo PL",
+      "Achar que margem líquida usa receita bruta — usa receita LÍQUIDA",
+      "Usar 365 dias nos prazos médios quando a prova pede ano comercial de 360",
+      "Achar que a DOAR ainda é obrigatória para cias abertas — extinta em 2009",
+      "Classificar compra de imobilizado como fluxo operacional — é INVESTIMENTO",
+      "Classificar dividendos pagos como operacional — é FINANCIAMENTO",
+      "Classificar recebimento de clientes como financiamento — é OPERACIONAL",
+      "Achar que liquidez corrente < 1 significa falência — é alerta, não sentença",
+      "Achar que liquidez alta é sempre boa — caixa parado e estoque encalhado também elevam o índice",
+      "Confundir EBIT com lucro bruto — EBIT vem DEPOIS das despesas operacionais",
+      "Incluir IR/CSLL nas deduções da receita bruta — deduções são impostos sobre vendas, devoluções e abatimentos",
+      "Achar que endividamento geral divide pelo PL — divide pelo ATIVO total",
+      "Achar que seca pode ser maior que a corrente — impossível: ela exclui estoques",
+      "Esquecer que o ROE baixo pode vir de PL inchado, não de lucro ruim — interpretar com a base",
+      "Confundir CCL (AC − PC) com liquidez corrente (AC ÷ PC) — um é diferença, outro é quociente"
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Balanço Patrimonial (BP)",
+          "Demonstração estática: posição patrimonial numa data (Ativo = Passivo + PL)."
+      ],
+      [
+          "DRE",
+          "Demonstração do Resultado do Exercício: receitas − despesas do período = lucro/prejuízo."
+      ],
+      [
+          "DFC",
+          "Demonstração dos Fluxos de Caixa: variação do caixa em fluxos operacional, de investimento e de financiamento."
+      ],
+      [
+          "DOAR",
+          "Demonstração das Origens e Aplicações de Recursos: explicava a variação do CCL; extinta para cias abertas (Lei 11.941/2009)."
+      ],
+      [
+          "CCL (Capital Circulante Líquido)",
+          "AC − PC: folga financeira de curto prazo em valores absolutos."
+      ],
+      [
+          "EBIT / LAJIR",
+          "Lucro antes de juros e imposto de renda: desempenho operacional puro."
+      ],
+      [
+          "Receita líquida",
+          "Receita bruta menos deduções (impostos sobre vendas, devoluções, abatimentos)."
+      ],
+      [
+          "Liquidez corrente",
+          "AC/PC: capacidade de pagar dívidas de curto prazo com ativos de curto prazo."
+      ],
+      [
+          "Liquidez seca",
+          "(AC − Estoques)/PC: liquidez sem depender da venda dos estoques."
+      ],
+      [
+          "Liquidez imediata",
+          "Disponibilidades/PC: cobertura instantânea das dívidas CP."
+      ],
+      [
+          "Liquidez geral",
+          "(AC + ARLP)/(PC + PNC): visão de longo prazo da solvência."
+      ],
+      [
+          "Endividamento geral",
+          "(PC + PNC)/Ativo: proporção dos recursos financiada por terceiros."
+      ],
+      [
+          "PMRE",
+          "Prazo médio de renovação dos estoques: (Estoques/CMV) × 360."
+      ],
+      [
+          "PMRV",
+          "Prazo médio de recebimento das vendas: (Clientes/Receita) × 360."
+      ],
+      [
+          "PMPC",
+          "Prazo médio de pagamento a fornecedores: (Fornecedores/CMV) × 360."
+      ],
+      [
+          "Ciclo financeiro",
+          "PMRE + PMRV − PMPC: tempo financiado com recursos próprios."
+      ],
+      [
+          "Margem líquida",
+          "LL/Receita líquida: quanto sobra de lucro por real vendido."
+      ],
+      [
+          "ROA",
+          "LL/Ativo total: retorno sobre o ativo (eficiência)."
+      ],
+      [
+          "ROE",
+          "LL/PL: retorno sobre o capital próprio dos sócios."
+      ],
+      [
+          "Análise DuPont",
+          "ROA = margem líquida × giro do ativo: decompõe a rentabilidade em margem e giro."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

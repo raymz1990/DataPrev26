@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planejamento Financeiro de Longo Prazo | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Administração Financeira</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">05 - Planejamento financeiro de longo prazo</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceitos básicos de administração financeira.html">01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html">02 - Finanças corporativas</option>
+    <option value="03 - Alavancagem operacional e financeira.html">03 - Alavancagem operacional e financeira</option>
+    <option value="04 - Planejamento financeiro de curto prazo.html">04 - Planejamento financeiro de curto prazo</option>
+    <option value="05 - Planejamento financeiro de longo prazo.html" selected>05 - Planejamento financeiro de longo prazo</option>
+    <option value="06 - Valor do dinheiro no tempo.html">06 - Valor do dinheiro no tempo</option>
+    <option value="" disabled>07 - Risco x retorno (em breve)</option>
+    <option value="" disabled>08 - Fontes de financiamento a longo prazo (em breve)</option>
+    <option value="" disabled>09 - Estratégias de investimentos (em breve)</option>
+    <option value="" disabled>10 - Valuation (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Planejamento Financeiro de Longo Prazo</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Administração Financeira<br>Tópico 05 de 10<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Planejamento Financeiro de Longo Prazo</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Administração Financeira</b> &nbsp;›&nbsp; Tópico 05</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">7h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média-alta <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 01 a 04 — especialmente capital de giro e demonstrações financeiras</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — tema recorrente da FGV, com questões conceituais e de cálculo (NAF e crescimento sustentável)</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Distinguir <b>planejamento financeiro de curto prazo</b> de <b>planejamento financeiro de longo prazo</b> (horizonte, foco e instrumentos).</li>
+            <li>Descrever o <b>processo de planejamento financeiro de longo prazo</b>: previsão de vendas → demonstrações pro forma → necessidade de financiamento.</li>
+            <li>Compreender por que a <b>previsão de vendas</b> é o ponto de partida de todo o plano financeiro.</li>
+            <li>Elaborar e interpretar <b>demonstrações pro forma</b> (DRE projetada, balanço patrimonial projetado e orçamento de caixa).</li>
+            <li>Aplicar o <b>método da porcentagem de vendas</b> para projetar itens do balanço.</li>
+            <li>Calcular a <b>Necessidade Adicional de Fundos (NAF)</b>, também chamada de financiamento externo necessário (EFN).</li>
+            <li>Calcular e interpretar a <b>taxa de crescimento interno</b> e a <b>taxa de crescimento sustentável</b>.</li>
+            <li>Relacionar o planejamento de longo prazo com a <b>política de dividendos</b>, a <b>estrutura de capital</b> e o <b>orçamento de capital</b>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>O <b>planejamento financeiro de longo prazo</b> (também chamado de planejamento financeiro estratégico) é o processo pelo qual a empresa define metas financeiras e traça o caminho para alcançá-las em um horizonte tipicamente de <b>2 a 5 anos ou mais</b>. Enquanto o planejamento de curto prazo (Tópico 04) cuida do capital de giro e do ciclo de caixa, o de longo prazo cuida das <b>grandes decisões</b>: crescimento, investimentos em ativos permanentes, estrutura de capital e política de dividendos.</p>
+          <p>O processo segue uma lógica em cadeia: tudo começa na <b>previsão de vendas</b>, que é a variável motora do plano. A partir dela, elaboram-se as <b>demonstrações pro forma</b> (projetadas): a DRE projetada estima o lucro; o balanço projetado estima os ativos necessários e os financiamentos espontâneos; a diferença entre recursos necessários e recursos gerados internamente revela a <b>Necessidade Adicional de Fundos (NAF)</b> — quanto a empresa precisará captar fora (dívida ou capital próprio) para sustentar o crescimento planejado.</p>
+          <p>A ferramenta clássica de projeção é o <b>método da porcentagem de vendas</b>: presume-se que certos itens do balanço (caixa, contas a receber, estoques, contas a pagar) variam <b>proporcionalmente às vendas</b>, enquanto outros (imobilizado, empréstimos de longo prazo, capital social) são decididos de forma discricionária.</p>
+          <p>Dois conceitos de crescimento são cobrados com frequência: a <b>taxa de crescimento interno</b> — o quanto a empresa cresce usando apenas lucros retidos, sem nenhum financiamento externo — e a <b>taxa de crescimento sustentável</b> — o quanto ela cresce mantendo constantes a estrutura de capital (endividamento/PL) e a política de dividendos, sem emitir novas ações: <b>g = ROE × taxa de retenção</b>.</p>
+          <p>Por fim, o planejamento de longo prazo se conecta diretamente ao <b>orçamento de capital</b> (seleção de projetos de investimento, aprofundado na matéria Avaliações Econômicas de Projetos) e, em empresas estatais como a DATAPREV, ao <b>orçamento empresarial plurianual</b>, alinhado ao plano de negócios e às diretrizes do acionista controlador.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Planejamento<br>Financeiro de<br>Longo Prazo</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Conceito</h4><ul><li>Horizonte 2–5+ anos</li><li>Dimensão estratégica</li><li>Crescimento e estrutura de capital</li></ul></div>
+              <div class="mm-node"><h4>Processo</h4><ul><li>Previsão de vendas</li><li>Demonstrações pro forma</li><li>Necessidade de fundos</li></ul></div>
+              <div class="mm-node"><h4>% de vendas</h4><ul><li>Itens espontâneos variam com vendas</li><li>Itens discricionários não variam</li></ul></div>
+              <div class="mm-node"><h4>NAF / EFN</h4><ul><li>Δ Ativos</li><li>− Δ Passivos espontâneos</li><li>− Lucros retidos</li></ul></div>
+              <div class="mm-node"><h4>Crescimento</h4><ul><li>Interno: g = ROA × b</li><li>Sustentável: g = ROE × b</li></ul></div>
+              <div class="mm-node"><h4>Ligações</h4><ul><li>Orçamento de capital</li><li>Política de dividendos</li><li>Orçamento da estatal</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 O que é planejamento financeiro de longo prazo</h3>
+          <p>O planejamento financeiro é o processo de definir metas financeiras e estabelecer os meios para alcançá-las. Divide-se, classicamente, em duas dimensões que a FGV adora contrastar:</p>
+          <table>
+            <thead><tr><th>Critério</th><th>Curto prazo</th><th>Longo prazo</th></tr></thead>
+            <tbody>
+              <tr><td>Horizonte típico</td><td>Até 1 ano</td><td>2 a 5 anos ou mais</td></tr>
+              <tr><td>Foco</td><td>Liquidez e capital de giro</td><td>Crescimento, investimentos e estrutura de capital</td></tr>
+              <tr><td>Instrumentos</td><td>Orçamento de caixa, gestão de recebíveis e estoques</td><td>Demonstrações pro forma, NAF, orçamento de capital</td></tr>
+              <tr><td>Natureza</td><td>Operacional</td><td>Estratégica</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Definição para decorar</div>
+            <p>Planejamento financeiro de longo prazo é o processo de <b>projetar as demonstrações financeiras futuras</b> da empresa e determinar <b>quanto de financiamento será necessário</b> para sustentar o crescimento planejado, orientando as decisões de investimento, financiamento e dividendos.</p>
+          </div>
+
+          <h3>4.2 O processo de planejamento financeiro de longo prazo</h3>
+          <p>O processo é sequencial — cada etapa alimenta a seguinte:</p>
+          <ol class="styled">
+            <li><b>Previsão de vendas</b> — ponto de partida; praticamente todas as demais projeções derivam dela.</li>
+            <li><b>Projeção das demonstrações pro forma</b> — DRE projetada (lucro esperado) e balanço projetado (ativos necessários e fontes espontâneas).</li>
+            <li><b>Determinação das necessidades de ativos</b> — quanto de capital de giro e de ativo permanente o crescimento exige.</li>
+            <li><b>Determinação das necessidades de financiamento</b> — a NAF: quanto falta captar além do que é gerado espontânea e internamente.</li>
+            <li><b>Escolha das fontes de financiamento</b> — dívida de longo prazo, retenção de lucros, emissão de ações (Tópico 08).</li>
+            <li><b>Análise de cenários e acompanhamento</b> — testar o plano sob premissas otimista, esperada e pessimista.</li>
+          </ol>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>A FGV cobra que o candidato saiba que a <b>previsão de vendas é o ponto de partida</b> do planejamento financeiro de longo prazo — não a projeção de custos, nem o orçamento de caixa, nem o balanço patrimonial. Vendas primeiro; tudo o mais deriva dela.</p>
+          </div>
+
+          <h3>4.3 A previsão de vendas</h3>
+          <p>A previsão de vendas combina <b>projeções externas</b> (cenário macroeconômico, crescimento do setor, comportamento da demanda) com <b>estimativas internas</b> (histórico da empresa, capacidade instalada, ações comerciais planejadas). Erros na previsão de vendas propagam-se por todo o plano: superestimar vendas leva a excesso de ativos e custos financeiros desnecessários; subestimar leva à perda de mercado por falta de capacidade.</p>
+          <table>
+            <thead><tr><th>Abordagem</th><th>Base da projeção</th></tr></thead>
+            <tbody>
+              <tr><td>Externa (top-down)</td><td>Economia → setor → participação de mercado da empresa</td></tr>
+              <tr><td>Interna (bottom-up)</td><td>Canais e equipes de venda → consolidação pela diretoria</td></tr>
+              <tr><td>Combinada (recomendada)</td><td>Cruza as duas visões e reconcilia as diferenças</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.4 Demonstrações pro forma</h3>
+          <p><b>Pro forma</b> significa "projetada" — são demonstrações elaboradas com base em premissas sobre o futuro. As três principais:</p>
+          <table>
+            <thead><tr><th>Demonstração pro forma</th><th>O que projeta</th></tr></thead>
+            <tbody>
+              <tr><td>DRE projetada</td><td>Receitas, custos, despesas e o lucro líquido do período futuro</td></tr>
+              <tr><td>Balanço patrimonial projetado</td><td>Ativos necessários ao nível de vendas previsto e passivos espontâneos correspondentes</td></tr>
+              <tr><td>Orçamento de caixa projetado</td><td>Entradas e saídas de caixa ao longo do período, revelando meses de déficit ou superávit</td></tr>
+            </tbody>
+          </table>
+
+          <h3>4.5 O método da porcentagem de vendas</h3>
+          <p>Método mais simples e mais cobrado para projetar o balanço. A premissa: <b>itens espontâneos</b> variam na mesma proporção das vendas; <b>itens discricionários</b> decorrem de decisões específicas da administração.</p>
+          <table>
+            <thead><tr><th>Grupo</th><th>Itens típicos</th><th>Comportamento</th></tr></thead>
+            <tbody>
+              <tr><td>Ativos espontâneos</td><td>Caixa mínimo, contas a receber, estoques</td><td>Crescem proporcionalmente às vendas</td></tr>
+              <tr><td>Ativos discricionários</td><td>Imobilizado, participações</td><td>Crescem por decisão de investimento (podem ter "degraus" de capacidade)</td></tr>
+              <tr><td>Passivos espontâneos</td><td>Contas a pagar, salários e encargos a pagar</td><td>Crescem proporcionalmente às vendas</td></tr>
+              <tr><td>Passivos discricionários</td><td>Empréstimos, capital social, lucros retidos</td><td>Definidos por decisões de financiamento e dividendos</td></tr>
+            </tbody>
+          </table>
+          <div class="box tip">
+            <div class="box-title">✅ Detalhe que cai em prova</div>
+            <p>No método da porcentagem de vendas, <b>lucros retidos NÃO são espontâneos</b>: variam com o lucro projetado e com a política de dividendos. <b>Empréstimos e capital social também não</b>: são o "plug" de fechamento do balanço — é exatamente aí que aparece a NAF.</p>
+          </div>
+
+          <h3>4.6 Necessidade Adicional de Fundos (NAF / EFN)</h3>
+          <p>A NAF (em inglês, EFN — <i>External Financing Needed</i>) responde à pergunta central do planejamento de longo prazo: <b>quanto a empresa precisará captar externamente para financiar o crescimento projetado?</b></p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Fórmula da NAF — decore</div>
+            <p style="font-size:16px;text-align:center;margin:8px 0;"><b>NAF = ΔAtivos necessários − ΔPassivos espontâneos − Lucros retidos projetados</b></p>
+            <p style="text-align:center;color:var(--text-soft);font-size:13.5px;">NAF = (A*/V₀) × ΔV − (P*/V₀) × ΔV − (m × V₁ × b)</p>
+            <p style="font-size:13px;margin-bottom:0;">onde A*/V₀ = ativos espontâneos ÷ vendas atuais; P*/V₀ = passivos espontâneos ÷ vendas atuais; ΔV = variação das vendas; m = margem líquida; V₁ = vendas projetadas; b = taxa de retenção de lucros (1 − payout).</p>
+          </div>
+          <p><b>Exemplo numérico completo.</b> Vendas atuais: R$ 1.000.000; vendas projetadas: R$ 1.250.000 (ΔV = R$ 250.000). Ativos espontâneos = 60% das vendas; passivos espontâneos = 10% das vendas; margem líquida = 8%; distribuição de dividendos (payout) = 50% (logo, retenção b = 50%).</p>
+          <table>
+            <thead><tr><th>Parcela</th><th>Cálculo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td>(+) Aumento de ativos</td><td>60% × 250.000</td><td>R$ 150.000</td></tr>
+              <tr><td>(−) Aumento de passivos espontâneos</td><td>10% × 250.000</td><td>(R$ 25.000)</td></tr>
+              <tr><td>(−) Lucros retidos projetados</td><td>8% × 1.250.000 × 50%</td><td>(R$ 50.000)</td></tr>
+              <tr><td><b>(=) NAF</b></td><td>150.000 − 25.000 − 50.000</td><td><b>R$ 75.000</b></td></tr>
+            </tbody>
+          </table>
+          <p>Interpretação: para crescer 25%, a empresa precisa captar <b>R$ 75.000</b> de fontes discricionárias (empréstimos ou capital próprio). Se a NAF fosse <b>negativa</b>, haveria <b>excedente</b> de recursos — a empresa geraria mais fundos do que o crescimento consome.</p>
+
+          <h3>4.7 Taxas de crescimento interno e sustentável</h3>
+          <p>Duas perguntas complementares que a FGV cobra com números simples:</p>
+          <table>
+            <thead><tr><th>Taxa</th><th>Pergunta que responde</th><th>Fórmula</th></tr></thead>
+            <tbody>
+              <tr><td><b>Crescimento interno</b></td><td>Quanto a empresa cresce <b>sem nenhum financiamento externo</b> (nem dívida nova, nem ações) — só com lucros retidos?</td><td>g = (ROA × b) ÷ (1 − ROA × b)</td></tr>
+              <tr><td><b>Crescimento sustentável</b></td><td>Quanto ela cresce <b>mantendo constantes</b> a estrutura de capital e o payout, <b>sem emitir novas ações</b> (pode aumentar dívida na mesma proporção)?</td><td>g = (ROE × b) ÷ (1 − ROE × b)</td></tr>
+            </tbody>
+          </table>
+          <p>Em muitas questões a banca usa a <b>forma aproximada (simplificada)</b>: <b>g ≈ ROE × b</b>. Leia o enunciado: se não houver a fórmula com denominador nas alternativas, aplique a forma simples.</p>
+          <div class="box tip">
+            <div class="box-title">✅ Exemplo aplicado</div>
+            <p>ROE = 15% e taxa de retenção b = 60% → crescimento sustentável simplificado: 15% × 60% = <b>9% a.a.</b>. Pela fórmula completa: 0,09 ÷ (1 − 0,09) ≈ <b>9,89%</b>. Repare: crescer <b>acima</b> da taxa sustentável exige emitir ações, aumentar o endividamento relativo, reter mais lucros ou elevar a rentabilidade.</p>
+          </div>
+
+          <h3>4.8 Ligações: orçamento de capital, dividendos e estrutura de capital</h3>
+          <ul class="styled">
+            <li><b>Orçamento de capital</b>: a lista de projetos de investimento de longo prazo (VPL, TIR, payback — matéria Avaliações Econômicas de Projetos) define a necessidade de ativos que alimenta o plano financeiro.</li>
+            <li><b>Política de dividendos</b>: reter mais lucros aumenta os fundos internos e <b>reduz a NAF</b>, mas diminui a distribuição aos acionistas — trade-off clássico.</li>
+            <li><b>Estrutura de capital</b>: a escolha entre dívida e capital próprio para cobrir a NAF afeta o custo médio ponderado de capital e o risco financeiro (Tópicos 02 e 08).</li>
+          </ul>
+
+          <h3>4.9 Planejamento financeiro de longo prazo em empresas estatais</h3>
+          <p>Em empresas públicas de economia mista como a DATAPREV, o planejamento financeiro de longo prazo se materializa no <b>plano de negócios plurianual</b> e no <b>orçamento empresarial</b>, alinhados às diretrizes do acionista controlador e submetidos a instâncias de governança (conselho de administração) e de controle. A lógica da NAF permanece, mas a "captação externa" frequentemente se dá via retenção de resultados e aportes orçamentários, e as metas combinam sustentabilidade financeira com missão institucional (conexão direta com a matéria Orçamento).</p>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV cobra este tópico nas duas pontas: questões <b>conceituais</b> (o que é, qual o ponto de partida, o que é pro forma, diferenças curto x longo prazo) e questões <b>de cálculo direto</b> (NAF, crescimento interno e sustentável, projeção por porcentagem de vendas). Os números costumam ser redondos — a dificuldade está em saber <b>qual fórmula aplicar</b> e em não misturar conceitos.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Definições: planejamento estratégico x operacional; demonstrações pro forma; itens espontâneos x discricionários.</li>
+            <li>Cálculo da NAF com dados de balanço e DRE resumidos (o formato mais frequente).</li>
+            <li>Cálculo das taxas de crescimento interno e sustentável a partir de ROA/ROE e taxa de retenção.</li>
+            <li>Interpretação: o que acontece com a necessidade de financiamento quando crescem vendas, payout ou margem.</li>
+            <li>Dificuldade média a média-alta — o erro típico é de conceito, não de aritmética.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Cálculo e interpretação da NAF (EFN)</td><td>Muito alta</td></tr>
+              <tr><td>Taxa de crescimento sustentável (g = ROE × b)</td><td>Muito alta</td></tr>
+              <tr><td>Previsão de vendas como ponto de partida do planejamento</td><td>Alta</td></tr>
+              <tr><td>Método da porcentagem de vendas (espontâneo x discricionário)</td><td>Alta</td></tr>
+              <tr><td>Diferença entre crescimento interno e sustentável</td><td>Média-alta</td></tr>
+              <tr><td>Demonstrações pro forma e orçamento de caixa projetado</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Dizer que lucros retidos variam "espontaneamente" com as vendas — variam com o <b>lucro</b> e com o <b>payout</b>, não com as vendas diretamente.</li>
+            <li>Trocar as fórmulas: crescimento <b>interno</b> usa <b>ROA</b>; crescimento <b>sustentável</b> usa <b>ROE</b>.</li>
+            <li>Esquecer que, no cálculo da retenção, usa-se o lucro das <b>vendas projetadas</b> (V₁), não das vendas atuais (V₀).</li>
+            <li>Tratar NAF negativa como "problema" — NAF negativa é <b>excedente</b> de recursos.</li>
+            <li>Afirmar que crescer acima da taxa sustentável é impossível — é possível, mas exige alterar rentabilidade, payout, endividamento ou emitir ações.</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Se a questão der a fórmula com denominador (1 − ROE × b), use a forma completa; se as alternativas forem todas em números simples, provavelmente é a forma simplificada g = ROE × b.</li>
+            <li>"Financiamento espontâneo" = contas a pagar e despesas a pagar que crescem com as vendas. Empréstimo bancário <b>nunca</b> é espontâneo.</li>
+            <li>Atenção ao payout x retenção: retenção b = 1 − payout. Se a questão der payout de 40%, b = 60%.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Ponto de partida</div><p>Todo planejamento financeiro de longo prazo começa pela <b>previsão de vendas</b>.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Fórmula da NAF</div><p><b>NAF = ΔAtivos − ΔPassivos espontâneos − Lucros retidos projetados</b>. Leia: "o crescimento consome ativos; passivos espontâneos e lucros retidos ajudam a pagar a conta; o que faltar vem de fora".</p></div>
+          <div class="box tip"><div class="box-title">🧠 Crescimento sustentável</div><p><b>g = ROE × b</b> (forma simples). Interno usa <b>ROA</b>; sustentável usa <b>ROE</b>. Mnemônico: "Sustentável é com E de ROE".</p></div>
+          <div class="box tip"><div class="box-title">🧠 Espontâneo x discricionário</div><p>Espontâneo: caixa, recebíveis, estoques, contas a pagar. Discricionário: imobilizado, empréstimos, capital social e lucros retidos.</p></div>
+          <div class="box tip"><div class="box-title">🧠 NAF negativa</div><p>NAF &lt; 0 significa <b>superávit de financiamento</b>: a empresa gera mais recursos do que o crescimento consome.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Horizonte</div><p>Longo prazo = tipicamente <b>2 a 5 anos ou mais</b>; curto prazo = até 1 ano (capital de giro).</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Planejamento de longo prazo = estratégico (2–5+ anos): crescimento, ativos permanentes, estrutura de capital e dividendos.</li>
+            <li>Cadeia do processo: previsão de vendas → demonstrações pro forma → necessidade de ativos → NAF → escolha das fontes.</li>
+            <li>Demonstrações pro forma: DRE projetada, balanço projetado e orçamento de caixa projetado.</li>
+            <li>Porcentagem de vendas: itens espontâneos variam com as vendas; discricionários dependem de decisão.</li>
+            <li>NAF = ΔAtivos − ΔPassivos espontâneos − (margem × V₁ × retenção). NAF negativa = excedente.</li>
+            <li>Crescimento interno: g = ROA × b ÷ (1 − ROA × b) — sem nenhum financiamento externo.</li>
+            <li>Crescimento sustentável: g = ROE × b ÷ (1 − ROE × b) — sem emitir ações, mantendo estrutura de capital.</li>
+            <li>Reter mais lucros ↓ NAF, mas ↓ dividendos: trade-off entre crescimento autofinanciado e distribuição.</li>
+            <li>Em estatais, o plano se conecta ao plano de negócios plurianual e ao orçamento empresarial.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>NAF (EFN)</td><td>NAF = (A*/V₀)·ΔV − (P*/V₀)·ΔV − (m·V₁·b) → financiamento externo necessário ao crescimento</td></tr>
+              <tr><td>Taxa de crescimento interno</td><td>g = (ROA × b) ÷ (1 − ROA × b) — crescimento só com lucros retidos</td></tr>
+              <tr><td>Taxa de crescimento sustentável</td><td>g = (ROE × b) ÷ (1 − ROE × b); forma simples: g ≈ ROE × b — crescimento sem emitir ações</td></tr>
+              <tr><td>Taxa de retenção (b)</td><td>b = 1 − payout = parcela do lucro retida (reinvestida) na empresa</td></tr>
+              <tr><td>ROE</td><td>Lucro líquido ÷ Patrimônio líquido — rentabilidade do capital próprio</td></tr>
+              <tr><td>ROA</td><td>Lucro líquido ÷ Ativo total — rentabilidade dos ativos</td></tr>
+              <tr><td>Porcentagem de vendas</td><td>Item projetado = (item atual ÷ V₀) × V₁, válido apenas para itens espontâneos</td></tr>
+              <tr><td>DuPont (apoio)</td><td>ROE = margem líquida × giro do ativo × alavancagem (PL multiplier)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Curto prazo x longo prazo</h3>
+          <table>
+            <thead><tr><th>Critério</th><th>Curto prazo</th><th>Longo prazo</th></tr></thead>
+            <tbody>
+              <tr><td>Horizonte</td><td>Até 1 ano</td><td>2 a 5+ anos</td></tr>
+              <tr><td>Foco</td><td>Capital de giro e liquidez</td><td>Crescimento e estrutura de capital</td></tr>
+              <tr><td>Instrumento-chave</td><td>Orçamento de caixa</td><td>Demonstrações pro forma e NAF</td></tr>
+            </tbody>
+          </table>
+          <h3>Espontâneo x discricionário</h3>
+          <table>
+            <thead><tr><th>Espontâneo (varia com vendas)</th><th>Discricionário (decisão)</th></tr></thead>
+            <tbody>
+              <tr><td>Caixa mínimo, contas a receber, estoques</td><td>Imobilizado, participações</td></tr>
+              <tr><td>Contas a pagar, salários e encargos a pagar</td><td>Empréstimos, capital social, lucros retidos</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplo numérico da NAF (memorizar a lógica)</h3>
+          <table>
+            <thead><tr><th>Etapa</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td>(+) ΔAtivos = 60% × ΔVendas de 250.000</td><td>R$ 150.000</td></tr>
+              <tr><td>(−) ΔPassivos espontâneos = 10% × 250.000</td><td>R$ 25.000</td></tr>
+              <tr><td>(−) Lucros retidos = 8% × 1.250.000 × 50%</td><td>R$ 50.000</td></tr>
+              <tr><td><b>(=) NAF</b></td><td><b>R$ 75.000</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 Por que a FGV ama a NAF</div><p>A Necessidade Adicional de Fundos é uma das poucas fórmulas de Administração Financeira que combina balanço, DRE e política de dividendos em um único cálculo — perfeita para questões de múltipla escolha com números redondos e pegadinhas conceituais.</p></div>
+        <div class="box curio"><div class="box-title">📚 Origem do crescimento sustentável</div><p>O conceito de taxa de crescimento sustentável foi popularizado por Robert C. Higgins (1977) e virou ferramenta-padrão de bancos e consultorias para avaliar se o plano de crescimento de uma empresa é financeiramente viável sem diluir os acionistas.</p></div>
+        <div class="box curio"><div class="box-title">🔬 O perigo de crescer rápido demais</div><p>Crescer muito <b>acima</b> da taxa sustentável pode quebrar uma empresa lucrativa: o crescimento consome caixa (estoques, recebíveis, ativos), e o financiamento desordenado eleva o risco financeiro — fenômeno conhecido como "overtrading", causa clássica de falência de empresas em expansão acelerada.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Planejamento financeiro de curto prazo (Tópico 04)</td><td>Contraste direto cobrado em prova: curto prazo cuida do capital de giro; longo prazo, do crescimento e da estrutura de capital</td></tr>
+              <tr><td>Finanças corporativas (Tópico 02)</td><td>A NAF é financiada pelas fontes e pela estrutura de capital estudadas lá</td></tr>
+              <tr><td>Fontes de financiamento a longo prazo (Tópico 08)</td><td>Detalha as alternativas para cobrir a NAF: dívida de LP, retenção, emissão de ações</td></tr>
+              <tr><td>Valuation (Tópico 10)</td><td>As projeções pro forma deste tópico são o insumo do fluxo de caixa descontado</td></tr>
+              <tr><td>Avaliações Econômicas de Projetos (matéria)</td><td>O orçamento de capital (VPL, TIR) define a necessidade de ativos do plano de longo prazo</td></tr>
+              <tr><td>Orçamento (matéria)</td><td>Orçamento empresarial plurianual das estatais é a materialização do planejamento de longo prazo</td></tr>
+              <tr><td>Contabilidade Empresarial (matéria)</td><td>Fornece BP e DRE históricos, base das projeções por porcentagem de vendas</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e refazer à mão o exemplo numérico da NAF sem olhar a solução.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas; refazer os cálculos de crescimento interno e sustentável com números novos inventados por você.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar NAF e % de vendas antes de avançar para o Tópico 06 (Valor do dinheiro no tempo).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Capítulos de planejamento financeiro: curto e longo prazo.)</li>
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey; JORDAN, Bradford D. <i>Administração Financeira</i>. Porto Alegre: AMGH. (Planejamento financeiro de longo prazo e crescimento sustentável.)</li>
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas.</li>
+            <li>BRIGHAM, Eugene F.; EHRHARDT, Michael C. <i>Administração Financeira: Teoria e Prática</i>. São Paulo: Cengage.</li>
+            <li>HIGGINS, Robert C. <i>Analysis for Financial Management</i>. New York: McGraw-Hill. (Origem do modelo de crescimento sustentável.)</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Administração Financeira · Tópico 05/10</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_admfin_t05";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"O que é planejamento financeiro de longo prazo?", a:"Processo de projetar as demonstrações financeiras futuras e determinar o financiamento necessário para sustentar o crescimento, em horizonte típico de 2 a 5 anos ou mais."},
+    {q:"Qual é o ponto de partida do planejamento financeiro de longo prazo?", a:"A previsão de vendas — praticamente todas as demais projeções derivam dela."},
+    {q:"Qual a diferença entre planejamento financeiro de curto e de longo prazo?", a:"Curto prazo: até 1 ano, foco em liquidez e capital de giro. Longo prazo: 2 a 5+ anos, foco em crescimento, investimentos e estrutura de capital."},
+    {q:"O que são demonstrações pro forma?", a:"Demonstrações financeiras projetadas (DRE, balanço e orçamento de caixa) elaboradas com base em premissas sobre o futuro."},
+    {q:"Qual a premissa do método da porcentagem de vendas?", a:"Que os itens espontâneos do balanço variam proporcionalmente às vendas, enquanto os discricionários dependem de decisões da administração."},
+    {q:"Cite itens espontâneos do ativo.", a:"Caixa mínimo, contas a receber e estoques — crescem com as vendas."},
+    {q:"Cite itens espontâneos do passivo.", a:"Contas a pagar, salários e encargos a pagar — crescem com as vendas."},
+    {q:"Lucros retidos são um item espontâneo do balanço?", a:"Não. Variam com o lucro projetado e com a política de dividendos (payout), não diretamente com as vendas."},
+    {q:"Qual é a fórmula da Necessidade Adicional de Fundos (NAF)?", a:"NAF = aumento de ativos − aumento de passivos espontâneos − lucros retidos projetados."},
+    {q:"O que significa uma NAF negativa?", a:"Excedente de recursos: a empresa gera internamente mais fundos do que o crescimento consome."},
+    {q:"O que mede a taxa de crescimento interno?", a:"O crescimento máximo possível usando apenas lucros retidos, sem nenhum financiamento externo: g = (ROA × b) ÷ (1 − ROA × b)."},
+    {q:"O que mede a taxa de crescimento sustentável?", a:"O crescimento máximo sem emitir novas ações, mantendo constantes a estrutura de capital e o payout: g = (ROE × b) ÷ (1 − ROE × b); forma simples: g ≈ ROE × b."},
+    {q:"Como se calcula a taxa de retenção de lucros (b)?", a:"b = 1 − payout (parcela do lucro líquido reinvestida na empresa)."},
+    {q:"ROE de 18% e retenção de 50%: qual o crescimento sustentável (forma simples)?", a:"g ≈ ROE × b = 18% × 50% = 9% ao ano."},
+    {q:"Se a empresa aumentar o payout (distribuir mais dividendos), o que acontece com a NAF?", a:"A NAF aumenta, pois diminuem os lucros retidos disponíveis para financiar o crescimento."},
+    {q:"Se a margem líquida aumentar, o que acontece com a NAF?", a:"A NAF diminui, pois cresce a geração interna de recursos (lucros retidos)."},
+    {q:"Um empréstimo bancário de longo prazo é financiamento espontâneo?", a:"Não. É fonte discricionária — depende de decisão de captação. Espontâneos são contas a pagar e despesas a pagar ligadas à operação."},
+    {q:"Para que serve o orçamento de caixa projetado?", a:"Para revelar, mês a mês, os períodos de déficit ou superávit de caixa dentro do plano de longo prazo."},
+    {q:"Cite três formas de reduzir a NAF sem captar recursos externos.", a:"Reter mais lucros (reduzir payout), melhorar a margem líquida e reduzir a intensidade de ativos (aumentar o giro)."},
+    {q:"Como o planejamento de longo prazo se manifesta em uma estatal como a DATAPREV?", a:"Por meio do plano de negócios plurianual e do orçamento empresarial, alinhados às diretrizes do acionista controlador e à missão institucional."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Conceito", texto:"—", enun:"O planejamento financeiro de longo prazo caracteriza-se por:", alts:["Ter horizonte de até 1 ano e foco na liquidez diária.","Projetar as demonstrações financeiras futuras e determinar o financiamento necessário ao crescimento, em horizonte típico de 2 a 5 anos ou mais.","Limitar-se à gestão de contas a receber e a pagar.","Ser exclusivamente uma atividade contábil de registro.","Dispensar premissas sobre o futuro da empresa."], correta:1, coment:"O planejamento financeiro de longo prazo é o processo estratégico de projetar demonstrações futuras e determinar quanto de financiamento será necessário para sustentar o crescimento, em horizonte de 2 a 5+ anos. A alternativa A descreve o planejamento de curto prazo."},
+    {tema:"Processo de planejamento", texto:"—", enun:"No processo de planejamento financeiro de longo prazo, o ponto de partida é:", alts:["A projeção das despesas administrativas.","A elaboração do orçamento de caixa.","A previsão de vendas.","O cálculo da folha de pagamento.","A definição da estrutura de capital."], correta:2, coment:"A previsão de vendas é o ponto de partida do planejamento financeiro: as projeções de custos, ativos, passivos e necessidades de financiamento derivam dela."},
+    {tema:"Curto x longo prazo", texto:"—", enun:"Assinale a alternativa que diferencia corretamente o planejamento financeiro de curto prazo do de longo prazo:", alts:["O curto prazo trata de crescimento e estrutura de capital; o longo prazo, de capital de giro.","O curto prazo foca liquidez e capital de giro (até 1 ano); o longo prazo foca crescimento, investimentos e estrutura de capital (2 a 5+ anos).","Ambos têm o mesmo horizonte e os mesmos instrumentos.","O longo prazo dispensa projeções, pois lida apenas com dados históricos.","O curto prazo usa demonstrações pro forma; o longo prazo usa apenas o orçamento de caixa."], correta:1, coment:"Curto prazo: até 1 ano, capital de giro e liquidez, orçamento de caixa. Longo prazo: 2 a 5+ anos, crescimento, ativos permanentes e estrutura de capital, demonstrações pro forma e NAF."},
+    {tema:"Demonstrações pro forma", texto:"—", enun:"Demonstrações pro forma são:", alts:["Demonstrações auditadas de exercícios passados.","Demonstrações projetadas, elaboradas com base em premissas sobre o futuro.","Demonstrações exigidas apenas pela Receita Federal.","Demonstrações que substituem legalmente o balanço patrimonial publicado.","Demonstrações exclusivas de empresas de capital aberto."], correta:1, coment:"Pro forma significa projetada: são a DRE projetada, o balanço projetado e o orçamento de caixa projetado, construídos a partir de premissas (sobretudo a previsão de vendas)."},
+    {tema:"Porcentagem de vendas", texto:"—", enun:"No método da porcentagem de vendas, assinale a alternativa que apresenta um item NÃO espontâneo (discricionário) do balanço patrimonial:", alts:["Contas a receber","Estoques","Contas a pagar","Empréstimos bancários de longo prazo","Caixa mínimo operacional"], correta:3, coment:"Empréstimos são fontes discricionárias de financiamento — dependem de decisão de captação. Caixa mínimo, recebíveis, estoques e contas a pagar são espontâneos, variando com as vendas."},
+    {tema:"Financiamento espontâneo", texto:"—", enun:"Constituem fontes espontâneas de financiamento, que crescem proporcionalmente às vendas:", alts:["Empréstimos bancários e debêntures.","Contas a pagar a fornecedores e salários e encargos a pagar.","Capital social e ações preferenciais.","Lucros retidos e reservas de capital.","Financiamentos de longo prazo junto ao BNDES."], correta:1, coment:"Contas a pagar e salários/encargos a pagar são passivos espontâneos: nascem da própria operação e crescem com o nível de vendas, sem decisão financeira específica."},
+    {tema:"NAF — cálculo com excedente", texto:"Vendas atuais: R$ 1.000.000; vendas projetadas: R$ 1.200.000 (ΔV = R$ 200.000). Ativos espontâneos: 50% das vendas; passivos espontâneos: 10% das vendas; margem líquida: 10%; a empresa não distribui dividendos (retenção de 100%).", enun:"A Necessidade Adicional de Fundos (NAF) da empresa será de:", alts:["R$ 100.000 (necessidade de captação)","R$ 40.000 (necessidade de captação)","R$ − 40.000 (excedente de recursos)","R$ 80.000 (necessidade de captação)","R$ 0 (equilíbrio exato)"], correta:2, coment:"ΔAtivos = 50% × 200.000 = 100.000; ΔPassivos espontâneos = 10% × 200.000 = 20.000; lucros retidos = 10% × 1.200.000 × 100% = 120.000. NAF = 100.000 − 20.000 − 120.000 = − 40.000: excedente de recursos, não há necessidade de captação externa."},
+    {tema:"NAF — cálculo padrão", texto:"Vendas atuais: R$ 2.000.000; vendas projetadas: R$ 2.400.000. Ativos espontâneos: 40% das vendas; passivos espontâneos: 15% das vendas; margem líquida: 5%; payout: 60%.", enun:"A NAF da empresa será de:", alts:["R$ 100.000","R$ 52.000","R$ 48.000","R$ 160.000","R$ − 48.000 (excedente)"], correta:1, coment:"ΔV = 400.000. ΔAtivos = 40% × 400.000 = 160.000; ΔPassivos espontâneos = 15% × 400.000 = 60.000; lucros retidos = 5% × 2.400.000 × (1 − 0,60) = 48.000. NAF = 160.000 − 60.000 − 48.000 = R$ 52.000."},
+    {tema:"Crescimento sustentável", texto:"—", enun:"Uma empresa tem ROE de 20% e taxa de retenção de lucros de 60%. Pela forma simplificada, sua taxa de crescimento sustentável é de:", alts:["8% ao ano","12% ao ano","20% ao ano","33% ao ano","6% ao ano"], correta:1, coment:"g ≈ ROE × b = 20% × 60% = 12% ao ano. É o crescimento máximo sem emitir ações e mantendo constantes a estrutura de capital e a política de dividendos."},
+    {tema:"Interno x sustentável", texto:"—", enun:"A diferença fundamental entre a taxa de crescimento interno e a taxa de crescimento sustentável é que:", alts:["A interna usa ROE; a sustentável usa ROA.","A interna não admite nenhum financiamento externo (nem dívida nova); a sustentável admite aumento de dívida na mesma proporção do PL, mas sem emissão de ações.","A sustentável é sempre menor que a interna.","A interna considera emissão de novas ações; a sustentável não.","Não há diferença conceitual entre as duas."], correta:1, coment:"Crescimento interno: só lucros retidos, sem nenhum financiamento externo (g usa ROA). Crescimento sustentável: permite nova dívida mantendo constante a razão dívida/PL, mas sem emitir ações (g usa ROE). Por isso o sustentável é, em geral, maior que o interno."},
+    {tema:"Política de dividendos", texto:"—", enun:"Se uma empresa elevar seu payout (percentual do lucro distribuído como dividendos), mantidas as demais premissas, sua Necessidade Adicional de Fundos:", alts:["Diminuirá, pois sobrará mais caixa.","Aumentará, pois diminuirão os lucros retidos disponíveis para financiar o crescimento.","Não se alterará, pois dividendos não afetam o planejamento.","Tornar-se-á negativa obrigatoriamente.","Será eliminada pela emissão de ações."], correta:1, coment:"Na fórmula da NAF, os lucros retidos entram com sinal negativo: quanto maior o payout, menor a retenção (b) e, portanto, maior a necessidade de financiamento externo."},
+    {tema:"Crescimento acima do sustentável", texto:"—", enun:"Uma empresa que pretende crescer a uma taxa superior à sua taxa de crescimento sustentável deverá, necessariamente:", alts:["Encerrar suas atividades, pois o crescimento é inviável.","Alterar pelo menos um dos parâmetros: elevar a rentabilidade (ROE), reter mais lucros, aumentar o endividamento relativo ou emitir novas ações.","Manter inalterados payout, ROE e estrutura de capital.","Reduzir suas vendas para reequilibrar o balanço.","Distribuir 100% do lucro como dividendos."], correta:1, coment:"A taxa sustentável é definida por ROE, retenção e estrutura de capital. Crescer acima dela exige mudar ao menos um desses parâmetros — não é impossível, apenas exige decisão financeira deliberada."},
+    {tema:"Orçamento de capital", texto:"—", enun:"No planejamento financeiro de longo prazo, o orçamento de capital cumpre o papel de:", alts:["Definir a lista de projetos de investimento de longo prazo que determina a necessidade de ativos do plano.","Substituir a previsão de vendas como ponto de partida do plano.","Registrar os dividendos pagos no exercício anterior.","Eliminar a necessidade de demonstrações pro forma.","Administrar exclusivamente o caixa do dia a dia."], correta:0, coment:"O orçamento de capital é a seleção dos projetos de investimento de longo prazo (VPL, TIR, payback). É ele que define quanto de ativo permanente o plano exigirá — insumo direto do balanço projetado e da NAF."},
+    {tema:"Orçamento de caixa projetado", texto:"—", enun:"A principal finalidade do orçamento de caixa projetado, dentro do planejamento financeiro de longo prazo, é:", alts:["Apurar o lucro líquido contábil do exercício.","Revelar os períodos de déficit ou superávit de caixa ao longo do plano, permitindo programar captações e aplicações.","Substituir a DRE projetada.","Determinar o valor patrimonial da empresa.","Servir como documento fiscal perante a Receita Federal."], correta:1, coment:"O orçamento de caixa projetado mostra entradas e saídas de caixa período a período, indicando quando haverá falta (necessidade de captação) ou sobra (aplicação) de recursos."},
+    {tema:"Porcentagem de vendas — aplicação", texto:"As vendas atuais são R$ 500.000 e o contas a receber, R$ 75.000. A empresa projeta crescimento de vendas de 20% e usa o método da porcentagem de vendas.", enun:"O contas a receber projetado será de:", alts:["R$ 75.000","R$ 90.000","R$ 100.000","R$ 120.000","R$ 95.000"], correta:1, coment:"Contas a receber é item espontâneo: 75.000 ÷ 500.000 = 15% das vendas. Vendas projetadas = 500.000 × 1,20 = 600.000. Recebíveis projetados = 15% × 600.000 = R$ 90.000."},
+    {tema:"DRE projetada", texto:"—", enun:"Na elaboração da DRE projetada pelo método simplificado, presume-se usualmente que:", alts:["Os custos e despesas operacionais guardam relação estável (percentual) com as vendas, gerando uma margem líquida aproximadamente constante.","O lucro líquido independe totalmente do nível de vendas.","As vendas projetadas não influenciam os custos.","A margem líquida deve ser sempre igual a zero.","Os impostos não incidem sobre o lucro projetado."], correta:0, coment:"A DRE projetada parte da previsão de vendas e aplica percentuais históricos de custos e despesas, resultando em margem líquida aproximadamente constante — que depois alimenta o cálculo dos lucros retidos na NAF."},
+    {tema:"Fórmula da NAF", texto:"—", enun:"Assinale a alternativa que expressa corretamente a Necessidade Adicional de Fundos (NAF):", alts:["NAF = ΔPassivos espontâneos − ΔAtivos − Lucros retidos projetados","NAF = ΔAtivos necessários − ΔPassivos espontâneos − Lucros retidos projetados","NAF = Lucros retidos projetados − ΔAtivos − ΔPassivos","NAF = ΔAtivos + ΔPassivos espontâneos + Dividendos","NAF = Vendas projetadas × margem líquida × payout"], correta:1, coment:"NAF = aumento de ativos exigido pelo crescimento − aumento dos passivos espontâneos − lucros retidos projetados. É a diferença entre o que o crescimento consome e o que a operação gera espontânea e internamente."},
+    {tema:"Taxa de retenção", texto:"—", enun:"Uma empresa que distribui 35% do lucro líquido como dividendos tem taxa de retenção (b) de:", alts:["35%","65%","100%","0%","70%"], correta:1, coment:"b = 1 − payout = 1 − 0,35 = 0,65 = 65%. A taxa de retenção é a parcela do lucro reinvestida na empresa, que alimenta o crescimento interno e sustentável."},
+    {tema:"Crescimento interno — cálculo", texto:"—", enun:"Com ROA de 12% e taxa de retenção de 50%, a taxa de crescimento interno (fórmula completa) é, aproximadamente:", alts:["6,0%","6,38%","12,0%","24,0%","3,0%"], correta:1, coment:"g = (ROA × b) ÷ (1 − ROA × b) = (0,12 × 0,50) ÷ (1 − 0,06) = 0,06 ÷ 0,94 ≈ 6,38%. Repare: a forma simples daria 6,0% — a diferença está no denominador da fórmula completa."},
+    {tema:"Estatais", texto:"—", enun:"Em uma empresa estatal como a DATAPREV, o planejamento financeiro de longo prazo se materializa principalmente por meio:", alts:["Do plano de negócios plurianual e do orçamento empresarial, alinhados às diretrizes do acionista controlador e à missão institucional.","De decisões exclusivamente operacionais de caixa diário.","Da emissão obrigatória de ações no mercado.","Da ausência de qualquer planejamento, dado o caráter público.","Da delegação integral do planejamento aos fornecedores."], correta:0, coment:"Estatais planejam o longo prazo via plano de negócios plurianual e orçamento empresarial, submetidos à governança (conselho de administração) e às diretrizes do acionista controlador, conciliando sustentabilidade financeira e missão institucional."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"O planejamento financeiro de longo prazo tem horizonte típico de:", alts:["Até 30 dias","Até 1 ano","2 a 5 anos ou mais","Somente 10 anos","Não tem horizonte definido"], correta:2},
+    {d:"Fácil", texto:"—", enun:"O ponto de partida do planejamento financeiro de longo prazo é:", alts:["A folha de pagamento","A previsão de vendas","O balanço do ano anterior","O orçamento de caixa","A escrituração contábil"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Demonstrações pro forma são demonstrações:", alts:["Auditadas","Projetadas","Fiscais","Publicadas em diário oficial","Históricas"], correta:1},
+    {d:"Fácil", texto:"—", enun:"É item espontâneo do ativo, que cresce com as vendas:", alts:["Imobilizado","Contas a receber","Capital social","Empréstimos","Debêntures"], correta:1},
+    {d:"Fácil", texto:"—", enun:"É item espontâneo do passivo:", alts:["Empréstimos bancários","Contas a pagar a fornecedores","Capital social","Ações emitidas","Financiamento de longo prazo"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A sigla NAF significa:", alts:["Nota de Aplicação Financeira","Necessidade Adicional de Fundos","Novo Ativo Fixo","Norma de Auditoria Financeira","Nível de Alavancagem Financeira"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A taxa de retenção de lucros (b) é igual a:", alts:["1 − payout","payout × ROE","lucro ÷ vendas","ROA × payout","1 + payout"], correta:0},
+    {d:"Fácil", texto:"—", enun:"A taxa de crescimento sustentável, na forma simplificada, é:", alts:["g = ROA × b","g = ROE × b","g = ROE ÷ b","g = b ÷ ROE","g = ROA × ROE"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A taxa de crescimento interno considera como única fonte de recursos:", alts:["Novos empréstimos","Emissão de ações","Lucros retidos","Venda de imobilizado","Capital de terceiros"], correta:2},
+    {d:"Fácil", texto:"—", enun:"O orçamento de caixa projetado revela:", alts:["O lucro líquido do período","Os períodos de déficit ou superávit de caixa","O valor patrimonial da empresa","O imposto de renda devido","O custo das mercadorias vendidas"], correta:1},
+    {d:"Média", texto:"—", enun:"Vendas atuais de R$ 500.000, com projeção de crescimento de 20%. O caixa mínimo operacional é 5% das vendas. O caixa projetado pelo método da porcentagem de vendas será de:", alts:["R$ 25.000","R$ 30.000","R$ 35.000","R$ 50.000","R$ 20.000"], correta:1},
+    {d:"Média", texto:"—", enun:"Uma empresa com ROE de 15% e payout de 40% tem, pela forma simplificada, taxa de crescimento sustentável de:", alts:["6%","9%","15%","21%","60%"], correta:1},
+    {d:"Média", texto:"—", enun:"ΔVendas = R$ 100.000; ativos espontâneos = 70% das vendas; passivos espontâneos = 20% das vendas; margem líquida = 10%; vendas projetadas = R$ 1.100.000; retenção = 100%. A NAF será de:", alts:["R$ 50.000 (necessidade)","R$ 40.000 (necessidade)","R$ − 60.000 (excedente)","R$ 0","R$ 60.000 (necessidade)"], correta:2},
+    {d:"Média", texto:"—", enun:"Uma empresa que distribui 30% do lucro como dividendos tem taxa de retenção de:", alts:["30%","70%","100%","0%","35%"], correta:1},
+    {d:"Média", texto:"—", enun:"Assinale a alternativa que apresenta apenas fontes discricionárias de financiamento:", alts:["Contas a pagar e salários a pagar","Estoques e contas a receber","Empréstimos de longo prazo e emissão de ações","Caixa e fornecedores","Encargos a pagar e estoques"], correta:2},
+    {d:"Média", texto:"—", enun:"Uma NAF negativa indica que:", alts:["A empresa está falida","A empresa precisa captar mais recursos externos","A empresa gera internamente mais recursos do que o crescimento consome — há excedente","As vendas vão cair","O payout é de 100%"], correta:2},
+    {d:"Média", texto:"—", enun:"A diferença entre crescimento interno e sustentável está em que o sustentável:", alts:["Não admite nenhuma dívida nova","Admite nova dívida mantendo constante a estrutura de capital, mas sem emitir ações","Exige emissão obrigatória de ações","Usa ROA em vez de ROE","É sempre menor que o interno"], correta:1},
+    {d:"Média", texto:"—", enun:"Se a margem líquida de uma empresa aumentar, mantidas as demais premissas, a NAF:", alts:["Aumenta","Diminui","Não se altera","Torna-se sempre zero","Duplica"], correta:1},
+    {d:"Média", texto:"—", enun:"A previsão de vendas deve combinar preferencialmente:", alts:["Apenas a visão da diretoria","Apenas dados macroeconômicos","Projeções externas (mercado, setor, economia) com estimativas internas (histórico, capacidade, equipe de vendas)","Apenas o histórico contábil","Apenas a opinião dos fornecedores"], correta:2},
+    {d:"Média", texto:"—", enun:"No método da porcentagem de vendas, os lucros retidos projetados são calculados com base em:", alts:["Vendas atuais × margem × payout","Vendas projetadas × margem líquida × taxa de retenção","Ativo total × ROA","Passivo espontâneo × ΔVendas","Capital social × giro do ativo"], correta:1},
+    {d:"Difícil", texto:"Vendas atuais: R$ 1.000.000; vendas projetadas: R$ 1.250.000. Ativos espontâneos: 60% das vendas; passivos espontâneos: 10% das vendas; margem líquida: 8%; payout: 50%.", enun:"A NAF da empresa é de:", alts:["R$ 150.000","R$ 125.000","R$ 75.000","R$ 50.000","R$ 100.000"], correta:2},
+    {d:"Difícil", texto:"Vendas atuais: R$ 800.000; vendas projetadas: R$ 1.000.000. Ativos espontâneos: 55% das vendas; passivos espontâneos: 12% das vendas; margem líquida: 10%; payout: 50%.", enun:"A NAF da empresa é de:", alts:["R$ 110.000","R$ 86.000","R$ 36.000","R$ 50.000","R$ − 14.000 (excedente)"], correta:2},
+    {d:"Difícil", texto:"—", enun:"Com ROA de 10% e taxa de retenção de 60%, a taxa de crescimento interno (fórmula completa) é, aproximadamente:", alts:["6,0%","6,38%","16,0%","10,0%","9,4%"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Com ROE de 12% e taxa de retenção de 50%, a taxa de crescimento sustentável (fórmula completa) é, aproximadamente:", alts:["6,0%","6,38%","12,0%","24,0%","5,66%"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a expressão correta da NAF:", alts:["NAF = ΔPassivos espontâneos − ΔAtivos − Lucros retidos","NAF = ΔAtivos − ΔPassivos espontâneos − Lucros retidos projetados","NAF = ΔAtivos + ΔPassivos + Dividendos","NAF = Vendas projetadas × margem × payout","NAF = Lucros retidos − ΔAtivos"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Sobre os lucros retidos no método da porcentagem de vendas, é correto afirmar que:", alts:["Variam automaticamente na mesma proporção das vendas, como item espontâneo","Dependem do lucro projetado e da política de dividendos, não sendo item espontâneo","São sempre iguais ao lucro do ano anterior","Não afetam o cálculo da NAF","Substituem a emissão de ações obrigatoriamente"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Uma empresa que deseja crescer acima de sua taxa de crescimento sustentável deverá:", alts:["Manter inalterados ROE, payout e estrutura de capital","Elevar o ROE, reter mais lucros, aumentar o endividamento relativo ou emitir ações — pelo menos um desses","Reduzir a margem líquida","Aumentar o payout","Nada pode fazer: é um limite absoluto"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Se o payout de uma empresa subir de 40% para 70%, mantidas as demais premissas, a NAF:", alts:["Diminuirá, pois sobra mais caixa","Aumentará, pois cairá a retenção de lucros","Não mudará","Tornar-se-á sempre negativa","Será igual ao payout"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Em uma empresa estatal, o planejamento financeiro de longo prazo se materializa principalmente:", alts:["Apenas no orçamento de caixa mensal","No plano de negócios plurianual e no orçamento empresarial, alinhados às diretrizes do acionista controlador","Na emissão obrigatória de debêntures","Na ausência de planejamento por ser pública","Apenas na DRE publicada"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Uma empresa tem ROA de 8%, ROE de 16% e retenção de 50%. Comparando as taxas de crescimento (formas completas), é correto afirmar que:", alts:["O crescimento interno (≈ 4,2%) é maior que o sustentável","O crescimento sustentável (≈ 8,7%) é maior que o interno, pois admite dívida adicional na mesma proporção do PL","As duas taxas são sempre idênticas","O crescimento sustentável usa ROA","O crescimento interno permite emissão de ações"], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Distinguir planejamento financeiro de curto prazo (até 1 ano) e de longo prazo (2–5+ anos)",
+    "Saber que a previsão de vendas é o ponto de partida de todo o plano",
+    "Descrever a cadeia: vendas → demonstrações pro forma → NAF → fontes de financiamento",
+    "Diferenciar itens espontâneos de discricionários no balanço",
+    "Aplicar o método da porcentagem de vendas para projetar caixa, recebíveis e estoques",
+    "Calcular a NAF de cor (ΔAtivos − ΔPassivos espontâneos − lucros retidos projetados)",
+    "Interpretar NAF negativa como excedente de recursos",
+    "Calcular crescimento interno (ROA × b) e sustentável (ROE × b), formas simples e completas",
+    "Analisar o efeito de payout, margem e crescimento sobre a NAF",
+    "Relacionar o plano de longo prazo com orçamento de capital, dividendos e orçamento de estatais",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Confundir planejamento de longo prazo (estratégico, 2–5+ anos) com o de curto prazo (capital de giro, até 1 ano).",
+    "Achar que o planejamento começa pelo orçamento de caixa — começa pela previsão de vendas.",
+    "Classificar empréstimos bancários como financiamento espontâneo — são discricionários.",
+    "Classificar lucros retidos como item espontâneo — dependem do lucro e do payout.",
+    "Usar as vendas atuais (V₀) em vez das vendas projetadas (V₁) no cálculo dos lucros retidos.",
+    "Inverter os sinais da NAF (somar passivos espontâneos em vez de subtrair).",
+    "Interpretar NAF negativa como necessidade de captação — é excedente de recursos.",
+    "Trocar as fórmulas: crescimento interno usa ROA; sustentável usa ROE.",
+    "Esquecer que b = 1 − payout (retenção ≠ payout).",
+    "Aplicar a porcentagem de vendas a itens discricionários como imobilizado e capital social.",
+    "Achar que a taxa sustentável é um teto absoluto — crescer acima dela é possível, mas exige mudar parâmetros.",
+    "Ignorar o denominador (1 − ROE × b) quando a questão pede a forma completa.",
+    "Usar a forma completa quando as alternativas claramente pedem a forma simples (g = ROE × b).",
+    "Confundir demonstrações pro forma (projetadas) com demonstrações auditadas ou publicadas.",
+    "Esquecer que a DRE projetada presume margem aproximadamente constante sobre as vendas.",
+    "Não perceber o efeito da margem líquida sobre a NAF (margem maior → NAF menor).",
+    "Achar que o orçamento de capital substitui a previsão de vendas no plano.",
+    "Ignorar a ligação entre retenção de lucros e financiamento do crescimento.",
+    "Tratar o planejamento de estatais como inexistente — ele existe via plano de negócios e orçamento empresarial.",
+    "Errar a aritmética por pressa: os números da FGV são redondos, o erro está na fórmula escolhida.",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Planejamento financeiro de longo prazo","Processo de projetar as demonstrações financeiras futuras e determinar o financiamento necessário ao crescimento, em horizonte típico de 2 a 5 anos ou mais."],
+    ["Previsão de vendas","Estimativa das vendas futuras, ponto de partida de todas as demais projeções do plano financeiro."],
+    ["Demonstrações pro forma","Demonstrações financeiras projetadas (DRE, balanço e orçamento de caixa) elaboradas com base em premissas."],
+    ["Método da porcentagem de vendas","Técnica de projeção em que itens espontâneos do balanço variam proporcionalmente às vendas."],
+    ["Item espontâneo","Conta do balanço que cresce automaticamente com o nível de vendas (caixa, recebíveis, estoques, contas a pagar)."],
+    ["Item discricionário","Conta que depende de decisão da administração (imobilizado, empréstimos, capital social, lucros retidos)."],
+    ["NAF (Necessidade Adicional de Fundos)","Financiamento externo necessário: ΔAtivos − ΔPassivos espontâneos − lucros retidos projetados. Em inglês, EFN."],
+    ["Orçamento de caixa projetado","Previsão de entradas e saídas de caixa período a período, revelando déficits e superávits."],
+    ["Orçamento de capital","Processo de seleção dos projetos de investimento de longo prazo que alimentam a necessidade de ativos do plano."],
+    ["Taxa de retenção (b)","Parcela do lucro líquido reinvestida na empresa: b = 1 − payout."],
+    ["Payout","Parcela do lucro líquido distribuída aos acionistas como dividendos."],
+    ["Taxa de crescimento interno","Crescimento máximo usando apenas lucros retidos, sem financiamento externo: g = (ROA × b) ÷ (1 − ROA × b)."],
+    ["Taxa de crescimento sustentável","Crescimento máximo sem emitir ações, mantendo estrutura de capital e payout: g = (ROE × b) ÷ (1 − ROE × b)."],
+    ["ROE (Return on Equity)","Retorno sobre o patrimônio líquido: lucro líquido ÷ PL. Base do crescimento sustentável."],
+    ["ROA (Return on Assets)","Retorno sobre o ativo total: lucro líquido ÷ ativo total. Base do crescimento interno."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

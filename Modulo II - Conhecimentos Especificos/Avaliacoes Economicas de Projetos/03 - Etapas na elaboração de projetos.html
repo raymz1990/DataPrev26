@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etapas na Elaboração de Projetos | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">03 - Etapas na elaboração de projetos</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html" selected>03 - Etapas na elaboração de projetos</option>
+    <option value="" disabled>04 - Metodologias de avaliação e seleção (em breve)</option>
+    <option value="" disabled>05 - Taxa mínima de atratividade (em breve)</option>
+    <option value="" disabled>06 - Parâmetros para análise de projetos (em breve)</option>
+    <option value="" disabled>07 - Indicadores: VPL, TIR, payback (em breve)</option>
+    <option value="" disabled>08 - Análise de sensibilidade e cenários (em breve)</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Etapas na Elaboração de Projetos</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 03 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Etapas na Elaboração de Projetos</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 03</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">4h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Baixa <span class="diff-dots"><span class="on"></span><span></span><span></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 01 e 02 (conceito, importância e características)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio — sequência das fases e conteúdo dos estudos de viabilidade são cobranças diretas</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Descrever a <b>sequência completa de etapas</b> na elaboração de um projeto: da geração da ideia à avaliação ex post.</li>
+            <li>Relacionar a elaboração ao <b>ciclo de vida do projeto</b>: concepção, planejamento, execução e encerramento.</li>
+            <li>Distinguir os <b>níveis de estudo</b> — perfil, pré-viabilidade e viabilidade — e o grau crescente de detalhamento e precisão.</li>
+            <li>Identificar o conteúdo de cada <b>dimensão da viabilidade</b>: técnica, mercadológica, econômico-financeira, ambiental, jurídica e organizacional.</li>
+            <li>Explicar o papel da <b>avaliação ex post</b> e do acompanhamento (previsto × realizado) no aprendizado organizacional.</li>
+            <li>Situar as etapas na realidade das estatais: vinculação orçamentária (PPA, LDO, LOA) e stage-gates de governança.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A elaboração de um projeto de investimento é um <b>processo sequencial e cumulativo</b>: cada etapa aprofunda a anterior, reduz incertezas e aumenta o custo de desistir. A sequência canônica é: <b>geração da ideia → análise preliminar (triagem) → estudos de viabilidade → avaliação e seleção → aprovação → implantação → acompanhamento → avaliação ex post</b>.</p>
+          <p>Os estudos avançam por <b>níveis de detalhamento crescente</b>: o <b>perfil</b> (estudo de oportunidade) dá uma primeira leitura com baixa precisão; a <b>pré-viabilidade</b> aprofunda as alternativas técnicas e de mercado; o <b>estudo de viabilidade</b> definitivo fecha números, cronograma e estrutura — é ele que fundamenta a decisão final e a captação de recursos. Regra geral: <b>quanto mais avançada a fase, maior o detalhamento, a precisão das estimativas e o custo do estudo</b>.</p>
+          <p>A viabilidade é analisada em <b>dimensões complementares</b>: técnica (dá para fazer?), mercadológica (há demanda?), econômico-financeira (cria valor?), ambiental (impactos e licenças?), jurídica (é legal?) e organizacional (a empresa consegue gerir?). Um projeto só é aprovado quando é viável em <b>todas</b> as dimensões relevantes.</p>
+          <p>Por fim, o processo não termina na aprovação: o <b>acompanhamento</b> compara previsto × realizado durante a execução, e a <b>avaliação ex post</b>, após o encerramento, registra lições aprendidas que alimentam os projetos futuros. Em estatais, tudo isso se conecta ao ciclo orçamentário (PPA → LDO → LOA) e aos controles de governança.</p>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Etapas da<br>Elaboração<br>de Projetos</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Sequência</h4><ul><li>Ideia → triagem</li><li>Viabilidade → avaliação</li><li>Aprovação → implantação</li><li>Acompanhamento → ex post</li></ul></div>
+              <div class="mm-node"><h4>Níveis de estudo</h4><ul><li>Perfil (oportunidade)</li><li>Pré-viabilidade</li><li>Viabilidade definitiva</li></ul></div>
+              <div class="mm-node"><h4>Regra de ouro</h4><ul><li>Detalhamento cresce</li><li>Precisão cresce</li><li>Custo do estudo cresce</li></ul></div>
+              <div class="mm-node"><h4>Dimensões</h4><ul><li>Técnica e mercadológica</li><li>Econômico-financeira</li><li>Ambiental e jurídica</li><li>Organizacional</li></ul></div>
+              <div class="mm-node"><h4>Depois da aprovação</h4><ul><li>Implantação</li><li>Acompanhamento (prev. × real.)</li><li>Avaliação ex post</li></ul></div>
+              <div class="mm-node"><h4>Estatais</h4><ul><li>PPA → LDO → LOA</li><li>Stage-gates / governança</li><li>Guias do Planejamento</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 A sequência de etapas na elaboração de um projeto</h3>
+          <p>A elaboração de um projeto é um <b>funil</b>: muitas ideias entram, poucas viram investimento aprovado. A sequência clássica dos livros-texto (e a que a FGV cobra) é:</p>
+          <ol class="styled">
+            <li><b>Geração de ideias / identificação da oportunidade:</b> surgimento da proposta — por demanda de mercado, necessidade operacional, exigência legal ou estratégia.</li>
+            <li><b>Análise preliminar (triagem):</b> filtro rápido e barato: o projeto faz sentido estratégico? Há inviabilidade óbvia? Sobreviventes seguem adiante.</li>
+            <li><b>Estudos de viabilidade:</b> aprofundamento técnico, mercadológico, financeiro, ambiental e jurídico, com grau crescente de detalhe (perfil → pré-viabilidade → viabilidade).</li>
+            <li><b>Avaliação e seleção:</b> aplicação dos métodos econômicos (VPL, TIR, payback — Tópicos 04 e 07) e comparação entre alternativas.</li>
+            <li><b>Aprovação:</b> decisão formal pela instância competente (diretoria, conselho) e alocação de orçamento.</li>
+            <li><b>Implantação/execução:</b> execução física do projeto, com cronograma e gestão de riscos.</li>
+            <li><b>Acompanhamento e controle:</b> monitoramento do previsto × realizado (prazo, custo, escopo) durante a execução e a operação.</li>
+            <li><b>Avaliação ex post:</b> após o encerramento, auditoria dos resultados: o projeto entregou o prometido? As lições alimentam os projetos futuros.</li>
+          </ol>
+          <div class="box info">
+            <div class="box-title">📘 Decore a ordem</div>
+            <p>Ideia → triagem → viabilidade → avaliação/seleção → aprovação → implantação → acompanhamento → ex post. A FGV cobra sequência: "qual etapa precede a aprovação?" (avaliação e seleção) ou "qual a última etapa do ciclo?" (avaliação ex post).</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Níveis de estudo: perfil, pré-viabilidade e viabilidade</h3>
+          <table>
+            <thead><tr><th>Nível</th><th>Objetivo</th><th>Detalhamento / precisão</th></tr></thead>
+            <tbody>
+              <tr><td><b>Perfil (estudo de oportunidade)</b></td><td>Primeira leitura: vale a pena aprofundar?</td><td>Baixo detalhe; estimativas por analogia; erro típico na faixa de ±30% a 50%</td></tr>
+              <tr><td><b>Pré-viabilidade</b></td><td>Comparar alternativas técnicas e de localização; descartar as fracas</td><td>Detalhe intermediário; precisão típica de ±15% a 30%</td></tr>
+              <tr><td><b>Viabilidade (estudo definitivo)</b></td><td>Fundamentar a decisão final e a captação</td><td>Alto detalhe; engenharia básica; precisão típica de ±5% a 15%</td></tr>
+            </tbody>
+          </table>
+          <p><b>Regra de ouro:</b> ao longo das fases, aumentam o <b>detalhamento</b>, a <b>precisão</b> das estimativas e o <b>custo do estudo</b> — por isso não se faz estudo definitivo para toda ideia: o funil descarta cedo o que não serve, barato.</p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Pegadinha clássica</div>
+            <p>"O estudo de viabilidade é a primeira etapa da elaboração do projeto" — <b>errado</b>: antes dele há a identificação da oportunidade e a análise preliminar (perfil). E: "quanto mais avançado o estudo, menor a precisão" — <b>errado</b>: a precisão aumenta a cada nível.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.3 Dimensões dos estudos de viabilidade</h3>
+          <table>
+            <thead><tr><th>Dimensão</th><th>Pergunta central</th><th>Conteúdo típico</th></tr></thead>
+            <tbody>
+              <tr><td><b>Técnica</b></td><td>Dá para executar?</td><td>Tecnologia, capacidade, localização, engenharia, cronograma físico</td></tr>
+              <tr><td><b>Mercadológica</b></td><td>Há demanda?</td><td>Mercado-alvo, concorrência, preço, canais, projeção de receitas</td></tr>
+              <tr><td><b>Econômico-financeira</b></td><td>Cria valor?</td><td>Investimento, fluxos de caixa, VPL/TIR/payback, fontes de recursos</td></tr>
+              <tr><td><b>Ambiental</b></td><td>Impactos e licenças?</td><td>Estudos de impacto, licenciamento, medidas mitigadoras</td></tr>
+              <tr><td><b>Jurídica</b></td><td>É legal?</td><td>Conformidade legal e regulatória, contratos, aspectos tributários</td></tr>
+              <tr><td><b>Organizacional (gerencial)</b></td><td>A empresa consegue gerir?</td><td>Estrutura, pessoas, processos e capacidade de gestão do projeto</td></tr>
+            </tbody>
+          </table>
+          <p>No setor público, somam-se ainda as dimensões <b>política</b> (apoio institucional) e <b>social</b> (distribuição dos benefícios). O projeto só avança se for viável em todas as dimensões relevantes — um veto em qualquer uma inviabiliza o conjunto.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.4 O ciclo de vida do projeto</h3>
+          <p>A elaboração se insere no <b>ciclo de vida do projeto</b>, que a gestão de projetos (PMI/PMBOK) organiza em quatro grandes fases:</p>
+          <table>
+            <thead><tr><th>Fase</th><th>O que acontece</th></tr></thead>
+            <tbody>
+              <tr><td><b>Concepção (iniciação)</b></td><td>Ideia, justificativa, objetivos e autorização formal para planejar</td></tr>
+              <tr><td><b>Planejamento</b></td><td>Estudos de viabilidade, cronograma, orçamento, riscos — detalhamento máximo antes de executar</td></tr>
+              <tr><td><b>Execução (implantação)</b></td><td>Realização física do projeto; monitoramento do previsto × realizado</td></tr>
+              <tr><td><b>Encerramento</b></td><td>Entrega, desmobilização, lições aprendidas e avaliação ex post</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Curva clássica: influência × custo de mudança</div>
+            <p>No início do ciclo, a <b>capacidade de influenciar</b> o projeto é máxima e o <b>custo de mudar</b> é mínimo; ao longo da execução, a influência cai e mudar fica caríssimo. Por isso o investimento em estudos iniciais é a "apólice de seguro" mais barata do projeto.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.5 Depois da aprovação: acompanhamento e avaliação ex post</h3>
+          <ul class="styled">
+            <li><b>Acompanhamento (monitoramento):</b> comparação sistemática do previsto com o realizado — prazo, custo, escopo e benefícios — permitindo correções de rota durante a execução e a operação.</li>
+            <li><b>Avaliação ex post (auditoria pós-implantação):</b> após o encerramento, verifica-se se os benefícios prometidos se realizaram e por quê. Cumpre dois papéis: <b>responsabilizar</b> os gestores (accountability) e <b>gerar aprendizado</b> para calibrar as premissas dos próximos projetos.</li>
+            <li>Sem ex post, os mesmos erros de estimativa se repetem — é o antídoto institucional contra o otimismo excessivo (Tópico 02).</li>
+          </ul>
+          <div class="box warn">
+            <div class="box-title">⚠️ Erro de prova</div>
+            <p>A análise de projetos <b>não termina na aprovação nem na implantação</b>. Alternativas que ignoram o acompanhamento e a avaliação ex post descrevem um processo incompleto.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.6 Etapas em empresas estatais</h3>
+          <ul class="styled">
+            <li><b>Vinculação orçamentária:</b> o investimento precisa constar do planejamento plurianual e do orçamento — ciclo <b>PPA → LDO → LOA</b>; fora do orçamento, não há execução.</li>
+            <li><b>Stage-gates de governança:</b> comitês de investimento e conselhos aprovam o projeto por fases; cada portão exige o nível de estudo correspondente.</li>
+            <li><b>Guias oficiais:</b> o Ministério do Planejamento publica guias de elaboração de estudos de viabilidade (ex.: EVTEA para obras), que padronizam o conteúdo mínimo dos estudos.</li>
+            <li><b>Contratações públicas:</b> a implantação passa por licitação (Lei 14.133/2021), que exige projeto básico/executivo antes da contratação de obras e serviços de engenharia.</li>
+            <li><b>Controle externo:</b> TCU acompanha a execução; a documentação das etapas é a defesa do gestor.</li>
+          </ul>
+          <div class="box ok">
+            <div class="box-title">✅ Síntese do tópico</div>
+            <p>Elaborar um projeto é percorrer um funil: <b>ideia → triagem → estudos de viabilidade (perfil → pré-viabilidade → viabilidade) → avaliação/seleção → aprovação → implantação → acompanhamento → avaliação ex post</b>. Detalhamento, precisão e custo do estudo crescem a cada nível. A viabilidade se decompõe em dimensões (técnica, mercado, financeira, ambiental, jurídica, organizacional), e o processo só se completa com a avaliação ex post.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <p>Cobrança tipicamente <b>conceitual e de sequência</b>. Os formatos mais frequentes:</p>
+          <ol class="styled">
+            <li><b>Ordenação das etapas:</b> "a sequência correta é…" — ideia/triagem antes da viabilidade; avaliação/seleção antes da aprovação; ex post por último.</li>
+            <li><b>Níveis de estudo:</b> qual nível tem maior detalhe e precisão (viabilidade definitiva); qual é o primeiro filtro barato (perfil/triagem).</li>
+            <li><b>Conteúdo das dimensões:</b> "estimar a demanda e a concorrência faz parte da viabilidade…" (mercadológica); "licenciamento e impacto" (ambiental); "VPL e fontes de recursos" (econômico-financeira).</li>
+            <li><b>Grau crescente de detalhe:</b> detalhamento, precisão e custo do estudo <b>aumentam</b> ao longo das fases — alternativa que inverte isso está errada.</li>
+            <li><b>Avaliação ex post:</b> função dupla — accountability e aprendizado (calibrar premissas futuras).</li>
+            <li><b>Curva influência × custo de mudança:</b> mudar é barato no início e caro na execução — por isso investe-se em estudos preliminares.</li>
+          </ol>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo de enunciado típico</div>
+            <p>"Uma empresa realizou estudo detalhado, com engenharia básica e estimativas de alta precisão, para fundamentar a decisão final de investimento. Trata-se do estudo de…" — Gabarito: <b>viabilidade</b> (definitivo). Se fosse "primeira leitura, por analogia, baixa precisão" → <b>perfil</b>.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠️ Distrações frequentes</div>
+            <p>"A avaliação ex post ocorre antes da implantação"; "o perfil é o estudo mais detalhado"; "a viabilidade ambiental dispensa a jurídica"; "o processo termina com a aprovação". Todas erradas.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Sequência: <b>ideia → triagem → estudos de viabilidade → avaliação/seleção → aprovação → implantação → acompanhamento → avaliação ex post</b>.</li>
+            <li>Níveis de estudo: <b>perfil</b> (oportunidade, baixa precisão) → <b>pré-viabilidade</b> → <b>viabilidade</b> (definitiva, alta precisão).</li>
+            <li>Regra de ouro: <b>detalhamento, precisão e custo do estudo crescem</b> a cada nível.</li>
+            <li>Funil: descartar cedo e barato o que não serve; aprofundar só o que merece.</li>
+            <li>Dimensões da viabilidade: <b>técnica, mercadológica, econômico-financeira, ambiental, jurídica, organizacional</b> (no setor público: + política e social).</li>
+            <li>Um veto em qualquer dimensão inviabiliza o projeto.</li>
+            <li>Ciclo de vida: <b>concepção → planejamento → execução → encerramento</b>.</li>
+            <li>No início, influência máxima e custo de mudança mínimo; na execução, o inverso.</li>
+            <li><b>Acompanhamento</b> = previsto × realizado durante a execução; <b>avaliação ex post</b> = auditoria após o encerramento (accountability + aprendizado).</li>
+            <li>Estatais: vinculação ao ciclo orçamentário <b>PPA → LDO → LOA</b>; obras exigem projeto básico/executivo (Lei 14.133/2021).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Pergunta-relâmpago</th><th>Resposta</th></tr></thead>
+            <tbody>
+              <tr><td>Primeira etapa da elaboração?</td><td>Geração da ideia / identificação da oportunidade</td></tr>
+              <tr><td>O que vem antes da aprovação?</td><td>Avaliação e seleção (aplicação dos métodos)</td></tr>
+              <tr><td>Última etapa do processo?</td><td>Avaliação ex post</td></tr>
+              <tr><td>Estudo mais detalhado e preciso?</td><td>Viabilidade (definitiva)</td></tr>
+              <tr><td>Estudo inicial, barato, por analogia?</td><td>Perfil (estudo de oportunidade)</td></tr>
+              <tr><td>O que cresce ao longo dos níveis de estudo?</td><td>Detalhamento, precisão e custo do estudo</td></tr>
+              <tr><td>Dimensão que responde "há demanda"?</td><td>Mercadológica</td></tr>
+              <tr><td>Dimensão que responde "cria valor"?</td><td>Econômico-financeira</td></tr>
+              <tr><td>Quando mudar é mais barato?</td><td>No início do ciclo (concepção/planejamento)</td></tr>
+              <tr><td>Papel da avaliação ex post?</td><td>Accountability + aprendizado para projetos futuros</td></tr>
+              <tr><td>Fases do ciclo de vida?</td><td>Concepção → planejamento → execução → encerramento</td></tr>
+              <tr><td>Vínculo orçamentário em estatais?</td><td>PPA → LDO → LOA</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Sequência da elaboração</td><td>Ideia → triagem → estudos de viabilidade → avaliação/seleção → aprovação → implantação → acompanhamento → ex post</td></tr>
+              <tr><td>Níveis de estudo</td><td>Perfil → pré-viabilidade → viabilidade (detalhamento, precisão e custo crescentes)</td></tr>
+              <tr><td>Perfil (estudo de oportunidade)</td><td>Primeira leitura; estimativas por analogia; precisão baixa (≈ ±30–50%)</td></tr>
+              <tr><td>Pré-viabilidade</td><td>Compara alternativas técnicas e de localização; precisão intermediária (≈ ±15–30%)</td></tr>
+              <tr><td>Viabilidade definitiva</td><td>Fundamenta a decisão final e a captação; engenharia básica; precisão alta (≈ ±5–15%)</td></tr>
+              <tr><td>Ciclo de vida do projeto</td><td>Concepção → planejamento → execução → encerramento</td></tr>
+              <tr><td>Curva influência × custo de mudança</td><td>Início: influência máxima, mudança barata; execução: influência mínima, mudança cara</td></tr>
+              <tr><td>Dimensões da viabilidade</td><td>Técnica + mercadológica + econômico-financeira + ambiental + jurídica + organizacional</td></tr>
+              <tr><td>Regra do veto</td><td>Inviabilidade em qualquer dimensão relevante inviabiliza o projeto inteiro</td></tr>
+              <tr><td>Acompanhamento</td><td>Previsto × realizado (prazo, custo, escopo) durante a execução</td></tr>
+              <tr><td>Avaliação ex post</td><td>Auditoria pós-encerramento: accountability + lições aprendidas</td></tr>
+              <tr><td>Vínculo orçamentário (estatais)</td><td>PPA → LDO → LOA; fora do orçamento não há execução</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas e quadros de memorização</h2></div>
+        <div class="card">
+          <h3>Etapas × perguntas-chave</h3>
+          <table>
+            <thead><tr><th>Etapa</th><th>Pergunta-chave</th></tr></thead>
+            <tbody>
+              <tr><td>Geração de ideias</td><td>Que oportunidade ou problema o projeto ataca?</td></tr>
+              <tr><td>Triagem (análise preliminar)</td><td>Faz sentido estratégico? Há inviabilidade óbvia?</td></tr>
+              <tr><td>Estudos de viabilidade</td><td>É viável técnica, mercadológica, financeira, ambiental, jurídica e organizacionalmente?</td></tr>
+              <tr><td>Avaliação e seleção</td><td>Cria valor? VPL &gt; 0? Melhor que as alternativas?</td></tr>
+              <tr><td>Aprovação</td><td>Quem decide e com que orçamento?</td></tr>
+              <tr><td>Implantação</td><td>Executar no prazo, custo e escopo?</td></tr>
+              <tr><td>Acompanhamento</td><td>Previsto × realizado: corrigir rota?</td></tr>
+              <tr><td>Avaliação ex post</td><td>Entregou o prometido? O que aprendemos?</td></tr>
+            </tbody>
+          </table>
+          <h3>Níveis de estudo — comparativo</h3>
+          <table>
+            <thead><tr><th>Critério</th><th>Perfil</th><th>Pré-viabilidade</th><th>Viabilidade</th></tr></thead>
+            <tbody>
+              <tr><td>Objetivo</td><td>Detectar oportunidade</td><td>Comparar alternativas</td><td>Fundamentar a decisão</td></tr>
+              <tr><td>Base das estimativas</td><td>Analogia</td><td>Dados secundários + primários</td><td>Dados primários + engenharia básica</td></tr>
+              <tr><td>Precisão típica</td><td>±30–50%</td><td>±15–30%</td><td>±5–15%</td></tr>
+              <tr><td>Custo do estudo</td><td>Baixo</td><td>Médio</td><td>Alto</td></tr>
+              <tr><td>Decisão ao final</td><td>Aprofundar ou arquivar</td><td>Selecionar alternativa</td><td>Aprovar ou rejeitar</td></tr>
+            </tbody>
+          </table>
+          <h3>Dimensão × pergunta</h3>
+          <table>
+            <thead><tr><th>Dimensão</th><th>Pergunta</th></tr></thead>
+            <tbody>
+              <tr><td>Técnica</td><td>Dá para executar?</td></tr>
+              <tr><td>Mercadológica</td><td>Há demanda?</td></tr>
+              <tr><td>Econômico-financeira</td><td>Cria valor?</td></tr>
+              <tr><td>Ambiental</td><td>Impactos e licenças?</td></tr>
+              <tr><td>Jurídica</td><td>É legal?</td></tr>
+              <tr><td>Organizacional</td><td>A empresa consegue gerir?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🏦 O ciclo de projetos do Banco Mundial</div><p>O Banco Mundial popularizou o "project cycle" — identificação, preparação, avaliação, negociação e aprovação, execução e supervisão, avaliação ex post — que virou a espinha dorsal dos manuais de análise de projetos e inspira as etapas cobradas em prova.</p></div>
+        <div class="box curio"><div class="box-title">📐 Por que 'projeto básico' e 'projeto executivo'?</div><p>Na engenharia e na Lei 14.133/2021 (licitações), o projeto básico define as soluções técnicas e permite estimar custos e licitar; o executivo detalha tudo para a obra. Contratar obra sem projeto básico é uma das irregularidades mais apontadas pelo TCU.</p></div>
+        <div class="box curio"><div class="box-title">💰 O estudo de viabilidade que virou banca</div><p>Para projetos grandes, existe até o conceito de "bankability": o estudo de viabilidade precisa ser robusto o bastante para um banco financiar. Sem ele, não há project finance — modalidade em que a dívida é paga pelos próprios fluxos do projeto.</p></div>
+        <div class="box curio"><div class="box-title">🔁 A avaliação ex post que quase ninguém faz</div><p>Pesquisas mostram que a minoria das empresas audita sistematicamente os projetos após a implantação. Quem faz, como as grandes petroquímicas e mineradoras, corrige o otimismo das premissas — e melhora o VPL dos projetos seguintes.</p></div>
+        <div class="box curio"><div class="box-title">🏛 EVTEA: o vocabulário do Governo Federal</div><p>Para obras públicas, o Ministério do Planejamento padronizou o Estudo de Viabilidade Técnica, Econômica e Ambiental (EVTEA) — é o equivalente governamental do estudo de viabilidade definitivo, exigido antes de grandes investimentos federais.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Conceito de projeto (Tópico 01)</td><td>O fluxo incremental é montado durante os estudos de viabilidade</td></tr>
+              <tr><td>Importância, características e limitações (Tópico 02)</td><td>O funil de etapas é o antídoto prático ao GIGO e aos vieses: descarta cedo e barato</td></tr>
+              <tr><td>Metodologias de avaliação e seleção (Tópico 04)</td><td>A etapa de avaliação e seleção é onde os métodos (VPL, TIR, payback) são aplicados</td></tr>
+              <tr><td>Taxa mínima de atratividade (Tópico 05)</td><td>A TMA é definida antes da avaliação — insumo essencial do estudo de viabilidade</td></tr>
+              <tr><td>Parâmetros de análise (Tópico 06)</td><td>Vida econômica, depreciação, valor residual e giro são estimados na fase de viabilidade</td></tr>
+              <tr><td>Indicadores VPL, TIR, payback (Tópico 07)</td><td>São o núcleo da viabilidade econômico-financeira</td></tr>
+              <tr><td>Sensibilidade e cenários (Tópico 08)</td><td>Complementam o estudo de viabilidade, testando premissas antes da aprovação</td></tr>
+              <tr><td>Projetos sociais (Tópico 10)</td><td>Em estatais, a dimensão social e o EVTEA conectam as etapas à análise social</td></tr>
+              <tr><td>Orçamento (matéria Orçamento)</td><td>O ciclo PPA → LDO → LOA governa a aprovação e a execução em estatais</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e escrever de memória a sequência de etapas e os três níveis de estudo.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, focando em ordenação das etapas e conteúdo de cada dimensão da viabilidade.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado e revisar os flashcards; avançar para o Tópico 04 (metodologias de avaliação e seleção).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas. (Processo de orçamento de capital.)</li>
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Etapas do processo de orçamento de capital.)</li>
+            <li>PROJECT MANAGEMENT INSTITUTE. <i>PMBOK Guide</i>. (Ciclo de vida e fases do projeto.)</li>
+            <li>BANCO MUNDIAL. <i>Project Cycle</i>. (Identificação, preparação, avaliação, execução, avaliação ex post.)</li>
+            <li>BRASIL. Lei nº 14.133/2021 (licitações e contratos — projeto básico e executivo) e guias do Ministério do Planejamento (EVTEA).</li>
+            <li>Provas anteriores da banca FGV (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 03/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t03";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Qual a sequência completa de etapas na elaboração de um projeto?",
+          "a": "Ideia → triagem (análise preliminar) → estudos de viabilidade → avaliação e seleção → aprovação → implantação → acompanhamento → avaliação ex post."
+      },
+      {
+          "q": "Quais são os três níveis de estudo, em ordem crescente de detalhe?",
+          "a": "Perfil (estudo de oportunidade) → pré-viabilidade → viabilidade (definitiva)."
+      },
+      {
+          "q": "O que é o estudo de perfil?",
+          "a": "Primeira leitura da oportunidade, com estimativas por analogia e baixa precisão — decide se vale aprofundar."
+      },
+      {
+          "q": "Qual nível de estudo fundamenta a decisão final e a captação?",
+          "a": "O estudo de viabilidade (definitivo) — maior detalhamento e precisão, com engenharia básica."
+      },
+      {
+          "q": "O que cresce ao longo dos níveis de estudo?",
+          "a": "Detalhamento, precisão das estimativas e custo do estudo."
+      },
+      {
+          "q": "Quais são as dimensões clássicas da viabilidade?",
+          "a": "Técnica, mercadológica, econômico-financeira, ambiental, jurídica e organizacional (no setor público: + política e social)."
+      },
+      {
+          "q": "Qual dimensão da viabilidade responde 'há demanda'?",
+          "a": "A mercadológica: mercado-alvo, concorrência, preço e projeção de receitas."
+      },
+      {
+          "q": "Qual dimensão responde 'cria valor'?",
+          "a": "A econômico-financeira: investimento, fluxos, VPL/TIR/payback e fontes de recursos."
+      },
+      {
+          "q": "O que acontece se o projeto for inviável em uma única dimensão?",
+          "a": "O projeto inteiro fica inviabilizado — a viabilidade exige aprovação em todas as dimensões relevantes."
+      },
+      {
+          "q": "Quais são as quatro fases do ciclo de vida do projeto?",
+          "a": "Concepção (iniciação) → planejamento → execução → encerramento."
+      },
+      {
+          "q": "Como evolui o custo de mudança ao longo do ciclo de vida?",
+          "a": "Cresce: no início a influência é máxima e mudar é barato; na execução, influência mínima e mudança caríssima."
+      },
+      {
+          "q": "O que é a etapa de triagem?",
+          "a": "Análise preliminar e barata que filtra as ideias: faz sentido estratégico? Há inviabilidade óbvia?"
+      },
+      {
+          "q": "Qual etapa precede imediatamente a aprovação?",
+          "a": "A avaliação e seleção — aplicação dos métodos (VPL, TIR, payback) e comparação de alternativas."
+      },
+      {
+          "q": "O que é o acompanhamento de um projeto?",
+          "a": "Monitoramento do previsto × realizado (prazo, custo, escopo) durante a execução, permitindo correções de rota."
+      },
+      {
+          "q": "O que é a avaliação ex post e quais suas duas funções?",
+          "a": "Auditoria após o encerramento: verifica se os benefícios se realizaram; serve à accountability e ao aprendizado (calibrar premissas futuras)."
+      },
+      {
+          "q": "Por que o processo não termina na aprovação?",
+          "a": "Porque ainda faltam implantação, acompanhamento e avaliação ex post — sem eles, não há controle nem aprendizado."
+      },
+      {
+          "q": "Como as etapas funcionam em estatais quanto ao orçamento?",
+          "a": "O investimento precisa constar do ciclo orçamentário PPA → LDO → LOA; fora do orçamento, não há execução."
+      },
+      {
+          "q": "O que é o EVTEA?",
+          "a": "Estudo de Viabilidade Técnica, Econômica e Ambiental — padrão do Governo Federal para grandes investimentos/obras."
+      },
+      {
+          "q": "O que a Lei 14.133/2021 exige antes de contratar obras?",
+          "a": "Projeto básico (soluções técnicas, custo estimado, licitação) e, na sequência, projeto executivo (detalhamento para execução)."
+      },
+      {
+          "q": "Por que não se faz estudo definitivo para toda ideia?",
+          "a": "Porque o estudo aprofundado é caro: o funil descarta cedo e barato o que não merece aprofundamento."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Sequência",
+          "texto": "—",
+          "enun": "A sequência correta das etapas na elaboração de um projeto de investimento é:",
+          "alts": [
+              "ideia → aprovação → triagem → viabilidade → implantação",
+              "ideia → triagem → estudos de viabilidade → avaliação e seleção → aprovação → implantação → acompanhamento → avaliação ex post",
+              "triagem → ideia → aprovação → viabilidade → ex post",
+              "viabilidade → ideia → implantação → triagem → ex post",
+              "ideia → implantação → viabilidade → aprovação → ex post"
+          ],
+          "correta": 1,
+          "coment": "Ordem canônica: ideia, triagem, estudos de viabilidade, avaliação/seleção, aprovação, implantação, acompanhamento e avaliação ex post."
+      },
+      {
+          "tema": "Sequência",
+          "texto": "—",
+          "enun": "A etapa que precede imediatamente a aprovação do projeto é:",
+          "alts": [
+              "a implantação",
+              "a avaliação e seleção",
+              "o acompanhamento",
+              "a avaliação ex post",
+              "a geração de ideias"
+          ],
+          "correta": 1,
+          "coment": "Avalia-se e seleciona-se (VPL, TIR, payback) antes de aprovar; aprovação é a decisão formal que libera a implantação."
+      },
+      {
+          "tema": "Sequência",
+          "texto": "—",
+          "enun": "A última etapa do processo de elaboração e gestão de um projeto é:",
+          "alts": [
+              "a aprovação",
+              "a implantação",
+              "o acompanhamento",
+              "a avaliação ex post",
+              "a triagem"
+          ],
+          "correta": 3,
+          "coment": "Avaliação ex post (auditoria pós-implantação): verifica se os benefícios se realizaram e gera lições aprendidas."
+      },
+      {
+          "tema": "Níveis de estudo",
+          "texto": "—",
+          "enun": "O estudo de perfil (estudo de oportunidade) caracteriza-se por:",
+          "alts": [
+              "alta precisão e alto custo",
+              "primeira leitura da oportunidade, com estimativas por analogia e baixa precisão",
+              "engenharia de detalhes",
+              "fundamentar a decisão final",
+              "ocorrer após a aprovação"
+          ],
+          "correta": 1,
+          "coment": "Perfil = filtro inicial barato: decide se vale aprofundar; precisão baixa (±30–50%)."
+      },
+      {
+          "tema": "Níveis de estudo",
+          "texto": "—",
+          "enun": "O estudo que fundamenta a decisão final de investimento e a captação de recursos é o de:",
+          "alts": [
+              "perfil",
+              "pré-viabilidade",
+              "viabilidade",
+              "triagem",
+              "ex post"
+          ],
+          "correta": 2,
+          "coment": "Viabilidade definitiva: engenharia básica, dados primários, precisão alta (±5–15%) — base para aprovação e financiamento."
+      },
+      {
+          "tema": "Níveis de estudo",
+          "texto": "—",
+          "enun": "Ao longo dos níveis de estudo (perfil → pré-viabilidade → viabilidade), o detalhamento, a precisão e o custo do estudo:",
+          "alts": [
+              "diminuem",
+              "permanecem constantes",
+              "aumentam",
+              "oscilam aleatoriamente",
+              "são irrelevantes"
+          ],
+          "correta": 2,
+          "coment": "Regra de ouro: cada nível aprofunda o anterior — mais detalhe, mais precisão e mais custo."
+      },
+      {
+          "tema": "Dimensões",
+          "texto": "—",
+          "enun": "Estimar a demanda, analisar a concorrência e projetar receitas são conteúdos da viabilidade:",
+          "alts": [
+              "técnica",
+              "mercadológica",
+              "ambiental",
+              "jurídica",
+              "organizacional"
+          ],
+          "correta": 1,
+          "coment": "Viabilidade mercadológica: mercado-alvo, concorrência, preço, canais e projeção de receitas."
+      },
+      {
+          "tema": "Dimensões",
+          "texto": "—",
+          "enun": "O estudo de impacto e o licenciamento integram a viabilidade:",
+          "alts": [
+              "jurídica",
+              "técnica",
+              "ambiental",
+              "mercadológica",
+              "financeira"
+          ],
+          "correta": 2,
+          "coment": "Ambiental: impactos, licenciamento e medidas mitigadoras. A jurídica trata de conformidade legal, contratos e tributos."
+      },
+      {
+          "tema": "Dimensões",
+          "texto": "—",
+          "enun": "Avaliar se a empresa tem estrutura, pessoas e processos para gerir o projeto é objeto da viabilidade:",
+          "alts": [
+              "técnica",
+              "organizacional",
+              "mercadológica",
+              "ambiental",
+              "econômico-financeira"
+          ],
+          "correta": 1,
+          "coment": "Viabilidade organizacional (gerencial): capacidade institucional de executar e operar o projeto."
+      },
+      {
+          "tema": "Dimensões",
+          "texto": "—",
+          "enun": "Um projeto tecnicamente viável, financeiramente atraente, mas sem licença ambiental possível é:",
+          "alts": [
+              "viável, pois as demais dimensões compensam",
+              "inviável, pois a viabilidade exige aprovação em todas as dimensões relevantes",
+              "viável, se o VPL for alto",
+              "independente do licenciamento",
+              "viável no setor privado"
+          ],
+          "correta": 1,
+          "coment": "Regra do veto: inviabilidade em qualquer dimensão relevante inviabiliza o conjunto do projeto."
+      },
+      {
+          "tema": "Ciclo de vida",
+          "texto": "—",
+          "enun": "As quatro fases clássicas do ciclo de vida de um projeto são:",
+          "alts": [
+              "ideia, análise, compra, venda",
+              "concepção, planejamento, execução e encerramento",
+              "início, meio, fim e revisão",
+              "perfil, pré-viabilidade, viabilidade e aprovação",
+              "planejamento, orçamento, licitação e fiscalização"
+          ],
+          "correta": 1,
+          "coment": "PMI/PMBOK: concepção (iniciação) → planejamento → execução → encerramento."
+      },
+      {
+          "tema": "Ciclo de vida",
+          "texto": "—",
+          "enun": "No início do ciclo de vida do projeto, a capacidade de influenciar seus resultados é ______ e o custo de promover mudanças é ______.",
+          "alts": [
+              "mínima; alto",
+              "máxima; baixo",
+              "máxima; alto",
+              "mínima; baixo",
+              "nula; nulo"
+          ],
+          "correta": 1,
+          "coment": "Curva clássica: influência máxima e mudança barata no início; na execução, influência mínima e mudança cara."
+      },
+      {
+          "tema": "Acompanhamento",
+          "texto": "—",
+          "enun": "O acompanhamento de um projeto consiste em:",
+          "alts": [
+              "auditar o projeto após o encerramento",
+              "comparar previsto × realizado durante a execução, corrigindo a rota",
+              "aprovar o orçamento",
+              "selecionar fornecedores",
+              "elaborar o estudo de perfil"
+          ],
+          "correta": 1,
+          "coment": "Monitoramento contínuo de prazo, custo e escopo durante a execução; a avaliação ex post é posterior ao encerramento."
+      },
+      {
+          "tema": "Ex post",
+          "texto": "—",
+          "enun": "As duas funções da avaliação ex post são:",
+          "alts": [
+              "aprovar e financiar",
+              "accountability (responsabilizar gestores) e aprendizado (calibrar premissas futuras)",
+              "licitar e contratar",
+              "planejar e orçar",
+              "vender e depreciar"
+          ],
+          "correta": 1,
+          "coment": "Ex post audita os resultados: responsabiliza os gestores e alimenta as premissas dos próximos projetos."
+      },
+      {
+          "tema": "Ex post",
+          "texto": "—",
+          "enun": "Sobre o processo de elaboração e gestão de projetos, é correto afirmar:",
+          "alts": [
+              "termina com a aprovação",
+              "termina com a implantação",
+              "inclui acompanhamento e avaliação ex post após a implantação",
+              "dispensa o monitoramento",
+              "começa pela viabilidade"
+          ],
+          "correta": 2,
+          "coment": "O processo vai até a avaliação ex post; aprovação e implantação são etapas intermediárias, e o processo começa com a ideia."
+      },
+      {
+          "tema": "Estatais",
+          "texto": "—",
+          "enun": "Para uma estatal executar um investimento, ele deve constar do ciclo orçamentário, cuja sequência é:",
+          "alts": [
+              "LOA → LDO → PPA",
+              "PPA → LDO → LOA",
+              "LDO → PPA → LOA",
+              "PPA → LOA → LDO",
+              "orçamento → planejamento → meta"
+          ],
+          "correta": 1,
+          "coment": "PPA (planejamento plurianual) → LDO (diretrizes e metas) → LOA (orçamento anual). Fora do orçamento, não há execução."
+      },
+      {
+          "tema": "Estatais",
+          "texto": "—",
+          "enun": "Segundo a Lei 14.133/2021, a contratação de obra pública exige, previamente, a elaboração de:",
+          "alts": [
+              "estudo de perfil",
+              "projeto básico",
+              "avaliação ex post",
+              "plano de marketing",
+              "parecer contábil"
+          ],
+          "correta": 1,
+          "coment": "Projeto básico: soluções técnicas, custos estimados e condições de licitação; o executivo detalha para a execução."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "O funil de elaboração de projetos existe porque:",
+          "alts": [
+              "toda ideia merece estudo completo",
+              "estudos aprofundados são caros — descarta-se cedo e barato o que não merece aprofundamento",
+              "a aprovação é automática",
+              "o orçamento é ilimitado",
+              "a precisão diminui a cada fase"
+          ],
+          "correta": 1,
+          "coment": "O estudo aprofundado custa caro; a triagem e o perfil filtram barato, e só os bons candidatos avançam."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Estudo com engenharia básica, dados primários e precisão de ±5% a 15%, destinado a fundamentar a decisão final, é o estudo de:",
+          "alts": [
+              "perfil",
+              "oportunidade",
+              "pré-viabilidade",
+              "viabilidade",
+              "triagem"
+          ],
+          "correta": 3,
+          "coment": "Viabilidade definitiva: máximo detalhamento e precisão antes da decisão — é o documento que embasa aprovação e captação."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "A sigla EVTEA, usada pelo Governo Federal, refere-se ao estudo de viabilidade:",
+          "alts": [
+              "técnica, econômica e ambiental",
+              "tributária, estratégica e atuarial",
+              "tecnológica, estatística e administrativa",
+              "tarifária, eleitoral e agrária",
+              "técnica, educacional e alimentar"
+          ],
+          "correta": 0,
+          "coment": "EVTEA = Estudo de Viabilidade Técnica, Econômica e Ambiental — padrão do Ministério do Planejamento para grandes investimentos."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A primeira etapa da elaboração de um projeto é:",
+          "alts": [
+              "a aprovação",
+              "a geração da ideia / identificação da oportunidade",
+              "a implantação",
+              "a avaliação ex post",
+              "o acompanhamento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A última etapa do processo de elaboração e gestão de um projeto é:",
+          "alts": [
+              "a aprovação",
+              "a triagem",
+              "a avaliação ex post",
+              "a implantação",
+              "a viabilidade"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Os três níveis de estudo, em ordem crescente de detalhamento, são:",
+          "alts": [
+              "viabilidade, pré-viabilidade, perfil",
+              "perfil, pré-viabilidade, viabilidade",
+              "pré-viabilidade, perfil, viabilidade",
+              "triagem, perfil, aprovação",
+              "perfil, viabilidade, ex post"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O estudo mais detalhado e preciso, que fundamenta a decisão final, é o de:",
+          "alts": [
+              "perfil",
+              "triagem",
+              "viabilidade",
+              "oportunidade",
+              "ex post"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Ao longo dos níveis de estudo, a precisão das estimativas:",
+          "alts": [
+              "aumenta",
+              "diminui",
+              "permanece igual",
+              "zera",
+              "torna-se irrelevante"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Analisar demanda, concorrência e preço faz parte da viabilidade:",
+          "alts": [
+              "técnica",
+              "ambiental",
+              "mercadológica",
+              "jurídica",
+              "organizacional"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Licenciamento e estudo de impacto referem-se à viabilidade:",
+          "alts": [
+              "mercadológica",
+              "ambiental",
+              "técnica",
+              "financeira",
+              "organizacional"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "As fases do ciclo de vida do projeto são:",
+          "alts": [
+              "perfil, pré-viabilidade e viabilidade",
+              "concepção, planejamento, execução e encerramento",
+              "ideia, aprovação e implantação",
+              "compra, venda e baixa",
+              "orçamento, licitação e pagamento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O acompanhamento do projeto compara:",
+          "alts": [
+              "preço × valor",
+              "previsto × realizado",
+              "receita × lucro",
+              "dívida × capital",
+              "custo fixo × variável"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A avaliação ex post ocorre:",
+          "alts": [
+              "antes da implantação",
+              "durante a triagem",
+              "após o encerramento do projeto",
+              "antes da aprovação",
+              "durante a viabilidade"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A etapa que precede imediatamente a aprovação de um projeto é:",
+          "alts": [
+              "a implantação",
+              "a triagem",
+              "a avaliação e seleção",
+              "o acompanhamento",
+              "a avaliação ex post"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O estudo de perfil (estudo de oportunidade) tem como característica:",
+          "alts": [
+              "engenharia de detalhes e alta precisão",
+              "estimativas por analogia e baixa precisão, servindo de filtro inicial",
+              "substituir a viabilidade",
+              "ocorrer após a implantação",
+              "ser o mais caro dos estudos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O objetivo principal da pré-viabilidade é:",
+          "alts": [
+              "fundamentar a decisão final",
+              "comparar alternativas técnicas e de localização, descartando as fracas",
+              "auditar o projeto encerrado",
+              "autorizar o orçamento",
+              "licitar a obra"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Avaliar se a empresa possui estrutura e pessoas para executar o projeto é objeto da viabilidade:",
+          "alts": [
+              "técnica",
+              "mercadológica",
+              "organizacional",
+              "ambiental",
+              "jurídica"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Um projeto viável em cinco dimensões, mas inviável juridicamente, é:",
+          "alts": [
+              "viável pela média das dimensões",
+              "inviável — a regra do veto exige viabilidade em todas as dimensões relevantes",
+              "viável se o VPL for positivo",
+              "viável após a aprovação",
+              "independente da dimensão jurídica"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "No início do ciclo de vida do projeto, o custo de promover mudanças é:",
+          "alts": [
+              "máximo",
+              "mínimo",
+              "constante",
+              "nulo apenas no fim",
+              "proibitivo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "As duas funções da avaliação ex post são:",
+          "alts": [
+              "aprovar e licitar",
+              "accountability e aprendizado",
+              "planejar e orçar",
+              "financiar e depreciar",
+              "licitar e fiscalizar"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A sequência do ciclo orçamentário que vincula os investimentos de uma estatal é:",
+          "alts": [
+              "LOA → LDO → PPA",
+              "PPA → LDO → LOA",
+              "LDO → LOA → PPA",
+              "PPA → LOA → LDO",
+              "LOA → PPA → LDO"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Pela Lei 14.133/2021, a contratação de obra pública exige previamente o:",
+          "alts": [
+              "projeto executivo",
+              "projeto básico",
+              "estudo de perfil",
+              "balanço patrimonial",
+              "acordo de acionistas"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O funil de elaboração existe porque estudos aprofundados são:",
+          "alts": [
+              "gratuitos",
+              "caros — por isso se descarta cedo e barato o que não merece aprofundamento",
+              "obrigatórios para toda ideia",
+              "proibidos",
+              "sempre imprecisos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre os níveis de estudo, é INCORRETO afirmar:",
+          "alts": [
+              "o perfil é o primeiro filtro, de baixo custo",
+              "a viabilidade definitiva tem a maior precisão",
+              "o detalhamento diminui do perfil para a viabilidade",
+              "o custo do estudo cresce a cada nível",
+              "a pré-viabilidade compara alternativas técnicas"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Estudo com engenharia básica, dados primários e precisão de ±5% a 15%, para embasar a decisão final, é o estudo de:",
+          "alts": [
+              "perfil",
+              "oportunidade",
+              "triagem",
+              "viabilidade",
+              "pré-viabilidade"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Assinale a sequência correta:",
+          "alts": [
+              "aprovação → avaliação → viabilidade → ideia",
+              "ideia → triagem → viabilidade → avaliação e seleção → aprovação",
+              "triagem → implantação → ideia → ex post",
+              "viabilidade → ideia → aprovação → triagem",
+              "ex post → ideia → triagem → aprovação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A dimensão que responde 'o projeto cria valor?' e a que responde 'há demanda?' são, respectivamente:",
+          "alts": [
+              "técnica e jurídica",
+              "econômico-financeira e mercadológica",
+              "ambiental e técnica",
+              "jurídica e organizacional",
+              "mercadológica e econômico-financeira"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A curva influência × custo de mudança justifica:",
+          "alts": [
+              "economizar nos estudos preliminares",
+              "investir em estudos na fase inicial, quando mudar ainda é barato",
+              "mudar o projeto apenas na execução",
+              "dispensar o planejamento",
+              "adiar toda decisão para o fim"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Uma empresa aprovou projeto, implantou-o e nunca verificou se os benefícios prometidos se realizaram. A etapa omitida é:",
+          "alts": [
+              "a triagem",
+              "a avaliação ex post",
+              "o perfil",
+              "a pré-viabilidade",
+              "a aprovação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A avaliação ex post combate qual problema identificado no Tópico 02?",
+          "alts": [
+              "o rationing de capital",
+              "o otimismo excessivo, ao calibrar premissas com resultados reais",
+              "a escassez de projetos",
+              "o custo de licitação",
+              "a inflação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "EVTEA, no âmbito do Governo Federal, é o estudo de viabilidade:",
+          "alts": [
+              "técnica, econômica e ambiental",
+              "tributária, estatística e administrativa",
+              "tecnológica, estratégica e atuarial",
+              "tarifária, educacional e agrária",
+              "técnica, eleitoral e alimentar"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "No ciclo de vida, a fase de maior detalhamento das estimativas antes da execução é o:",
+          "alts": [
+              "encerramento",
+              "planejamento",
+              "início da execução",
+              "conceito",
+              "ex post"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre a elaboração de projetos, assinale a afirmativa correta:",
+          "alts": [
+              "o processo termina com a aprovação",
+              "o estudo de viabilidade é a primeira etapa",
+              "a precisão das estimativas diminui a cada nível de estudo",
+              "a triagem é o filtro inicial, rápido e barato, antes dos estudos aprofundados",
+              "a avaliação ex post antecede a implantação"
+          ],
+          "correta": 3
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Recitar a sequência de etapas da ideia à avaliação ex post",
+      "Distinguir perfil, pré-viabilidade e viabilidade (objetivo e precisão)",
+      "Explicar por que detalhamento, precisão e custo crescem ao longo das fases",
+      "Listar as dimensões da viabilidade e a pergunta central de cada uma",
+      "Saber que inviabilidade em uma dimensão inviabiliza o projeto",
+      "Relacionar as etapas ao ciclo de vida: concepção, planejamento, execução, encerramento",
+      "Explicar a curva influência × custo de mudança",
+      "Distinguir acompanhamento (previsto × realizado) de avaliação ex post",
+      "Explicar a dupla função da avaliação ex post (accountability + aprendizado)",
+      "Situar o ciclo orçamentário (PPA → LDO → LOA) e o EVTEA nas estatais"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Afirmar que o processo de elaboração termina com a aprovação ou com a implantação.",
+      "Colocar o estudo de viabilidade como primeira etapa — antes há ideia e triagem.",
+      "Inverter a ordem dos níveis: é perfil → pré-viabilidade → viabilidade.",
+      "Dizer que a precisão diminui à medida que o estudo avança — ela aumenta.",
+      "Achar que o estudo mais detalhado é o mais barato.",
+      "Confundir viabilidade mercadológica (demanda) com técnica (dá para fazer).",
+      "Atribuir licenciamento ambiental à viabilidade jurídica.",
+      "Ignorar que inviabilidade em uma dimensão inviabiliza o projeto inteiro.",
+      "Confundir ciclo de vida (concepção→encerramento) com níveis de estudo (perfil→viabilidade).",
+      "Achar que mudar no início é caro — no início a mudança é barata; na execução, caríssima.",
+      "Confundir acompanhamento (durante a execução) com avaliação ex post (após o encerramento).",
+      "Ignorar a função de aprendizado da avaliação ex post.",
+      "Esquecer a vinculação orçamentária PPA → LDO → LOA em estatais.",
+      "Confundir projeto básico (licitar) com projeto executivo (executar) na Lei 14.133/2021.",
+      "Fazer estudo definitivo para toda ideia — o funil existe para descartar cedo e barato.",
+      "Omitir a dimensão organizacional: a empresa precisa ter capacidade de gerir o projeto.",
+      "Achar que a avaliação e seleção vêm depois da aprovação.",
+      "Desconhecer o EVTEA (técnica, econômica e ambiental) no setor público.",
+      "Trocar a sequência do ciclo orçamentário (LOA → LDO → PPA é errado).",
+      "Ignorar que o controle externo (TCU) exige documentação de todas as etapas."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Triagem (análise preliminar)",
+          "Filtro inicial e barato das ideias: verifica coerência estratégica e inviabilidades óbvias antes de aprofundar."
+      ],
+      [
+          "Perfil (estudo de oportunidade)",
+          "Primeiro nível de estudo: estimativas por analogia, baixa precisão, baixo custo; decide se vale aprofundar."
+      ],
+      [
+          "Pré-viabilidade",
+          "Nível intermediário: compara alternativas técnicas e de localização, descartando as fracas."
+      ],
+      [
+          "Estudo de viabilidade",
+          "Nível definitivo: engenharia básica, dados primários e alta precisão; fundamenta a decisão final e a captação."
+      ],
+      [
+          "Ciclo de vida do projeto",
+          "Concepção → planejamento → execução → encerramento."
+      ],
+      [
+          "Viabilidade técnica",
+          "Análise se o projeto é executável: tecnologia, capacidade, localização, cronograma físico."
+      ],
+      [
+          "Viabilidade mercadológica",
+          "Análise da demanda: mercado-alvo, concorrência, preço, canais, projeção de receitas."
+      ],
+      [
+          "Viabilidade econômico-financeira",
+          "Análise da criação de valor: investimento, fluxos, VPL/TIR/payback, fontes de recursos."
+      ],
+      [
+          "Viabilidade ambiental",
+          "Análise de impactos, licenciamento e medidas mitigadoras."
+      ],
+      [
+          "Viabilidade jurídica",
+          "Análise de conformidade legal, regulatória, contratual e tributária."
+      ],
+      [
+          "Viabilidade organizacional",
+          "Análise da capacidade da empresa de gerir o projeto: estrutura, pessoas e processos."
+      ],
+      [
+          "Acompanhamento (monitoramento)",
+          "Comparação contínua previsto × realizado durante a execução, para correção de rota."
+      ],
+      [
+          "Avaliação ex post",
+          "Auditoria após o encerramento: verifica benefícios realizados; serve à accountability e ao aprendizado."
+      ],
+      [
+          "Projeto básico",
+          "Documento que define soluções técnicas e custos estimados, exigido antes da licitação de obras (Lei 14.133/2021)."
+      ],
+      [
+          "Projeto executivo",
+          "Detalhamento completo do projeto básico, necessário à execução da obra."
+      ],
+      [
+          "EVTEA",
+          "Estudo de Viabilidade Técnica, Econômica e Ambiental — padrão do Governo Federal para grandes investimentos."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

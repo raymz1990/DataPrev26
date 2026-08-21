@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parâmetros para Análise de Projetos | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">06 - Parâmetros para análise de projetos</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html" selected>06 - Parâmetros para análise de projetos</option>
+    <option value="" disabled>07 - Indicadores: VPL, TIR, payback (em breve)</option>
+    <option value="" disabled>08 - Análise de sensibilidade e cenários (em breve)</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Parâmetros de Análise de Projetos</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 06 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Parâmetros para Análise de Projetos</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 06</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">5h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 01 (fluxo de caixa) e 04–05 (métodos e TMA)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — escudo fiscal, valor residual líquido e capital de giro caem em cálculo</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Distinguir <b>vida econômica</b>, <b>vida útil física</b> e <b>vida contábil/fiscal</b> de um ativo — e definir qual delas delimita o horizonte do projeto.</li>
+            <li>Calcular a <b>depreciação linear</b> e explicar seu papel na análise: não é caixa, mas gera <b>escudo fiscal</b>.</li>
+            <li>Conhecer os métodos de depreciação (linear, saldos decrescentes, unidades produzidas) e seus efeitos no fluxo.</li>
+            <li>Calcular o <b>valor residual líquido de impostos</b>: venda − IR sobre o ganho de capital (venda − valor contábil).</li>
+            <li>Medir a <b>necessidade de capital de giro (NCG)</b> e tratá-la no fluxo: variação como saída, recuperação no encerramento.</li>
+            <li>Montar o <b>fluxo de caixa completo</b> do projeto integrando os quatro parâmetros.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Quatro parâmetros estruturam o fluxo de caixa de qualquer projeto: <b>vida econômica</b>, <b>depreciação</b>, <b>valor residual</b> e <b>capital de giro</b>.</p>
+          <p><b>Vida econômica</b> é o período em que o projeto gera benefícios que justificam mantê-lo — não confundir com a <b>vida física</b> (quanto tempo o ativo funciona) nem com a <b>vida fiscal</b> (prazo de depreciação definido pela Receita). É a vida econômica que fixa o horizonte de análise: fluxos só contam até ela.</p>
+          <p><b>Depreciação</b> é a alocação contábil do custo do ativo ao longo da vida útil. <b>Não é saída de caixa</b> — mas reduz o lucro tributável, gerando <b>escudo fiscal</b>: economia de IR = depreciação × alíquota. Métodos: linear (parcelas iguais), saldos decrescentes (acelerada, escudo maior no início) e unidades produzidas.</p>
+          <p><b>Valor residual</b> é o que o ativo vale ao fim do projeto. Entra no último fluxo <b>líquido do IR sobre o ganho de capital</b>: ganho = valor de venda − valor contábil. Se vender abaixo do valor contábil, há perda dedutível (economia de IR).</p>
+          <p><b>Capital de giro</b>: o projeto consome caixa em estoques e recebíveis, parcialmente compensado por fornecedores — <b>NCG = ativo circulante operacional − passivo circulante operacional</b>. A <b>variação da NCG é saída de caixa</b> quando cresce; no encerramento, o giro investido <b>retorna integralmente</b>, somando-se ao último fluxo. Esquecer a recuperação do giro é o erro clássico que a FGV cobra.</p>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Parâmetros<br>de Análise<br>de Projetos</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Vida econômica</h4><ul><li>Horizonte da análise</li><li>≠ vida física</li><li>≠ vida fiscal</li></ul></div>
+              <div class="mm-node"><h4>Depreciação</h4><ul><li>Não é caixa</li><li>Escudo fiscal: Dep × IR</li><li>Linear / acelerada / unidades</li></ul></div>
+              <div class="mm-node"><h4>Valor residual</h4><ul><li>Venda ao fim do projeto</li><li>IR sobre ganho de capital</li><li>Entra no último fluxo</li></ul></div>
+              <div class="mm-node"><h4>Capital de giro</h4><ul><li>NCG = AC oper. − PC oper.</li><li>ΔNCG = saída de caixa</li><li>Recuperado no fim</li></ul></div>
+              <div class="mm-node"><h4>Fluxo operacional</h4><ul><li>(R − C − D)(1−IR) + D</li><li>Depreciação só via escudo</li></ul></div>
+              <div class="mm-node"><h4>Último ano (tₙ)</h4><ul><li>Operação</li><li>+ residual líquido</li><li>+ recuperação do giro</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Vida econômica × vida útil × vida fiscal</h3>
+          <table>
+            <thead><tr><th>Conceito</th><th>Definição</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td><b>Vida econômica</b></td><td>Período em que o projeto/ativo gera benefícios líquidos que justificam mantê-lo em operação</td><td><b>Delimita o horizonte da análise</b> — os fluxos do projeto vão até aqui</td></tr>
+              <tr><td><b>Vida útil física</b></td><td>Tempo em que o ativo funciona fisicamente</td><td>Referência técnica; pode exceder a vida econômica (obsolescência encerra antes)</td></tr>
+              <tr><td><b>Vida contábil/fiscal</b></td><td>Prazo de depreciação aceito pela Receita (ex.: máquinas 10 anos, veículos 5, computadores 5)</td><td>Define a depreciação dedutível — e, portanto, o escudo fiscal</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 A regra da prova</div>
+            <p>O horizonte de análise do projeto é a <b>vida econômica</b>. Se a máquina dura 15 anos (física), deprecia em 10 (fiscal) mas o produto fica obsoleto em 6, o projeto tem 6 anos de fluxos — e o ativo ainda terá <b>valor residual</b> ao final.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Depreciação: não é caixa, mas gera escudo fiscal</h3>
+          <p>A depreciação aloca o custo do ativo ao longo de sua vida útil como despesa. <b>Ela não sai do caixa</b> — o desembolso ocorreu em t₀, na compra. Mas, por reduzir o lucro tributável, gera economia de imposto:</p>
+          <p><b>Escudo fiscal = Depreciação × alíquota de IR</b></p>
+          <p>Por isso o fluxo operacional após IR pode ser escrito como:</p>
+          <p><b>FC = (Receitas − Custos − Depreciação) × (1 − IR) + Depreciação</b><br>
+          ou, equivalentemente: <b>FC = (R − C) × (1 − IR) + Depreciação × IR</b></p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Exemplo numérico</div>
+            <p>Ativo de R$ 1.000.000, vida fiscal de 5 anos, valor residual contábil de R$ 100.000 → depreciação linear = (1.000.000 − 100.000) ÷ 5 = <b>R$ 180.000/ano</b>. Com IR de 34%, escudo fiscal anual = 180.000 × 0,34 = <b>R$ 61.200</b> — economia de imposto que entra no fluxo todo ano.</p>
+          </div>
+          <p><b>Métodos de depreciação:</b></p>
+          <table>
+            <thead><tr><th>Método</th><th>Como calcula</th><th>Efeito no projeto</th></tr></thead>
+            <tbody>
+              <tr><td><b>Linear (linha reta)</b></td><td>(Custo − residual) ÷ vida útil</td><td>Escudo constante ao longo dos anos</td></tr>
+              <tr><td><b>Saldos decrescentes (acelerada)</b></td><td>Taxa fixa sobre o valor contábil residual</td><td>Escudo maior no início → <b>VPL maior</b> (escudo chega antes)</td></tr>
+              <tr><td><b>Unidades produzidas</b></td><td>Proporcional à produção do período</td><td>Escudo acompanha a operação</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>4.3 Valor residual: o último fluxo do ativo</h3>
+          <p>Ao fim da vida econômica, o ativo pode ser vendido. O que entra no fluxo é o valor de venda <b>líquido do IR sobre o ganho de capital</b>:</p>
+          <p><b>Ganho de capital = valor de venda − valor contábil</b> (custo − depreciação acumulada)<br>
+          <b>Valor residual líquido = valor de venda − IR × ganho de capital</b></p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Exemplo numérico</div>
+            <p>Ativo vendido por R$ 150.000 com valor contábil de R$ 100.000 → ganho = 50.000 → IR de 34% = 17.000 → <b>valor residual líquido = 150.000 − 17.000 = R$ 133.000</b>. Se a venda fosse por R$ 80.000 (abaixo do valor contábil), haveria perda dedutível de 20.000 → economia de IR de 6.800 → valor líquido = 80.000 + 6.800 = <b>R$ 86.800</b>.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠️ Pegadinhas</div>
+            <p>O IR incide sobre o <b>ganho</b> (venda − valor contábil), não sobre o valor total da venda. E se o ativo estiver <b>totalmente depreciado</b> (valor contábil zero), todo o valor de venda é ganho tributável.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.4 Capital de giro: o investimento que vai e volta</h3>
+          <p>Operar exige financiar o <b>ciclo operacional</b>: estoques + clientes a receber − fornecedores a pagar. A diferença é a <b>necessidade de capital de giro (NCG)</b>:</p>
+          <p><b>NCG = ativo circulante operacional − passivo circulante operacional</b></p>
+          <ul class="styled">
+            <li>Entram no ativo operacional: estoques, contas a receber, despesas antecipadas, caixa mínimo.</li>
+            <li>Entram no passivo operacional: fornecedores, salários e tributos a pagar.</li>
+            <li><b>Não entram</b>: empréstimos e aplicações financeiras (são itens de financiamento, não de operação).</li>
+          </ul>
+          <p><b>Como o giro entra no fluxo do projeto:</b></p>
+          <table>
+            <thead><tr><th>Momento</th><th>Efeito no fluxo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Início (t₀)</b></td><td>Investimento da NCG inicial → saída de caixa</td></tr>
+              <tr><td><b>Durante</b></td><td>Se a operação cresce, <b>ΔNCG &gt; 0 é saída</b> de caixa no ano; se encolhe, entrada</td></tr>
+              <tr><td><b>Encerramento (tₙ)</b></td><td><b>Recuperação integral do giro acumulado</b> → entrada no último fluxo</td></tr>
+            </tbody>
+          </table>
+          <div class="box fgv">
+            <div class="box-title">🏛 Exemplo numérico</div>
+            <p>Estoques R$ 300 mil + recebíveis R$ 500 mil − fornecedores R$ 200 mil → <b>NCG = R$ 600 mil</b>: saem em t₀ (ou conforme a operação cresce) e retornam R$ 600 mil no último ano, somando-se ao fluxo terminal. Esquecer essa recuperação subestima o VPL — erro clássico de prova.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.5 Integrando tudo: o fluxo de caixa completo</h3>
+          <p>Projeto de 3 anos: ativo R$ 1.000 (depreciação linear em 3 anos até valor contábil de R$ 100); giro R$ 200; receitas − custos de R$ 500/ano; IR de 34%; venda do ativo ao fim por R$ 250.</p>
+          <table>
+            <thead><tr><th>Componente</th><th>t₀</th><th>t₁</th><th>t₂</th><th>t₃</th></tr></thead>
+            <tbody>
+              <tr><td>Investimento no ativo</td><td>− 1.000</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>Capital de giro</td><td>− 200</td><td>—</td><td>—</td><td>+ 200</td></tr>
+              <tr><td>Fluxo operacional: (500 − 300) × 0,66 + 300</td><td>—</td><td>+ 432</td><td>+ 432</td><td>+ 432</td></tr>
+              <tr><td>Valor residual líquido: 250 − 0,34 × (250 − 100)</td><td>—</td><td>—</td><td>—</td><td>+ 199</td></tr>
+              <tr><td><b>Fluxo total</b></td><td><b>− 1.200</b></td><td><b>+ 432</b></td><td><b>+ 432</b></td><td><b>+ 831</b></td></tr>
+            </tbody>
+          </table>
+          <p>Depreciação anual = (1.000 − 100) ÷ 3 = 300. Fluxo operacional = (500 − 300) × 0,66 + 300 = 132 + 300 = 432. Residual: ganho de 150, IR de 51 → 250 − 51 = 199.</p>
+          <div class="box ok">
+            <div class="box-title">✅ Síntese do tópico</div>
+            <p>Quatro parâmetros alimentam o fluxo: <b>vida econômica</b> (horizonte), <b>depreciação</b> (só via escudo fiscal: Dep × IR), <b>valor residual</b> (venda − IR sobre o ganho de capital) e <b>capital de giro</b> (NCG sai no início e retorna no fim). Monte o fluxo completo antes de qualquer VPL.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <p>Este tópico é <b>território de cálculo</b>: a FGV dá os parâmetros e pede um número. Os formatos dominantes:</p>
+          <ol class="styled">
+            <li><b>Depreciação linear:</b> (custo − valor residual contábil) ÷ vida útil.</li>
+            <li><b>Escudo fiscal:</b> depreciação × alíquota de IR — ou o fluxo operacional completo via (R − C − D)(1−IR) + D.</li>
+            <li><b>Valor residual líquido:</b> venda − IR × (venda − valor contábil); cuidado com o ativo 100% depreciado (todo o valor de venda é ganho).</li>
+            <li><b>NCG:</b> estoques + recebíveis − fornecedores; e o tratamento no fluxo (saída no início, retorno no fim).</li>
+            <li><b>Fluxo do último ano:</b> operação + residual líquido + recuperação do giro — a soma é o gabarito.</li>
+            <li><b>Conceito de vida econômica:</b> ≠ vida física ≠ vida fiscal; é ela que delimita a análise.</li>
+            <li><b>Depreciação não é desembolso:</b> questão conceitual clássica — entra no fluxo apenas via escudo fiscal.</li>
+          </ol>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo de enunciado típico</div>
+            <p>"Uma máquina de R$ 500 mil, depreciada linearmente em 5 anos até valor residual contábil nulo, alíquota de IR de 34%. O escudo fiscal anual é…" — Gabarito: 500 ÷ 5 × 0,34 = <b>R$ 34 mil</b>.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠️ Distrações frequentes</div>
+            <p>Calcular o IR sobre o valor total da venda (é sobre o ganho); incluir a depreciação como saída de caixa; esquecer a recuperação do giro; usar a vida fiscal como horizonte do projeto; tratar fornecedores como se aumentassem a NCG (eles a reduzem).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Vida econômica</b> delimita o horizonte da análise — não é a física nem a fiscal.</li>
+            <li>Depreciação <b>não é caixa</b>; entra no fluxo só pelo <b>escudo fiscal = Dep × IR</b>.</li>
+            <li>Depreciação linear = <b>(custo − residual contábil) ÷ vida útil</b>.</li>
+            <li>Depreciação acelerada antecipa o escudo → <b>VPL maior</b>.</li>
+            <li><b>FC operacional = (R − C − D)(1 − IR) + D</b> = (R − C)(1 − IR) + D × IR.</li>
+            <li>Ganho de capital = <b>venda − valor contábil</b>; IR incide só sobre o ganho.</li>
+            <li>Valor residual líquido = <b>venda − IR × ganho</b>.</li>
+            <li>Ativo 100% depreciado: <b>todo o valor de venda é ganho tributável</b>.</li>
+            <li>Venda abaixo do valor contábil: perda dedutível → <b>economia de IR soma ao fluxo</b>.</li>
+            <li><b>NCG = ativo circulante operacional − passivo circulante operacional</b>.</li>
+            <li>ΔNCG &gt; 0 = saída de caixa; no fim, o giro acumulado <b>retorna integralmente</b>.</li>
+            <li>Último fluxo = <b>operação + residual líquido + giro</b>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Pergunta-relâmpago</th><th>Resposta</th></tr></thead>
+            <tbody>
+              <tr><td>O que delimita o horizonte do projeto?</td><td>A vida econômica</td></tr>
+              <tr><td>Depreciação é saída de caixa?</td><td>Não — só gera escudo fiscal (Dep × IR)</td></tr>
+              <tr><td>Depreciação linear de 1.000, residual 100, 5 anos?</td><td>(1.000 − 100) ÷ 5 = 180/ano</td></tr>
+              <tr><td>Escudo fiscal de 180 com IR 34%?</td><td>180 × 0,34 = 61,2</td></tr>
+              <tr><td>Fórmula do fluxo operacional?</td><td>(R − C − D)(1 − IR) + D</td></tr>
+              <tr><td>IR do valor residual incide sobre quê?</td><td>O ganho de capital (venda − valor contábil)</td></tr>
+              <tr><td>Ativo totalmente depreciado vendido por 100?</td><td>Ganho = 100; IR sobre os 100</td></tr>
+              <tr><td>NCG: estoques 300 + recebíveis 500 − fornecedores 200?</td><td>NCG = 600</td></tr>
+              <tr><td>ΔNCG positivo no ano é entrada ou saída?</td><td>Saída de caixa</td></tr>
+              <tr><td>O que acontece com o giro no último ano?</td><td>Retorna integralmente ao fluxo</td></tr>
+              <tr><td>Último fluxo = ?</td><td>Operação + residual líquido + recuperação do giro</td></tr>
+              <tr><td>Depreciação acelerada × VPL?</td><td>Escudo chega antes → VPL maior</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Depreciação linear</td><td>D = (custo − valor residual contábil) ÷ vida útil</td></tr>
+              <tr><td>Escudo fiscal</td><td>D × alíquota de IR — economia anual de imposto</td></tr>
+              <tr><td>Fluxo operacional (via 1)</td><td>FC = (R − C − D) × (1 − IR) + D</td></tr>
+              <tr><td>Fluxo operacional (via 2)</td><td>FC = (R − C) × (1 − IR) + D × IR</td></tr>
+              <tr><td>Valor contábil</td><td>Custo − depreciação acumulada</td></tr>
+              <tr><td>Ganho de capital</td><td>Valor de venda − valor contábil</td></tr>
+              <tr><td>Valor residual líquido</td><td>Venda − IR × ganho de capital</td></tr>
+              <tr><td>Perda na venda</td><td>Venda &lt; valor contábil → economia de IR = IR × perda (soma ao fluxo)</td></tr>
+              <tr><td>NCG</td><td>Ativo circulante operacional − passivo circulante operacional</td></tr>
+              <tr><td>Efeito caixa do giro</td><td>ΔNCG &gt; 0 → saída; encerramento → retorno integral</td></tr>
+              <tr><td>Fluxo terminal (tₙ)</td><td>Operação + valor residual líquido + recuperação do giro</td></tr>
+              <tr><td>Depreciação acelerada</td><td>Escudo maior no início → VPL maior que o linear</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas e quadros de memorização</h2></div>
+        <div class="card">
+          <h3>Três vidas do ativo</h3>
+          <table>
+            <thead><tr><th>Vida</th><th>Significado</th><th>Papel na análise</th></tr></thead>
+            <tbody>
+              <tr><td>Econômica</td><td>Enquanto gera benefícios que justificam manter</td><td>Define o horizonte do projeto</td></tr>
+              <tr><td>Física/útil</td><td>Enquanto funciona fisicamente</td><td>Referência técnica</td></tr>
+              <tr><td>Fiscal/contábil</td><td>Prazo de depreciação aceito pela Receita</td><td>Define o escudo fiscal</td></tr>
+            </tbody>
+          </table>
+          <h3>Tratamento dos parâmetros no fluxo</h3>
+          <table>
+            <thead><tr><th>Parâmetro</th><th>t₀</th><th>t₁…tₙ₋₁</th><th>tₙ</th></tr></thead>
+            <tbody>
+              <tr><td>Ativo</td><td>− investimento</td><td>—</td><td>+ residual líquido de IR</td></tr>
+              <tr><td>Depreciação</td><td>—</td><td>só escudo fiscal (× IR)</td><td>só escudo fiscal</td></tr>
+              <tr><td>Capital de giro</td><td>− NCG inicial</td><td>− ΔNCG se crescer</td><td>+ recuperação integral</td></tr>
+              <tr><td>Operação</td><td>—</td><td>+ (R − C)(1−IR) + D×IR</td><td>+ idem</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplo-resumo (3 anos; IR 34%)</h3>
+          <table>
+            <thead><tr><th>Item</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td>Ativo / giro</td><td>1.000 / 200</td></tr>
+              <tr><td>Depreciação linear anual</td><td>(1.000 − 100) ÷ 3 = 300</td></tr>
+              <tr><td>Fluxo operacional anual</td><td>(500 − 300) × 0,66 + 300 = 432</td></tr>
+              <tr><td>Residual líquido (venda 250, VC 100)</td><td>250 − 0,34 × 150 = 199</td></tr>
+              <tr><td>Fluxos</td><td>−1.200 / +432 / +432 / +831</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">💻 Por que computador deprecia em 5 anos?</div><p>A Receita fixa prazos fiscais por tipo de ativo: computadores 5 anos, veículos 5, máquinas 10, prédios 25. São convenções — a vida econômica real de um servidor numa empresa de TI pode ser de 3 anos (obsolescência), o que gera valor residual e discussões sobre vida fiscal × econômica.</p></div>
+        <div class="box curio"><div class="box-title">✈️ Aviões: a vida útil mais longa do balanço</div><p>Companhias aéreas depreciam aviões em 20–25 anos — e vendem aeronaves com 15 anos por valores altos, gerando ganhos de capital relevantes. É por isso que o valor residual de frota é um capítulo próprio da análise de aviação.</p></div>
+        <div class="box curio"><div class="box-title">🛒 O capital de giro negativo do supermercado</div><p>Varejistas recebem do cliente à vista e pagam fornecedores a prazo: a NCG é <b>negativa</b> — o fornecedor financia a operação. Crescer gera caixa, não consome. É a exceção que prova a regra (e uma possível pegadinha conceitual).</p></div>
+        <div class="box curio"><div class="box-title">🚗 A regra de ouro das locadoras</div><p>Locadoras de veículos vivem de acertar o valor residual: compram frota, alugam por 12–24 meses e revendem. Um erro de 5% no valor residual esperado pode virar o VPL de todo o plano de expansão.</p></div>
+        <div class="box curio"><div class="box-title">🏛 Acelerada como política pública</div><p>O Brasil já usou <b>depreciação acelerada incentivada</b> (ex.: Lei 11.196/2005, Lei do Bem) como política industrial: antecipar o escudo fiscal melhora o VPL dos investimentos — um exemplo de como os parâmetros deste tópico viram instrumento de política econômica.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Conceito de projeto (Tópico 01)</td><td>Os quatro parâmetros são os componentes do esqueleto de fluxo definido lá</td></tr>
+              <tr><td>Metodologias (Tópico 04)</td><td>VPL e TIR só existem depois que estes parâmetros montam o fluxo</td></tr>
+              <tr><td>TMA (Tópico 05)</td><td>A taxa desconta os fluxos construídos com estes parâmetros</td></tr>
+              <tr><td>Indicadores VPL, TIR, payback (Tópico 07)</td><td>Aplicação direta: os exercícios de lá usam depreciação, residual e giro daqui</td></tr>
+              <tr><td>Sensibilidade e cenários (Tópico 08)</td><td>Valor residual e giro são premissas sensíveis testadas na sensibilidade</td></tr>
+              <tr><td>Contabilidade Empresarial</td><td>Depreciação (CPC 27), valor residual e impairment ligam as matérias</td></tr>
+              <tr><td>Capital de giro (Adm. Fin. 03)</td><td>A NCG é o mesmo conceito da administração financeira aplicado ao projeto</td></tr>
+              <tr><td>Valor do dinheiro no tempo (Adm. Fin. 06)</td><td>Por que a depreciação acelerada melhora o VPL: escudo antecipado vale mais</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e refazer à mão o exemplo completo da seção 14 (depreciação, fluxo operacional, residual e giro).</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas — foco nos cálculos de escudo fiscal, valor residual líquido e NCG.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado e revisar os flashcards; avançar para o Tópico 07 (indicadores: VPL, TIR, payback).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas. (Construção do fluxo de caixa: depreciação, residual, giro.)</li>
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Desenvolvimento dos fluxos relevantes.)</li>
+            <li>ROSS, Stephen A. et al. <i>Administração Financeira</i>. Porto Alegre: AMGH. (Orçamento de capital e fluxo incremental.)</li>
+            <li>BRASIL. CPC 27 — Ativo Imobilizado (depreciação, valor residual, vida útil); Instruções da RFB sobre prazos de depreciação.</li>
+            <li>Provas anteriores da banca FGV (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 06/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t06";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que é vida econômica de um ativo?",
+          "a": "O período em que ele gera benefícios que justificam mantê-lo — é ela que delimita o horizonte de análise do projeto."
+      },
+      {
+          "q": "Diferencie vida econômica, física e fiscal.",
+          "a": "Econômica: enquanto vale a pena operar; física: enquanto funciona; fiscal: prazo de depreciação aceito pela Receita."
+      },
+      {
+          "q": "Depreciação é saída de caixa?",
+          "a": "Não. É despesa contábil não desembolsável; seu efeito no fluxo é indireto, via escudo fiscal."
+      },
+      {
+          "q": "O que é o escudo fiscal da depreciação?",
+          "a": "A economia de imposto gerada pela depreciação: Dep × alíquota de IR."
+      },
+      {
+          "q": "Fórmula da depreciação linear?",
+          "a": "(Custo − valor residual contábil) ÷ vida útil."
+      },
+      {
+          "q": "Escreva a fórmula do fluxo operacional após IR.",
+          "a": "FC = (R − C − D) × (1 − IR) + D — equivale a (R − C)(1 − IR) + D × IR."
+      },
+      {
+          "q": "Por que a depreciação acelerada eleva o VPL?",
+          "a": "Antecipa o escudo fiscal — e fluxo que chega antes vale mais."
+      },
+      {
+          "q": "O que é valor contábil de um ativo?",
+          "a": "Custo de aquisição − depreciação acumulada."
+      },
+      {
+          "q": "Como se calcula o valor residual líquido?",
+          "a": "Valor de venda − IR × (venda − valor contábil). O IR incide só sobre o ganho de capital."
+      },
+      {
+          "q": "E se o ativo estiver 100% depreciado?",
+          "a": "Valor contábil zero → todo o valor de venda é ganho tributável."
+      },
+      {
+          "q": "E se vender abaixo do valor contábil?",
+          "a": "Há perda dedutível: a economia de IR (IR × perda) soma ao valor recebido."
+      },
+      {
+          "q": "O que é a necessidade de capital de giro (NCG)?",
+          "a": "Ativo circulante operacional − passivo circulante operacional (estoques + recebíveis − fornecedores)."
+      },
+      {
+          "q": "Como a variação da NCG afeta o fluxo do projeto?",
+          "a": "ΔNCG > 0 é saída de caixa no ano; ΔNCG < 0 é entrada."
+      },
+      {
+          "q": "O que acontece com o capital de giro no encerramento do projeto?",
+          "a": "É recuperado integralmente — entra no último fluxo, somado à operação e ao residual."
+      },
+      {
+          "q": "O que compõe o fluxo do último ano (tₙ)?",
+          "a": "Fluxo operacional + valor residual líquido + recuperação do capital de giro."
+      },
+      {
+          "q": "Empréstimos entram no cálculo da NCG?",
+          "a": "Não — são itens de financiamento, não de operação. NCG usa só circulante operacional."
+      },
+      {
+          "q": "Exemplo: ativo 500 mil, 5 anos, residual zero, IR 34%. Escudo anual?",
+          "a": "Dep = 100 mil; escudo = 100 × 0,34 = 34 mil/ano."
+      },
+      {
+          "q": "Exemplo: venda 150, valor contábil 100, IR 34%. Residual líquido?",
+          "a": "Ganho 50 → IR 17 → 150 − 17 = 133."
+      },
+      {
+          "q": "Exemplo: NCG com estoques 300, recebíveis 500, fornecedores 200?",
+          "a": "NCG = 300 + 500 − 200 = 600."
+      },
+      {
+          "q": "Por que a vida fiscal pode diferir do horizonte do projeto?",
+          "a": "A fiscal é convenção da Receita para depreciar; o horizonte segue a vida econômica — podem divergir."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Vida econômica",
+          "texto": "—",
+          "enun": "O horizonte de análise de um projeto de investimento é delimitado pela:",
+          "alts": [
+              "vida física do ativo",
+              "vida econômica",
+              "vida fiscal",
+              "vida da empresa",
+              "duração do financiamento"
+          ],
+          "correta": 1,
+          "coment": "A vida econômica — período em que o projeto gera benefícios que justificam mantê-lo — fixa o horizonte dos fluxos."
+      },
+      {
+          "tema": "Vida econômica",
+          "texto": "Uma máquina funciona 15 anos (vida física), deprecia em 10 (vida fiscal), mas o produto que fabrica ficará obsoleto em 6 anos.",
+          "enun": "O horizonte de análise do projeto é de:",
+          "alts": [
+              "15 anos",
+              "10 anos",
+              "6 anos",
+              "a média dos três",
+              "o maior dos três"
+          ],
+          "correta": 2,
+          "coment": "Vida econômica (6 anos): quando deixar de gerar benefício, o projeto acaba — mesmo com ativo funcionando e não depreciado."
+      },
+      {
+          "tema": "Depreciação",
+          "texto": "—",
+          "enun": "Na análise de projetos, a depreciação:",
+          "alts": [
+              "é desembolso anual de caixa",
+              "não é saída de caixa, mas gera escudo fiscal",
+              "não tem qualquer efeito no fluxo",
+              "aumenta o imposto devido",
+              "é somada ao investimento inicial"
+          ],
+          "correta": 1,
+          "coment": "Despesa não desembolsável: reduz o lucro tributável e economiza IR — o escudo fiscal."
+      },
+      {
+          "tema": "Depreciação",
+          "texto": "Ativo de R$ 600 mil, valor residual contábil zero, vida útil de 6 anos.",
+          "enun": "A depreciação anual linear é, em R$ mil:",
+          "alts": [
+              "60",
+              "100",
+              "120",
+              "50",
+              "90"
+          ],
+          "correta": 1,
+          "coment": "(600 − 0) ÷ 6 = 100 por ano."
+      },
+      {
+          "tema": "Escudo fiscal",
+          "texto": "Depreciação anual de R$ 100 mil e alíquota de IR de 34%.",
+          "enun": "O escudo fiscal anual é, em R$ mil:",
+          "alts": [
+              "100",
+              "66",
+              "34",
+              "134",
+              "50"
+          ],
+          "correta": 2,
+          "coment": "Escudo = 100 × 0,34 = 34 — economia de imposto que entra no fluxo todo ano."
+      },
+      {
+          "tema": "Escudo fiscal",
+          "texto": "Receitas de R$ 1.000 mil e custos de R$ 600 mil por ano; depreciação de R$ 200 mil; IR de 34%.",
+          "enun": "O fluxo operacional anual é, em R$ mil:",
+          "alts": [
+              "400",
+              "264",
+              "332",
+              "200",
+              "466"
+          ],
+          "correta": 2,
+          "coment": "(1.000 − 600 − 200) × 0,66 + 200 = 132 + 200 = 332. Ou: 400 × 0,66 + 200 × 0,34 = 264 + 68 = 332."
+      },
+      {
+          "tema": "Depreciação",
+          "texto": "—",
+          "enun": "Comparada à depreciação linear, a depreciação acelerada tende a produzir:",
+          "alts": [
+              "menor VPL, pelo maior imposto",
+              "maior VPL, pois antecipa o escudo fiscal",
+              "mesmo VPL sempre",
+              "menor TIR",
+              "maior investimento inicial"
+          ],
+          "correta": 1,
+          "coment": "Escudo maior no início = fluxo mais cedo = VPL maior (valor do dinheiro no tempo)."
+      },
+      {
+          "tema": "Valor residual",
+          "texto": "Ativo vendido ao fim do projeto por R$ 150 mil, com valor contábil de R$ 100 mil; IR de 34%.",
+          "enun": "O valor residual líquido é, em R$ mil:",
+          "alts": [
+              "150",
+              "99",
+              "133",
+              "116",
+              "100"
+          ],
+          "correta": 2,
+          "coment": "Ganho = 150 − 100 = 50; IR = 17; residual líquido = 150 − 17 = 133."
+      },
+      {
+          "tema": "Valor residual",
+          "texto": "Ativo totalmente depreciado (valor contábil zero) é vendido por R$ 80 mil; IR de 34%.",
+          "enun": "O valor líquido que entra no fluxo é, em R$ mil:",
+          "alts": [
+              "80",
+              "52,8",
+              "27,2",
+              "107,2",
+              "46,8"
+          ],
+          "correta": 1,
+          "coment": "Todo o valor é ganho: 80 × 0,66 = 52,8. IR = 27,2 sobre o ganho de 80."
+      },
+      {
+          "tema": "Valor residual",
+          "texto": "Ativo com valor contábil de R$ 200 mil é vendido por R$ 150 mil; IR de 34%.",
+          "enun": "O fluxo líquido da venda é, em R$ mil:",
+          "alts": [
+              "150",
+              "133",
+              "167",
+              "99",
+              "200"
+          ],
+          "correta": 2,
+          "coment": "Perda dedutível de 50 → economia de IR = 17 → 150 + 17 = 167."
+      },
+      {
+          "tema": "Valor residual",
+          "texto": "—",
+          "enun": "Na venda do ativo ao fim do projeto, o imposto de renda incide sobre:",
+          "alts": [
+              "o valor total da venda",
+              "o ganho de capital (venda − valor contábil)",
+              "a depreciação acumulada",
+              "o custo original",
+              "o capital de giro"
+          ],
+          "correta": 1,
+          "coment": "Só o ganho (venda − valor contábil) é tributável — nunca o valor cheio da venda."
+      },
+      {
+          "tema": "Capital de giro",
+          "texto": "Estoques de R$ 300 mil, recebíveis de R$ 500 mil e fornecedores de R$ 200 mil.",
+          "enun": "A necessidade de capital de giro (NCG) é, em R$ mil:",
+          "alts": [
+              "1.000",
+              "600",
+              "400",
+              "800",
+              "zero"
+          ],
+          "correta": 1,
+          "coment": "NCG = 300 + 500 − 200 = 600."
+      },
+      {
+          "tema": "Capital de giro",
+          "texto": "—",
+          "enun": "Na análise de projetos, um aumento da NCG num determinado ano representa:",
+          "alts": [
+              "entrada de caixa",
+              "saída de caixa",
+              "despesa financeira",
+              "custo afundado",
+              "escudo fiscal"
+          ],
+          "correta": 1,
+          "coment": "Crescer a operação exige mais giro — o ΔNCG positivo consome caixa no ano."
+      },
+      {
+          "tema": "Capital de giro",
+          "texto": "—",
+          "enun": "No encerramento do projeto, o capital de giro investido é:",
+          "alts": [
+              "perdido",
+              "recuperado integralmente, somando-se ao último fluxo",
+              "depreciado",
+              "tributado integralmente",
+              "convertido em dívida"
+          ],
+          "correta": 1,
+          "coment": "O giro é investimento temporário: volta ao caixa quando estoques e recebíveis se realizam."
+      },
+      {
+          "tema": "Capital de giro",
+          "texto": "—",
+          "enun": "No cálculo da NCG, NÃO deve ser incluído:",
+          "alts": [
+              "estoques",
+              "contas a receber",
+              "fornecedores",
+              "empréstimos bancários",
+              "despesas antecipadas"
+          ],
+          "correta": 3,
+          "coment": "Empréstimos são financiamento — a NCG usa apenas itens operacionais do circulante."
+      },
+      {
+          "tema": "Fluxo terminal",
+          "texto": "No último ano: fluxo operacional de R$ 400 mil, valor residual líquido de R$ 100 mil e recuperação do giro de R$ 150 mil.",
+          "enun": "O fluxo do último ano é, em R$ mil:",
+          "alts": [
+              "400",
+              "500",
+              "550",
+              "650",
+              "750"
+          ],
+          "correta": 3,
+          "coment": "400 + 100 + 150 = 650."
+      },
+      {
+          "tema": "Fluxo terminal",
+          "texto": "—",
+          "enun": "O fluxo de caixa do último ano de um projeto é composto por:",
+          "alts": [
+              "apenas o fluxo operacional",
+              "operação + valor residual líquido + recuperação do capital de giro",
+              "operação + depreciação + juros",
+              "residual + financiamento",
+              "operação − giro − residual"
+          ],
+          "correta": 1,
+          "coment": "Fluxo terminal = operação + residual líquido de IR + recuperação integral do giro."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Sobre os parâmetros de análise, é correto afirmar:",
+          "alts": [
+              "a depreciação é desembolso anual",
+              "a vida fiscal delimita o horizonte do projeto",
+              "o IR sobre o residual incide sobre o valor total da venda",
+              "o capital de giro é recuperado no encerramento",
+              "a NCG inclui empréstimos"
+          ],
+          "correta": 3,
+          "coment": "O giro retorna no fim. As demais são os erros clássicos: depreciação não é caixa; horizonte = vida econômica; IR só sobre o ganho; NCG é só operacional."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Esquecer a recuperação do capital de giro no último ano do projeto provoca:",
+          "alts": [
+              "superestimação do VPL",
+              "subestimação do VPL",
+              "nenhum efeito",
+              "aumento da TIR",
+              "redução da TMA"
+          ],
+          "correta": 1,
+          "coment": "O fluxo terminal fica menor que o correto → VPL (e TIR) subestimados."
+      },
+      {
+          "tema": "Depreciação",
+          "texto": "Máquina de R$ 500 mil, vida fiscal de 5 anos, residual contábil nulo, IR de 34%.",
+          "enun": "O escudo fiscal anual é, em R$ mil:",
+          "alts": [
+              "34",
+              "100",
+              "50",
+              "66",
+              "170"
+          ],
+          "correta": 0,
+          "coment": "Dep = 500 ÷ 5 = 100; escudo = 100 × 0,34 = 34."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O horizonte de análise de um projeto é definido pela vida:",
+          "alts": [
+              "física",
+              "econômica",
+              "fiscal",
+              "do financiamento",
+              "da empresa"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A depreciação é uma despesa:",
+          "alts": [
+              "desembolsável",
+              "não desembolsável",
+              "financeira",
+              "extraordinária",
+              "tributável"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O escudo fiscal da depreciação é calculado por:",
+          "alts": [
+              "depreciação ÷ IR",
+              "depreciação × alíquota de IR",
+              "IR ÷ depreciação",
+              "venda − custo",
+              "custo ÷ vida útil"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O IR sobre o valor residual incide sobre o:",
+          "alts": [
+              "valor total da venda",
+              "ganho de capital (venda − valor contábil)",
+              "custo original",
+              "investimento inicial",
+              "capital de giro"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A necessidade de capital de giro (NCG) é:",
+          "alts": [
+              "ativo circulante operacional − passivo circulante operacional",
+              "ativo total − passivo total",
+              "caixa + empréstimos",
+              "receita − custo",
+              "ativo fixo − dívida"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "No encerramento do projeto, o capital de giro é:",
+          "alts": [
+              "perdido",
+              "recuperado",
+              "depreciado",
+              "tributado",
+              "financiado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O fluxo do último ano soma operação, valor residual líquido e:",
+          "alts": [
+              "juros",
+              "recuperação do capital de giro",
+              "depreciação acumulada",
+              "dividendos",
+              "empréstimos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Um aumento da NCG num ano representa, no fluxo do projeto:",
+          "alts": [
+              "entrada de caixa",
+              "saída de caixa",
+              "lucro",
+              "escudo fiscal",
+              "dividendo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A vida fiscal (prazo de depreciação) é definida pela:",
+          "alts": [
+              "empresa",
+              "Receita Federal",
+              "assembleia de acionistas",
+              "banco financiador",
+              "bolsa de valores"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Ativo totalmente depreciado vendido por R$ 100 mil tem ganho de capital de:",
+          "alts": [
+              "zero",
+              "R$ 100 mil",
+              "R$ 50 mil",
+              "depende do IR",
+              "não há ganho"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Ativo de R$ 600 mil, residual contábil zero, vida útil de 6 anos.",
+          "enun": "A depreciação linear anual é, em R$ mil:",
+          "alts": [
+              "60",
+              "100",
+              "120",
+              "50",
+              "90"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Máquina de R$ 500 mil, vida fiscal de 5 anos, residual zero, IR de 34%.",
+          "enun": "O escudo fiscal anual é, em R$ mil:",
+          "alts": [
+              "34",
+              "100",
+              "50",
+              "66",
+              "170"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "Receitas 1.000, custos 600, depreciação 200, IR 34% (em R$ mil).",
+          "enun": "O fluxo operacional anual é, em R$ mil:",
+          "alts": [
+              "400",
+              "264",
+              "332",
+              "200",
+              "466"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Venda por 150, valor contábil 100, IR 34% (R$ mil).",
+          "enun": "O valor residual líquido é, em R$ mil:",
+          "alts": [
+              "150",
+              "99",
+              "133",
+              "116",
+              "100"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Venda por 80, valor contábil zero, IR 34% (R$ mil).",
+          "enun": "O fluxo líquido é, em R$ mil:",
+          "alts": [
+              "80",
+              "52,8",
+              "27,2",
+              "107,2",
+              "46,8"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Estoques 300 + recebíveis 500 − fornecedores 200 (R$ mil).",
+          "enun": "A NCG é, em R$ mil:",
+          "alts": [
+              "1.000",
+              "600",
+              "400",
+              "800",
+              "zero"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Último ano: operação 400, residual líquido 100, giro 150 (R$ mil).",
+          "enun": "O fluxo do último ano é, em R$ mil:",
+          "alts": [
+              "400",
+              "500",
+              "550",
+              "650",
+              "750"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A depreciação acelerada, em relação à linear, tende a gerar:",
+          "alts": [
+              "menor VPL",
+              "maior VPL, por antecipar o escudo fiscal",
+              "mesmo VPL",
+              "menor TIR",
+              "maior investimento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Na NCG, NÃO se inclui:",
+          "alts": [
+              "estoques",
+              "recebíveis",
+              "fornecedores",
+              "empréstimos bancários",
+              "despesas antecipadas"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Esquecer a recuperação do capital de giro no último ano provoca:",
+          "alts": [
+              "superestimação do VPL",
+              "subestimação do VPL",
+              "nenhum efeito",
+              "aumento da TIR",
+              "redução da TMA"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Receitas 2.000, custos 1.200, depreciação 300, IR 25% (R$ mil).",
+          "enun": "O fluxo operacional anual é, em R$ mil:",
+          "alts": [
+              "800",
+              "600",
+              "675",
+              "500",
+              "875"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Ativo vendido por 150, valor contábil 200, IR 34% (R$ mil).",
+          "enun": "O fluxo líquido da venda é, em R$ mil:",
+          "alts": [
+              "150",
+              "133",
+              "167",
+              "99",
+              "200"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Ativo 1.000; vida fiscal 4 anos; residual contábil 200; IR 25%.",
+          "enun": "O escudo fiscal anual (linear) é, em R$ mil:",
+          "alts": [
+              "200",
+              "50",
+              "250",
+              "100",
+              "75"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "NCG em t₀ = 600; reforço de 100 em t₁; encerramento em t₂.",
+          "enun": "A recuperação do giro em t₂ é, em R$:",
+          "alts": [
+              "600",
+              "100",
+              "500",
+              "700",
+              "zero"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre vida econômica, física e fiscal, é correto afirmar:",
+          "alts": [
+              "são sempre iguais",
+              "a fiscal delimita o horizonte do projeto",
+              "a econômica delimita o horizonte; a fiscal, o escudo; a física é referência técnica",
+              "a física delimita o horizonte",
+              "são irrelevantes ao projeto"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto: ativo 1.000, giro 200, operação anual 432 por 3 anos, residual líquido 199 (R$).",
+          "enun": "O fluxo de t₃ é, em R$:",
+          "alts": [
+              "432",
+              "631",
+              "831",
+              "632",
+              "1.000"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Uma empresa com NCG negativa (recebe à vista e paga fornecedores a prazo), ao crescer:",
+          "alts": [
+              "consome mais caixa",
+              "gera caixa — o fornecedor financia a operação",
+              "tem VPL zero",
+              "não precisa de giro",
+              "tem escudo fiscal negativo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre a depreciação na análise de projetos, é INCORRETO afirmar:",
+          "alts": [
+              "não é saída de caixa",
+              "gera escudo fiscal",
+              "é desembolso anual de caixa do projeto",
+              "pode ser linear ou acelerada",
+              "reduz o lucro tributável"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Ativo 800, residual contábil zero, vida fiscal 5 anos, IR 34%. O projeto tem vida econômica de 3 anos e vende o ativo ao fim por 400 (R$ mil).",
+          "enun": "O valor contábil ao fim do ano 3 e o IR sobre a venda são, em R$ mil:",
+          "alts": [
+              "480 e 136",
+              "320 e 27,2",
+              "320 e 136",
+              "480 e 27,2",
+              "zero e 136"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre os parâmetros de análise de projetos, assinale a correta:",
+          "alts": [
+              "a depreciação reduz o caixa do projeto",
+              "o IR do residual incide sobre o valor total da venda",
+              "o capital de giro nunca retorna",
+              "o fluxo terminal soma operação, residual líquido e recuperação do giro",
+              "a vida fiscal define o horizonte do projeto"
+          ],
+          "correta": 3
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Distinguir vida econômica, física e fiscal (horizonte = econômica)",
+      "Calcular depreciação linear: (custo − residual) ÷ vida útil",
+      "Calcular o escudo fiscal: depreciação × IR",
+      "Aplicar o fluxo operacional: (R − C − D)(1 − IR) + D",
+      "Explicar por que a depreciação acelerada aumenta o VPL",
+      "Calcular o valor residual líquido: venda − IR × ganho de capital",
+      "Tratar a venda com perda: economia de IR soma ao fluxo",
+      "Calcular a NCG: AC operacional − PC operacional",
+      "Lançar ΔNCG como saída e a recuperação integral no último ano",
+      "Montar o fluxo terminal: operação + residual líquido + giro"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Tratar a depreciação como saída de caixa do projeto.",
+      "Esquecer o escudo fiscal (depreciação × IR) no fluxo operacional.",
+      "Usar a vida fiscal como horizonte do projeto em vez da vida econômica.",
+      "Calcular a depreciação linear sem subtrair o valor residual contábil.",
+      "Calcular o IR do residual sobre o valor total da venda (é sobre o ganho de capital).",
+      "Esquecer que ativo 100% depreciado tributa o valor inteiro da venda.",
+      "Ignorar a economia de IR quando a venda ocorre abaixo do valor contábil.",
+      "Esquecer a recuperação integral do capital de giro no último ano.",
+      "Incluir empréstimos no cálculo da NCG.",
+      "Tratar aumento da NCG como entrada de caixa (é saída).",
+      "Omitir o valor residual do fluxo terminal.",
+      "Confundir valor contábil com valor de mercado.",
+      "Afirmar que depreciação acelerada reduz o VPL (ela o aumenta).",
+      "Somar a depreciação ao investimento inicial.",
+      "Tratar fornecedores como componente que aumenta a NCG (eles reduzem).",
+      "Ignorar o reforço de giro (ΔNCG) quando a operação cresce.",
+      "Usar o lucro contábil no lugar do fluxo de caixa operacional.",
+      "Confundir escudo fiscal com despesa financeira.",
+      "Afirmar que o giro é um custo definitivo do projeto.",
+      "Montar o VPL sem antes construir o fluxo completo com os quatro parâmetros."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Vida econômica",
+          "Período em que o ativo/projeto gera benefícios que justificam mantê-lo; delimita o horizonte da análise."
+      ],
+      [
+          "Vida útil física",
+          "Tempo de funcionamento físico do ativo; pode exceder a vida econômica."
+      ],
+      [
+          "Vida fiscal (contábil)",
+          "Prazo de depreciação aceito pela Receita; define o escudo fiscal dedutível."
+      ],
+      [
+          "Depreciação",
+          "Alocação do custo do ativo ao longo da vida útil; despesa não desembolsável."
+      ],
+      [
+          "Depreciação linear",
+          "Parcelas iguais: (custo − residual contábil) ÷ vida útil."
+      ],
+      [
+          "Depreciação acelerada",
+          "Parcelas maiores no início (saldos decrescentes); antecipa o escudo fiscal e eleva o VPL."
+      ],
+      [
+          "Escudo fiscal",
+          "Economia de IR gerada pela depreciação: Dep × alíquota."
+      ],
+      [
+          "Valor contábil",
+          "Custo de aquisição − depreciação acumulada."
+      ],
+      [
+          "Valor residual",
+          "Valor de venda do ativo ao fim do projeto."
+      ],
+      [
+          "Valor residual líquido",
+          "Venda − IR × (venda − valor contábil)."
+      ],
+      [
+          "Ganho de capital",
+          "Valor de venda − valor contábil; base do IR sobre o residual."
+      ],
+      [
+          "Capital de giro",
+          "Recursos aplicados no ciclo operacional: estoques, recebíveis, caixa mínimo."
+      ],
+      [
+          "NCG",
+          "Necessidade de capital de giro: ativo circulante operacional − passivo circulante operacional."
+      ],
+      [
+          "Variação da NCG (ΔNCG)",
+          "Aumento do giro necessário no ano; é saída de caixa do projeto."
+      ],
+      [
+          "Fluxo terminal",
+          "Fluxo do último ano: operação + valor residual líquido + recuperação do giro."
+      ],
+      [
+          "Fluxo operacional",
+          "FC = (R − C − D)(1 − IR) + D — caixa gerado pela operação após impostos."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

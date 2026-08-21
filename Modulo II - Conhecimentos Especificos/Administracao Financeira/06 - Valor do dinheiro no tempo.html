@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valor do Dinheiro no Tempo | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Administração Financeira</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">06 - Valor do dinheiro no tempo</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceitos básicos de administração financeira.html">01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html">02 - Finanças corporativas</option>
+    <option value="03 - Alavancagem operacional e financeira.html">03 - Alavancagem operacional e financeira</option>
+    <option value="04 - Planejamento financeiro de curto prazo.html">04 - Planejamento financeiro de curto prazo</option>
+    <option value="05 - Planejamento financeiro de longo prazo.html">05 - Planejamento financeiro de longo prazo</option>
+    <option value="06 - Valor do dinheiro no tempo.html" selected>06 - Valor do dinheiro no tempo</option>
+    <option value="" disabled>07 - Risco x retorno (em breve)</option>
+    <option value="" disabled>08 - Fontes de financiamento a longo prazo (em breve)</option>
+    <option value="" disabled>09 - Estratégias de investimentos (em breve)</option>
+    <option value="" disabled>10 - Valuation (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Valor do Dinheiro no Tempo</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Administração Financeira<br>Tópico 06 de 10<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Valor do Dinheiro no Tempo</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Administração Financeira</b> &nbsp;›&nbsp; Tópico 06</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">7h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 01 e 05 — conceitos básicos e planejamento de longo prazo</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Altíssimo — fundamento de VPL, TIR, valuation e de toda a Matemática Financeira do edital</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Explicar por que <b>R$ 1 hoje vale mais que R$ 1 no futuro</b> — e os três motivos clássicos (juros/custo de oportunidade, inflação e risco).</li>
+            <li>Calcular <b>valor futuro (VF)</b> e <b>valor presente (VP)</b> de um pagamento único, a juros compostos.</li>
+            <li>Distinguir <b>juros simples</b> de <b>juros compostos</b> e identificar quando cada regime se aplica.</li>
+            <li>Calcular o <b>valor presente de uma série uniforme</b> (anuidade) e de uma <b>perpetuidade</b>.</li>
+            <li>Compreender o papel da <b>taxa de desconto</b> e da <b>Taxa Mínima de Atratividade (TMA)</b> como custo de oportunidade.</li>
+            <li>Aplicar o princípio da <b>comparabilidade</b>: fluxos de caixa só podem ser comparados ou somados na mesma data.</li>
+            <li>Relacionar o valor do dinheiro no tempo com as decisões de investimento (VPL) e com o valuation (Tópico 10).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>O <b>valor do dinheiro no tempo</b> é o princípio mais fundamental das finanças: <b>uma mesma quantia tem valores diferentes em datas diferentes</b>. Receber R$ 1.000 hoje é melhor do que receber R$ 1.000 daqui a um ano, porque o dinheiro disponível hoje pode ser investido e render juros (custo de oportunidade), porque a inflação corrói o poder de compra e porque o futuro é incerto (risco).</p>
+          <p>As duas operações básicas são espelhadas: <b>capitalizar</b> é levar um valor do presente para o futuro — <b>VF = VP × (1 + i)ⁿ</b> — e <b>descontar</b> é trazer um valor do futuro para o presente — <b>VP = VF ÷ (1 + i)ⁿ</b>. No regime de <b>juros compostos</b> (o padrão do mercado e da FGV), os juros de cada período incidem sobre o montante acumulado ("juros sobre juros"); nos <b>juros simples</b>, incidem apenas sobre o capital inicial.</p>
+          <p>Para séries de pagamentos iguais (anuidades), o valor presente é obtido pelo fator de anuidade: <b>VP = PMT × [(1 − (1 + i)⁻ⁿ) ÷ i]</b>. Quando a série é infinita, temos a <b>perpetuidade</b>: <b>VP = PMT ÷ i</b>.</p>
+          <p>A taxa usada para descontar (<b>i</b>) representa o <b>custo de oportunidade</b> do capital — na prática empresarial, a <b>Taxa Mínima de Atratividade (TMA)</b>, frequentemente o custo médio ponderado de capital (CMPC/WACC). É ela que traduz o risco e a preferência temporal do decisor.</p>
+          <p>Regra de ouro cobrada em toda prova: <b>só se comparam ou somam fluxos de caixa referenciados na mesma data</b>. É por isso que o VPL (Tópico 07 de Avaliações de Projetos) traz todos os fluxos a valor presente antes de somá-los — e por isso este tópico é o alicerce de tudo o que vem depois.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Valor do<br>Dinheiro<br>no Tempo</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Por que vale mais hoje?</h4><ul><li>Juros / custo de oportunidade</li><li>Inflação</li><li>Risco</li></ul></div>
+              <div class="mm-node"><h4>Pagamento único</h4><ul><li>VF = VP(1+i)ⁿ</li><li>VP = VF ÷ (1+i)ⁿ</li></ul></div>
+              <div class="mm-node"><h4>Regimes de juros</h4><ul><li>Simples: J = P·i·n</li><li>Compostos: juros sobre juros</li></ul></div>
+              <div class="mm-node"><h4>Séries</h4><ul><li>Anuidade: VP = PMT × fator</li><li>Perpetuidade: VP = PMT ÷ i</li></ul></div>
+              <div class="mm-node"><h4>Taxa de desconto</h4><ul><li>Custo de oportunidade</li><li>TMA / WACC</li></ul></div>
+              <div class="mm-node"><h4>Regra de ouro</h4><ul><li>Só comparar fluxos na mesma data</li><li>Base do VPL e do valuation</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Por que o dinheiro vale mais hoje do que amanhã</h3>
+          <p>O princípio do valor do dinheiro no tempo afirma que <b>R$ 1 recebido hoje vale mais que R$ 1 recebido no futuro</b>. Três razões sustentam esse princípio — a FGV cobra as três:</p>
+          <table>
+            <thead><tr><th>Razão</th><th>Explicação</th></tr></thead>
+            <tbody>
+              <tr><td><b>Custo de oportunidade (juros)</b></td><td>Dinheiro em mãos hoje pode ser investido e gerar rendimentos; esperar significa abrir mão desse rendimento.</td></tr>
+              <tr><td><b>Inflação</b></td><td>O aumento geral dos preços reduz o poder de compra da mesma quantia ao longo do tempo.</td></tr>
+              <tr><td><b>Risco (incerteza)</b></td><td>Recebimentos futuros são incertos; o recebimento presente é certo. Quanto maior o risco, maior a taxa exigida.</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Consequência direta</div>
+            <p>Como o dinheiro tem "custo no tempo", <b>fluxos de caixa em datas diferentes não são diretamente comparáveis nem somáveis</b>. Para comparar, é preciso trazer todos a uma mesma data de referência — em geral, a data presente (valor presente).</p>
+          </div>
+
+          <h3>4.2 Valor futuro: capitalizar</h3>
+          <p>Levar um valor do presente para o futuro é <b>capitalizar</b>. No regime composto:</p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Fórmula central — decore</div>
+            <p style="font-size:16px;text-align:center;margin:8px 0;"><b>VF = VP × (1 + i)ⁿ</b></p>
+            <p style="font-size:13px;margin-bottom:0;">VF = valor futuro (montante); VP = valor presente (capital inicial); i = taxa de juros por período; n = número de períodos. <b>Atenção: i e n devem estar na mesma unidade de tempo</b> (taxa ao mês com n em meses, por exemplo).</p>
+          </div>
+          <p><b>Exemplo.</b> Aplicar R$ 10.000 a 1% ao mês por 12 meses: VF = 10.000 × (1,01)¹² = 10.000 × 1,126825 ≈ <b>R$ 11.268,25</b>.</p>
+
+          <h3>4.3 Valor presente: descontar</h3>
+          <p>Trazer um valor do futuro para o presente é <b>descontar</b> — a operação inversa:</p>
+          <p style="font-size:16px;text-align:center;margin:8px 0;"><b>VP = VF ÷ (1 + i)ⁿ</b></p>
+          <p><b>Exemplo.</b> Quanto vale hoje o direito de receber R$ 12.682,42 daqui a 12 meses, se a taxa de desconto é 2% ao mês? VP = 12.682,42 ÷ (1,02)¹² = 12.682,42 ÷ 1,268242 = <b>R$ 10.000</b>.</p>
+          <div class="box tip">
+            <div class="box-title">✅ Intuição para não errar</div>
+            <p>Descontar é "tirar os juros embutidos". Quanto <b>maior a taxa i</b> ou <b>maior o prazo n</b>, <b>menor o valor presente</b> de um mesmo valor futuro. Essa relação inversa entre taxa e VP cai muito em questões conceituais.</p>
+          </div>
+
+          <h3>4.4 Juros simples x juros compostos</h3>
+          <table>
+            <thead><tr><th>Critério</th><th>Juros simples</th><th>Juros compostos</th></tr></thead>
+            <tbody>
+              <tr><td>Incidência</td><td>Sempre sobre o capital inicial</td><td>Sobre o montante acumulado ("juros sobre juros")</td></tr>
+              <tr><td>Fórmula do montante</td><td>M = P × (1 + i·n)</td><td>M = P × (1 + i)ⁿ</td></tr>
+              <tr><td>Crescimento</td><td>Linear (progressão aritmética)</td><td>Exponencial (progressão geométrica)</td></tr>
+              <tr><td>Uso típico</td><td>Operações curtas e cálculos proporcionais (detalhado em Matemática Financeira)</td><td><b>Padrão do mercado financeiro</b> e das questões de investimento</td></tr>
+            </tbody>
+          </table>
+          <p><b>Comparação numérica.</b> R$ 10.000 a 10% ao ano por 2 anos: juros simples → M = 10.000 × (1 + 0,10 × 2) = <b>R$ 12.000</b>; juros compostos → M = 10.000 × (1,10)² = <b>R$ 12.100</b>. A diferença (R$ 100) são os juros sobre os juros do primeiro ano.</p>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha clássica FGV</div>
+            <p>No <b>primeiro período</b>, juros simples e compostos produzem <b>exatamente o mesmo montante</b> (a capitalização composta só se diferencia a partir do segundo período). E, para o mesmo prazo e taxa, o montante composto só supera o simples quando <b>n &gt; 1</b> — em n &lt; 1, o simples é maior (efeito da linearidade no início da curva exponencial).</p>
+          </div>
+
+          <h3>4.5 Séries uniformes: anuidades e perpetuidades</h3>
+          <p>Uma <b>anuidade</b> (ou série uniforme) é uma sequência de pagamentos iguais em intervalos iguais — prestações de um financiamento, mensalidades de um plano, aluguéis.</p>
+          <table>
+            <thead><tr><th>Caso</th><th>Fórmula</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td>VP de anuidade (postecipada)</td><td>VP = PMT × [(1 − (1 + i)⁻ⁿ) ÷ i]</td><td>Quanto vale hoje uma série de n pagamentos iguais (ex.: preço à vista equivalente a um parcelamento)</td></tr>
+              <tr><td>VF de anuidade</td><td>VF = PMT × [((1 + i)ⁿ − 1) ÷ i]</td><td>Quanto acumula uma poupança com depósitos iguais</td></tr>
+              <tr><td>Perpetuidade</td><td>VP = PMT ÷ i</td><td>Série infinita (base de modelos de valuation por dividendos e de fundos patrimoniais)</td></tr>
+            </tbody>
+          </table>
+          <p><b>Exemplo de anuidade.</b> Quanto vale hoje receber R$ 1.000 ao ano por 3 anos, a 10% ao ano? Fator = (1 − 1,10⁻³) ÷ 0,10 = (1 − 0,751315) ÷ 0,10 ≈ 2,4869. VP = 1.000 × 2,4869 ≈ <b>R$ 2.486,85</b> — menos que a soma simples (R$ 3.000), porque os pagamentos futuros foram descontados.</p>
+          <p><b>Exemplo de perpetuidade.</b> Um fluxo perpétuo de R$ 1.000 ao ano, com taxa de 10% ao ano, vale hoje: VP = 1.000 ÷ 0,10 = <b>R$ 10.000</b>.</p>
+          <div class="box info">
+            <div class="box-title">📘 Postecipada x antecipada</div>
+            <p>Na série <b>postecipada</b>, o primeiro pagamento ocorre no <b>fim</b> do primeiro período (padrão das fórmulas acima e da maioria das provas). Na <b>antecipada</b>, o primeiro pagamento ocorre <b>hoje</b> (no início), e o VP é multiplicado por (1 + i). Se o enunciado disser "entrada + parcelas" ou "primeiro pagamento no ato", é antecipada.</p>
+          </div>
+
+          <h3>4.6 A taxa de desconto: TMA e custo de oportunidade</h3>
+          <p>A taxa <b>i</b> usada para descontar fluxos não é arbitrária: representa o <b>custo de oportunidade do capital</b> — o retorno da melhor alternativa disponível com risco semelhante. Na linguagem empresarial, é a <b>Taxa Mínima de Atratividade (TMA)</b>: o retorno mínimo que um projeto precisa oferecer para ser aceito. Em finanças corporativas, a TMA costuma ser o <b>custo médio ponderado de capital (CMPC/WACC)</b>, que combina custo da dívida e custo do capital próprio (detalhado nos Tópicos 02 e 10).</p>
+          <div class="box tip">
+            <div class="box-title">✅ Regra de decisão que deriva daqui</div>
+            <p>Um projeto só <b>cria valor</b> se seu retorno superar a TMA. É exatamente essa a lógica do VPL &gt; 0, que você estudará em Avaliações Econômicas de Projetos — e que só existe porque o dinheiro tem valor no tempo.</p>
+          </div>
+
+          <h3>4.7 Aplicações diretas nas decisões financeiras</h3>
+          <ul class="styled">
+            <li><b>Comparar propostas de pagamento</b>: à vista com desconto x parcelado — traz-se o parcelado a valor presente e compara-se com o preço à vista.</li>
+            <li><b>Avaliar investimentos</b>: VPL e TIR (matéria Avaliações Econômicas de Projetos) são aplicações diretas do desconto de fluxos.</li>
+            <li><b>Precificar títulos</b>: o preço de um título é o VP de seus fluxos futuros; por isso <b>preço e taxa de juros caminham em direções opostas</b>.</li>
+            <li><b>Valuation</b> (Tópico 10): o valor de uma empresa é o VP de seus fluxos de caixa futuros.</li>
+            <li><b>Setor público/estatais</b>: a taxa de desconto em projetos públicos (taxa social de desconto) reflete o custo de oportunidade dos recursos para a sociedade — conceito que aparece na análise de projetos sociais.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>A FGV trata o valor do dinheiro no tempo como <b>conceito estruturante</b>: cobra a intuição (por que R$ 1 hoje vale mais), as fórmulas fundamentais (VF, VP, anuidade, perpetuidade) e cálculos curtos com números redondos ou potências fornecidas no enunciado (ex.: "(1,10)² = 1,21"). Questões puramente conceituais sobre simples x composto e sobre a relação inversa taxa x VP são muito frequentes.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Cálculo de VF e VP de pagamento único com potência fornecida no enunciado.</li>
+            <li>Comparação conceitual juros simples x compostos (inclusive a igualdade no 1º período).</li>
+            <li>VP de série uniforme e perpetuidade com valores simples.</li>
+            <li>Interpretação: efeito de elevar a taxa ou o prazo sobre o valor presente.</li>
+            <li>Dificuldade média — os erros vêm de unidade de tempo (i e n incompatíveis) e de inversão de fórmula.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Cálculo de VP/VF de pagamento único (juros compostos)</td><td>Muito alta</td></tr>
+              <tr><td>Juros simples x compostos — comparação conceitual</td><td>Muito alta</td></tr>
+              <tr><td>Relação inversa entre taxa de desconto e valor presente</td><td>Alta</td></tr>
+              <tr><td>VP de anuidade e perpetuidade (VP = PMT ÷ i)</td><td>Alta</td></tr>
+              <tr><td>TMA como custo de oportunidade</td><td>Média-alta</td></tr>
+              <tr><td>Compatibilidade entre unidade da taxa e do prazo</td><td>Média-alta</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Usar taxa ao ano com prazo em meses (ou vice-versa) sem converter.</li>
+            <li>Somar fluxos de datas diferentes sem trazer a valor presente.</li>
+            <li>Achar que juros compostos rendem mais que simples em qualquer prazo — no 1º período são iguais; com n &lt; 1, o simples é maior.</li>
+            <li>Elevar o valor presente quando a taxa aumenta — a relação é inversa.</li>
+            <li>Confundir o fator da anuidade com o da perpetuidade.</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>Se o enunciado fornecer a potência calculada (ex.: (1,01)¹² = 1,1268), use-a — é sinal de que a questão quer o cálculo direto de VF ou VP.</li>
+            <li>"Primeiro pagamento no ato" ou "com entrada" = série antecipada (multiplique o VP por 1 + i).</li>
+            <li>"Retorno mínimo exigido", "custo de oportunidade", "taxa de desconto" e "TMA" são sinônimos operacionais na prática das questões.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 As duas fórmulas-espelho</div><p><b>VF = VP × (1 + i)ⁿ</b> (capitalizar) e <b>VP = VF ÷ (1 + i)ⁿ</b> (descontar). Quem multiplica é o futuro; quem divide é o presente.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Por que vale mais hoje: J-I-R</div><p><b>J</b>uros (custo de oportunidade), <b>I</b>nflação, <b>R</b>isco.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Simples x composto</div><p>Simples: linear, sobre o capital inicial (M = P(1 + i·n)). Composto: exponencial, juros sobre juros (M = P(1 + i)ⁿ). <b>No 1º período são iguais.</b></p></div>
+          <div class="box tip"><div class="box-title">🧠 Anuidade e perpetuidade</div><p>Anuidade: VP = PMT × [(1 − (1 + i)⁻ⁿ) ÷ i]. Perpetuidade: <b>VP = PMT ÷ i</b> (a anuidade com n → ∞).</p></div>
+          <div class="box tip"><div class="box-title">🧠 Relação inversa</div><p>Taxa de desconto ↑ → valor presente ↓. Prazo ↑ → valor presente ↓. Decore a direção, não só a fórmula.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Regra de ouro</div><p>Fluxos de caixa só se comparam ou somam <b>na mesma data</b>. TMA = custo de oportunidade = taxa de desconto.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Dinheiro hoje &gt; dinheiro amanhã, por três motivos: juros (custo de oportunidade), inflação e risco.</li>
+            <li>VF = VP × (1 + i)ⁿ; VP = VF ÷ (1 + i)ⁿ. i e n sempre na mesma unidade de tempo.</li>
+            <li>Juros simples: M = P(1 + i·n), linear, sobre o capital. Juros compostos: M = P(1 + i)ⁿ, exponencial, juros sobre juros. No 1º período, iguais.</li>
+            <li>Anuidade (postecipada): VP = PMT × [(1 − (1 + i)⁻ⁿ) ÷ i]. Antecipada: multiplique por (1 + i).</li>
+            <li>Perpetuidade: VP = PMT ÷ i.</li>
+            <li>Taxa de desconto = custo de oportunidade = TMA (na empresa, em geral o WACC/CMPC).</li>
+            <li>Taxa maior ou prazo maior → VP menor. Relação inversa, muito cobrada em questões conceituais.</li>
+            <li>Nunca some fluxos de datas diferentes: traga todos a valor presente (é a base do VPL e do valuation).</li>
+            <li>Preço de título e taxa de juros andam em direções opostas (o preço é o VP dos fluxos).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Valor futuro (composto)</td><td>VF = VP × (1 + i)ⁿ — capitalização</td></tr>
+              <tr><td>Valor presente</td><td>VP = VF ÷ (1 + i)ⁿ — desconto</td></tr>
+              <tr><td>Montante a juros simples</td><td>M = P × (1 + i·n); juros J = P × i × n</td></tr>
+              <tr><td>VP de anuidade (postecipada)</td><td>VP = PMT × [(1 − (1 + i)⁻ⁿ) ÷ i]</td></tr>
+              <tr><td>VF de anuidade</td><td>VF = PMT × [((1 + i)ⁿ − 1) ÷ i]</td></tr>
+              <tr><td>Perpetuidade</td><td>VP = PMT ÷ i</td></tr>
+              <tr><td>TMA</td><td>Taxa Mínima de Atratividade: retorno mínimo exigido; reflete o custo de oportunidade do capital (na empresa, em geral o WACC)</td></tr>
+              <tr><td>Compatibilidade i × n</td><td>Taxa e número de períodos devem estar na mesma unidade de tempo</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Simples x composto (R$ 10.000 a 10% a.a.)</h3>
+          <table>
+            <thead><tr><th>Ano</th><th>Montante — juros simples</th><th>Montante — juros compostos</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>R$ 11.000,00</td><td>R$ 11.000,00 (iguais no 1º período)</td></tr>
+              <tr><td>2</td><td>R$ 12.000,00</td><td>R$ 12.100,00</td></tr>
+              <tr><td>3</td><td>R$ 13.000,00</td><td>R$ 13.310,00</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplos numéricos padrão</h3>
+          <table>
+            <thead><tr><th>Operação</th><th>Dados</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>VF de pagamento único</td><td>10.000 × (1,01)¹²</td><td>≈ R$ 11.268,25</td></tr>
+              <tr><td>VP de pagamento único</td><td>12.682,42 ÷ (1,02)¹²</td><td>R$ 10.000,00</td></tr>
+              <tr><td>VP de anuidade</td><td>1.000 × 2,4869 (n=3; i=10% a.a.)</td><td>≈ R$ 2.486,85</td></tr>
+              <tr><td>Perpetuidade</td><td>1.000 ÷ 0,10</td><td>R$ 10.000,00</td></tr>
+            </tbody>
+          </table>
+          <h3>Efeito das variáveis sobre o valor presente</h3>
+          <table>
+            <thead><tr><th>Variável que aumenta</th><th>Efeito sobre o VP</th></tr></thead>
+            <tbody>
+              <tr><td>Taxa de desconto (i)</td><td>VP diminui</td></tr>
+              <tr><td>Prazo (n)</td><td>VP diminui</td></tr>
+              <tr><td>Valor futuro (VF)</td><td>VP aumenta (relação direta)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 A "oitava maravilha do mundo"</div><p>A frase atribuída a Einstein — "os juros compostos são a oitava maravilha do mundo" — é provavelmente apócrifa, mas captura bem a matemática: a curva exponencial do (1 + i)ⁿ faz pequenas taxas gerarem diferenças gigantescas em prazos longos, o que surpreende até profissionais experientes.</p></div>
+        <div class="box curio"><div class="box-title">📚 Manhattan por R$ 24</div><p>O exemplo didático mais famoso de valor do dinheiro no tempo: os holandeses compraram Manhattan dos indígenas, em 1626, pelo equivalente a US$ 24. Se esse valor tivesse sido investido a juros compostos modestos (cerca de 6% a.a.), valeria hoje mais que todo o imobiliário da ilha — ilustrando o poder da capitalização em séculos.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Por que a perpetuidade importa</div><p>A fórmula VP = PMT ÷ i parece abstrata, mas é o motor do modelo de Gordon de avaliação de ações (dividendos perpétuos com crescimento) e dos fundos patrimoniais (endowments) de universidades como Harvard, que vivem de rendimentos perpétuos sem consumir o principal.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Risco x retorno (Tópico 07)</td><td>A taxa de desconto embute o prêmio de risco: mais risco → TMA maior → VP menor</td></tr>
+              <tr><td>Valuation (Tópico 10)</td><td>O valor da empresa é o VP dos fluxos de caixa futuros — aplicação direta deste tópico</td></tr>
+              <tr><td>Planejamento financeiro de longo prazo (Tópico 05)</td><td>As projeções pro forma só viram decisão de investimento quando descontadas</td></tr>
+              <tr><td>Avaliações Econômicas de Projetos (matéria)</td><td>VPL, TIR e TMA são aplicações diretas do valor do dinheiro no tempo</td></tr>
+              <tr><td>Matemática Financeira (matéria)</td><td>Aprofunda taxas (nominal, efetiva, equivalente), descontos e sistemas de amortização</td></tr>
+              <tr><td>Finanças corporativas (Tópico 02)</td><td>O custo de capital (WACC) é a taxa de desconto usada nas decisões de investimento</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e refazer à mão os 4 exemplos numéricos da seção de tabelas.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com foco nos cálculos de VP, anuidade e perpetuidade.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar as fórmulas antes de avançar para o Tópico 07 (Risco x retorno).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Capítulo sobre valor do dinheiro no tempo.)</li>
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey; JORDAN, Bradford D. <i>Administração Financeira</i>. Porto Alegre: AMGH. (Valor presente, fluxos de caixa descontados.)</li>
+            <li>ASSAF NETO, Alexandre. <i>Matemática Financeira e suas Aplicações</i>. São Paulo: Atlas.</li>
+            <li>BRIGHAM, Eugene F.; EHRHARDT, Michael C. <i>Administração Financeira: Teoria e Prática</i>. São Paulo: Cengage.</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Administração Financeira · Tópico 06/10</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_admfin_t06";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+    {q:"Por que R$ 1 hoje vale mais que R$ 1 no futuro?", a:"Por três razões: juros (custo de oportunidade — o dinheiro pode render), inflação (perda de poder de compra) e risco (incerteza do recebimento futuro)."},
+    {q:"Qual é a fórmula do valor futuro a juros compostos?", a:"VF = VP × (1 + i)ⁿ."},
+    {q:"Qual é a fórmula do valor presente?", a:"VP = VF ÷ (1 + i)ⁿ."},
+    {q:"Qual a diferença entre capitalizar e descontar?", a:"Capitalizar leva um valor do presente para o futuro (multiplica por (1+i)ⁿ); descontar traz do futuro para o presente (divide por (1+i)ⁿ)."},
+    {q:"Qual é a fórmula do montante a juros simples?", a:"M = P × (1 + i·n) — os juros incidem apenas sobre o capital inicial; crescimento linear."},
+    {q:"O que caracteriza os juros compostos?", a:"Os juros de cada período incidem sobre o montante acumulado (juros sobre juros); crescimento exponencial."},
+    {q:"Em qual período juros simples e compostos produzem o mesmo montante?", a:"No primeiro período. A partir do segundo, o composto supera o simples."},
+    {q:"O que acontece com o valor presente quando a taxa de desconto aumenta?", a:"O valor presente diminui — a relação entre taxa e VP é inversa."},
+    {q:"O que acontece com o valor presente quando o prazo aumenta?", a:"O valor presente diminui — quanto mais distante o recebimento, menos ele vale hoje."},
+    {q:"Qual é a fórmula do VP de uma anuidade postecipada?", a:"VP = PMT × [(1 − (1 + i)⁻ⁿ) ÷ i]."},
+    {q:"Qual é a fórmula do valor presente de uma perpetuidade?", a:"VP = PMT ÷ i."},
+    {q:"O que é a Taxa Mínima de Atratividade (TMA)?", a:"O retorno mínimo exigido para aceitar um investimento; representa o custo de oportunidade do capital (na empresa, em geral o WACC)."},
+    {q:"Quanto rendem R$ 10.000 a 10% ao ano, por 2 anos, a juros compostos?", a:"VF = 10.000 × (1,10)² = R$ 12.100."},
+    {q:"E a juros simples, nas mesmas condições?", a:"M = 10.000 × (1 + 0,10 × 2) = R$ 12.000 — a diferença de R$ 100 são os juros sobre juros."},
+    {q:"Quanto vale hoje uma perpetuidade de R$ 2.000 ao ano, com taxa de 8% ao ano?", a:"VP = 2.000 ÷ 0,08 = R$ 25.000."},
+    {q:"Qual é a regra de ouro para comparar fluxos de caixa?", a:"Só comparar ou somar fluxos referenciados na mesma data — em geral, trazendo todos a valor presente."},
+    {q:"Qual a diferença entre série postecipada e antecipada?", a:"Postecipada: primeiro pagamento no fim do primeiro período. Antecipada: primeiro pagamento hoje — VP multiplicado por (1 + i)."},
+    {q:"Por que o preço de um título sobe quando a taxa de juros cai?", a:"Porque o preço é o valor presente dos fluxos futuros do título; taxa menor implica VP maior."},
+    {q:"Qual a relação deste tópico com o VPL?", a:"O VPL é a soma dos fluxos de caixa de um projeto trazidos a valor presente pela TMA — aplicação direta do valor do dinheiro no tempo."},
+    {q:"Qual cuidado obrigatório entre taxa (i) e prazo (n)?", a:"Devem estar na mesma unidade de tempo: taxa ao mês exige n em meses, e assim por diante."},
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+    {tema:"Conceito fundamental", texto:"—", enun:"O princípio do valor do dinheiro no tempo afirma que:", alts:["R$ 1 hoje e R$ 1 no futuro têm exatamente o mesmo valor.","R$ 1 hoje vale mais que R$ 1 no futuro, devido ao custo de oportunidade, à inflação e ao risco.","O dinheiro perde valor apenas em períodos de hiperinflação.","O valor do dinheiro independe da taxa de juros.","R$ 1 no futuro vale mais que R$ 1 hoje, sempre."], correta:1, coment:"O dinheiro vale mais hoje por três razões clássicas: pode render juros (custo de oportunidade), a inflação corrói o poder de compra e o recebimento futuro é incerto (risco)."},
+    {tema:"Valor futuro", texto:"Dado: (1,10)² = 1,21.", enun:"Uma aplicação de R$ 10.000 a 10% ao ano, por 2 anos, no regime de juros compostos, resultará em:", alts:["R$ 12.000","R$ 12.100","R$ 11.000","R$ 12.210","R$ 12.000,50"], correta:1, coment:"VF = VP × (1 + i)ⁿ = 10.000 × (1,10)² = 10.000 × 1,21 = R$ 12.100."},
+    {tema:"Valor presente", texto:"Dado: (1,10)² = 1,21.", enun:"O valor presente de R$ 12.100 a receber daqui a 2 anos, à taxa de desconto de 10% ao ano, é:", alts:["R$ 9.900","R$ 10.000","R$ 10.500","R$ 11.000","R$ 12.100"], correta:1, coment:"VP = VF ÷ (1 + i)ⁿ = 12.100 ÷ 1,21 = R$ 10.000."},
+    {tema:"Simples x composto", texto:"—", enun:"Assinale a alternativa que diferencia corretamente os regimes de juros simples e composto:", alts:["No simples, os juros incidem sobre o montante acumulado; no composto, apenas sobre o capital inicial.","No simples, os juros incidem apenas sobre o capital inicial (crescimento linear); no composto, sobre o montante acumulado (crescimento exponencial).","Os dois regimes sempre produzem montantes idênticos.","O regime composto é proibido no mercado financeiro brasileiro.","O regime simples é o padrão das aplicações de longo prazo."], correta:1, coment:"Juros simples: incidência apenas sobre o capital inicial, crescimento linear. Juros compostos: incidência sobre o montante (juros sobre juros), crescimento exponencial — padrão do mercado."},
+    {tema:"Simples x composto", texto:"—", enun:"Sobre a comparação entre juros simples e compostos, para a mesma taxa e mesmo capital, é correto afirmar que:", alts:["O montante composto é sempre maior, em qualquer prazo.","No primeiro período, os dois regimes produzem exatamente o mesmo montante.","O montante simples é sempre maior.","Os regimes só coincidem após 10 períodos.","O regime simples nunca é usado em prova."], correta:1, coment:"No primeiro período não há 'juros sobre juros', logo simples e composto são iguais. O composto supera o simples apenas a partir do segundo período (n > 1)."},
+    {tema:"Taxa x valor presente", texto:"—", enun:"Se a taxa de desconto aplicada a um mesmo valor futuro aumentar, mantido o prazo, o valor presente:", alts:["Aumenta","Diminui","Permanece igual","Duplica","Torna-se negativo"], correta:1, coment:"A relação entre taxa de desconto e valor presente é inversa: taxa maior → VP menor. Mesma lógica para o prazo: prazo maior → VP menor."},
+    {tema:"Anuidade", texto:"Dado: (1,10)⁻³ = 0,7513, aproximadamente.", enun:"O valor presente de três pagamentos anuais de R$ 1.000 (primeiro daqui a 1 ano), à taxa de 10% ao ano, é aproximadamente:", alts:["R$ 3.000,00","R$ 2.486,90","R$ 2.735,50","R$ 2.500,00","R$ 2.751,30"], correta:1, coment:"Fator = (1 − 0,7513) ÷ 0,10 = 2,487. VP = 1.000 × 2,487 ≈ R$ 2.486,90. Note que é menor que a soma simples (R$ 3.000), pois os pagamentos futuros foram descontados."},
+    {tema:"Perpetuidade", texto:"—", enun:"Um fluxo perpétuo de R$ 1.000 por ano, descontado à taxa de 10% ao ano, tem valor presente de:", alts:["R$ 1.000","R$ 10.000","R$ 100.000","R$ 5.000","Infinito"], correta:1, coment:"VP da perpetuidade = PMT ÷ i = 1.000 ÷ 0,10 = R$ 10.000. Embora a série seja infinita, o VP é finito porque os fluxos distantes valem quase nada."},
+    {tema:"TMA", texto:"—", enun:"A Taxa Mínima de Atratividade (TMA) representa:", alts:["A taxa de inflação esperada para o período.","O retorno mínimo exigido para aceitar um investimento, refletindo o custo de oportunidade do capital.","A taxa básica de juros da economia, sempre.","A taxa de juros dos empréstimos consignados.","O lucro mínimo contábil exigido por lei."], correta:1, coment:"TMA = retorno mínimo exigido = custo de oportunidade do capital. Na prática empresarial, costuma ser o custo médio ponderado de capital (WACC/CMPC)."},
+    {tema:"Comparabilidade", texto:"—", enun:"Uma empresa deve escolher entre receber R$ 10.000 hoje ou R$ 11.000 daqui a 1 ano, sendo 5% ao ano seu custo de oportunidade. A decisão financeiramente correta é:", alts:["Receber hoje, pois dinheiro à vista é sempre melhor.","Receber daqui a 1 ano, pois o valor presente de R$ 11.000 (≈ R$ 10.476) supera R$ 10.000.","É indiferente, pois os valores são próximos.","Receber hoje, pois R$ 10.000 é valor certo.","Não é possível decidir sem saber a inflação."], correta:1, coment:"Comparando na mesma data: VP de 11.000 = 11.000 ÷ 1,05 ≈ R$ 10.476 > R$ 10.000. Logo, a segunda opção cria mais valor à taxa de 5% ao ano."},
+    {tema:"Unidade de tempo", texto:"—", enun:"Ao aplicar a fórmula VF = VP × (1 + i)ⁿ, é obrigatório que:", alts:["A taxa seja sempre anual.","O prazo seja sempre em meses.","A taxa (i) e o número de períodos (n) estejam na mesma unidade de tempo.","O capital seja superior a R$ 1.000.","A taxa seja nominal."], correta:2, coment:"Taxa e prazo devem estar na mesma unidade: taxa ao mês com n em meses, taxa ao ano com n em anos. Incompatibilidade de unidades é a pegadinha mais comum."},
+    {tema:"Série antecipada", texto:"Dado: o valor presente de uma série postecipada de 3 pagamentos de R$ 1.000, a 10% ao ano, é R$ 2.486,90.", enun:"Se o primeiro pagamento ocorrer hoje (série antecipada), o valor presente será aproximadamente:", alts:["R$ 2.486,90","R$ 2.735,60","R$ 3.000,00","R$ 2.260,80","R$ 3.300,00"], correta:1, coment:"Na série antecipada, todos os fluxos estão um período mais próximo: VP antecipada = VP postecipada × (1 + i) = 2.486,90 × 1,10 ≈ R$ 2.735,60."},
+    {tema:"Juros simples", texto:"—", enun:"Um capital de R$ 10.000 aplicado a juros simples de 2% ao mês por 6 meses renderá juros de:", alts:["R$ 1.200","R$ 1.261","R$ 1.000","R$ 2.000","R$ 600"], correta:0, coment:"J = P × i × n = 10.000 × 0,02 × 6 = R$ 1.200. No regime simples, cada mês rende os mesmos R$ 200 sobre o capital inicial."},
+    {tema:"Juros compostos — cálculo", texto:"Dado: (1,01)¹² = 1,1268, aproximadamente.", enun:"Uma aplicação de R$ 10.000 a 1% ao mês, por 12 meses, no regime composto, resultará em, aproximadamente:", alts:["R$ 11.200,00","R$ 11.268,00","R$ 11.120,00","R$ 12.682,00","R$ 11.000,00"], correta:1, coment:"VF = 10.000 × (1,01)¹² ≈ 10.000 × 1,1268 = R$ 11.268. A alternativa A é o valor a juros simples (10.000 + 12 × 100) — pegadinha clássica."},
+    {tema:"n < 1", texto:"—", enun:"Para um mesmo capital e mesma taxa, em um prazo MENOR que um período (n < 1), o montante a juros simples, em comparação ao composto, será:", alts:["Menor","Maior","Idêntico","Sempre zero","Imprevisível"], correta:1, coment:"Com n < 1, a linearidade do regime simples fica acima da curva exponencial no início: o montante simples é maior. Com n = 1, são iguais; com n > 1, o composto supera."},
+    {tema:"Títulos e juros", texto:"—", enun:"Quando a taxa de juros de mercado sobe, o preço de um título de renda fixa já emitido (que paga fluxos fixos futuros) tende a:", alts:["Subir, pois o título fica mais atrativo.","Cair, pois o valor presente de seus fluxos futuros diminui.","Permanecer constante, pois os fluxos são fixos.","Dobrar.","Cair apenas para títulos públicos."], correta:1, coment:"O preço de um título é o valor presente de seus fluxos futuros. Como a relação taxa x VP é inversa, juros em alta → preço em queda. É a base do risco de mercado (duration, Tópico 11 de Avaliações de Projetos)."},
+    {tema:"Razões do valor no tempo", texto:"—", enun:"Assinale a alternativa que NÃO constitui razão para o dinheiro valer mais hoje do que no futuro:", alts:["Custo de oportunidade (juros).","Inflação.","Risco (incerteza do recebimento).","Maior oferta monetária futura garantida por lei.","Preferência por liquidez associada ao custo de oportunidade."], correta:3, coment:"As três razões clássicas são juros/custo de oportunidade, inflação e risco. Não existe garantia legal de oferta monetária futura como fundamento do valor do dinheiro no tempo."},
+    {tema:"VF de anuidade", texto:"—", enun:"Uma pessoa deposita R$ 1.000 ao fim de cada ano, por 3 anos, a 10% ao ano. O valor futuro acumulado (dado: (1,10)³ = 1,331) é:", alts:["R$ 3.000","R$ 3.310","R$ 3.100","R$ 3.331","R$ 2.735"], correta:1, coment:"VF = PMT × [((1 + i)ⁿ − 1) ÷ i] = 1.000 × [(1,331 − 1) ÷ 0,10] = 1.000 × 3,31 = R$ 3.310. O último depósito não rende; o penúltimo rende 1 ano; o primeiro, 2 anos."},
+    {tema:"Setor público", texto:"—", enun:"Em projetos públicos, como os avaliados por uma estatal, a taxa usada para descontar fluxos futuros (taxa social de desconto) reflete:", alts:["A taxa de juros dos títulos privados de maior risco.","O custo de oportunidade dos recursos para a sociedade, orientando a alocação eficiente de recursos públicos.","Sempre a taxa Selic vigente, por obrigação legal.","A meta de inflação do Banco Central.","O retorno exigido pelos acionistas privados da estatal."], correta:1, coment:"A taxa social de desconto representa o custo de oportunidade dos recursos públicos para a sociedade — mesmo princípio do valor do dinheiro no tempo, aplicado à decisão pública."},
+    {tema:"Síntese", texto:"—", enun:"Assinale a alternativa que combina corretamente os conceitos deste tópico:", alts:["Fluxos de datas diferentes podem ser somados diretamente, desde que corrigidos pela inflação passada.","O valor presente aumenta quando a taxa de desconto aumenta, e a TMA é sinônimo de inflação.","Só se comparam fluxos na mesma data; taxa maior reduz o VP; e a TMA representa o custo de oportunidade do capital.","Juros compostos crescem linearmente e sempre superam os simples em qualquer prazo.","A perpetuidade tem valor presente infinito, pois os pagamentos nunca terminam."], correta:2, coment:"A síntese correta: comparabilidade na mesma data, relação inversa taxa x VP e TMA como custo de oportunidade. As demais invertem conceitos estudados no capítulo."},
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+    {d:"Fácil", texto:"—", enun:"O dinheiro vale mais hoje do que no futuro por causa de:", alts:["Juros, inflação e risco","Apenas da inflação","Apenas do risco","Da oferta monetária futura","Da velocidade da impressão de moeda"], correta:0},
+    {d:"Fácil", texto:"—", enun:"A fórmula do valor futuro a juros compostos é:", alts:["VF = VP ÷ (1 + i)ⁿ","VF = VP × (1 + i)ⁿ","VF = VP × (1 + i·n)","VF = VP × i × n","VF = PMT ÷ i"], correta:1},
+    {d:"Fácil", texto:"—", enun:"A fórmula do valor presente é:", alts:["VP = VF × (1 + i)ⁿ","VP = VF ÷ (1 + i)ⁿ","VP = VF × i × n","VP = PMT ÷ i","VP = VF + juros"], correta:1},
+    {d:"Fácil", texto:"—", enun:"No regime de juros simples, os juros incidem sobre:", alts:["O montante acumulado","Apenas o capital inicial","Os juros dos períodos anteriores","A inflação acumulada","O valor futuro"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Juros sobre juros caracterizam o regime de juros:", alts:["Simples","Compostos","Nominais","Proporcionais","Reais"], correta:1},
+    {d:"Fácil", texto:"—", enun:"O valor presente de uma perpetuidade que paga PMT por período, à taxa i, é:", alts:["PMT × i","PMT ÷ i","PMT × (1+i)ⁿ","PMT − i","PMT + i"], correta:1},
+    {d:"Fácil", texto:"—", enun:"TMA significa:", alts:["Taxa Mínima de Atratividade","Taxa Média de Aplicação","Taxa Máxima de Amortização","Tarifa Mensal de Administração","Taxa de Mercado Aberto"], correta:0},
+    {d:"Fácil", texto:"—", enun:"Se a taxa de desconto aumenta, o valor presente de um fluxo futuro:", alts:["Aumenta","Diminui","Não muda","Duplica","Zera"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Fluxos de caixa em datas diferentes só podem ser comparados:", alts:["Pela soma simples dos valores","Após serem referenciados à mesma data","Pela média aritmética","Pelo maior valor nominal","Pela taxa de inflação passada"], correta:1},
+    {d:"Fácil", texto:"—", enun:"Uma série uniforme com primeiro pagamento hoje (no ato) é chamada de:", alts:["Postecipada","Antecipada","Perpetuidade","Diferida","Amortizável"], correta:1},
+    {d:"Média", texto:"—", enun:"Dado (1,10)² = 1,21: aplicar R$ 5.000 a 10% a.a. por 2 anos, a juros compostos, gera:", alts:["R$ 6.000","R$ 6.050","R$ 5.500","R$ 6.100","R$ 5.950"], correta:1},
+    {d:"Média", texto:"—", enun:"Juros simples de R$ 8.000 a 3% a.m. por 4 meses totalizam:", alts:["R$ 960","R$ 1.000","R$ 800","R$ 240","R$ 1.200"], correta:0},
+    {d:"Média", texto:"—", enun:"Dado (1,02)¹² = 1,2682: o VP de R$ 12.682 a receber em 12 meses, a 2% a.m., é aproximadamente:", alts:["R$ 10.000","R$ 11.000","R$ 9.500","R$ 12.000","R$ 10.500"], correta:0},
+    {d:"Média", texto:"—", enun:"Uma perpetuidade de R$ 500 por mês, a 2% a.m., vale hoje:", alts:["R$ 10.000","R$ 25.000","R$ 50.000","R$ 2.500","R$ 5.000"], correta:1},
+    {d:"Média", texto:"—", enun:"No primeiro período de capitalização, juros simples e compostos:", alts:["Produzem o mesmo montante","Diferem em 10%","Diferem em 1%","Simples é sempre maior","Composto é sempre o dobro"], correta:0},
+    {d:"Média", texto:"—", enun:"Com n < 1, para mesmo capital e taxa, o montante a juros simples é:", alts:["Menor que o composto","Maior que o composto","Igual ao composto","Zero","Sempre negativo"], correta:1},
+    {d:"Média", texto:"—", enun:"Receber R$ 21.000 daqui a 1 ano, com custo de oportunidade de 5% a.a., equivale hoje a:", alts:["R$ 20.000","R$ 21.000","R$ 19.950","R$ 22.050","R$ 19.000"], correta:0},
+    {d:"Média", texto:"—", enun:"Se o prazo até o recebimento de um valor futuro aumenta (taxa constante), seu valor presente:", alts:["Aumenta","Diminui","Não muda","Duplica","Depende da inflação"], correta:1},
+    {d:"Média", texto:"—", enun:"A TMA de uma empresa é, em geral, aproximada pelo:", alts:["CDI do período","Custo médio ponderado de capital (WACC/CMPC)","IPCA esperado","Taxa de câmbio","Retorno da poupança"], correta:1},
+    {d:"Média", texto:"—", enun:"Quando os juros de mercado sobem, o preço de um título de renda fixa já emitido:", alts:["Sobe","Cai","Fica igual","Dobra","Depende só do prazo"], correta:1},
+    {d:"Difícil", texto:"Dado (1,10)⁻³ = 0,7513.", enun:"O VP de 3 pagamentos anuais de R$ 2.000 (postecipados), a 10% a.a., é aproximadamente:", alts:["R$ 6.000,00","R$ 4.973,80","R$ 5.471,00","R$ 5.000,00","R$ 4.500,60"], correta:1},
+    {d:"Difícil", texto:"Dado (1,10)⁻³ = 0,7513.", enun:"Se os 3 pagamentos de R$ 2.000 da questão anterior fossem antecipados (primeiro hoje), o VP seria aproximadamente:", alts:["R$ 4.973,80","R$ 5.471,20","R$ 6.000,00","R$ 4.521,60","R$ 6.600,00"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Uma empresa pode receber R$ 100.000 hoje ou R$ 115.000 daqui a 1 ano. A proposta futura só é vantajosa se sua taxa de oportunidade for:", alts:["Superior a 15% a.a.","Inferior a 15% a.a.","Igual a 15% a.a.","Superior a 10% a.a.","Qualquer taxa positiva"], correta:1},
+    {d:"Difícil", texto:"—", enun:"O VP de uma perpetuidade de R$ 1.200 por ano a 10% a.a., somado a um pagamento único de R$ 5.000 recebido hoje, é:", alts:["R$ 12.000","R$ 17.000","R$ 6.200","R$ 12.500","R$ 5.000"], correta:1},
+    {d:"Difícil", texto:"Dado (1,10)³ = 1,331.", enun:"Depósitos anuais de R$ 1.000 (fim de cada ano, 3 anos) a 10% a.a. acumulam, ao final:", alts:["R$ 3.000","R$ 3.310","R$ 3.100","R$ 3.331","R$ 2.486"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Assinale a afirmativa correta sobre os regimes de capitalização:", alts:["O simples é exponencial e o composto, linear","Para n = 1, simples e composto geram montantes iguais; para n > 1, o composto supera o simples","O composto supera o simples em qualquer prazo, inclusive n < 1","O simples incide sobre juros acumulados","Os dois regimes diferem desde o primeiro dia"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um investidor exige TMA de 12% a.a. Um projeto oferece retorno de 10% a.a. A decisão correta e sua justificativa são:", alts:["Aceitar, pois o retorno é positivo","Rejeitar, pois o retorno (10%) não supera o custo de oportunidade (12%) — o projeto destrói valor","Aceitar, pois 10% está próximo de 12%","Rejeitar apenas se houver inflação","É indiferente"], correta:1},
+    {d:"Difícil", texto:"—", enun:"Um gerente somou R$ 10.000 recebidos hoje com R$ 10.000 a receber em 5 anos e concluiu ter R$ 20.000. O erro conceitual é:", alts:["Não há erro: a soma está correta","Somou fluxos de datas diferentes sem trazer o valor futuro a valor presente","Deveria ter usado juros simples","Faltou multiplicar pela inflação","Faltou dobrar o primeiro valor"], correta:1},
+    {d:"Difícil", texto:"Dado (1,01)¹² = 1,1268 e (1,12)¹ = 1,12.", enun:"Qual alternativa vale MAIS hoje: (I) R$ 10.000 aplicáveis hoje a 1% a.m. por 12 meses, ou (II) R$ 11.000 a receber em 1 ano, com taxa de desconto de 12% a.a.?", alts:["I, pois 10.000 × 1,1268 ≈ 11.268 > 11.000","II, pois 11.000 ÷ 1,12 ≈ 9.821 > 11.268","Empate exato","II, pois 11.000 > 11.268","I, pois o VP de II é 9.821, que é menor que 10.000"], correta:0},
+    {d:"Difícil", texto:"—", enun:"Sobre taxa de desconto e valor presente, é correto afirmar que:", alts:["Quanto maior o risco percebido, menor a taxa exigida e maior o VP","Quanto maior o risco, maior a taxa de desconto exigida e, portanto, menor o valor presente dos fluxos","Risco não influencia a taxa de desconto","A taxa de desconto é sempre a inflação","VP e taxa variam na mesma direção"], correta:1},
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+    "Explicar as três razões do valor do dinheiro no tempo (juros, inflação, risco)",
+    "Aplicar VF = VP × (1 + i)ⁿ com dados numéricos",
+    "Aplicar VP = VF ÷ (1 + i)ⁿ com dados numéricos",
+    "Diferenciar juros simples (linear, sobre o capital) de compostos (exponencial, juros sobre juros)",
+    "Saber que simples = composto no 1º período e que simples > composto quando n < 1",
+    "Calcular VP de anuidade postecipada e ajustar para antecipada (× (1 + i))",
+    "Calcular VP de perpetuidade (PMT ÷ i)",
+    "Explicar TMA como custo de oportunidade e sua ligação com o WACC",
+    "Aplicar a regra de ouro: comparar fluxos apenas na mesma data",
+    "Dominar a relação inversa taxa de desconto x valor presente",
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+    "Usar taxa ao ano com prazo em meses sem converter as unidades.",
+    "Somar ou comparar fluxos de caixa de datas diferentes sem trazer a valor presente.",
+    "Inverter as fórmulas: multiplicar quando deveria dividir (VF x VP).",
+    "Achar que juros compostos superam os simples em qualquer prazo — no 1º período são iguais.",
+    "Ignorar que, para n < 1, o montante a juros simples supera o composto.",
+    "Acreditar que taxa de desconto maior aumenta o valor presente — a relação é inversa.",
+    "Calcular o VP de uma série antecipada como se fosse postecipada (esquecer o × (1 + i)).",
+    "Confundir o fator da anuidade com a fórmula da perpetuidade (PMT ÷ i).",
+    "Achar que perpetuidade tem valor infinito — o desconto torna o VP finito.",
+    "Tratar TMA como sinônimo de inflação ou de Selic — é o custo de oportunidade do decisor.",
+    "No cálculo de VF, aplicar M = P(1 + i·n) quando a questão pede regime composto.",
+    "Errar a leitura do enunciado sobre a data do primeiro pagamento (ato x fim do período).",
+    "Esquecer que o preço de um título é o VP de seus fluxos (preço e juros em direções opostas).",
+    "Usar a potência errada quando o enunciado a fornece pronta (conferir i e n).",
+    "Aceitar projeto com retorno abaixo da TMA por focar apenas no lucro nominal.",
+    "Confundir custo de oportunidade com custo contábil de captação.",
+    "Arredondar potências no meio do cálculo e escolher a alternativa errada por centavos.",
+    "Achar que a inflação é a única razão do valor do dinheiro no tempo (são três).",
+    "Não perceber que o Tópico 06 é a base de VPL, TIR e valuation — estudá-lo isoladamente.",
+    "Chutar a resposta conceitual sem antes testar a direção da variação (taxa ↑ → VP ↓).",
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+    ["Valor do dinheiro no tempo","Princípio segundo o qual uma mesma quantia tem valores diferentes em datas diferentes, em razão dos juros, da inflação e do risco."],
+    ["Valor presente (VP)","Valor, na data de hoje, de um fluxo ou série de fluxos futuros, obtido pelo desconto à taxa apropriada."],
+    ["Valor futuro (VF)","Valor de uma quantia presente em uma data futura, após capitalização: VF = VP × (1 + i)ⁿ."],
+    ["Capitalização","Operação de levar valores do presente para o futuro, incorporando juros."],
+    ["Desconto","Operação de trazer valores futuros para o presente, retirando os juros embutidos."],
+    ["Juros simples","Regime em que os juros incidem apenas sobre o capital inicial; crescimento linear: M = P(1 + i·n)."],
+    ["Juros compostos","Regime em que os juros incidem sobre o montante acumulado; crescimento exponencial: M = P(1 + i)ⁿ."],
+    ["Anuidade (série uniforme)","Sequência de pagamentos iguais em intervalos iguais; postecipada (fim do período) ou antecipada (início)."],
+    ["Perpetuidade","Série infinita de pagamentos iguais; VP = PMT ÷ i."],
+    ["Taxa de desconto","Taxa usada para trazer fluxos futuros a valor presente; reflete o custo de oportunidade e o risco."],
+    ["TMA (Taxa Mínima de Atratividade)","Retorno mínimo exigido para aceitar um investimento; na empresa, em geral o WACC/CMPC."],
+    ["Custo de oportunidade","Retorno da melhor alternativa disponível à qual se renuncia ao escolher um investimento."],
+    ["WACC / CMPC","Custo médio ponderado de capital: média ponderada do custo da dívida e do capital próprio; base da TMA empresarial."],
+    ["Inflação","Elevação geral dos preços que reduz o poder de compra da moeda ao longo do tempo."],
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

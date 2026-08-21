@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Importância, Características e Limitações | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">02 - Importância, características e limitações</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html" selected>02 - Importância, características e limitações</option>
+    <option value="" disabled>03 - Etapas na elaboração de projetos (em breve)</option>
+    <option value="" disabled>04 - Metodologias de avaliação e seleção (em breve)</option>
+    <option value="" disabled>05 - Taxa mínima de atratividade (em breve)</option>
+    <option value="" disabled>06 - Parâmetros para análise de projetos (em breve)</option>
+    <option value="" disabled>07 - Indicadores: VPL, TIR, payback (em breve)</option>
+    <option value="" disabled>08 - Análise de sensibilidade e cenários (em breve)</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Importância, Características e Limitações</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 02 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Importância, Características e Limitações da Elaboração e Análise de Projetos</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 02</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">4h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Baixa <span class="diff-dots"><span class="on"></span><span></span><span></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópico 01 (conceito de projeto de investimento)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Médio — cobrança conceitual; embasa as etapas (Tópico 03) e as metodologias (Tópico 04)</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Explicar <b>por que elaborar e analisar projetos</b> é essencial: escassez de recursos, redução de incerteza e alinhamento com a estratégia.</li>
+            <li>Relacionar a análise de projetos à <b>criação de valor</b> e à sobrevivência de longo prazo da empresa.</li>
+            <li>Identificar as <b>características de um bom projeto</b> e de uma boa análise: objetivos claros, horizonte definido, abordagem multidisciplinar, fluxos incrementais e tratamento do risco.</li>
+            <li>Reconhecer as <b>limitações</b> da elaboração e análise de projetos: estimativas, subjetividade da taxa, intangíveis, vieses e mudanças de cenário.</li>
+            <li>Compreender o papel dos <b>vieses comportamentais</b> (otimismo excessivo, falácia do custo afundado) na distorção de análises.</li>
+            <li>Aplicar o princípio <b>GIGO</b>: a qualidade da decisão depende da qualidade das premissas.</li>
+            <li>Situar esses pontos na realidade de estatais: governança, prestação de contas e projetos regulatórios.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Por que analisar projetos?</b> Porque recursos são <b>escassos</b> e cada real investido hoje só se justifica por benefícios futuros maiores. A análise de projetos é o mecanismo que transforma intenções estratégicas em decisões racionais: reduz incerteza, evita desperdícios, dá base para captar recursos e permite cobrar resultados depois (accountability). Empresas que investem sem análise sistemática destroem valor; as que analisam bem escolhem os projetos que <b>criam valor</b> (VPL &gt; 0).</p>
+          <p><b>Características de um bom projeto/análise:</b> objetivos claros e mensuráveis; horizonte de tempo definido; fluxos de caixa <b>incrementais</b> (Tópico 01); visão <b>multidisciplinar</b> (técnica, mercadológica, financeira, ambiental, jurídica); tratamento explícito de <b>risco e incerteza</b>; coerência com a estratégia; e documentação que permita acompanhamento e auditoria.</p>
+          <p><b>Limitações:</b> tudo depende de <b>estimativas</b> sobre o futuro — receitas, custos, vida útil. A escolha da taxa de desconto é parcialmente subjetiva; benefícios intangíveis (imagem, satisfação do usuário) são difíceis de quantificar; modelos simplificam a realidade; e vieses humanos — <b>otimismo excessivo</b> e a <b>falácia do custo afundado</b> — distorcem até boas metodologias. Regra de bolso: <b>GIGO</b> (garbage in, garbage out) — premissa ruim gera decisão ruim, por melhor que seja a técnica.</p>
+          <p>Em <b>estatais</b> como a DATAPREV, a análise ganha camadas extras: governança e prestação de contas ao TCU, projetos frequentemente obrigatórios (regulatórios) e benefícios que incluem impacto social — mas a lógica de comparar alternativas e medir custo-benefício permanece.</p>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Elaboração e<br>Análise de<br>Projetos</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Importância</h4><ul><li>Recursos escassos</li><li>Reduz incerteza</li><li>Alinha com a estratégia</li><li>Criação de valor</li></ul></div>
+              <div class="mm-node"><h4>Funções</h4><ul><li>Base para captar recursos</li><li>Evita desperdício</li><li>Controle e accountability</li></ul></div>
+              <div class="mm-node"><h4>Características</h4><ul><li>Objetivos claros e mensuráveis</li><li>Horizonte definido</li><li>Multidisciplinar</li><li>Fluxos incrementais + risco</li></ul></div>
+              <div class="mm-node"><h4>Limitações</h4><ul><li>Depende de estimativas</li><li>Taxa subjetiva</li><li>Intangíveis difíceis</li><li>Modelo ≠ realidade</li></ul></div>
+              <div class="mm-node"><h4>Vieses</h4><ul><li>Otimismo excessivo</li><li>Falácia do custo afundado</li><li>Premissas contaminadas (GIGO)</li></ul></div>
+              <div class="mm-node"><h4>Estatais</h4><ul><li>Governança e TCU</li><li>Projetos regulatórios</li><li>Benefícios sociais</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Por que elaborar e analisar projetos: a importância</h3>
+          <p>A elaboração e a análise de projetos existem por uma razão econômica elementar: <b>os recursos são escassos e têm usos alternativos</b>. Cada real aplicado no projeto A deixa de ser aplicado no projeto B ou de voltar ao acionista. Analisar é o filtro que decide onde o recurso gera mais valor.</p>
+          <table>
+            <thead><tr><th>Função da análise</th><th>O que significa na prática</th></tr></thead>
+            <tbody>
+              <tr><td><b>Racionalizar a alocação de capital</b></td><td>Escolher os projetos de maior retorno ajustado ao risco, dado o orçamento limitado</td></tr>
+              <tr><td><b>Reduzir incerteza</b></td><td>Estudar mercado, técnica e finanças antes de gastar — decidir com informação, não com intuição</td></tr>
+              <tr><td><b>Alinhar com a estratégia</b></td><td>Garantir que cada investimento apoie os objetivos de longo prazo da empresa</td></tr>
+              <tr><td><b>Criar valor</b></td><td>Aceitar projetos com benefícios descontados maiores que o investimento (VPL &gt; 0) é o que aumenta o valor da firma</td></tr>
+              <tr><td><b>Viabilizar a captação</b></td><td>Bancos, BNDES e investidores só financiam com estudo de viabilidade bem fundamentado</td></tr>
+              <tr><td><b>Permitir controle e accountability</b></td><td>O projeto aprovado vira referência: dá para comparar realizado × previsto e cobrar responsáveis</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Ligação com o objetivo da empresa</div>
+            <p>O objetivo financeiro da empresa é <b>maximizar a riqueza dos acionistas</b> (valor da firma). Como o valor vem dos fluxos futuros descontados, <b>aceitar bons projetos é o principal motor de criação de valor</b> — mais que decisões de financiamento ou de dividendos.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 O que acontece quando não se analisa (ou se analisa mal)</h3>
+          <ul class="styled">
+            <li><b>Destruição de valor:</b> projetos com retorno abaixo do custo do capital consomem caixa e reduzem o valor da empresa.</li>
+            <li><b>Capital imobilizado:</b> recursos presos em ativos ociosos ou subutilizados, que poderiam render em outro uso.</li>
+            <li><b>Estouros de orçamento e prazo:</b> sem estudo prévio, surpresas técnicas e de mercado aparecem no meio do caminho.</li>
+            <li><b>Projetos elefantes-brancos:</b> clássico no setor público — obras sem demanda que não se sustentam.</li>
+            <li><b>Perda de credibilidade:</b> financiadores e órgãos de controle deixam de aprovar novos investimentos.</li>
+          </ul>
+          <div class="box fgv">
+            <div class="box-title">🏛 Como a FGV cobra a importância</div>
+            <p>Questões conceituais do tipo: "a análise de projetos é importante porque…" — o gabarito gira em torno de <b>escassez de recursos + redução de incerteza + criação de valor</b>. Alternativa errada típica: "porque elimina o risco dos investimentos" — a análise <b>reduz</b> a incerteza, não a elimina.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.3 Características de um bom projeto (e de uma boa análise)</h3>
+          <table>
+            <thead><tr><th>Característica</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td><b>Objetivos claros e mensuráveis</b></td><td>O que o projeto deve alcançar, em termos quantificáveis e prazos definidos</td></tr>
+              <tr><td><b>Horizonte de tempo definido</b></td><td>Vida útil/econômica do projeto explicitada — sem ela não há fluxo nem VPL</td></tr>
+              <tr><td><b>Fluxos incrementais</b></td><td>Só o que muda na empresa por causa do projeto (Tópico 01)</td></tr>
+              <tr><td><b>Abordagem multidisciplinar</b></td><td>Viabilidade técnica, mercadológica, econômico-financeira, ambiental, jurídica e organizacional</td></tr>
+              <tr><td><b>Tratamento do risco</b></td><td>Análise de sensibilidade, cenários e taxa compatível com o risco do projeto</td></tr>
+              <tr><td><b>Coerência estratégica</b></td><td>O projeto dialoga com o planejamento estratégico e com os demais projetos da carteira</td></tr>
+              <tr><td><b>Flexibilidade</b></td><td>Possibilidade de adiar, expandir ou abandonar (opções reais) tem valor</td></tr>
+              <tr><td><b>Documentação e auditabilidade</b></td><td>Premissas registradas, permitindo revisão, controle e prestação de contas</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>4.4 Limitações da elaboração e análise de projetos</h3>
+          <p>A análise é indispensável, mas não é infalível. A FGV adora cobrar o "lado fraco" da técnica:</p>
+          <table>
+            <thead><tr><th>Limitação</th><th>Por que acontece</th></tr></thead>
+            <tbody>
+              <tr><td><b>Dependência de estimativas</b></td><td>Receitas, custos, demanda e vida útil são projeções sobre um futuro incerto — pequenos erros de premissa mudam o VPL</td></tr>
+              <tr><td><b>Subjetividade da taxa de desconto</b></td><td>A TMA/WACC envolve escolhas (prêmio de risco, estrutura-alvo); taxas diferentes levam a decisões diferentes</td></tr>
+              <tr><td><b>Dificuldade com intangíveis</b></td><td>Imagem da marca, satisfação do cidadão, impacto ambiental e valor estratégico são difíceis de monetizar</td></tr>
+              <tr><td><b>Modelos simplificam a realidade</b></td><td>O mundo é não linear; o modelo assume relações estáveis (ex.: fluxos "no fim de cada ano")</td></tr>
+              <tr><td><b>Mudanças de cenário</b></td><td>Choques tecnológicos, regulatórios e macroeconômicos podem invalidar premissas no meio do caminho</td></tr>
+              <tr><td><b>Restrição de capital (rationing)</b></td><td>Mesmo bons projetos podem ficar de fora por limite orçamentário — a análise não cria recursos</td></tr>
+              <tr><td><b>Custo e tempo da análise</b></td><td>Estudos profundos são caros e demorados; para projetos pequenos, o custo da análise pode superar o benefício</td></tr>
+              <tr><td><b>Não substitui julgamento</b></td><td>O indicador informa a decisão; fatores qualitativos e a responsabilidade final são dos gestores</td></tr>
+            </tbody>
+          </table>
+          <div class="box warn">
+            <div class="box-title">⚠️ GIGO — garbage in, garbage out</div>
+            <p>A técnica mais sofisticada não salva premissas ruins. Se as estimativas de entrada forem enviesadas ou falsas, o VPL calculado será igualmente falso. A FGV cobra isso como "a qualidade da análise depende da qualidade das informações de entrada".</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.5 Vieses comportamentais na análise de projetos</h3>
+          <table>
+            <thead><tr><th>Viés</th><th>Como distorce a análise</th></tr></thead>
+            <tbody>
+              <tr><td><b>Otimismo excessivo (optimism bias)</b></td><td>Superestimar receitas e subestimar custos e prazos — sistemático em megaprojetos (Flyvbjerg)</td></tr>
+              <tr><td><b>Falácia do custo afundado</b></td><td>Continuar um projeto ruim porque "já gastamos demais para parar" — o gasto passado é irrelevante</td></tr>
+              <tr><td><b>Ancoragem</b></td><td>Premissas coladas no primeiro número apresentado, sem revisão crítica</td></tr>
+              <tr><td><b>Viés de confirmação</b></td><td>Buscar só dados que confirmam a decisão que o gestor já queria tomar</td></tr>
+              <tr><td><b>Escalonamento do compromisso</b></td><td>Dobrar a aposta no projeto fracassado para justificar a decisão anterior</td></tr>
+            </tbody>
+          </table>
+          <p>Antídotos: <b>análise independente</b> (quem avalia não é quem propõe), premissas comparadas com projetos semelhantes (benchmarking/"reference class"), análise de sensibilidade obrigatória e <b>revisões de portão</b> (stage-gates) que permitem abortar em cada fase.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.6 Particularidades em empresas estatais</h3>
+          <ul class="styled">
+            <li><b>Governança e controle externo:</b> investimentos relevantes passam por conselhos, auditorias e TCU — a documentação da análise é tão importante quanto o número final.</li>
+            <li><b>Projetos regulatórios:</b> adequações legais (LGPD, acessibilidade) não competem por retorno financeiro — a análise compara <b>alternativas de execução</b> (menor custo, menor risco).</li>
+            <li><b>Benefícios intangíveis e sociais:</b> filas menores, menos fraudes, inclusão digital — difíceis de monetizar, mas centrais na missão; usam-se técnicas de custo-efetividade e VPL social (Tópico 10).</li>
+            <li><b>Ciclo político:</b> mudanças de governo/diretoria podem alterar prioridades no meio do projeto — risco adicional a considerar.</li>
+            <li><b>Orçamento público:</b> o teto de despesas e o ciclo orçamentário (PPA/LDO/LOA) funcionam como restrição de capital permanente.</li>
+          </ul>
+          <div class="box ok">
+            <div class="box-title">✅ Síntese do tópico</div>
+            <p>Analisar projetos é essencial porque recursos são escassos e o futuro é incerto: a análise racionaliza, reduz risco e cria valor. Um bom projeto tem objetivos claros, horizonte definido, fluxos incrementais e tratamento de risco. Mas toda análise tem limites: estimativas, subjetividade, intangíveis, modelos simplificados e vieses humanos — e vale o GIGO: premissa ruim, decisão ruim.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <p>Tópico eminentemente <b>conceitual</b> — a FGV cobra distinções finas entre importância, característica e limitação:</p>
+          <ol class="styled">
+            <li><b>Finalidade da análise:</b> "a elaboração de projetos é importante porque…" → gabarito: alocação racional de recursos escassos / redução de incerteza / criação de valor.</li>
+            <li><b>Pegadinha do "elimina o risco":</b> alternativa dizendo que a análise elimina a incerteza/risco — errada: ela <b>reduz</b> e <b>mede</b>, não elimina.</li>
+            <li><b>Característica × limitação:</b> a banca troca os papéis — ex.: "depende de estimativas" é <b>limitação</b>, não característica desejável.</li>
+            <li><b>GIGO:</b> "a qualidade da decisão depende fundamentalmente de…" → qualidade das premissas/informações de entrada.</li>
+            <li><b>Vieses:</b> identificar otimismo excessivo (superestimar benefícios) e falácia do custo afundado (não abandonar projeto ruim).</li>
+            <li><b>Intangíveis:</b> benefícios como imagem institucional e impacto social são de difícil mensuração — limitação clássica.</li>
+            <li><b>Multidisciplinaridade:</b> um projeto completo envolve aspectos técnicos, mercadológicos, financeiros, ambientais e jurídicos.</li>
+          </ol>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo de enunciado típico</div>
+            <p>"Um gestor afirma que a análise de viabilidade elimina o risco de projetos e dispensa julgamento gerencial. Assinale a alternativa que corrige o gestor." — Gabarito: a análise <b>reduz</b> a incerteza e <b>apóia</b> a decisão, mas não elimina riscos nem substitui o julgamento.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠️ Distrações frequentes</div>
+            <p>"A análise garante o sucesso do projeto"; "projetos bem avaliados não precisam de acompanhamento"; "quanto mais detalhado o estudo, menor o custo do projeto" — todas erradas. A análise melhora a decisão, não controla o futuro.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>A análise existe porque <b>recursos são escassos</b> e têm usos alternativos.</li>
+            <li>Funções: <b>racionalizar alocação, reduzir incerteza, alinhar à estratégia, criar valor, viabilizar captação, permitir controle</b>.</li>
+            <li>A análise <b>reduz</b> a incerteza — <b>não elimina</b> o risco.</li>
+            <li>Bom projeto: <b>objetivos claros e mensuráveis</b>, horizonte definido, fluxos incrementais, abordagem <b>multidisciplinar</b>, tratamento de risco, coerência estratégica.</li>
+            <li>Limitação-mãe: tudo depende de <b>estimativas sobre o futuro</b>.</li>
+            <li>A <b>taxa de desconto</b> é parcialmente subjetiva — muda a decisão.</li>
+            <li><b>Intangíveis</b> (imagem, social, ambiental) são difíceis de monetizar.</li>
+            <li><b>GIGO:</b> premissa ruim → decisão ruim, independentemente da técnica.</li>
+            <li>Vieses cobrados: <b>otimismo excessivo</b> e <b>falácia do custo afundado</b>.</li>
+            <li>Análise <b>apoia</b> a decisão, mas <b>não substitui o julgamento</b> dos gestores.</li>
+            <li><b>Rationing:</b> limite de capital pode barrar até bons projetos.</li>
+            <li>Em estatais: governança, prestação de contas e benefícios sociais reforçam (não dispensam) a análise.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Pergunta-relâmpago</th><th>Resposta</th></tr></thead>
+            <tbody>
+              <tr><td>Por que analisar projetos?</td><td>Recursos escassos + reduzir incerteza + criar valor</td></tr>
+              <tr><td>A análise elimina o risco?</td><td>Não — reduz e mede; o risco permanece</td></tr>
+              <tr><td>Principal motor de criação de valor?</td><td>Aceitar projetos com VPL > 0</td></tr>
+              <tr><td>Característica de um bom projeto?</td><td>Objetivos claros e mensuráveis, horizonte definido, fluxos incrementais</td></tr>
+              <tr><td>O que é abordagem multidisciplinar?</td><td>Viabilidade técnica + mercado + finanças + ambiental + jurídica</td></tr>
+              <tr><td>Limitação-mãe da análise?</td><td>Dependência de estimativas sobre o futuro</td></tr>
+              <tr><td>Por que a taxa de desconto é limitação?</td><td>É parcialmente subjetiva e muda a decisão</td></tr>
+              <tr><td>O que é GIGO?</td><td>Garbage in, garbage out — premissa ruim gera decisão ruim</td></tr>
+              <tr><td>Otimismo excessivo?</td><td>Superestimar benefícios e subestimar custos/prazos</td></tr>
+              <tr><td>Falácia do custo afundado?</td><td>Continuar projeto ruim porque "já se gastou muito"</td></tr>
+              <tr><td>Rationing de capital?</td><td>Limite orçamentário que barra até projetos bons</td></tr>
+              <tr><td>A análise substitui o julgamento?</td><td>Não — apoia a decisão do gestor</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Criação de valor</td><td>Aceitar projetos cujo benefício descontado supera o investimento → VPL &gt; 0 (detalhado no Tópico 07)</td></tr>
+              <tr><td>Escassez + custo de oportunidade</td><td>Escolher A implica renunciar a B — a análise compara usos alternativos do mesmo recurso</td></tr>
+              <tr><td>GIGO</td><td>Garbage in, garbage out: a qualidade da decisão é limitada pela qualidade das premissas de entrada</td></tr>
+              <tr><td>Reduzir × eliminar risco</td><td>A análise mede e reduz a incerteza; o risco residual sempre permanece</td></tr>
+              <tr><td>Otimismo excessivo</td><td>Viés que superestima benefícios e subestima custos e prazos (Flyvbjerg)</td></tr>
+              <tr><td>Falácia do custo afundado</td><td>Viés de continuar o projeto por causa do que já foi gasto — gasto passado é irrelevante</td></tr>
+              <tr><td>Rationing de capital</td><td>Restrição orçamentária que força o ranqueamento de projetos; alguns bons projetos ficam de fora</td></tr>
+              <tr><td>Multidisciplinaridade</td><td>Análise completa = técnica + mercadológica + financeira + ambiental + jurídica + organizacional</td></tr>
+              <tr><td>Stage-gate</td><td>Revisões por fases que permitem continuar, corrigir ou abortar o projeto a cada portão</td></tr>
+              <tr><td>Benchmarking / reference class</td><td>Comparar premissas com projetos semelhantes já executados, corrigindo o otimismo</td></tr>
+              <tr><td>Custo-efetividade</td><td>Quando benefícios não são monetizáveis (saúde, social): comparar custo por unidade de benefício</td></tr>
+              <tr><td>Accountability</td><td>Prestação de contas: projeto aprovado vira referência para comparar previsto × realizado</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas e quadros de memorização</h2></div>
+        <div class="card">
+          <h3>Importância × Característica × Limitação — não confunda!</h3>
+          <table>
+            <thead><tr><th>Importância (por que fazer)</th><th>Característica (o que um bom projeto tem)</th><th>Limitação (o que a análise não resolve)</th></tr></thead>
+            <tbody>
+              <tr><td>Recursos escassos</td><td>Objetivos claros e mensuráveis</td><td>Dependência de estimativas</td></tr>
+              <tr><td>Reduzir incerteza</td><td>Horizonte de tempo definido</td><td>Taxa de desconto subjetiva</td></tr>
+              <tr><td>Criar valor (VPL &gt; 0)</td><td>Fluxos incrementais</td><td>Intangíveis difíceis de medir</td></tr>
+              <tr><td>Alinhar com a estratégia</td><td>Abordagem multidisciplinar</td><td>Modelos simplificam a realidade</td></tr>
+              <tr><td>Viabilizar captação</td><td>Tratamento explícito do risco</td><td>Mudanças de cenário</td></tr>
+              <tr><td>Controle e accountability</td><td>Coerência estratégica + documentação</td><td>Vieses humanos / rationing</td></tr>
+            </tbody>
+          </table>
+          <h3>Vieses × antídotos</h3>
+          <table>
+            <thead><tr><th>Viés</th><th>Sintoma</th><th>Antídoto</th></tr></thead>
+            <tbody>
+              <tr><td>Otimismo excessivo</td><td>Receita alta, custo baixo, prazo curto</td><td>Reference class / sensibilidade</td></tr>
+              <tr><td>Custo afundado</td><td>"Já gastamos demais para parar"</td><td>Avaliar só fluxos futuros</td></tr>
+              <tr><td>Viés de confirmação</td><td>Só dados a favor da decisão</td><td>Análise independente (advogado do diabo)</td></tr>
+              <tr><td>Escalonamento do compromisso</td><td>Dobrar a aposta no fracasso</td><td>Stage-gates com poder de abortar</td></tr>
+            </tbody>
+          </table>
+          <h3>Dimensões da análise multidisciplinar</h3>
+          <table>
+            <thead><tr><th>Dimensão</th><th>Pergunta que responde</th></tr></thead>
+            <tbody>
+              <tr><td>Técnica</td><td>É possível executar? Temos tecnologia e pessoas?</td></tr>
+              <tr><td>Mercadológica</td><td>Há demanda? Qual o mercado?</td></tr>
+              <tr><td>Econômico-financeira</td><td>Cria valor? VPL &gt; 0?</td></tr>
+              <tr><td>Ambiental</td><td>Impactos e licenças?</td></tr>
+              <tr><td>Jurídica</td><td>É legal? Atende à regulamentação?</td></tr>
+              <tr><td>Organizacional</td><td>A estrutura da empresa comporta o projeto?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🏗 A lei dos megaprojetos de Flyvbjerg</div><p>Bent Flyvbjerg (Oxford) estudou milhares de megaprojetos e resumiu: "over budget, over time, under benefits" — mais de 90% estouram custo ou prazo, e os benefícios ficam aquém do prometido. A causa raiz é o otimismo excessivo (e, às vezes, "mentira estratégica" para aprovar o projeto).</p></div>
+        <div class="box curio"><div class="box-title">🚆 O trem-bala da Califórnia</div><p>Aprovado em 2008 com orçamento de US$ 33 bilhões e entrega em 2020, o projeto passou de US$ 100 bilhões estimados e segue incompleto. É o exemplo mundial de premissas otimistas + escalonamento do compromisso — a falácia do custo afundado em escala bilionária.</p></div>
+        <div class="box curio"><div class="box-title">🎼 A Ópera de Sydney: 14× o orçamento</div><p>Orçada em AU$ 7 milhões, custou AU$ 102 milhões e levou 10 anos a mais. Caso clássico citado por Flyvbjerg para justificar o "reference class forecasting": comparar com projetos semelhantes em vez de confiar nas estimativas internas.</p></div>
+        <div class="box curio"><div class="box-title">💻 Projetos de TI: os campeões de estouro</div><p>O Standish Group (CHAOS Report) aponta que parcela expressiva dos projetos de TI falha ou estoura prazo/orçamento. Para uma empresa de tecnologia como a DATAPREV, isso reforça o valor dos stage-gates e da gestão ágil com entregas incrementais.</p></div>
+        <div class="box curio"><div class="box-title">🏛 TCU e o "elefante branco"</div><p>O TCU mantém histórico de obras públicas paralisadas ou superavaliadas — o relatório de obras paradas já listou bilhões em investimentos inconclusos. Muitos casos nascem de análise de viabilidade deficiente ou viesada: por isso o controle externo exige estudos bem documentados.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Conceito de projeto (Tópico 01)</td><td>O fluxo incremental correto é a premissa básica de qualidade (GIGO) exigida aqui</td></tr>
+              <tr><td>Etapas na elaboração (Tópico 03)</td><td>As características deste tópico (multidisciplinaridade, documentação) se concretizam nas etapas: perfil, pré-viabilidade, viabilidade</td></tr>
+              <tr><td>Metodologias de avaliação (Tópico 04)</td><td>As limitações dos critérios (VPL, TIR, payback) derivam das limitações gerais vistas aqui</td></tr>
+              <tr><td>Taxa mínima de atratividade (Tópico 05)</td><td>A subjetividade da taxa de desconto — limitação destacada aqui — é estudada em profundidade lá</td></tr>
+              <tr><td>Análise de sensibilidade (Tópico 08)</td><td>É o antídoto técnico para a dependência de estimativas: testa o que acontece quando as premissas mudam</td></tr>
+              <tr><td>Risco e incerteza (Tópico 09)</td><td>A análise "reduz a incerteza, mas não elimina o risco" — que é formalmente tratado neste tópico</td></tr>
+              <tr><td>Projetos sociais (Tópico 10)</td><td>A dificuldade de monetizar intangíveis ganha solução própria: taxa social e custo-efetividade</td></tr>
+              <tr><td>Estratégia e HME (Adm. Financeira 09)</td><td>Coerência estratégica e eficiência de mercado conectam a análise de projetos à criação de valor</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e reconstruir de memória o quadro importância × característica × limitação.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, identificando em cada uma se o tema é importância, característica, limitação ou viés.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado e revisar os flashcards; avançar para o Tópico 03 (etapas na elaboração de projetos).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas. (Orçamento de capital e processo decisório.)</li>
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Importância e limites da análise de investimentos.)</li>
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey; JORDAN, Bradford D. <i>Administração Financeira</i>. Porto Alegre: AMGH.</li>
+            <li>FLYVBJERG, Bent. <i>How Big Things Get Done</i>. (Otimismo excessivo e reference class forecasting em megaprojetos.)</li>
+            <li>BRASIL. Ministério do Planejamento. <i>Guia de elaboração de estudos de viabilidade</i>.</li>
+            <li>Provas anteriores da banca FGV (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 02/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t02";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Por que a elaboração e análise de projetos é importante?",
+          "a": "Porque recursos são escassos e têm usos alternativos: a análise racionaliza a alocação, reduz incerteza, alinha com a estratégia e cria valor."
+      },
+      {
+          "q": "A análise de projetos elimina o risco do investimento?",
+          "a": "Não. Ela reduz e mede a incerteza, mas o risco residual sempre permanece."
+      },
+      {
+          "q": "Qual é o principal motor de criação de valor da empresa?",
+          "a": "Aceitar projetos com VPL > 0 — benefícios descontados maiores que o investimento."
+      },
+      {
+          "q": "Cite três características de um bom projeto.",
+          "a": "Objetivos claros e mensuráveis; horizonte de tempo definido; fluxos incrementais (além de multidisciplinaridade e tratamento de risco)."
+      },
+      {
+          "q": "O que significa a análise multidisciplinar de um projeto?",
+          "a": "Avaliar viabilidade técnica, mercadológica, econômico-financeira, ambiental, jurídica e organizacional."
+      },
+      {
+          "q": "Qual é a limitação-mãe da análise de projetos?",
+          "a": "A dependência de estimativas sobre o futuro — receitas, custos, demanda e vida útil são projeções incertas."
+      },
+      {
+          "q": "Por que a taxa de desconto é uma limitação da análise?",
+          "a": "Porque envolve escolhas subjetivas (prêmio de risco, estrutura de capital) — taxas diferentes podem mudar a decisão."
+      },
+      {
+          "q": "O que é GIGO na análise de projetos?",
+          "a": "Garbage in, garbage out: premissas de entrada ruins produzem decisões ruins, por melhor que seja a técnica."
+      },
+      {
+          "q": "O que é otimismo excessivo (optimism bias)?",
+          "a": "Viés de superestimar benefícios e subestimar custos e prazos — sistemático em megaprojetos (Flyvbjerg)."
+      },
+      {
+          "q": "O que é a falácia do custo afundado na decisão de projetos?",
+          "a": "Continuar um projeto ruim porque 'já se gastou muito' — o gasto passado é irrelevante para a decisão."
+      },
+      {
+          "q": "O que é escalonamento do compromisso?",
+          "a": "Dobrar a aposta num projeto fracassado para justificar a decisão anterior — combinação de custo afundado + comprometimento."
+      },
+      {
+          "q": "O que são stage-gates?",
+          "a": "Revisões ao fim de cada fase do projeto, com poder de continuar, corrigir ou abortar — antídoto contra vieses."
+      },
+      {
+          "q": "O que é reference class forecasting?",
+          "a": "Comparar as premissas do projeto com os resultados reais de projetos semelhantes, corrigindo o otimismo (Flyvbjerg)."
+      },
+      {
+          "q": "Por que benefícios intangíveis são uma limitação?",
+          "a": "Imagem, satisfação do cidadão e impacto ambiental são difíceis de monetizar — e a análise financeira tende a subvalorizá-los."
+      },
+      {
+          "q": "O que é rationing de capital?",
+          "a": "Restrição orçamentária que força o ranqueamento de projetos: mesmo projetos com VPL > 0 podem ficar de fora."
+      },
+      {
+          "q": "A análise de projetos substitui o julgamento gerencial?",
+          "a": "Não — ela informa e apoia a decisão; fatores qualitativos e a responsabilidade final ficam com os gestores."
+      },
+      {
+          "q": "Qual a relação entre análise de projetos e captação de recursos?",
+          "a": "Bancos, BNDES e investidores exigem estudo de viabilidade bem fundamentado para financiar."
+      },
+      {
+          "q": "O que é accountability na gestão de projetos?",
+          "a": "Prestação de contas: o projeto aprovado vira referência para comparar previsto × realizado e responsabilizar gestores."
+      },
+      {
+          "q": "Quais são os antídotos contra vieses na análise?",
+          "a": "Avaliação independente, benchmarking/reference class, análise de sensibilidade e stage-gates."
+      },
+      {
+          "q": "Que camadas extras a análise ganha em estatais?",
+          "a": "Governança e controle externo (TCU), projetos regulatórios (comparar alternativas de execução) e benefícios sociais/intangíveis."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Importância",
+          "texto": "—",
+          "enun": "A principal razão econômica para elaborar e analisar projetos de investimento é:",
+          "alts": [
+              "cumprir exigências contábeis",
+              "a escassez de recursos, que têm usos alternativos",
+              "aumentar o ativo da empresa",
+              "reduzir o imposto de renda",
+              "padronizar documentos"
+          ],
+          "correta": 1,
+          "coment": "Recursos escassos com usos alternativos (custo de oportunidade) exigem escolha racional — é a origem de toda a análise de projetos."
+      },
+      {
+          "tema": "Importância",
+          "texto": "—",
+          "enun": "Sobre o papel da análise de projetos, é correto afirmar que ela:",
+          "alts": [
+              "elimina o risco dos investimentos",
+              "reduz a incerteza, sem eliminar o risco",
+              "garante o sucesso do projeto",
+              "dispensa o acompanhamento",
+              "substitui o julgamento gerencial"
+          ],
+          "correta": 1,
+          "coment": "Pegadinha clássica: a análise reduz e mede a incerteza, mas risco residual sempre permanece; e ela apoia, não substitui, o julgamento."
+      },
+      {
+          "tema": "Importância",
+          "texto": "—",
+          "enun": "A empresa cria valor para os acionistas quando:",
+          "alts": [
+              "aumenta as vendas",
+              "reduz o endividamento",
+              "aceita projetos cujos benefícios descontados superam o investimento",
+              "aumenta o capital social",
+              "distribui dividendos"
+          ],
+          "correta": 2,
+          "coment": "Criação de valor = aceitar projetos com VPL > 0; é o principal motor do aumento do valor da firma."
+      },
+      {
+          "tema": "Importância",
+          "texto": "—",
+          "enun": "A exigência de estudos de viabilidade por bancos e agências de fomento evidencia qual função da análise de projetos?",
+          "alts": [
+              "controle de estoques",
+              "viabilização da captação de recursos",
+              "redução de custos fixos",
+              "cumprimento fiscal",
+              "gestão de pessoas"
+          ],
+          "correta": 1,
+          "coment": "Financiadores só liberam recursos com base em estudo de viabilidade consistente: a análise viabiliza a captação."
+      },
+      {
+          "tema": "Características",
+          "texto": "—",
+          "enun": "Qual conjunto reúne características de um bom projeto de investimento?",
+          "alts": [
+              "objetivos vagos, prazo aberto, foco financeiro",
+              "objetivos claros e mensuráveis, horizonte definido, fluxos incrementais",
+              "estimativas otimistas, baixa documentação, rapidez",
+              "custos baixos, sem análise de risco, retorno rápido",
+              "apenas viabilidade técnica e jurídica"
+          ],
+          "correta": 1,
+          "coment": "Bom projeto: objetivos claros e mensuráveis, horizonte definido, fluxos incrementais, multidisciplinaridade e tratamento do risco."
+      },
+      {
+          "tema": "Características",
+          "texto": "—",
+          "enun": "A abordagem multidisciplinar na análise de projetos abrange as dimensões:",
+          "alts": [
+              "apenas financeira e contábil",
+              "técnica, mercadológica, econômico-financeira, ambiental e jurídica",
+              "apenas jurídica e ambiental",
+              "contábil, fiscal e trabalhista",
+              "estritamente financeira"
+          ],
+          "correta": 1,
+          "coment": "Análise completa cruza técnica + mercado + finanças + meio ambiente + direito (e organizacional)."
+      },
+      {
+          "tema": "Características",
+          "texto": "—",
+          "enun": "O projeto que pode ser adiado, expandido ou abandonado conforme o cenário evolui possui a característica de:",
+          "alts": [
+              "rigidez",
+              "flexibilidade",
+              "obrigatoriedade",
+              "independência",
+              "irreversibilidade"
+          ],
+          "correta": 1,
+          "coment": "Flexibilidade gerencial (opções reais) tem valor: adiar, expandir ou abandonar conforme a incerteza se resolve."
+      },
+      {
+          "tema": "Limitações",
+          "texto": "—",
+          "enun": "A limitação fundamental de toda análise de projetos decorre do fato de que:",
+          "alts": [
+              "os métodos são matematicamente errados",
+              "as premissas são estimativas sobre um futuro incerto",
+              "as taxas de juros são sempre altas",
+              "os projetos são sempre pequenos",
+              "os gestores não participam"
+          ],
+          "correta": 1,
+          "coment": "Receitas, custos, demanda e vida útil são projeções: a análise é tão boa quanto as estimativas que a alimentam."
+      },
+      {
+          "tema": "Limitações",
+          "texto": "—",
+          "enun": "O princípio GIGO (garbage in, garbage out) aplicado à análise de projetos significa que:",
+          "alts": [
+              "projetos grandes geram resultados grandes",
+              "premissas ruins produzem decisões ruins, qualquer que seja a técnica",
+              "a análise deve ser feita por computador",
+              "o resultado depende do software utilizado",
+              "erros de cálculo são inevitáveis"
+          ],
+          "correta": 1,
+          "coment": "A qualidade da decisão é limitada pela qualidade das informações de entrada — técnica sofisticada não salva premissa ruim."
+      },
+      {
+          "tema": "Limitações",
+          "texto": "—",
+          "enun": "Benefícios como melhoria da imagem institucional e satisfação do usuário representam limitação da análise porque:",
+          "alts": [
+              "não existem de fato",
+              "são intangíveis e de difícil monetização",
+              "são irrelevantes para estatais",
+              "não podem ser descritos",
+              "sempre geram prejuízo"
+          ],
+          "correta": 1,
+          "coment": "Intangíveis são reais, mas difíceis de traduzir em fluxo de caixa — e a análise financeira tende a subvalorizá-los."
+      },
+      {
+          "tema": "Limitações",
+          "texto": "—",
+          "enun": "A subjetividade na escolha da taxa de desconto é considerada limitação porque:",
+          "alts": [
+              "impede o cálculo do VPL",
+              "taxas diferentes podem levar a decisões diferentes sobre o mesmo projeto",
+              "é proibida pela legislação",
+              "vale apenas para empresas privadas",
+              "elimina o risco do projeto"
+          ],
+          "correta": 1,
+          "coment": "A TMA envolve julgamento (prêmio de risco etc.); variando a taxa, o VPL e a decisão podem se inverter."
+      },
+      {
+          "tema": "Limitações",
+          "texto": "—",
+          "enun": "O rationing de capital ocorre quando:",
+          "alts": [
+              "a empresa não tem projetos",
+              "o limite orçamentário impede aceitar todos os projetos com VPL positivo",
+              "os projetos têm VPL negativo",
+              "a taxa de juros é zero",
+              "há excesso de capital"
+          ],
+          "correta": 1,
+          "coment": "Com restrição de capital, projetos são ranqueados e alguns bons projetos ficam de fora — limitação prática da análise."
+      },
+      {
+          "tema": "Vieses",
+          "texto": "Um gestor superestima sistematicamente as receitas e subestima custos e prazos dos projetos que propõe.",
+          "enun": "Esse comportamento caracteriza o viés de:",
+          "alts": [
+              "ancoragem",
+              "otimismo excessivo",
+              "aversão à perda",
+              "custo afundado",
+              "confirmação"
+          ],
+          "correta": 1,
+          "coment": "Otimismo excessivo (Flyvbjerg): benefícios inflados, custos e prazos subestimados — sistemático em megaprojetos."
+      },
+      {
+          "tema": "Vieses",
+          "texto": "“O projeto já consumiu R$ 50 milhões; não podemos abandoná-lo agora”, afirma o diretor, apesar de as projeções futuras serem negativas.",
+          "enun": "A afirmação revela:",
+          "alts": [
+              "racionalidade econômica",
+              "a falácia do custo afundado",
+              "análise incremental correta",
+              "otimismo excessivo",
+              "gestão de risco adequada"
+          ],
+          "correta": 1,
+          "coment": "Os R$ 50 milhões já gastos são irrecuperáveis e irrelevantes; a decisão correta olha só os fluxos futuros — negativos, neste caso."
+      },
+      {
+          "tema": "Vieses",
+          "texto": "—",
+          "enun": "Qual conjunto é formado por antídotos aos vieses na análise de projetos?",
+          "alts": [
+              "otimismo, rapidez, sigilo",
+              "avaliação independente, benchmarking com projetos semelhantes, stage-gates",
+              "hierarquia, senioridade, intuição",
+              "terceirização total da decisão",
+              "ausência de documentação"
+          ],
+          "correta": 1,
+          "coment": "Quem avalia não deve ser quem propõe; comparar com a 'reference class'; e revisões de portão com poder de abortar."
+      },
+      {
+          "tema": "Vieses",
+          "texto": "—",
+          "enun": "O escalonamento do compromisso é melhor descrito como:",
+          "alts": [
+              "dividir o projeto em fases",
+              "aumentar o investimento num projeto fracassado para justificar decisões anteriores",
+              "delegar a decisão ao conselho",
+              "revisar premissas periodicamente",
+              "contratar consultoria externa"
+          ],
+          "correta": 1,
+          "coment": "Escalada de comprometimento: 'dobrar a aposta' para não admitir o erro — combina custo afundado com autojustificativa."
+      },
+      {
+          "tema": "Estatais",
+          "texto": "—",
+          "enun": "Em empresas estatais, a análise de projetos de investimento:",
+          "alts": [
+              "é dispensável, pois o objetivo é social",
+              "ganha relevância extra pela governança e prestação de contas, mantendo a lógica de custo-benefício",
+              "segue apenas critérios políticos",
+              "proíbe projetos regulatórios",
+              "não usa fluxo de caixa"
+          ],
+          "correta": 1,
+          "coment": "Em estatais a análise é ainda mais exigida (TCU, conselhos, transparência); projetos regulatórios comparam alternativas de execução ao menor custo."
+      },
+      {
+          "tema": "Estatais",
+          "texto": "Uma estatal deve adequar seus sistemas à nova lei de proteção de dados, sob pena de sanções.",
+          "enun": "A análise econômica desse projeto deve:",
+          "alts": [
+              "verificar se o VPL é positivo para decidir se executa",
+              "comparar alternativas de execução, escolhendo a de menor custo e risco",
+              "ser dispensada, pois é obrigatória",
+              "focar apenas no payback",
+              "considerar apenas o custo inicial"
+          ],
+          "correta": 1,
+          "coment": "Projeto obrigatório: a decisão 'se' não existe; a análise escolhe 'como' — alternativa de menor custo/risco para o mesmo fim."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Sobre elaboração e análise de projetos, assinale a afirmativa correta:",
+          "alts": [
+              "a análise elimina a incerteza",
+              "modelos capturam toda a complexidade da realidade",
+              "a qualidade da decisão depende da qualidade das premissas",
+              "a análise dispensa acompanhamento posterior",
+              "projetos aprovados sempre criam valor"
+          ],
+          "correta": 2,
+          "coment": "GIGO: premissas determinam a qualidade. As demais afirmativas são os erros clássicos (eliminar risco, modelo = realidade, dispensar controle)."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Comparar o desempenho realizado com o previsto no projeto aprovado, cobrando responsabilidades, é a função de:",
+          "alts": [
+              "captação de recursos",
+              "accountability e controle",
+              "marketing institucional",
+              "redução de impostos",
+              "formação de preços"
+          ],
+          "correta": 1,
+          "coment": "O projeto aprovado vira referência de controle: previsto × realizado, com prestação de contas (accountability)."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A análise de projetos de investimento é necessária, fundamentalmente, porque os recursos são:",
+          "alts": [
+              "ilimitados",
+              "escassos",
+              "gratuitos",
+              "contábeis",
+              "fiscais"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A análise de projetos permite à empresa:",
+          "alts": [
+              "eliminar todo o risco",
+              "reduzir a incerteza das decisões",
+              "garantir lucro",
+              "evitar impostos",
+              "prescindir de planejamento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Criar valor para a empresa significa aceitar projetos com:",
+          "alts": [
+              "maior investimento",
+              "maior prazo",
+              "VPL positivo",
+              "menor equipe",
+              "maior risco"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Um bom projeto deve ter objetivos:",
+          "alts": [
+              "vagos e flexíveis",
+              "claros e mensuráveis",
+              "sigilosos",
+              "somente financeiros",
+              "de curto prazo apenas"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A análise de um projeto deve considerar, além da dimensão financeira, as dimensões técnica, mercadológica, ambiental e jurídica — característica chamada de:",
+          "alts": [
+              "simplicidade",
+              "multidisciplinaridade",
+              "rationing",
+              "liquidez",
+              "competência"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "GIGO, na análise de projetos, significa que a decisão depende da qualidade das:",
+          "alts": [
+              "máquinas",
+              "premissas de entrada",
+              "instalações",
+              "taxas de juros",
+              "ações da empresa"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Superestimar receitas e subestimar custos de um projeto caracteriza o viés de:",
+          "alts": [
+              "otimismo excessivo",
+              "aversão ao risco",
+              "custo afundado",
+              "ancoragem",
+              "prudência"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A falácia do custo afundado na gestão de projetos é:",
+          "alts": [
+              "abandonar projetos cedo demais",
+              "continuar um projeto ruim por causa do que já foi gasto",
+              "investir apenas em projetos baratos",
+              "ignorar os custos fixos",
+              "ratear custos entre projetos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A análise de projetos substitui o julgamento dos gestores?",
+          "alts": [
+              "sim, sempre",
+              "não — apoia a decisão, mas não a substitui",
+              "sim, se o VPL for positivo",
+              "sim, em estatais",
+              "não, porque é proibida"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Benefícios intangíveis (imagem, satisfação do cidadão) são limitação da análise porque são:",
+          "alts": [
+              "inexistentes",
+              "difíceis de monetizar",
+              "irrelevantes",
+              "proibidos",
+              "sempre negativos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Bancos e agências de fomento exigem estudo de viabilidade antes de financiar. Isso evidencia que a análise de projetos:",
+          "alts": [
+              "elimina riscos",
+              "viabiliza a captação de recursos",
+              "substitui garantias",
+              "reduz o IR",
+              "dispensa contratos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Qual alternativa apresenta uma LIMITAÇÃO da análise de projetos?",
+          "alts": [
+              "objetivos claros e mensuráveis",
+              "abordagem multidisciplinar",
+              "subjetividade na escolha da taxa de desconto",
+              "fluxos de caixa incrementais",
+              "documentação das premissas"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Qual alternativa apresenta uma CARACTERÍSTICA desejável de um projeto?",
+          "alts": [
+              "depender de estimativas",
+              "ter horizonte de tempo definido",
+              "possuir benefícios intangíveis",
+              "sofrer rationing de capital",
+              "estar sujeito a mudanças de cenário"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O projeto X foi aprovado com premissas de demanda superestimadas; o VPL calculado, alto, não se realizou. O caso ilustra:",
+          "alts": [
+              "rationing de capital",
+              "o princípio GIGO",
+              "a flexibilidade gerencial",
+              "o stage-gate",
+              "a multidisciplinaridade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Revisões ao fim de cada fase do projeto, com poder de continuar ou abortar, são chamadas de:",
+          "alts": [
+              "stage-gates",
+              "benchmarks",
+              "rationing",
+              "fluxos incrementais",
+              "opções reais"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Comparar as premissas de um novo projeto com os resultados reais de projetos semelhantes já executados é a técnica de:",
+          "alts": [
+              "custo-efetividade",
+              "reference class forecasting",
+              "payback",
+              "fluxo incremental",
+              "sensibilidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O rationing de capital implica que:",
+          "alts": [
+              "todos os projetos com VPL > 0 serão aceitos",
+              "alguns projetos com VPL > 0 podem ser rejeitados por falta de recursos",
+              "projetos com VPL < 0 serão aceitos",
+              "a empresa não tem projetos",
+              "o orçamento é ilimitado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Duas equipes calculam o VPL do mesmo projeto e chegam a conclusões opostas, apenas por usarem taxas de desconto diferentes. Isso ilustra a limitação da:",
+          "alts": [
+              "multidisciplinaridade",
+              "subjetividade da taxa de desconto",
+              "documentação",
+              "flexibilidade",
+              "escassez de projetos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Em estatais, projetos obrigatórios (regulatórios) devem ser analisados com foco em:",
+          "alts": [
+              "decidir se serão executados",
+              "comparar alternativas de execução ao menor custo e risco",
+              "maximizar a receita",
+              "evitar qualquer análise",
+              "aumentar o ativo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O gestor que só busca dados que confirmam a decisão que já pretendia tomar incorre no viés de:",
+          "alts": [
+              "otimismo",
+              "confirmação",
+              "ancoragem",
+              "disponibilidade",
+              "aversão à perda"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre a importância da análise de projetos, é INCORRETO afirmar que ela:",
+          "alts": [
+              "racionaliza a alocação de recursos escassos",
+              "reduz a incerteza das decisões",
+              "elimina o risco dos investimentos aprovados",
+              "apoia a criação de valor",
+              "permite controle e prestação de contas"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Um diretor decide duplicar o investimento num sistema que já mostrou não atender à demanda, 'para não desperdiçar o que já foi investido'. Há combinação de:",
+          "alts": [
+              "otimismo e ancoragem",
+              "falácia do custo afundado e escalonamento do compromisso",
+              "rationing e GIGO",
+              "flexibilidade e stage-gate",
+              "prudência e accountability"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Assinale a alternativa que NÃO representa antídoto aos vieses na análise de projetos:",
+          "alts": [
+              "avaliação por equipe independente da proponente",
+              "comparação com projetos semelhantes (reference class)",
+              "análise de sensibilidade das premissas",
+              "stage-gates com poder de abortar",
+              "concentração da análise em quem propôs o projeto"
+          ],
+          "correta": 4
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Um projeto apresenta ótimo VPL, mas a empresa, com orçamento limitado, o rejeita em favor de outro de VPL ainda maior. Trata-se de:",
+          "alts": [
+              "falácia do custo afundado",
+              "rationing de capital",
+              "viés de confirmação",
+              "erro de cálculo",
+              "flexibilidade gerencial"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A afirmativa 'modelos de avaliação são representações simplificadas do mundo real' aponta para qual limitação?",
+          "alts": [
+              "os modelos não reproduzem toda a complexidade das relações econômicas",
+              "os modelos são matematicamente inválidos",
+              "os modelos dispensam premissas",
+              "os modelos eliminam o risco",
+              "os modelos só servem para estatais"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre benefícios intangíveis em projetos de estatais (ex.: redução de filas, inclusão digital), é correto afirmar:",
+          "alts": [
+              "devem ser ignorados por não terem valor",
+              "são centrais para a missão, mas difíceis de monetizar — usa-se custo-efetividade como complemento",
+              "substituem a análise financeira",
+              "tornam o projeto obrigatório",
+              "eliminam a necessidade de premissas"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "O custo e o tempo exigidos por estudos de viabilidade muito detalhados podem ser limitação porque:",
+          "alts": [
+              "tornam o projeto inviável sempre",
+              "para projetos pequenos, o custo da análise pode superar seu benefício",
+              "impedem qualquer decisão",
+              "são proibidos em estatais",
+              "eliminam a incerteza"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Mudanças tecnológicas ou regulatórias durante a execução de um projeto ilustram qual limitação da análise?",
+          "alts": [
+              "a impossibilidade de prever mudanças de cenário que invalidam premissas",
+              "a falta de documentação",
+              "o rationing de capital",
+              "a multidisciplinaridade",
+              "a flexibilidade"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Assinale a sequência correta de correspondência: (I) recurso escasso; (II) premissa ruim; (III) taxa subjetiva.",
+          "alts": [
+              "I-limitação; II-característica; III-importância",
+              "I-importância da análise; II-GIGO; III-limitação",
+              "I-característica; II-importância; III-limitação",
+              "I-limitação; II-importância; III-GIGO",
+              "I-importância; II-limitação; III-característica"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre a análise de projetos, assinale a afirmativa correta:",
+          "alts": [
+              "quanto mais detalhada, menor o custo do projeto",
+              "projetos bem avaliados dispensam acompanhamento",
+              "a qualidade da análise independe das premissas",
+              "o projeto aprovado vira referência para controle previsto × realizado",
+              "a análise garante o sucesso do projeto"
+          ],
+          "correta": 3
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Explicar por que a análise de projetos existe (escassez + incerteza + criação de valor)",
+      "Distinguir reduzir incerteza de eliminar risco",
+      "Listar as funções da análise: alocação, captação, controle, accountability",
+      "Reconhecer as características de um bom projeto (objetivos, horizonte, fluxos, multidisciplinaridade)",
+      "Explicar a dependência de estimativas como limitação-mãe",
+      "Justificar a subjetividade da taxa de desconto como limitação",
+      "Aplicar o princípio GIGO (premissas determinam a qualidade da decisão)",
+      "Identificar otimismo excessivo e falácia do custo afundado em situações",
+      "Conhecer os antídotos: análise independente, reference class, stage-gates",
+      "Relacionar as particularidades de estatais (governança, regulatório, social) à análise"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Afirmar que a análise de projetos elimina o risco — ela reduz e mede a incerteza, não a elimina.",
+      "Achar que a análise garante o sucesso do projeto.",
+      "Confundir característica de bom projeto (objetivos claros) com limitação (dependência de estimativas).",
+      "Acreditar que técnica sofisticada compensa premissas ruins — esquecer o GIGO.",
+      "Superestimar benefícios e subestimar custos por otimismo excessivo.",
+      "Continuar projeto ruim por causa do que já foi gasto (falácia do custo afundado).",
+      "Escalonar o compromisso: dobrar a aposta para justificar a decisão anterior.",
+      "Ignorar que a taxa de desconto é parcialmente subjetiva e pode inverter a decisão.",
+      "Desprezar benefícios intangíveis como se não existissem.",
+      "Tratar modelos como se capturassem toda a complexidade da realidade.",
+      "Achar que a análise substitui o julgamento gerencial.",
+      "Achar que projetos aprovados dispensam acompanhamento e controle.",
+      "Ignorar o rationing: nem todo projeto com VPL > 0 será executado se faltar capital.",
+      "Concentrar a avaliação na mesma equipe que propôs o projeto (viés de confirmação).",
+      "Não comparar premissas com projetos semelhantes (reference class).",
+      "Não prever stage-gates que permitam abortar o projeto em cada fase.",
+      "Em estatais, dispensar análise em projeto regulatório — compara-se o 'como', não o 'se'.",
+      "Analisar só a dimensão financeira, esquecendo técnica, mercado, ambiental e jurídica.",
+      "Não documentar premissas, inviabilizando auditoria e prestação de contas.",
+      "Tratar a análise como burocracia contábil em vez de ferramenta de alocação de recursos escassos."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Análise de projetos",
+          "Processo de elaborar, avaliar e selecionar projetos de investimento, comparando benefícios futuros com recursos investidos."
+      ],
+      [
+          "Escassez",
+          "Condição de recursos limitados com usos alternativos; origem econômica da necessidade de analisar projetos."
+      ],
+      [
+          "Criação de valor",
+          "Aumento do valor da firma obtido ao aceitar projetos cujos benefícios descontados superam o investimento (VPL > 0)."
+      ],
+      [
+          "Accountability",
+          "Prestação de contas: comparar previsto × realizado e responsabilizar gestores pelos resultados do projeto."
+      ],
+      [
+          "GIGO",
+          "Garbage in, garbage out: a qualidade da decisão é limitada pela qualidade das premissas de entrada."
+      ],
+      [
+          "Otimismo excessivo",
+          "Viés de superestimar benefícios e subestimar custos e prazos (Flyvbjerg)."
+      ],
+      [
+          "Falácia do custo afundado",
+          "Viés de continuar um projeto ruim por causa dos gastos já realizados, que são irrelevantes."
+      ],
+      [
+          "Escalonamento do compromisso",
+          "Viés de aumentar o investimento num projeto fracassado para justificar decisões anteriores."
+      ],
+      [
+          "Viés de confirmação",
+          "Tendência de buscar apenas dados que confirmam a decisão desejada."
+      ],
+      [
+          "Stage-gate",
+          "Revisão ao fim de cada fase do projeto, com poder de continuar, corrigir ou abortar."
+      ],
+      [
+          "Reference class forecasting",
+          "Correção do otimismo comparando premissas com resultados reais de projetos semelhantes."
+      ],
+      [
+          "Rationing de capital",
+          "Restrição orçamentária que força o ranqueamento de projetos; alguns com VPL > 0 ficam de fora."
+      ],
+      [
+          "Intangíveis",
+          "Benefícios difíceis de monetizar: imagem, satisfação do cidadão, impacto ambiental."
+      ],
+      [
+          "Multidisciplinaridade",
+          "Análise integrando dimensões técnica, mercadológica, financeira, ambiental, jurídica e organizacional."
+      ],
+      [
+          "Custo-efetividade",
+          "Critério que compara o custo por unidade de benefício quando este não é monetizável."
+      ],
+      [
+          "Opções reais",
+          "Flexibilidades do projeto (adiar, expandir, abandonar) que têm valor econômico."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

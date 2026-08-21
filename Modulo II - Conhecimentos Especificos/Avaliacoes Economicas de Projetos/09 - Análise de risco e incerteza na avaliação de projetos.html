@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risco e Incerteza em Projetos | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">09 - Risco e incerteza em projetos</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html">06 - Parâmetros para análise de projetos</option>
+    <option value="07 - Indicadores econômicos de projetos (VPL, TIR, payback).html">07 - Indicadores: VPL, TIR, payback</option>
+    <option value="08 - Análise de sensibilidade e cenários.html">08 - Análise de sensibilidade e cenários</option>
+    <option value="09 - Análise de risco e incerteza na avaliação de projetos.html" selected>09 - Risco e incerteza em projetos</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Risco e Incerteza em Projetos</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 09 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Análise de Risco e Incerteza na Avaliação de Projetos</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 09</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 5 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Média-alta <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Tópicos 05, 07 e 08 (TMA, VPL, sensibilidade e cenários)</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Alto — distinção risco × incerteza, taxa ajustada e opções reais</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Distinguir <b>risco</b> de <b>incerteza</b> na clássica definição de Knight (probabilidades conhecidas × desconhecidas).</li>
+            <li>Identificar as principais <b>fontes de risco</b> de um projeto: mercado, operacional, tecnológico, regulatório e financeiro.</li>
+            <li>Medir o risco do projeto pelo <b>desvio-padrão</b> e pelo <b>coeficiente de variação</b> do VPL esperado.</li>
+            <li>Aplicar a <b>taxa ajustada ao risco (RADR)</b>: elevar a TMA para projetos mais arriscados — e conhecer suas críticas.</li>
+            <li>Aplicar o método do <b>equivalente certo</b>: reduzir os fluxos e descontar à taxa livre de risco.</li>
+            <li>Conceituar <b>opções reais</b> (adiar, expandir, abandonar) e calcular o valor da flexibilidade gerencial.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>No tópico 08 estressamos as premissas; aqui tratamos o risco <b>dentro do próprio critério de decisão</b>. A distinção de partida é de Frank Knight (1921): <b>risco</b> é quando as probabilidades dos resultados são conhecidas ou estimáveis (dá para mensurar); <b>incerteza</b> é quando nem as probabilidades são conhecidas (não dá para mensurar).</p>
+          <p>Duas famílias de ajuste do VPL ao risco:</p>
+          <ul class="styled">
+            <li><b>Taxa ajustada ao risco (RADR)</b> — projeto mais arriscado ⇒ TMA maior ⇒ VPL menor. Simples e intuitiva, mas penaliza <b>exponencialmente</b> os fluxos distantes e mistura no denominador dois efeitos distintos (tempo e risco).</li>
+            <li><b>Equivalente certo (EC)</b> — em vez de inflar a taxa, <b>deflaciona os fluxos</b>: substitui cada fluxo esperado pelo valor certo que o decisor aceitaria em troca (αₜ × FCₜ) e desconta à <b>taxa livre de risco</b>. Teoricamente mais puro: separa tempo (Rf) de risco (α).</li>
+          </ul>
+          <p>Por fim, as <b>opções reais</b> capturam o que o VPL estático ignora: a <b>flexibilidade gerencial</b> de adiar, expandir, contrair ou abandonar o projeto conforme a realidade se revela. Flexibilidade vale mais quanto maior a incerteza — paradoxo fértil para a FGV.</p>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Risco = probabilidades conhecidas; incerteza = desconhecidas (Knight). Ajuste ao risco: <b>sobe a taxa</b> (RADR) ou <b>desce o fluxo</b> (equivalente certo). Opção real mais cobrada: <b>abandono</b>.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Risco e<br>Incerteza<br>em Projetos</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Risco × incerteza</h4><ul><li>Knight (1921)</li><li>Risco: probs conhecidas</li><li>Incerteza: probs desconhecidas</li></ul></div>
+            <div class="mm-node"><h4>Medidas</h4><ul><li>σ e CV do VPL esperado</li><li>CV = σ / VE</li><li>Compara projetos de escalas diferentes</li></ul></div>
+            <div class="mm-node"><h4>RADR</h4><ul><li>Sobe a TMA com o risco</li><li>VPL descontado à taxa ajustada</li><li>Crítica: penaliza fluxos distantes</li></ul></div>
+            <div class="mm-node"><h4>Equivalente certo</h4><ul><li>Desce o fluxo (αₜ × FCₜ)</li><li>Desconta à taxa livre de risco</li><li>Separa risco de tempo</li></ul></div>
+            <div class="mm-node"><h4>Opções reais</h4><ul><li>Adiar, expandir, contrair, abandonar</li><li>Flexibilidade tem valor</li><li>Maior incerteza → opção mais valiosa</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Risco × incerteza — a distinção de Knight</h3>
+        <div class="card">
+          <p>Frank Knight (<i>Risk, Uncertainty and Profit</i>, 1921) separou dois mundos:</p>
+          <ul class="styled">
+            <li><b>Risco</b>: os resultados possíveis são conhecidos e suas <b>probabilidades podem ser estimadas</b> — por dados históricos, mercados ou modelos. Ex.: a demanda de um produto maduro, cuja distribuição histórica é estável. É o mundo das técnicas do tópico 08 (cenários probabilizados, Monte Carlo).</li>
+            <li><b>Incerteza</b> (knightiana): nem as probabilidades são conhecidas — situações inéditas, sem dados comparáveis. Ex.: lançar tecnologia disruptiva, explorar mercado inexistente, reagir a regulação ainda não escrita. Aqui não há distribuição para simular; restam julgamento, margens de segurança e flexibilidade.</li>
+          </ul>
+          <div class="box fgv"><div class="box-title">Como cai na prova</div><p>A assertiva típica: “Risco é mensurável (probabilidades conhecidas); incerteza é não mensurável (probabilidades desconhecidas)”. A pegadinha inverte os conceitos ou afirma que são sinônimos.</p></div>
+        </div>
+
+        <h3>4.2 Fontes de risco de um projeto</h3>
+        <div class="card">
+          <table>
+            <tr><th>Fonte</th><th>Exemplos</th><th>Mitigação típica</th></tr>
+            <tr><td><b>Mercado</b></td><td>Demanda, preço, concorrência</td><td>Contratos de longo prazo, pesquisa, diversificação</td></tr>
+            <tr><td><b>Operacional</b></td><td>Custos, produtividade, fornecedores</td><td>Fornecedores redundantes, manutenção</td></tr>
+            <tr><td><b>Tecnológico</b></td><td>Obsolescência, falha de implantação</td><td>Pilotos, provas de conceito</td></tr>
+            <tr><td><b>Regulatório/político</b></td><td>Mudança de lei, licenças, tributos</td><td>Cenários regulatórios, advocacia preventiva</td></tr>
+            <tr><td><b>Financeiro</b></td><td>Taxa de juros, câmbio, crédito</td><td>Hedge, casamento de prazos e moedas</td></tr>
+          </table>
+          <p>Para estatais como a DATAPREV, o risco <b>regulatório</b> e o <b>tecnológico</b> (grandes sistemas legados, migração de plataformas) costumam dominar — e são os mais próximos da incerteza knightiana.</p>
+        </div>
+
+        <h3>4.3 Medindo o risco: desvio-padrão e coeficiente de variação do VPL</h3>
+        <div class="card">
+          <p>Com cenários probabilizados, o VPL vira uma <b>variável aleatória</b>. Retomando os cenários do tópico 08: VE = +991,70, com VPLs de +2.434,26 (30%), +808,24 (50%) e −713,47 (20%):</p>
+          <p style="text-align:center">σ(VPL) = √[ Σ pᵢ × (VPLᵢ − VE)² ] = <b>R$ 1.105,73</b> &nbsp;&nbsp;·&nbsp;&nbsp; <b>CV = σ / VE = 1.105,73 / 991,70 ≈ 1,12</b></p>
+          <p>O <b>coeficiente de variação</b> (risco por unidade de retorno esperado) permite comparar projetos de <b>escalas diferentes</b>: um VPL esperado de +1 milhão com σ de 500 mil (CV = 0,5) é menos arriscado, proporcionalmente, que VE de +100 mil com σ de 110 mil (CV = 1,1).</p>
+          <div class="box info"><div class="box-title">Regra prática</div><p>Entre projetos com VPL esperado semelhante, prefira o de <b>menor σ</b>; entre projetos de tamanhos diferentes, compare os <b>CVs</b>.</p></div>
+        </div>
+
+        <h3>4.4 Taxa ajustada ao risco (RADR)</h3>
+        <div class="card">
+          <p>A abordagem mais usada na prática: quanto maior o risco do projeto, <b>maior a taxa de desconto</b> — um prêmio de risco sobre a TMA-base (coerente com o CAPM do tópico 05: β maior ⇒ Ke maior).</p>
+          <p><b>Exemplo:</b> mesmo fluxo (−1.000; +500 × 3) avaliado em dois níveis de risco:</p>
+          <table>
+            <tr><th>Perfil</th><th>Taxa ajustada</th><th>VPL</th><th>Decisão</th></tr>
+            <tr><td>Risco baixo</td><td>12%</td><td>+200,92</td><td>Aceita</td></tr>
+            <tr><td>Risco médio</td><td>18%</td><td>+87,14</td><td>Aceita</td></tr>
+            <tr><td>Risco alto</td><td>20%</td><td>+53,24</td><td>Aceita “no limite”</td></tr>
+            <tr><td>Risco altíssimo</td><td>25%</td><td>−24,00</td><td><b>Rejeita</b></td></tr>
+          </table>
+          <div class="box warn"><div class="box-title">Críticas à RADR</div><p>(1) Penaliza os fluxos <b>distantes</b> exponencialmente — supõe que o risco cresce com o tempo, o que nem sempre é verdade; (2) mistura no denominador dois efeitos distintos: <b>valor do dinheiro no tempo</b> e <b>prêmio de risco</b>; (3) o prêmio é frequentemente arbitrário (“chute gerencial”).</p></div>
+        </div>
+
+        <h3>4.5 Equivalente certo (EC)</h3>
+        <div class="card">
+          <p>A alternativa teórica à RADR: em vez de ajustar o <b>denominador</b> (taxa), ajusta-se o <b>numerador</b> (fluxo). Cada fluxo esperado FCₜ é substituído pelo <b>equivalente certo</b> αₜ × FCₜ — o valor <b>garantido</b> que o decisor aceitaria em troca do fluxo arriscado (0 &lt; α ≤ 1) — e desconta-se à <b>taxa livre de risco</b>:</p>
+          <p style="text-align:center"><b>VPL = −I₀ + Σ αₜ × FCₜ / (1 + Rf)ᵗ</b></p>
+          <p><b>Exemplo:</b> fluxos esperados de 500/ano por 3 anos, α = 0,9 (equivalente certo de 450/ano), Rf = 10%: VPL = −1.000 + 450 × 2,4869 = <b>+119,08</b> → aceita.</p>
+          <div class="box ok"><div class="box-title">Por que é teoricamente superior</div><p>Separa limpamente os dois efeitos: o <b>tempo</b> fica na taxa livre de risco; o <b>risco</b> fica no fator α de cada período — que pode variar ano a ano, conforme o risco evolui. A dificuldade prática: estimar os α exige medir a aversão ao risco do decisor.</p></div>
+        </div>
+
+        <h3>4.6 Opções reais — o valor da flexibilidade</h3>
+        <div class="card">
+          <p>O VPL tradicional trata o projeto como um caminho único e rígido. Mas gestores <b>reagem</b> ao que acontece — e essa capacidade de reação vale dinheiro. São as <b>opções reais</b>:</p>
+          <ul class="styled">
+            <li><b>Opção de adiar</b> — esperar mais informação antes de investir (valiosa sob incerteza alta).</li>
+            <li><b>Opção de expandir</b> — se o piloto der certo, escalar; o investimento inicial compra o <i>direito</i> de crescer.</li>
+            <li><b>Opção de contrair/abandonar</b> — se o cenário azedar, reduzir ou sair, limitando perdas (possivelmente com valor de revenda).</li>
+            <li><b>Opção de flexibilidade de insumos/produtos</b> — trocar matéria-prima ou mix conforme preços relativos mudam.</li>
+          </ul>
+          <p><b>Exemplo numérico (valor da opção de abandono):</b> projeto de R$ 1.000; ano 1 rende 700 (60%) ou 300 (40%); no ano 2, +800 no ramo alto ou <b>−200</b> no ramo baixo; TMA 10%. Se o ramo for baixo, é possível <b>abandonar ao fim do ano 1 vendendo o ativo por R$ 800</b>.</p>
+          <ul class="styled">
+            <li><b>Sem a opção:</b> ramo baixo = −1.000 + 300/1,10 − 200/1,10² = −892,56 → VE = 0,6×297,52 + 0,4×(−892,56) = <b>−178,51</b> → rejeitaria.</li>
+            <li><b>Com a opção:</b> no ramo baixo abandona-se: −1.000 + (300 + 800)/1,10 = 0 → VE = 0,6×297,52 + 0,4×0 = <b>+178,51</b> → aceita.</li>
+            <li><b>Valor da opção de abandono = 178,51 − (−178,51) = +357,02</b>.</li>
+          </ul>
+          <div class="box fgv"><div class="box-title">Insight cobrado</div><p>Quanto <b>maior a incerteza</b>, mais valiosa a flexibilidade — o oposto do que a intuição sugere. E: um projeto com VPL estático negativo pode tornar-se viável quando se precifica a opção real embutida.</p></div>
+        </div>
+
+        <h3>4.7 Panorama integrado</h3>
+        <div class="card">
+          <table>
+            <tr><th>Técnica</th><th>Onde o risco entra</th><th>Força</th><th>Fraqueza</th></tr>
+            <tr><td>Sensibilidade / cenários (tóp. 08)</td><td>Estresse de premissas</td><td>Simples e transparente</td><td>Não altera o critério de decisão</td></tr>
+            <tr><td>σ e CV do VPL</td><td>Dispersão dos resultados</td><td>Comparável entre projetos</td><td>Exige cenários probabilizados</td></tr>
+            <tr><td>RADR</td><td>Taxa de desconto</td><td>Intuitiva; prática de mercado</td><td>Penaliza fluxos distantes; prêmio arbitrário</td></tr>
+            <tr><td>Equivalente certo</td><td>Fluxos (αₜ) + Rf</td><td>Separa risco de tempo</td><td>α é subjetivo e difícil de estimar</td></tr>
+            <tr><td>Opções reais</td><td>Flexibilidade futura</td><td>Captura valor que o VPL ignora</td><td>Precificação complexa</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Risco × incerteza (Knight)</b>: assertivas certo/errado — risco tem probabilidade mensurável, incerteza não. Inversão dos conceitos é a pegadinha padrão.</li>
+            <li><b>RADR</b>: “quanto maior o risco, maior a taxa de desconto e menor o VPL”; crítica de que penaliza os fluxos mais distantes.</li>
+            <li><b>Equivalente certo</b>: fluxos ajustados para baixo (α × FC) descontados à taxa <b>livre de risco</b> — a banca testa se você sabe qual variável é ajustada em cada método.</li>
+            <li><b>Coeficiente de variação</b>: CV = σ/VE para comparar risco relativo entre projetos de escalas diferentes.</li>
+            <li><b>Opções reais</b>: conceituar (adiar, expandir, abandonar) e a tese de que <b>maior incerteza aumenta o valor da flexibilidade</b>.</li>
+            <li><b>Projeto com VPL negativo que vira viável</b> ao considerar a opção de abandono — questão de interpretação sofisticada.</li>
+            <li><b>Fontes de risco</b>: classificar exemplos (regulatório, tecnológico, mercado) — comum em provas de estatais.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Knight:</b> risco = probabilidades conhecidas (mensurável); incerteza = probabilidades desconhecidas (não mensurável).</li>
+            <li><b>RADR:</b> ajusta a <b>taxa</b> (sobe com o risco). <b>Equivalente certo:</b> ajusta o <b>fluxo</b> (desce com α) e desconta à Rf.</li>
+            <li>Crítica da RADR: penaliza exponencialmente os fluxos distantes e mistura tempo + risco na mesma taxa.</li>
+            <li><b>CV = σ / VE</b>: risco por unidade de retorno — use-o para comparar projetos de tamanhos diferentes.</li>
+            <li><b>Opções reais:</b> adiar, expandir, contrair, abandonar, flexibilizar. Incerteza maior ⇒ opção mais valiosa.</li>
+            <li>Valor da opção = VPL com flexibilidade − VPL estático.</li>
+            <li>VPL estático negativo pode virar positivo com opções reais — flexibilidade cria valor.</li>
+            <li>RADR é a prática de mercado; EC é a pureza teórica — saiba defender os dois.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>Knight:</b> risco mensurável (probs conhecidas); incerteza não mensurável (probs desconhecidas).</li>
+            <li><b>Fontes de risco:</b> mercado, operacional, tecnológico, regulatório, financeiro.</li>
+            <li><b>σ(VPL)</b> mede risco absoluto; <b>CV = σ/VE</b> mede risco relativo — compara projetos de escalas distintas.</li>
+            <li><b>RADR:</b> risco ↑ ⇒ TMA ↑ ⇒ VPL ↓. Mesmo fluxo (−1.000; 500×3): a 12% → +200,92; a 20% → +53,24; a 25% → −24,00.</li>
+            <li><b>Crítica da RADR:</b> penaliza fluxos distantes; mistura tempo e risco; prêmio arbitrário.</li>
+            <li><b>Equivalente certo:</b> VPL = −I₀ + Σ αₜFCₜ/(1+Rf)ᵗ. Ex.: α = 0,9, Rf = 10% → −1.000 + 450×2,4869 = +119,08.</li>
+            <li><b>Opções reais:</b> adiar, expandir, contrair, abandonar — a flexibilidade vale mais sob maior incerteza.</li>
+            <li><b>Opção de abandono (exemplo):</b> VE sem opção −178,51 → com opção +178,51 → valor da opção = +357,02.</li>
+            <li><b>Regra de bolso:</b> RADR mexe na taxa; EC mexe no fluxo; opções reais mexem na estrutura de decisão.</li>
+            <li><b>Ponte:</b> tópico 08 estressa premissas; tópico 09 embute o risco na decisão; tópico 10 aplica ao setor público.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Conceito</th><th>Fórmula</th><th>Observação</th></tr>
+            <tr><td><b>VPL esperado</b></td><td>VE = Σ pᵢ × VPLᵢ</td><td>média ponderada dos cenários</td></tr>
+            <tr><td><b>Desvio-padrão do VPL</b></td><td>σ = √[ Σ pᵢ × (VPLᵢ − VE)² ]</td><td>risco absoluto</td></tr>
+            <tr><td><b>Coeficiente de variação</b></td><td>CV = σ / VE</td><td>risco relativo — compara escalas distintas</td></tr>
+            <tr><td><b>RADR</b></td><td>VPL = −I₀ + Σ FCₜ/(1 + k + prêmio)ᵗ</td><td>risco entra na taxa</td></tr>
+            <tr><td><b>Equivalente certo</b></td><td>VPL = −I₀ + Σ (αₜ × FCₜ)/(1 + Rf)ᵗ</td><td>risco entra no fluxo; desconto à taxa livre de risco</td></tr>
+            <tr><td><b>Valor da opção real</b></td><td>VPL(com flexibilidade) − VPL(estático)</td><td>ex.: abandono = +357,02 no exemplo</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">Fatores de anuidade extras</div><p>(n=3; 8%) = 2,5771 · (n=3; 15%) = 2,2832 · (n=3; 16%) = 2,2459 · (n=3; 18%) = 2,1743.</p></div>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>RADR — mesmo fluxo, quatro níveis de risco (−1.000; +500 × 3)</h4>
+          <table>
+            <tr><th>Taxa ajustada</th><th>Fator de anuidade</th><th>VPL</th><th>Decisão</th></tr>
+            <tr><td>12%</td><td>2,4018</td><td>+200,92</td><td>Aceita</td></tr>
+            <tr><td>18%</td><td>2,1743</td><td>+87,14</td><td>Aceita</td></tr>
+            <tr><td>20%</td><td>2,1065</td><td>+53,24</td><td>Aceita no limite</td></tr>
+            <tr><td>25%</td><td>1,9520</td><td>−24,00</td><td>Rejeita</td></tr>
+          </table>
+          <h4>RADR × Equivalente certo — quem ajusta o quê</h4>
+          <table>
+            <tr><th></th><th>RADR</th><th>Equivalente certo</th></tr>
+            <tr><td>Onde entra o risco</td><td>Denominador (taxa ↑)</td><td>Numerador (fluxo ↓, αₜ)</td></tr>
+            <tr><td>Taxa de desconto</td><td>TMA + prêmio de risco</td><td>Taxa livre de risco (Rf)</td></tr>
+            <tr><td>Risco pode variar por período?</td><td>Não (taxa única)</td><td>Sim (αₜ por ano)</td></tr>
+            <tr><td>Crítica principal</td><td>Penaliza fluxos distantes</td><td>α subjetivo, difícil de estimar</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">Knight, o economista que deu nome ao desconhecido</div><p>Frank Knight publicou a distinção risco/incerteza em 1921 — e ela voltou à moda na crise de 2008, quando os modelos de “risco” dos bancos falharam exatamente porque o que havia era incerteza. Donald Rumsfeld imortalizou a ideia com seus “unknown unknowns”.</p></div>
+          <div class="box curio"><div class="box-title">Opções reais nasceram do petróleo</div><p>A precificação de opções reais explodiu nos anos 1980 quando petrolíferas perceberam que uma concessão de exploração é literalmente uma opção de compra: paga-se o prêmio (licitação) pelo direito — não a obrigação — de desenvolver o campo se os preços subirem.</p></div>
+          <div class="box curio"><div class="box-title">Por que farmacêuticas adoram o equivalente certo</div><p>Em P&D de fármacos, o risco cai drasticamente a cada fase clínica superada — logo, uma taxa única (RADR) distorce tudo. Usar um α por fase (EC) permite refletir que o risco de amanhã é menor que o de hoje.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: quem ajusta o quê</div><p>A FGV embaralha: “No equivalente certo, a taxa de desconto é acrescida de prêmio de risco” — FALSO. No EC, ajusta-se o <b>fluxo</b> e desconta-se à <b>Rf</b>. Quem recebe o prêmio é a taxa da RADR.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: incerteza alta ⇒ investir já?</div><p>Sob incerteza alta e investimento irreversível, a opção de <b>adiar</b> é valiosa — racionalmente, espera-se mais informação. “Incerteza alta pede cautela” não é timidez: é valor econômico da espera.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>← Tópico 08:</b> σ e CV do VPL usam os cenários probabilizados; a árvore de decisão é a porta de entrada das opções reais.</li>
+            <li><b>← Tópico 05 (TMA):</b> a RADR é o CAPM/WACC aplicado com prêmio por classe de risco do projeto.</li>
+            <li><b>→ Tópico 12 (VAR):</b> o VAR é, em essência, um percentil da distribuição de resultados — a mesma lógica da distribuição do VPL do Monte Carlo.</li>
+            <li><b>→ Tópico 10 (Projetos sociais):</b> projetos públicos enfrentam incerteza regulatória alta — opções de adiar e pilotos são padrão em políticas públicas.</li>
+            <li><b>↔ Administração Financeira:</b> β e CAPM sustentam o prêmio de risco da RADR; aversão ao risco sustenta o α do EC.</li>
+            <li><b>↔ Orçamento (Módulo II):</b> o princípio da cautela orçamentária (subestimar receitas) é um “equivalente certo” informal do setor público.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.3 (Knight, fontes, σ e CV); refazer o cálculo do CV</td><td>Explicar risco × incerteza sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.4–4.5 (RADR e EC); refazer os dois exemplos numéricos</td><td>Saber quem ajusta taxa e quem ajusta fluxo</td></tr>
+            <tr><td>3</td><td>Estudar 4.6–4.7 (opções reais); refazer o exemplo do abandono; 20 flashcards</td><td>Calcular o valor da opção de cor</td></tr>
+            <tr><td>4</td><td>20 questões comentadas + mini-simulado de 30</td><td>≥ 80% e ≥ 24/30</td></tr>
+            <tr><td>5</td><td>Revisão em 5 minutos + Para decorar + checklist</td><td>Recitar o quadro RADR × EC de cor</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>KNIGHT, F. H. <b>Risk, Uncertainty and Profit</b>. 1921 — a fonte original da distinção risco × incerteza.</li>
+            <li>BREALEY, R.; MYERS, S.; ALLEN, F. <b>Princípios de Finanças Corporativas</b>. McGraw-Hill — risco, taxa ajustada e opções reais.</li>
+            <li>ROSS, S. A. et al. <b>Princípios de Administração Financeira</b>. Atlas — capítulos de risco e retorno em orçamento de capital.</li>
+            <li>ASSAF NETO, A.; LIMA, F. G. <b>Curso de Administração Financeira</b>. Atlas — tratamento brasileiro de risco em projetos.</li>
+            <li>DIXIT, A.; PINDYCK, R. <b>Investment under Uncertainty</b>. Princeton — a bíblia das opções reais.</li>
+            <li>Provas FGV de estatais e área de controle: questões sobre risco × incerteza e ajuste da taxa de desconto.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 09/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t09";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Qual a diferença entre risco e incerteza, segundo Knight?",
+          "a": "Risco: os resultados possíveis e suas probabilidades são conhecidos/estimáveis (mensurável). Incerteza: nem as probabilidades são conhecidas (não mensurável)."
+      },
+      {
+          "q": "Cite as cinco fontes clássicas de risco de um projeto.",
+          "a": "Mercado (demanda, preço), operacional (custos, fornecedores), tecnológico (obsolescência), regulatório/político (leis, licenças) e financeiro (juros, câmbio, crédito)."
+      },
+      {
+          "q": "O que mede o coeficiente de variação (CV) do VPL?",
+          "a": "O risco por unidade de retorno esperado: CV = σ(VPL) / VPL esperado. Permite comparar o risco de projetos de escalas diferentes."
+      },
+      {
+          "q": "Como a RADR incorpora risco à avaliação de projetos?",
+          "a": "Aumentando a taxa de desconto conforme o risco do projeto: maior risco → TMA ajustada maior → VPL menor. Projeto arriscado precisa de retorno esperado maior para ser aceito."
+      },
+      {
+          "q": "Quais são as críticas à taxa ajustada ao risco (RADR)?",
+          "a": "(1) Penaliza exponencialmente os fluxos distantes; (2) mistura valor do dinheiro no tempo e prêmio de risco numa taxa só; (3) o prêmio costuma ser arbitrário."
+      },
+      {
+          "q": "Como funciona o método do equivalente certo (EC)?",
+          "a": "Cada fluxo esperado é multiplicado por um fator α (0<α≤1) — o valor certo equivalente — e o fluxo ajustado é descontado à taxa livre de risco: VPL = −I₀ + Σ αₜFCₜ/(1+Rf)ᵗ."
+      },
+      {
+          "q": "Por que o EC é teoricamente superior à RADR?",
+          "a": "Porque separa os dois efeitos: o tempo fica na taxa livre de risco e o risco fica no fator α de cada período — que pode variar ano a ano. A RADR mistura tudo na taxa."
+      },
+      {
+          "q": "O que são opções reais?",
+          "a": "Flexibilidades gerenciais embutidas no projeto que têm valor econômico: adiar, expandir, contrair, abandonar, trocar insumos/produtos. O VPL estático as ignora."
+      },
+      {
+          "q": "Qual a relação entre incerteza e valor das opções reais?",
+          "a": "Direta: quanto maior a incerteza, mais valiosa a flexibilidade (a opção de adiar esperando informação, a de abandonar limitando perdas)."
+      },
+      {
+          "q": "Como se calcula o valor de uma opção real?",
+          "a": "Valor da opção = VPL do projeto com a flexibilidade − VPL do projeto estático (sem a flexibilidade)."
+      },
+      {
+          "q": "Mesmo fluxo (−1.000; 500×3) a 12%, 18% e 25%: quais os VPLs?",
+          "a": "A 12%: +200,92; a 18%: +87,14; a 25%: −24,00. Ilustra a RADR: taxa maior (mais risco) corrói o VPL até inviabilizar."
+      },
+      {
+          "q": "Exemplo de EC: fluxos esperados de 500/ano (3 anos), α = 0,9, Rf = 10%. Qual o VPL?",
+          "a": "EC anual = 450; VPL = −1.000 + 450 × 2,4869 = +119,08 → aceita."
+      },
+      {
+          "q": "Projeto: VE = +991,70 e σ = 1.105,73. Qual o CV e o que ele diz?",
+          "a": "CV = 1.105,73/991,70 ≈ 1,12 — para cada real de VPL esperado, há R$ 1,12 de desvio-padrão: risco alto em termos relativos."
+      },
+      {
+          "q": "No exemplo da opção de abandono, qual o valor da opção?",
+          "a": "Sem opção: VE = −178,51 (rejeita). Com opção (vende o ativo por 800 no ramo ruim): VE = +178,51 (aceita). Valor da opção = 178,51 − (−178,51) = +357,02."
+      },
+      {
+          "q": "Um projeto com VPL estático negativo pode ser viável?",
+          "a": "Sim — se embutir opções reais valiosas (ex.: abandono com bom valor de revenda, ou expansão condicionada a piloto bem-sucedido)."
+      },
+      {
+          "q": "Por que a opção de adiar é valiosa sob alta incerteza?",
+          "a": "Porque investir é (quase) irreversível: esperar revela informação sem custo de comprometimento. Se o cenário azedar, não se investe; se clarear, investe-se melhor."
+      },
+      {
+          "q": "Qual a diferença prática de quem ajusta o quê: RADR × EC?",
+          "a": "RADR ajusta o denominador (taxa de desconto sobe); EC ajusta o numerador (fluxos descem) e desconta à taxa livre de risco."
+      },
+      {
+          "q": "Dê um exemplo de risco regulatório em estatal de tecnologia.",
+          "a": "Mudança de legislação de proteção de dados ou de regras previdenciárias exigindo refazer sistemas — fonte de risco típica da DATAPREV."
+      },
+      {
+          "q": "Por que comparar projetos pelo σ (e não pelo CV) pode enganar?",
+          "a": "σ é absoluto: um projeto grande tem σ grande mesmo sendo proporcionalmente seguro. O CV normaliza pelo VE, permitindo comparar escalas diferentes."
+      },
+      {
+          "q": "O que a análise de risco NÃO faz?",
+          "a": "Não elimina a incerteza nem torna a decisão objetiva: as probabilidades, os prêmios de risco e os α continuam dependendo de julgamento."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Knight",
+          "texto": "Segundo a clássica distinção de Frank Knight (1921):",
+          "enun": "",
+          "alts": [
+              "Risco e incerteza são sinônimos.",
+              "Risco é mensurável (probabilidades conhecidas); incerteza é não mensurável (probabilidades desconhecidas).",
+              "Incerteza é mensurável; risco, não.",
+              "Risco existe só em finanças; incerteza, só em projetos públicos.",
+              "Ambos são eliminados pela diversificação."
+          ],
+          "correta": 1,
+          "coment": "Risco: resultados possíveis e probabilidades conhecidas/estimáveis. Incerteza: nem as probabilidades são conhecidas. A pegadinha clássica é inverter os dois."
+      },
+      {
+          "tema": "RADR",
+          "texto": "O método da taxa ajustada ao risco (RADR) incorpora o risco do projeto por meio de:",
+          "enun": "",
+          "alts": [
+              "Redução dos fluxos de caixa.",
+              "Acréscimo de prêmio de risco à taxa de desconto.",
+              "Desconto à taxa livre de risco.",
+              "Redução do investimento inicial.",
+              "Aumento da vida útil considerada."
+          ],
+          "correta": 1,
+          "coment": "RADR: risco maior ⇒ taxa de desconto maior ⇒ VPL menor. Quem reduz os fluxos é o equivalente certo."
+      },
+      {
+          "tema": "RADR — cálculo",
+          "texto": "Um fluxo de −1.000 hoje e +500/ano por 3 anos, descontado a 12% (fator 2,4018), tem VPL de +200,92. Se o projeto for classificado como de alto risco e avaliado a 25% (fator 1,9520), o VPL será:",
+          "enun": "",
+          "alts": [
+              "+R$ 200,92",
+              "+R$ 87,14",
+              "+R$ 53,24",
+              "−R$ 24,00",
+              "+R$ 976,00"
+          ],
+          "correta": 3,
+          "coment": "VP = 500 × 1,9520 = 976,00 → VPL = 976,00 − 1.000 = −24,00: a taxa ajustada ao risco inviabilizou o projeto."
+      },
+      {
+          "tema": "Crítica à RADR",
+          "texto": "Uma crítica técnica à taxa ajustada ao risco é que ela:",
+          "enun": "",
+          "alts": [
+              "Ignora o valor do dinheiro no tempo.",
+              "Penaliza exponencialmente os fluxos mais distantes, ao pressupor risco crescente com o tempo.",
+              "Não pode ser usada com o VPL.",
+              "Só se aplica a projetos públicos.",
+              "Sempre aprova projetos arriscados."
+          ],
+          "correta": 1,
+          "coment": "O desconto composto faz o prêmio de risco “pesar” cada vez mais nos anos finais — mesmo que o risco do projeto não cresça com o tempo."
+      },
+      {
+          "tema": "Equivalente certo",
+          "texto": "No método do equivalente certo, o VPL é calculado:",
+          "enun": "",
+          "alts": [
+              "Com fluxos esperados descontados à TMA ajustada.",
+              "Com fluxos ajustados por fatores α (0 < α ≤ 1), descontados à taxa livre de risco.",
+              "Com fluxos nominais à taxa de inflação.",
+              "Com o maior fluxo possível à TMA.",
+              "Sem descontar os fluxos."
+          ],
+          "correta": 1,
+          "coment": "EC: ajusta-se o numerador (fluxo ↓ via α) e desconta-se à Rf. Tempo na Rf, risco no α — separação limpa."
+      },
+      {
+          "tema": "Equivalente certo — cálculo",
+          "texto": "Fluxos esperados de R$ 500/ano por 3 anos, fator de equivalência α = 0,9 e taxa livre de risco de 10% (fator de anuidade 2,4869), para investimento de R$ 1.000. O VPL pelo equivalente certo é:",
+          "enun": "",
+          "alts": [
+              "+R$ 243,43",
+              "+R$ 119,08",
+              "−R$ 119,08",
+              "+R$ 1.119,08",
+              "R$ 0,00"
+          ],
+          "correta": 1,
+          "coment": "EC anual = 500 × 0,9 = 450; VP = 450 × 2,4869 = 1.119,08; VPL = +119,08. (A alternativa A é o VPL sem ajuste de risco.)"
+      },
+      {
+          "tema": "Coeficiente de variação",
+          "texto": "O projeto Alfa tem VE = +R$ 500 mil e σ = R$ 400 mil; o projeto Beta tem VE = +R$ 100 mil e σ = R$ 100 mil. Pelo coeficiente de variação:",
+          "enun": "",
+          "alts": [
+              "Beta é menos arriscado, pois tem menor σ.",
+              "Alfa é menos arriscado: CV = 0,8 contra CV = 1,0 de Beta.",
+              "Empatam em risco.",
+              "Alfa é mais arriscado, pois σ é maior.",
+              "Impossível comparar sem a TIR."
+          ],
+          "correta": 1,
+          "coment": "CV(Alfa) = 400/500 = 0,8; CV(Beta) = 100/100 = 1,0. σ absoluto engana: o CV mostra que Alfa tem menos risco por unidade de retorno esperado."
+      },
+      {
+          "tema": "Opções reais — conceito",
+          "texto": "São exemplos de opções reais embutidas em projetos:",
+          "enun": "",
+          "alts": [
+              "Opções de compra de ações da empresa.",
+              "Adiar o investimento, expandir a capacidade, abandonar o projeto.",
+              "Contratos futuros de commodities.",
+              "Bônus de subscrição.",
+              "Derivativos de taxa de juros."
+          ],
+          "correta": 1,
+          "coment": "Opções reais são flexibilidades sobre ativos reais (projetos): adiar, expandir, contrair, abandonar. Opções sobre ações/derivativos são opções financeiras."
+      },
+      {
+          "tema": "Incerteza × flexibilidade",
+          "texto": "Sobre o valor das opções reais, é correto afirmar:",
+          "enun": "",
+          "alts": [
+              "Quanto maior a incerteza, menor o valor da flexibilidade.",
+              "Quanto maior a incerteza, maior o valor da flexibilidade.",
+              "A incerteza não afeta o valor das opções.",
+              "Opções reais só têm valor com certeza total.",
+              "Flexibilidade sempre tem valor nulo."
+          ],
+          "correta": 1,
+          "coment": "Contra-intuitivo e cobrado: a incerteza amplia os resultados possíveis — e a opção captura o lado bom limitando o lado ruim (abandono) ou aproveitando a alta (expansão)."
+      },
+      {
+          "tema": "Opção de abandono — cálculo",
+          "texto": "Projeto de R$ 1.000: ano 1 rende 700 (60%) ou 300 (40%); ano 2 rende +800 no ramo alto ou −200 no baixo (TMA 10%). Sem flexibilidade, o VE é −178,51. Se for possível abandonar no ramo baixo vendendo o ativo por 800 ao fim do ano 1, o VE passa a ser:",
+          "enun": "",
+          "alts": [
+              "−R$ 178,51",
+              "R$ 0,00",
+              "+R$ 178,51",
+              "+R$ 297,52",
+              "+R$ 357,02"
+          ],
+          "correta": 2,
+          "coment": "Ramo baixo com abandono: −1.000 + (300+800)/1,10 = 0. VE = 0,6×297,52 + 0,4×0 = +178,51. O valor da opção = 178,51 − (−178,51) = +357,02 (alternativa E é o valor da opção, não o VE)."
+      },
+      {
+          "tema": "RADR — decisão",
+          "texto": "Um projeto de R$ 3.000 com entradas de R$ 1.300/ano por 3 anos é aprovado a 12% (VPL +122,38) mas é reclassificado como de alto risco, com taxa de 18% (fator 2,1743). A decisão correta passa a ser:",
+          "enun": "",
+          "alts": [
+              "Manter a aprovação, pois os fluxos não mudaram.",
+              "Rejeitar, pois o VPL a 18% é aproximadamente −R$ 173,45.",
+              "Aprovar, pois o VPL a 18% é +R$ 826,60.",
+              "Rejeitar, pois a TIR é menor que 12%.",
+              "Aprovar com payback menor."
+          ],
+          "correta": 1,
+          "coment": "VP = 1.300 × 2,1743 = 2.826,55; VPL = 2.826,55 − 3.000 = −173,45 < 0 → rejeita. A reclassificação de risco (taxa) virou a decisão."
+      },
+      {
+          "tema": "Fontes de risco",
+          "texto": "Uma mudança na legislação previdenciária que obriga a DATAPREV a refazer seus sistemas de cálculo é classificada como risco:",
+          "enun": "",
+          "alts": [
+              "De mercado.",
+              "Operacional.",
+              "Regulatório/político.",
+              "De liquidez.",
+              "Cambial."
+          ],
+          "correta": 2,
+          "coment": "Risco regulatório/político: decorre de mudanças de leis, normas e licenças. Em estatais, costuma ser a fonte dominante de risco de projetos."
+      },
+      {
+          "tema": "EC × RADR",
+          "texto": "A afirmativa correta sobre os dois métodos de ajuste ao risco é:",
+          "enun": "",
+          "alts": [
+              "Na RADR ajusta-se o fluxo; no EC, a taxa.",
+              "Na RADR ajusta-se a taxa (prêmio de risco); no EC ajusta-se o fluxo (α) e desconta-se à taxa livre de risco.",
+              "Ambos ajustam apenas a taxa.",
+              "Ambos ajustam apenas os fluxos.",
+              "O EC usa taxa maior que a RADR."
+          ],
+          "correta": 1,
+          "coment": "Mnemônico: RADR = Rate (taxa); EC = fluxo certo. A pegadinha favorita da banca é trocar os dois."
+      },
+      {
+          "tema": "Knight — aplicação",
+          "texto": "Uma empresa estuda entrar num mercado que ainda não existe, sem dados históricos nem análogos para estimar probabilidades. Trata-se de situação de:",
+          "enun": "",
+          "alts": [
+              "Risco puro.",
+              "Incerteza knightiana.",
+              "Risco diversificável.",
+              "Risco de mercado.",
+              "Certeza."
+          ],
+          "correta": 1,
+          "coment": "Sem base para probabilidades, não há mensuração possível: é incerteza. As ferramentas quantitativas (cenários probabilizados, Monte Carlo) perdem o chão."
+      },
+      {
+          "tema": "σ do VPL",
+          "texto": "Com cenários probabilizados de VPL +2.434,26 (30%), +808,24 (50%) e −713,47 (20%), VE = +991,70, o desvio-padrão do VPL é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "R$ 991,70",
+              "R$ 1.105,73",
+              "R$ 1.222,65",
+              "R$ 713,47",
+              "R$ 2.434,26"
+          ],
+          "correta": 1,
+          "coment": "σ = √[0,3×(2.434,26−991,70)² + 0,5×(808,24−991,70)² + 0,2×(−713,47−991,70)²] ≈ √1.222.652 ≈ 1.105,73."
+      },
+      {
+          "tema": "Opção de adiar",
+          "texto": "Diante de alta incerteza sobre a demanda e de um investimento irreversível, a decisão racional tende a ser:",
+          "enun": "",
+          "alts": [
+              "Investir imediatamente, antes que o risco aumente.",
+              "Adiar, pois a espera revela informação e a opção de adiar tem valor econômico.",
+              "Abandonar para sempre.",
+              "Investir o dobro para diluir o risco.",
+              "Ignorar a incerteza."
+          ],
+          "correta": 1,
+          "coment": "Irreversibilidade + incerteza = valor em esperar. Adiar não é indecisão: é manter viva a opção de investir com mais informação."
+      },
+      {
+          "tema": "RADR — interpretação",
+          "texto": "Se um projeto é aprovado com VPL positivo à taxa de 18% a.a., então, à taxa de 12% a.a. (mesmos fluxos), seu VPL será:",
+          "enun": "",
+          "alts": [
+              "Menor.",
+              "Maior.",
+              "Igual.",
+              "Zero.",
+              "Negativo."
+          ],
+          "correta": 1,
+          "coment": "O VPL é função decrescente da taxa em fluxos convencionais: taxa menor ⇒ desconto menor ⇒ VPL maior. Se passou no teste duro (18%), passa no fácil (12%)."
+      },
+      {
+          "tema": "VPL estático × opções",
+          "texto": "A afirmação de que “um projeto com VPL estático negativo pode ser economicamente viável” é:",
+          "enun": "",
+          "alts": [
+              "Falsa: VPL negativo sempre inviabiliza.",
+              "Verdadeira: opções reais embutidas (abandono, expansão) podem agregar valor suficiente para tornar o VPL total positivo.",
+              "Verdadeira apenas no setor público.",
+              "Falsa, pois opções não têm valor.",
+              "Verdadeira apenas com inflação alta."
+          ],
+          "correta": 1,
+          "coment": "VPL expandido = VPL estático + valor das opções reais. É a principal contribuição da teoria das opções reais ao orçamento de capital."
+      },
+      {
+          "tema": "Limitações",
+          "texto": "Sobre as técnicas de tratamento de risco em projetos, é INCORRETO afirmar:",
+          "enun": "",
+          "alts": [
+              "A RADR depende de um prêmio de risco estimado.",
+              "O EC depende da estimativa dos fatores α.",
+              "O CV permite comparar riscos relativos.",
+              "As opções reais eliminam a incerteza do projeto.",
+              "O σ do VPL exige cenários probabilizados."
+          ],
+          "correta": 3,
+          "coment": "Nenhuma técnica elimina a incerteza — as opções reais apenas capturam o valor de reagir a ela. Todas as técnicas dependem de premissas subjetivas."
+      },
+      {
+          "tema": "Integração",
+          "texto": "A sequência lógica de sofisticação no tratamento do risco em avaliação de projetos é:",
+          "enun": "",
+          "alts": [
+              "Monte Carlo → sensibilidade → opções reais.",
+              "Sensibilidade/cenários → medidas de dispersão (σ, CV) → ajuste na decisão (RADR, EC) → flexibilidade (opções reais).",
+              "Opções reais → VPL → payback.",
+              "EC → RADR → payback.",
+              "Payback → Knight → VPL."
+          ],
+          "correta": 1,
+          "coment": "Primeiro estressa-se (tópico 08), depois mede-se a dispersão, depois embute-se o risco no critério (RADR/EC) e, por fim, precifica-se a flexibilidade (opções reais)."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "Para Knight, risco é a situação em que:",
+          "enun": "",
+          "alts": [
+              "Nada se sabe sobre o futuro.",
+              "As probabilidades dos resultados são conhecidas ou estimáveis.",
+              "As probabilidades são desconhecidas.",
+              "O retorno é garantido.",
+              "O VPL é negativo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Incerteza, na distinção de Knight, caracteriza-se por:",
+          "enun": "",
+          "alts": [
+              "Probabilidades conhecidas.",
+              "Probabilidades desconhecidas — nem mensurar é possível.",
+              "Risco de mercado elevado.",
+              "Variância alta.",
+              "Retorno negativo certo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A RADR ajusta o projeto ao risco por meio de:",
+          "enun": "",
+          "alts": [
+              "Redução dos fluxos.",
+              "Aumento da taxa de desconto.",
+              "Redução da taxa de desconto.",
+              "Aumento dos fluxos.",
+              "Redução do investimento."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "O equivalente certo ajusta o projeto ao risco por meio de:",
+          "enun": "",
+          "alts": [
+              "Aumento da taxa.",
+              "Redução dos fluxos (fator α), descontando à taxa livre de risco.",
+              "Aumento dos fluxos.",
+              "Uso da TIR.",
+              "Uso do payback."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "O coeficiente de variação do VPL é dado por:",
+          "enun": "",
+          "alts": [
+              "VE / σ.",
+              "σ / VE.",
+              "σ × VE.",
+              "VE − σ.",
+              "σ² / VE."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "São exemplos de opções reais:",
+          "enun": "",
+          "alts": [
+              "Calls e puts sobre ações.",
+              "Adiar, expandir e abandonar o projeto.",
+              "Contratos de swap.",
+              "Debêntures conversíveis.",
+              "Opções de câmbio."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Quanto maior a incerteza sobre um projeto, o valor de suas opções reais tende a ser:",
+          "enun": "",
+          "alts": [
+              "Menor.",
+              "Maior.",
+              "Nulo.",
+              "Igual.",
+              "Negativo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Risco de mudança de legislação afetando o projeto é classificado como risco:",
+          "enun": "",
+          "alts": [
+              "De mercado.",
+              "Operacional.",
+              "Regulatório/político.",
+              "De liquidez.",
+              "De crédito."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "O valor de uma opção real é calculado como:",
+          "enun": "",
+          "alts": [
+              "VPL estático − investimento.",
+              "VPL com flexibilidade − VPL estático.",
+              "TIR − TMA.",
+              "σ × VE.",
+              "Payback × TIR."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "No equivalente certo, os fluxos ajustados são descontados à:",
+          "enun": "",
+          "alts": [
+              "TMA ajustada.",
+              "Taxa livre de risco.",
+              "TIR.",
+              "Taxa de inflação.",
+              "Taxa Selic + prêmio."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Fluxo −1.000; +500 × 3; avaliado a 18% (fator 2,1743), o VPL é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 200,92",
+              "+R$ 87,14",
+              "−R$ 24,00",
+              "+R$ 1.087,14",
+              "+R$ 53,24"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Fluxos esperados de 500/ano por 3 anos, α = 0,9, Rf = 10% (fator 2,4869), I₀ = 1.000. O VPL pelo equivalente certo é:",
+          "enun": "",
+          "alts": [
+              "+R$ 243,43",
+              "+R$ 119,08",
+              "+R$ 367,77",
+              "−R$ 119,08",
+              "+R$ 357,24"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "VE = +500 mil e σ = 400 mil. O CV é:",
+          "enun": "",
+          "alts": [
+              "1,25",
+              "0,80",
+              "0,64",
+              "2,00",
+              "0,40"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Projeto de R$ 3.000, entradas de 1.300/ano por 3 anos, reclassificado de 12% (VPL +122,38) para 18% (fator 2,1743). O novo VPL é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 122,38",
+              "−R$ 173,45",
+              "+R$ 826,55",
+              "−R$ 826,55",
+              "+R$ 2.826,55"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Uma crítica técnica à RADR é que ela:",
+          "enun": "",
+          "alts": [
+              "Ignora o risco.",
+              "Penaliza exponencialmente os fluxos distantes e mistura tempo e risco na mesma taxa.",
+              "Só funciona com payback.",
+              "Exige opções reais.",
+              "Não usa o VPL."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "A vantagem teórica do equivalente certo sobre a RADR é:",
+          "enun": "",
+          "alts": [
+              "Ser mais simples de calcular.",
+              "Separar o valor do dinheiro no tempo (Rf) do ajuste de risco (α), que pode variar por período.",
+              "Dispensar estimativas subjetivas.",
+              "Usar taxa maior.",
+              "Não precisar de fluxos projetados."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Opção de abandono: VE sem a opção = −178,51; VE com a opção = +178,51. O valor da opção é:",
+          "enun": "",
+          "alts": [
+              "+R$ 178,51",
+              "R$ 0,00",
+              "+R$ 357,02",
+              "−R$ 357,02",
+              "+R$ 535,53"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Projeto aprovado à taxa de 18% (VPL > 0). À taxa de 12%, mesmos fluxos, o VPL será:",
+          "enun": "",
+          "alts": [
+              "Menor.",
+              "Maior — fluxo convencional tem VPL decrescente na taxa.",
+              "Igual.",
+              "Zero.",
+              "Impossível saber."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Entrar em mercado inédito, sem dados para estimar probabilidades, é situação de:",
+          "enun": "",
+          "alts": [
+              "Risco mensurável.",
+              "Incerteza knightiana.",
+              "Risco diversificável.",
+              "Certeza.",
+              "Risco cambial."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Dois projetos: Alfa (VE +500 mil; σ 400 mil) e Beta (VE +100 mil; σ 100 mil). Pelo CV, o menos arriscado é:",
+          "enun": "",
+          "alts": [
+              "Beta (menor σ).",
+              "Alfa (CV 0,8 < 1,0).",
+              "Empate.",
+              "Beta (menor VE).",
+              "Impossível dizer."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre os métodos de ajuste ao risco, assinale a correta:",
+          "enun": "",
+          "alts": [
+              "RADR ajusta o fluxo; EC ajusta a taxa.",
+              "RADR adiciona prêmio à taxa; EC reduz os fluxos por α e desconta à Rf.",
+              "Ambos usam a taxa livre de risco.",
+              "EC penaliza mais os fluxos distantes que a RADR.",
+              "RADR separa tempo de risco."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto de R$ 2.000, entradas de R$ 800/ano por 3 anos. A 10% (fator 2,4869) o VPL é −10,52; a 15% (fator 2,2832) é −173,42. Conclui-se que:",
+          "enun": "",
+          "alts": [
+              "O projeto é viável a 10%.",
+              "O projeto é inviável nas duas taxas, e a TIR é inferior a 10%.",
+              "A TIR é superior a 15%.",
+              "O projeto deve ser aceito a 15%.",
+              "O VPL cresce com a taxa."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Uma farmacêutica avalia P&D cujo risco cai a cada fase clínica superada. O método mais adequado é:",
+          "enun": "",
+          "alts": [
+              "RADR com taxa única alta.",
+              "Equivalente certo com α crescente por fase, pois reflete a queda do risco ao longo do tempo.",
+              "Payback simples.",
+              "TIR.",
+              "Payback descontado."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto tem VPL estático de −R$ 150 mil, mas embute opção de expansão avaliada em +R$ 400 mil. A decisão correta é:",
+          "enun": "",
+          "alts": [
+              "Rejeitar: VPL < 0.",
+              "Aceitar: o VPL expandido é +R$ 250 mil.",
+              "Rejeitar: opções não têm valor.",
+              "Aceitar apenas se a TIR > TMA.",
+              "Ficar indiferente."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre a irreversibilidade do investimento sob alta incerteza, a teoria das opções reais recomenda:",
+          "enun": "",
+          "alts": [
+              "Investir já para antecipar receitas.",
+              "Considerar o valor da opção de adiar: esperar informação pode ser a decisão de maior valor.",
+              "Nunca adiar, pois adiar destrói VPL.",
+              "Aumentar o investimento para diluir o risco.",
+              "Usar sempre o payback."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Assinale a afirmativa INCORRETA:",
+          "enun": "",
+          "alts": [
+              "Risco é mensurável; incerteza, não (Knight).",
+              "A RADR pressupõe risco constante ou crescente no tempo via taxa única.",
+              "O EC desconta fluxos ajustados à taxa livre de risco.",
+              "As opções reais eliminam a incerteza do projeto.",
+              "O CV compara risco relativo entre projetos."
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto de R$ 6.000, entradas de R$ 2.600/ano por 3 anos: a 10% (fator 2,4869) o VPL é +465,82. Reclassificado para risco alto (16%, fator 2,2459), a decisão se altera porque o VPL passa a ser, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 465,82",
+              "−R$ 160,69",
+              "+R$ 5.839,34",
+              "−R$ 465,82",
+              "+R$ 160,69"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Cenários de VPL: +2.434,26 (30%), +808,24 (50%), −713,47 (20%), VE = +991,70. O desvio-padrão e o CV são, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "σ = 991,70; CV = 1,00.",
+              "σ = 1.105,73; CV = 1,12.",
+              "σ = 1.222,65; CV = 0,81.",
+              "σ = 713,47; CV = 0,72.",
+              "σ = 2.434,26; CV = 2,45."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "A DATAPREV avalia modernizar um sistema crítico. Mudanças previdenciárias podem exigir refazer o sistema, e a tecnologia escolhida pode se tornar obsoleta. Os dois riscos dominantes são, respectivamente:",
+          "enun": "",
+          "alts": [
+              "Mercado e cambial.",
+              "Regulatório e tecnológico.",
+              "Liquidez e crédito.",
+              "Operacional e de mercado.",
+              "Cambial e regulatório."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre o tratamento de risco e incerteza em projetos, a síntese correta é:",
+          "enun": "",
+          "alts": [
+              "Técnicas quantitativas eliminam a incerteza.",
+              "Sob incerteza knightiana, probabilidades subjetivas não têm utilidade.",
+              "RADR e EC embutem o risco na decisão (taxa ou fluxo); opções reais precificam a flexibilidade; nada disso elimina o julgamento.",
+              "O payback é o único método que trata risco.",
+              "O VPL estático já captura todas as flexibilidades."
+          ],
+          "correta": 2
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei distinguir risco (probabilidades conhecidas) de incerteza (desconhecidas), segundo Knight.",
+      "Identifico as fontes de risco: mercado, operacional, tecnológico, regulatório e financeiro.",
+      "Calculo σ(VPL) e o coeficiente de variação (CV = σ/VE) e uso o CV para comparar projetos.",
+      "Aplico a RADR: risco maior ⇒ taxa maior ⇒ VPL menor, e sei suas críticas.",
+      "Aplico o equivalente certo: α nos fluxos, desconto à taxa livre de risco.",
+      "Sei dizer de cor: RADR ajusta a taxa; EC ajusta o fluxo.",
+      "Conceituo as opções reais (adiar, expandir, contrair, abandonar) e seu valor.",
+      "Sei que maior incerteza aumenta o valor da flexibilidade.",
+      "Calculo o valor de uma opção: VPL com flexibilidade − VPL estático.",
+      "Fiz o mini-simulado com ≥ 24/30 e revisei todos os erros comentados."
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Inverter os conceitos de Knight: risco é o mensurável (probabilidades conhecidas); incerteza é o não mensurável.",
+      "Afirmar que risco e incerteza são sinônimos — a distinção é o coração do tópico.",
+      "Trocar os métodos: RADR ajusta a TAXA; equivalente certo ajusta o FLUXO.",
+      "No equivalente certo, descontar pela TMA ajustada — o desconto correto é pela taxa livre de risco.",
+      "Achar que a RADR é neutra quanto ao tempo: ela penaliza mais os fluxos distantes.",
+      "Comparar projetos de tamanhos diferentes pelo desvio-padrão em vez do coeficiente de variação.",
+      "Calcular o CV como VE/σ — o correto é σ/VE.",
+      "Afirmar que maior incerteza reduz o valor das opções reais — é o contrário.",
+      "Esquecer que um VPL estático negativo pode virar positivo com opções reais valiosas.",
+      "Confundir o valor da opção com o VE final: no exemplo, a opção vale +357,02 e o VE final é +178,51.",
+      "Tratar opções financeiras (calls, puts) como opções reais — estas versam sobre ativos/projetos reais.",
+      "Somar o prêmio de risco aos fluxos em vez de à taxa na RADR.",
+      "Acreditar que alguma técnica elimina a incerteza — todas dependem de julgamento.",
+      "Usar taxa única (RADR) quando o risco muda claramente ao longo do tempo — caso para o EC com αₜ variável.",
+      "Ignorar o risco regulatório em projetos de estatais — muitas vezes é o dominante.",
+      "Rejeitar adiar por “medo de perder tempo”: sob incerteza e irreversibilidade, esperar tem valor.",
+      "Calcular σ sem subtrair o VE de cada cenário (variância é desvio ao quadrado em torno da média).",
+      "Afirmar que opções reais substituem o VPL — elas o expandem: VPL expandido = estático + opções.",
+      "Achar que o EC é objetivo: os fatores α refletem a aversão ao risco do decisor — são subjetivos.",
+      "Esquecer que a TIR é o limite da RADR: se a taxa ajustada superar a TIR, o VPL fica negativo."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Risco (Knight)",
+          "Situação em que os resultados possíveis e suas probabilidades são conhecidos ou estimáveis — mensurável."
+      ],
+      [
+          "Incerteza (knightiana)",
+          "Situação em que nem as probabilidades dos resultados são conhecidas — não mensurável."
+      ],
+      [
+          "RADR (taxa ajustada ao risco)",
+          "Método que incorpora o risco elevando a taxa de desconto: maior risco ⇒ maior taxa ⇒ menor VPL."
+      ],
+      [
+          "Prêmio de risco",
+          "Acréscimo à taxa livre de risco (ou à TMA-base) exigido para compensar o risco do projeto."
+      ],
+      [
+          "Equivalente certo (EC)",
+          "Valor garantido que o decisor aceitaria em troca de um fluxo arriscado; VPL = −I₀ + Σ αₜFCₜ/(1+Rf)ᵗ."
+      ],
+      [
+          "Fator α de equivalência",
+          "Multiplicador (0 < α ≤ 1) que converte fluxo esperado em equivalente certo; reflete a aversão ao risco."
+      ],
+      [
+          "Taxa livre de risco (Rf)",
+          "Retorno de ativo sem risco de crédito (título público); usada para descontar fluxos já ajustados ao risco no EC."
+      ],
+      [
+          "Desvio-padrão do VPL (σ)",
+          "Raiz da variância dos VPLs dos cenários: mede o risco absoluto do projeto."
+      ],
+      [
+          "Coeficiente de variação (CV)",
+          "σ dividido pelo VE: risco por unidade de retorno esperado; permite comparar projetos de escalas diferentes."
+      ],
+      [
+          "Opções reais",
+          "Flexibilidades gerenciais sobre ativos reais — adiar, expandir, contrair, abandonar — com valor econômico próprio."
+      ],
+      [
+          "Opção de abandono",
+          "Direito de encerrar o projeto, limitando perdas e eventualmente recuperando valor de revenda do ativo."
+      ],
+      [
+          "Opção de adiar",
+          "Direito de postergar o investimento à espera de mais informação; valiosa sob incerteza e irreversibilidade."
+      ],
+      [
+          "Opção de expansão",
+          "Direito de ampliar o projeto se os resultados iniciais forem favoráveis; o piloto “compra” esse direito."
+      ],
+      [
+          "VPL expandido",
+          "VPL estático somado ao valor das opções reais embutidas no projeto."
+      ],
+      [
+          "Irreversibilidade",
+          "Característica de investimentos cujos custos não são recuperáveis; aumenta o valor da opção de adiar."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

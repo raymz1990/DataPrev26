@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conceito de Projeto de Investimento | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Conceito de projeto de investimento</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html" selected>01 - Conceito de projeto de investimento</option>
+    <option value="" disabled>02 - Importância, características e limitações (em breve)</option>
+    <option value="" disabled>03 - Etapas na elaboração de projetos (em breve)</option>
+    <option value="" disabled>04 - Metodologias de avaliação e seleção (em breve)</option>
+    <option value="" disabled>05 - Taxa mínima de atratividade (em breve)</option>
+    <option value="" disabled>06 - Parâmetros para análise de projetos (em breve)</option>
+    <option value="" disabled>07 - Indicadores: VPL, TIR, payback (em breve)</option>
+    <option value="" disabled>08 - Análise de sensibilidade e cenários (em breve)</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Conceito de Projeto de Investimento</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 01 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Conceito de Projeto de Investimento</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 01</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">5h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média-baixa <span class="diff-dots"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Nenhum — porta de entrada da matéria (ajuda ter lido Adm. Financeira 01, 02 e 06)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — fundamento de todos os demais tópicos da matéria (VPL, TIR, payback)</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Definir <b>projeto de investimento</b> e situá-lo dentro das grandes decisões financeiras da empresa.</li>
+            <li>Classificar projetos quanto à <b>relação entre si</b> (independentes, mutuamente excludentes, dependentes) e quanto à <b>natureza</b> (expansão, reposição, modernização, novos produtos).</li>
+            <li>Identificar os <b>elementos básicos do fluxo de caixa de um projeto</b>: investimento inicial, fluxos operacionais incrementais, capital de giro e valor residual.</li>
+            <li>Aplicar os <b>princípios do fluxo incremental</b>: custos afundados ficam de fora; custos de oportunidade e efeitos colaterais entram.</li>
+            <li>Desenhar e interpretar o <b>diagrama de fluxo de caixa</b> (sinais, datas, convenções) e reconhecer fluxos convencionais × não convencionais.</li>
+            <li>Relacionar o conceito à realidade de estatais: projetos de tecnologia, viabilidade e responsabilidade pública.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>Um <b>projeto de investimento</b> é uma proposta de aplicação de recursos hoje (capital, tempo, pessoas) com a expectativa de obter <b>benefícios futuros</b> — normalmente fluxos de caixa ao longo de vários períodos. É a materialização da <b>decisão de investimento</b>, a mais importante das três grandes decisões financeiras (investir, financiar, distribuir), porque é ela que cria valor para a empresa.</p>
+          <p>Os projetos se classificam quanto à relação entre si: <b>independentes</b> (aceitar um não afeta o outro), <b>mutuamente excludentes</b> (aceitar um elimina o outro — ex.: duas plantas para a mesma função) e <b>dependentes/complementares</b>. Quanto à natureza: expansão, reposição, modernização, lançamento de produtos e projetos obrigatórios (legais, ambientais, de segurança).</p>
+          <p>O coração do projeto é seu <b>fluxo de caixa incremental</b> — apenas o que muda na empresa se o projeto for aceito. Os elementos básicos são: <b>investimento inicial</b> (t0: máquinas, obras, capital de giro), <b>fluxos operacionais</b> ao longo da vida útil e <b>valor residual</b> ao final (venda dos ativos, recuperação do capital de giro). Convenção de sinais: saídas negativas, entradas positivas.</p>
+          <p>Três princípios separam o fluxo correto do errado — e a FGV adora cobrá-los: <b>custos afundados não entram</b> (já foram gastos, são irrelevantes para a decisão); <b>custos de oportunidade entram</b> (usar um galpão próprio tem custo — o aluguel que se deixa de receber); e os <b>efeitos colaterais</b> (sinergias e erosão de outros produtos) também entram. Trabalha-se sempre em <b>regime de caixa</b> (não de competência) e <b>após os impostos</b>.</p>
+          <p>Tudo o que vem a seguir nesta matéria — VPL, TIR, payback, sensibilidade, risco — parte deste fluxo de caixa bem montado. Quem erra o fluxo, erra o indicador.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Projeto de<br>Investimento</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Conceito</h4><ul><li>Recursos hoje × benefícios futuros</li><li>Decisão de investimento</li><li>Criação de valor</li></ul></div>
+              <div class="mm-node"><h4>Classificação</h4><ul><li>Independentes</li><li>Mutuamente excludentes</li><li>Dependentes</li></ul></div>
+              <div class="mm-node"><h4>Natureza</h4><ul><li>Expansão / reposição</li><li>Modernização / novos produtos</li><li>Obrigatórios (legais)</li></ul></div>
+              <div class="mm-node"><h4>Elementos do fluxo</h4><ul><li>Investimento inicial (t0)</li><li>Fluxos operacionais</li><li>Capital de giro + valor residual</li></ul></div>
+              <div class="mm-node"><h4>Princípios</h4><ul><li>Só fluxo incremental</li><li>Custo afundado: fora</li><li>Custo de oportunidade: dentro</li></ul></div>
+              <div class="mm-node"><h4>Convenções</h4><ul><li>Regime de caixa, após IR</li><li>Saída (−), entrada (+)</li><li>Convencional × não convencional</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 O que é um projeto de investimento</h3>
+          <p>Um <b>projeto de investimento</b> é um <b>conjunto de ações planejadas que envolve o comprometimento de recursos hoje (desembolso inicial) com a expectativa de obter benefícios (fluxos de caixa) ao longo de um período futuro</b>. É a ponte entre a decisão estratégica ("queremos crescer no mercado X") e a decisão financeira ("vale a pena colocar R$ 10 milhões nisso?").</p>
+          <p>Na administração financeira, as grandes decisões da empresa se agrupam em três:</p>
+          <table>
+            <thead><tr><th>Decisão</th><th>Pergunta</th><th>Onde aparece no balanço</th></tr></thead>
+            <tbody>
+              <tr><td><b>Investimento</b></td><td>Em quais ativos/projetos aplicar os recursos?</td><td>Ativo (lado esquerdo)</td></tr>
+              <tr><td><b>Financiamento</b></td><td>De onde virão os recursos (capital próprio × terceiros)?</td><td>Passivo + PL (lado direito)</td></tr>
+              <tr><td><b>Dividendos</b></td><td>Quanto do lucro distribuir × reter para reinvestir?</td><td>Movimentação do PL</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Por que o foco é no fluxo de caixa, e não no lucro?</div>
+            <p>Projetos são avaliados pelo <b>fluxo de caixa incremental</b> que geram, não pelo lucro contábil. O lucro inclui rubricas sem efeito caixa (depreciação, provisões) e depende de critérios contábeis; o caixa é o que efetivamente paga contas, dívidas e dividendos. A avaliação trabalha com <b>regime de caixa</b> (quando o dinheiro entra e sai), e não com o regime de competência.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Classificação dos projetos</h3>
+          <p><b>Quanto à relação entre si:</b></p>
+          <table>
+            <thead><tr><th>Tipo</th><th>Definição</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Independentes</b></td><td>A aceitação de um não afeta a decisão sobre o outro; podem ser aceitos simultaneamente</td><td>Nova filial em Recife + modernização do data center em Brasília</td></tr>
+              <tr><td><b>Mutuamente excludentes</b></td><td>Aceitar um elimina a possibilidade de aceitar o outro; disputam o mesmo objetivo</td><td>Comprar servidor próprio <i>ou</i> contratar nuvem para o mesmo sistema</td></tr>
+              <tr><td><b>Dependentes (contingentes)</b></td><td>Um só é viável (ou só faz sentido) se o outro for aceito</td><td>Fábrica nova exige projeto de ampliação da rede elétrica</td></tr>
+            </tbody>
+          </table>
+          <p><b>Quanto à natureza/finalidade:</b></p>
+          <ul class="styled">
+            <li><b>Expansão/crescimento:</b> aumentar capacidade, entrar em novos mercados — os mais analisados em concursos.</li>
+            <li><b>Reposição/substituição:</b> trocar equipamento no fim da vida útil (manter ou reduzir custo).</li>
+            <li><b>Modernização/eficiência:</b> automatizar, reduzir custo operacional.</li>
+            <li><b>Novos produtos/serviços:</b> lançamento com receitas novas.</li>
+            <li><b>Obrigatórios (regulatórios/ambientais/segurança):</b> exigidos por lei — a decisão não é "se", mas "como" fazer ao menor custo.</li>
+          </ul>
+          <div class="box fgv">
+            <div class="box-title">🏛 Pegadinha clássica da FGV</div>
+            <p>Projetos <b>excludentes</b> não são avaliados isoladamente: compara-se qual gera mais valor (maior VPL, em geral). Já projetos <b>independentes</b> são aceitos se, individualmente, criarem valor (VPL &gt; 0) — sujeitos à disponibilidade de capital (rationing).</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.3 Elementos do fluxo de caixa de um projeto</h3>
+          <ol class="styled">
+            <li><b>Investimento inicial (t₀):</b> desembolso no início (sinal negativo): compra de máquinas e instalações, obras, licenças, <b>capital de giro inicial</b>. Somam-se os gastos de instalação e frete ao custo do ativo.</li>
+            <li><b>Fluxos operacionais (t₁ a tₙ):</b> entradas líquidas geradas ano a ano: receitas incrementais − custos e despesas incrementais − impostos. Convenção: ocorrem no <b>fim de cada período</b>.</li>
+            <li><b>Capital de giro:</b> investimento em caixa, estoques e recebíveis necessário para operar; é desembolso no início (e reforços quando a operação cresce) e <b>retorna (é recuperado) no encerramento</b> do projeto.</li>
+            <li><b>Valor residual / fluxo terminal (tₙ):</b> no último ano, soma-se ao fluxo operacional o valor de venda dos ativos (sucata ou valor de mercado) <b>+ a recuperação do capital de giro</b>, líquidos de impostos.</li>
+          </ol>
+          <div class="box info">
+            <div class="box-title">📘 Esqueleto típico cobrado em prova</div>
+            <p>t₀: − investimento inicial (ativo + giro) • t₁…tₙ₋₁: + fluxos operacionais • tₙ: + fluxo operacional + valor residual + recuperação do giro.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.4 Princípios do fluxo de caixa incremental</h3>
+          <p>O que entra na avaliação é o <b>fluxo incremental</b>: a diferença entre o caixa da empresa <b>com</b> o projeto e o caixa <b>sem</b> o projeto. Três regras de ouro:</p>
+          <table>
+            <thead><tr><th>Item</th><th>Entra na análise?</th><th>Por quê</th></tr></thead>
+            <tbody>
+              <tr><td><b>Custo afundado (sunk cost)</b></td><td><b>NÃO</b></td><td>Já foi gasto e é irrecuperável, decida-se pelo projeto ou não (ex.: pesquisa de mercado já paga)</td></tr>
+              <tr><td><b>Custo de oportunidade</b></td><td><b>SIM</b></td><td>Uso de recurso que a empresa já tem e que deixa de gerar renda alternativa (ex.: usar galpão próprio que poderia ser alugado por R$ 50 mil/mês)</td></tr>
+              <tr><td><b>Efeitos colaterais (sinergia/erosão)</b></td><td><b>SIM</b></td><td>Impactos do projeto nos demais negócios da empresa: canibalização de produto existente (erosão, subtrai) ou complementaridade (sinergia, soma)</td></tr>
+            </tbody>
+          </table>
+          <ul class="styled">
+            <li><b>Fluxo após o imposto de renda:</b> avalia-se o caixa que sobra para a empresa, logo, após IR/CSLL.</li>
+            <li><b>Depreciação não é saída de caixa</b>, mas gera <b>escudo fiscal</b> (reduz o IR): ela entra indiretamente no fluxo, via imposto economizado.</li>
+            <li><b>Despesas financeiras (juros) ficam fora do fluxo do projeto:</b> o custo do financiamento já é capturado pela <b>taxa de desconto</b> (WACC/TMA). Incluí-los seria contagem dupla.</li>
+            <li><b>Regime de caixa:</b> importa quando o dinheiro entra/sai, não quando a receita é "reconhecida" contabilmente.</li>
+          </ul>
+          <div class="box warn">
+            <div class="box-title">⚠️ Erros clássicos que a FGV explora</div>
+            <p>Incluir custo afundado no investimento inicial; esquecer o custo de oportunidade; incluir juros no fluxo (dupla contagem com a taxa); tratar depreciação como desembolso; esquecer a recuperação do capital de giro no último ano.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.5 Diagrama de fluxo de caixa e convenções</h3>
+          <p>O projeto é representado numa <b>linha do tempo</b>: seta para <b>baixo = saída (sinal −)</b>; seta para <b>cima = entrada (sinal +)</b>. Por convenção, os fluxos anuais ocorrem no <b>fim de cada período</b> (convenção postecipada), e t₀ é "agora".</p>
+          <table>
+            <thead><tr><th>Padrão de fluxo</th><th>Característica</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td><b>Convencional (simples)</b></td><td>Uma saída inicial seguida só de entradas (− + + +)</td><td>Compra de máquina que gera receitas anuais</td></tr>
+              <tr><td><b>Não convencional</b></td><td>Mais de uma troca de sinal (− + + − ou − + − +)</td><td>Mineração: investe, explora e, no fim, gasta com recuperação ambiental</td></tr>
+            </tbody>
+          </table>
+          <p>Esse detalhe importa: fluxos <b>não convencionais</b> podem gerar <b>múltiplas TIRs</b> ou nenhuma — um dos motivos pelos quais o <b>VPL</b> é o critério preferido (veremos no Tópico 07).</p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Leitura de prova</div>
+            <p>Questão típica mostra um diagrama e pede a classificação ("fluxo convencional, pois há apenas uma inversão de sinal") ou pede o valor de t₀ somando ativo + instalação + capital de giro. Decore o esqueleto do item 4.3.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.6 Projetos de investimento em empresas estatais</h3>
+          <p>A DATAPREV é uma <b>empresa pública de TI</b>: seus projetos típicos são modernização de datacenters, migração para nuvem, novos sistemas de benefícios, segurança da informação. Em estatais, a lógica financeira convive com particularidades:</p>
+          <ul class="styled">
+            <li>O objetivo primário pode ser <b>missão institucional</b> (universalizar benefícios, reduzir filas) e não maximização de lucro — mas a análise de custo-benefício continua valendo.</li>
+            <li>Projetos frequentemente são <b>obrigatórios/regulatórios</b> (adequação à LGPD, exigências do órgão de controle): decide-se a melhor alternativa de execução, não a conveniência de executar.</li>
+            <li>Em <b>projetos sociais</b>, usa-se VPL social, taxa social de desconto e análise custo-efetividade (Tópico 10).</li>
+            <li>O processo decisório exige <b>governança</b>: estudos de viabilidade técnica, econômico-financeira, ambiental, orçamentária e jurídica (Etapas — Tópico 03).</li>
+          </ul>
+          <div class="box ok">
+            <div class="box-title">✅ Síntese do tópico</div>
+            <p>Projeto de investimento = comprometer recursos hoje por fluxos futuros. Avalia-se pelo <b>fluxo de caixa incremental, após IR, em regime de caixa</b>: entram custo de oportunidade e efeitos colaterais; ficam de fora custos afundados e despesas financeiras. O esqueleto do fluxo é: t₀ (investimento + giro), t₁…tₙ (operação) e tₙ (+ residual + giro).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <p>A FGV raramente pergunta "o que é projeto" diretamente. Ela cobra o conceito <b>aplicado em situações</b>, com foco nos princípios do fluxo incremental:</p>
+          <ol class="styled">
+            <li><b>Classificação de projetos:</b> descreve dois projetos e pergunta a relação (excludentes × independentes × dependentes).</li>
+            <li><b>O que entra e o que não entra no fluxo:</b> lista itens (pesquisa de mercado já paga, aluguel do galpão próprio, juros do financiamento, depreciação) e pede qual deve integrar a análise.</li>
+            <li><b>Composição do investimento inicial:</b> preço do equipamento + frete + instalação + capital de giro.</li>
+            <li><b>Fluxo convencional × não convencional:</b> conta o número de inversões de sinal no diagrama.</li>
+            <li><b>Custo afundado:</b> situação do tipo "a empresa já gastou R$ 500 mil em estudo de viabilidade; o projeto deve ser avaliado considerando esse gasto?" — Resposta: <b>não</b>.</li>
+            <li><b>Efeitos colaterais:</b> novo produto que canibaliza 20% das vendas do produto atual — a perda de margem deve entrar no fluxo do novo projeto (erosão).</li>
+          </ol>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo de enunciado típico</div>
+            <p>"Uma empresa estatal estuda implantar um novo sistema de atendimento. Antes da decisão, pagou R$ 300 mil por uma consultoria de viabilidade e pretende instalar o sistema em prédio próprio, hoje alugado a terceiros por R$ 40 mil mensais. Na elaboração do fluxo de caixa incremental do projeto, deve(m) ser considerado(s): …" — Gabarito: apenas o aluguel perdido (custo de oportunidade).</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠️ Distrações frequentes</div>
+            <p>Alternativas que somam juros do empréstimo ao fluxo; que incluem a consultoria já paga; que tratam depreciação como desembolso de caixa; que ignoram a recuperação do capital de giro no ano final. São quase sempre as erradas.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Projeto de investimento</b> = comprometer recursos hoje em troca de fluxos de caixa futuros, com risco.</li>
+            <li>Três grandes decisões financeiras: <b>investimento, financiamento e dividendos</b>.</li>
+            <li>Classificação quanto à relação: <b>independentes, mutuamente excludentes, dependentes</b>.</li>
+            <li>Classificação quanto à natureza: <b>expansão, reposição, modernização, novos produtos, obrigatórios</b>.</li>
+            <li>Esqueleto do fluxo: <b>t₀ = −(ativo + instalação + capital de giro)</b>; t₁…tₙ = + operação; <b>tₙ também traz valor residual + recuperação do giro</b>.</li>
+            <li><b>Fluxo incremental</b> = caixa COM projeto − caixa SEM projeto.</li>
+            <li><b>ENTRA:</b> custo de oportunidade, efeitos colaterais (erosão/sinergia), imposto de renda.</li>
+            <li><b>NÃO ENTRA:</b> custo afundado, despesas financeiras (juros), depreciação como desembolso (entra só o escudo fiscal).</li>
+            <li>Avaliação em <b>regime de caixa</b>, após IR; convenção de fluxos no <b>fim de cada período</b>.</li>
+            <li>Fluxo <b>convencional</b>: uma inversão de sinal; <b>não convencional</b>: duas ou mais (pode gerar múltiplas TIRs).</li>
+            <li>Juros ficam fora do fluxo porque já estão na <b>taxa de desconto</b> — incluí-los é contagem dupla.</li>
+            <li>Em estatais, projetos podem ter motivação <b>regulatória ou social</b>; a análise econômica continua necessária (menor custo / maior benefício).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Pergunta-relâmpago</th><th>Resposta</th></tr></thead>
+            <tbody>
+              <tr><td>O que é projeto de investimento?</td><td>Aplicação de recursos hoje visando fluxos futuros de caixa</td></tr>
+              <tr><td>Projetos excludentes?</td><td>Aceitar um elimina o outro</td></tr>
+              <tr><td>Projetos dependentes?</td><td>Um só existe se o outro for aceito</td></tr>
+              <tr><td>O que compõe t₀?</td><td>Ativo + instalação/frete + capital de giro (negativo)</td></tr>
+              <tr><td>O que acontece no último ano?</td><td>Fluxo operacional + valor residual + recuperação do giro</td></tr>
+              <tr><td>Custo afundado entra?</td><td>Não — já foi gasto, é irrelevante para a decisão</td></tr>
+              <tr><td>Custo de oportunidade entra?</td><td>Sim — recurso próprio usado deixa de gerar renda alternativa</td></tr>
+              <tr><td>Juros entram no fluxo?</td><td>Não — já estão na taxa de desconto (dupla contagem)</td></tr>
+              <tr><td>Depreciação é saída de caixa?</td><td>Não, mas gera escudo fiscal (economia de IR)</td></tr>
+              <tr><td>Regime usado na avaliação?</td><td>Caixa, após imposto de renda</td></tr>
+              <tr><td>Fluxo com duas trocas de sinal?</td><td>Não convencional — risco de múltiplas TIRs</td></tr>
+              <tr><td>Erosão (canibalização) entra?</td><td>Sim, como efeito colateral negativo</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Esqueleto do fluxo do projeto</td><td>t₀ = − (investimento no ativo + instalação + capital de giro); t₁…tₙ = + fluxos operacionais; tₙ inclui ainda valor residual + recuperação do giro</td></tr>
+              <tr><td>Fluxo de caixa incremental</td><td>FC incremental = FC da empresa COM o projeto − FC da empresa SEM o projeto</td></tr>
+              <tr><td>Fluxo operacional (visão simplificada)</td><td>FC = (receitas incrementais − custos incrementais) × (1 − IR) + escudo fiscal da depreciação</td></tr>
+              <tr><td>Escudo fiscal da depreciação</td><td>Depreciação × alíquota de IR — economia de imposto gerada pela depreciação</td></tr>
+              <tr><td>Valor residual líquido</td><td>Valor de venda do ativo − IR sobre o ganho de capital (venda − valor contábil)</td></tr>
+              <tr><td>Convenção de sinais</td><td>Saídas = negativo (seta para baixo, t₀); entradas = positivo (seta para cima, fim de cada período)</td></tr>
+              <tr><td>Fluxo convencional</td><td>Apenas uma inversão de sinal: − + + + …</td></tr>
+              <tr><td>Fluxo não convencional</td><td>Duas ou mais inversões: − + + − ou − + − + (pode gerar múltiplas TIRs)</td></tr>
+              <tr><td>Custo afundado</td><td>Gasto já realizado e irrecuperável → irrelevante para a decisão (fica fora)</td></tr>
+              <tr><td>Custo de oportunidade</td><td>Valor da melhor alternativa sacrificada ao usar um recurso no projeto (entra no fluxo)</td></tr>
+              <tr><td>Efeito colateral</td><td>Impacto do projeto nos demais negócios: erosão (−) ou sinergia (+)</td></tr>
+              <tr><td>Regra dos juros</td><td>Despesas financeiras não entram no fluxo do projeto: já são capturadas pela taxa de desconto (TMA/WACC)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas e quadros de memorização</h2></div>
+        <div class="card">
+          <h3>Classificação dos projetos — resumo</h3>
+          <table>
+            <thead><tr><th>Critério</th><th>Categorias</th><th>Palavra-chave da prova</th></tr></thead>
+            <tbody>
+              <tr><td>Relação entre projetos</td><td>Independentes / Mutuamente excludentes / Dependentes</td><td>"disputam o mesmo objetivo" → excludentes</td></tr>
+              <tr><td>Natureza/finalidade</td><td>Expansão / Reposição / Modernização / Novos produtos / Obrigatórios</td><td>"exigido por lei" → obrigatório</td></tr>
+            </tbody>
+          </table>
+          <h3>Entra × não entra no fluxo incremental</h3>
+          <table>
+            <thead><tr><th>Entra (✔)</th><th>Não entra (✘)</th></tr></thead>
+            <tbody>
+              <tr><td>Custo de oportunidade</td><td>Custo afundado (sunk cost)</td></tr>
+              <tr><td>Efeitos colaterais (erosão/sinergia)</td><td>Despesas financeiras (juros do financiamento)</td></tr>
+              <tr><td>Capital de giro (saída no início, retorno no fim)</td><td>Depreciação como desembolso (vale só o escudo fiscal)</td></tr>
+              <tr><td>Imposto de renda sobre o resultado incremental</td><td>Rateios de custos fixos que existiriam sem o projeto</td></tr>
+              <tr><td>Valor residual líquido de impostos</td><td>Gastos com estudos já pagos</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplo de fluxo completo (projeto de 3 anos, em R$ mil)</h3>
+          <table>
+            <thead><tr><th>Componente</th><th>t₀</th><th>t₁</th><th>t₂</th><th>t₃</th></tr></thead>
+            <tbody>
+              <tr><td>Investimento no ativo</td><td>− 1.000</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>Capital de giro</td><td>− 200</td><td>—</td><td>—</td><td>+ 200</td></tr>
+              <tr><td>Fluxo operacional (após IR)</td><td>—</td><td>+ 450</td><td>+ 450</td><td>+ 450</td></tr>
+              <tr><td>Valor residual líquido</td><td>—</td><td>—</td><td>—</td><td>+ 100</td></tr>
+              <tr><td><b>Fluxo total</b></td><td><b>− 1.200</b></td><td><b>+ 450</b></td><td><b>+ 450</b></td><td><b>+ 750</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🏛 O conceito nasceu antes dos computadores</div><p>A análise sistemática de projetos de investimento ganhou forma na década de 1950, com Joel Dean e a popularização do fluxo de caixa descontado — antes disso, empresas decidiam grandes investimentos basicamente "no feeling" dos diretores. A DATAPREV, fundada em 1974 para informatizar a previdência, é filha dessa era em que a computação começou a exigir projetos de investimento cada vez maiores.</p></div>
+        <div class="box curio"><div class="box-title">💸 "Sunk cost" explica por que projetos ruins não morrem</div><p>A falácia do custo afundado — "já gastamos tanto, não podemos parar agora" — é um dos vieses mais estudados das finanças comportamentais. A regra correta é fria: o que já foi gasto é irrelevante; decide-se olhando só os fluxos futuros. Por isso obras públicas abandonadas são tão comuns: ninguém quer "assumir o prejuízo" de parar.</p></div>
+        <div class="box curio"><div class="box-title">🧮 Canais do Panamá e da excelência</div><p>A avaliação do Canal do Panamá (inaugurado em 1914) é frequentemente citada como um dos primeiros "megaprojetos" avaliados com lógica de benefícios futuros versus custo monumental inicial. Hoje, estudos mostram que mais de 90% dos megaprojetos estouram prazo ou orçamento — por isso a análise de risco (Tópicos 08 e 09) existe.</p></div>
+        <div class="box curio"><div class="box-title">🖥 O projeto de TI que "vira ativo"</div><p>Na DATAPREV, desenvolver um sistema novo é projeto de investimento típico: desembolso grande no início (equipe, licenças, infraestrutura) e benefícios ao longo dos anos (menor custo por benefício pago, menos fraudes, filas menores). A contabilidade permite até ativar parte desses gastos como "ativo intangível" (CPC 04) — ponte com Contabilidade Empresarial.</p></div>
+        <div class="box curio"><div class="box-title">🎯 Megaprojeto brasileiro clássico</div><p>A Usina de Itaipu é o exemplo nacional de fluxo não trivial: investimento gigantesco nos anos 1970/80, receitas de energia por décadas e, no contrato, revisão da tarifa e amortização da dívida até 2023 — quando a usina quitou a dívida de construção e pôde reduzir a tarifa. Um "projeto" de 50 anos de horizonte.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Valor do dinheiro no tempo (Adm. Financeira — Tópico 06)</td><td>Toda a avaliação de projetos é aplicação direta do desconto de fluxos a valor presente</td></tr>
+              <tr><td>Fontes de financiamento / WACC (Adm. Financeira — Tópico 08)</td><td>A taxa que desconta os fluxos do projeto (TMA) nasce do custo de capital — Tópico 05 desta matéria</td></tr>
+              <tr><td>Etapas na elaboração de projetos (Tópico 03)</td><td>O conceito deste tópico é a matéria-prima das etapas: estudo de viabilidade, fluxo projetado, avaliação</td></tr>
+              <tr><td>Metodologias de avaliação (Tópico 04)</td><td>Os métodos (VPL, TIR, payback) só existem porque o fluxo incremental foi corretamente definido aqui</td></tr>
+              <tr><td>Indicadores VPL, TIR, payback (Tópico 07)</td><td>O esqueleto de fluxo (t₀, operação, residual + giro) é exatamente o que esses indicadores processam</td></tr>
+              <tr><td>Parâmetros de análise (Tópico 06)</td><td>Vida econômica, depreciação, valor residual e capital de giro — os componentes deste tópico — são detalhados lá</td></tr>
+              <tr><td>Análise de projetos sociais (Tópico 10)</td><td>A mesma lógica incremental aplicada a benefícios sociais, com taxa social de desconto</td></tr>
+              <tr><td>Matemática Financeira</td><td>Desconto, séries uniformes e equivalência de capitais sustentam todos os cálculos dos tópicos seguintes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e redesenhar à mão o esqueleto do fluxo de caixa (t₀, operação, ano final) sem consultar o material.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, marcando em cada uma o princípio do fluxo incremental testado (afundado, oportunidade, colateral, juros).</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado e revisar os flashcards; avançar para o Tópico 02 (importância, características e limitações).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas. (Capítulos de análise de investimentos e orçamento de capital.)</li>
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Orçamento de capital e princípios do fluxo incremental.)</li>
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey; JORDAN, Bradford D. <i>Administração Financeira</i>. Porto Alegre: AMGH. (Decisões de investimento de capital.)</li>
+            <li>DAMODARAN, Aswath. <i>Finanças Corporativas Aplicadas</i>. Porto Alegre: Bookman.</li>
+            <li>BRASIL. Ministério do Planejamento. <i>Guia de elaboração de estudos de viabilidade</i> (referência para projetos em entes públicos).</li>
+            <li>Provas anteriores da banca FGV — concursos de gestão e finanças (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 01/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t01";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que é um projeto de investimento?",
+          "a": "Conjunto de ações que compromete recursos hoje (desembolso inicial) em troca de fluxos de caixa futuros, sob risco."
+      },
+      {
+          "q": "Quais são as três grandes decisões financeiras da empresa?",
+          "a": "Investimento (em quais ativos aplicar), financiamento (de onde vem o recurso) e dividendos (quanto distribuir × reter)."
+      },
+      {
+          "q": "Projetos independentes — definição?",
+          "a": "A aceitação de um não afeta a do outro; cada um é aceito se, isoladamente, criar valor (VPL > 0)."
+      },
+      {
+          "q": "Projetos mutuamente excludentes — definição?",
+          "a": "Disputam o mesmo objetivo: aceitar um elimina o outro. Escolhe-se o de maior valor."
+      },
+      {
+          "q": "Projetos dependentes (contingentes) — definição?",
+          "a": "Um só é viável se o outro for aceito (ex.: fábrica nova que exige ampliação da rede elétrica)."
+      },
+      {
+          "q": "Quanto à natureza, como se classificam os projetos?",
+          "a": "Expansão, reposição, modernização, novos produtos e obrigatórios (regulatórios/ambientais)."
+      },
+      {
+          "q": "O que compõe o investimento inicial (t₀)?",
+          "a": "Preço do ativo + frete + instalação + capital de giro inicial — sempre com sinal negativo."
+      },
+      {
+          "q": "O que acontece com o capital de giro no fluxo do projeto?",
+          "a": "É desembolso no início (e reforços durante a vida) e é recuperado (retorna) no encerramento do projeto."
+      },
+      {
+          "q": "O que compõe o fluxo do último ano (tₙ)?",
+          "a": "Fluxo operacional + valor residual líquido dos ativos + recuperação do capital de giro."
+      },
+      {
+          "q": "O que é fluxo de caixa incremental?",
+          "a": "A diferença entre o caixa da empresa COM o projeto e o caixa SEM o projeto — é ele que entra na análise."
+      },
+      {
+          "q": "Custo afundado entra na análise do projeto?",
+          "a": "Não. Já foi gasto e é irrecuperável, aconteça o que acontecer com o projeto — é irrelevante para a decisão."
+      },
+      {
+          "q": "Custo de oportunidade entra na análise?",
+          "a": "Sim. Usar recurso próprio (ex.: galpão que poderia ser alugado) tem custo: a renda alternativa sacrificada."
+      },
+      {
+          "q": "O que são efeitos colaterais de um projeto?",
+          "a": "Impactos nos demais negócios da empresa: erosão/canibalização (negativo) ou sinergia (positivo). Entram no fluxo."
+      },
+      {
+          "q": "Por que juros do financiamento ficam fora do fluxo do projeto?",
+          "a": "Porque o custo do financiamento já está na taxa de desconto (TMA/WACC). Incluí-los seria contagem dupla."
+      },
+      {
+          "q": "Depreciação é saída de caixa?",
+          "a": "Não. Mas gera escudo fiscal: reduz o IR, economia que entra no fluxo (depreciação × alíquota)."
+      },
+      {
+          "q": "Qual regime se usa na avaliação de projetos: caixa ou competência?",
+          "a": "Regime de caixa — importa quando o dinheiro entra e sai; e os fluxos são considerados após o IR."
+      },
+      {
+          "q": "O que é fluxo de caixa convencional?",
+          "a": "Uma única inversão de sinal: saída inicial seguida de entradas (− + + +)."
+      },
+      {
+          "q": "O que é fluxo não convencional e qual seu problema?",
+          "a": "Duas ou mais inversões de sinal (− + + −). Pode gerar múltiplas TIRs ou nenhuma — por isso o VPL é preferido."
+      },
+      {
+          "q": "Qual a convenção de datas usada nos diagramas?",
+          "a": "Fluxos ocorrem no fim de cada período (convenção postecipada); t₀ é o instante inicial, 'agora'."
+      },
+      {
+          "q": "Como o conceito se aplica a estatais como a DATAPREV?",
+          "a": "Projetos de TI (sistemas, datacenter, nuvem) exigem desembolso inicial e geram benefícios futuros; muitos são obrigatórios/regulatórios, e a análise busca a alternativa de menor custo/maior benefício."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Conceito",
+          "texto": "—",
+          "enun": "Um projeto de investimento é melhor definido como:",
+          "alts": [
+              "qualquer gasto realizado pela empresa no exercício",
+              "conjunto de ações que compromete recursos hoje visando fluxos de caixa futuros",
+              "o documento formal que descreve os objetivos estratégicos",
+              "o orçamento anual aprovado pelo conselho",
+              "a soma dos ativos imobilizados da empresa"
+          ],
+          "correta": 1,
+          "coment": "Projeto de investimento envolve desembolso presente em troca de benefícios (fluxos de caixa) futuros, sob risco. Não é mero gasto, documento ou rubrica contábil."
+      },
+      {
+          "tema": "Decisões financeiras",
+          "texto": "—",
+          "enun": "As três grandes decisões da administração financeira são:",
+          "alts": [
+              "compras, produção e vendas",
+              "investimento, financiamento e dividendos",
+              "planejamento, organização e controle",
+              "liquidez, rentabilidade e solvência",
+              "curto, médio e longo prazos"
+          ],
+          "correta": 1,
+          "coment": "Clássico: decisão de investimento (ativo), decisão de financiamento (passivo/PL) e decisão de dividendos (distribuir x reter)."
+      },
+      {
+          "tema": "Classificação",
+          "texto": "Uma estatal avalia duas alternativas para o mesmo fim: contratar nuvem ou comprar servidores próprios para hospedar o mesmo sistema.",
+          "enun": "Esses projetos são classificados como:",
+          "alts": [
+              "independentes",
+              "dependentes",
+              "mutuamente excludentes",
+              "obrigatórios",
+              "complementares"
+          ],
+          "correta": 2,
+          "coment": "Atendem ao mesmo objetivo: aceitar um elimina o outro → mutuamente excludentes."
+      },
+      {
+          "tema": "Classificação",
+          "texto": "Uma empresa decide abrir uma filial em outro estado e, ao mesmo tempo, trocar o sistema de climatização da sede; um não depende do outro.",
+          "enun": "Os dois projetos são:",
+          "alts": [
+              "mutuamente excludentes",
+              "dependentes",
+              "independentes",
+              "obrigatórios",
+              "contingentes"
+          ],
+          "correta": 2,
+          "coment": "A decisão sobre um não interfere na do outro: são independentes; cada um deve ser aceito se, por si só, criar valor."
+      },
+      {
+          "tema": "Classificação",
+          "texto": "O projeto de ampliação da fábrica só é viável se o projeto de reforço da subestação elétrica for executado antes.",
+          "enun": "A ampliação da fábrica é um projeto:",
+          "alts": [
+              "independente",
+              "dependente (contingente)",
+              "excludente",
+              "de reposição",
+              "obrigatório"
+          ],
+          "correta": 1,
+          "coment": "A existência/viabilidade de um depende da aceitação do outro → projeto dependente ou contingente."
+      },
+      {
+          "tema": "Natureza",
+          "texto": "Uma empresa substitui uma máquina no fim da vida útil por outra equivalente, mantendo a mesma capacidade.",
+          "enun": "Quanto à natureza, trata-se de projeto de:",
+          "alts": [
+              "expansão",
+              "novos produtos",
+              "reposição",
+              "modernização",
+              "pesquisa"
+          ],
+          "correta": 2,
+          "coment": "Reposição/substituição: troca do ativo mantendo a operação; não há aumento de capacidade (que seria expansão)."
+      },
+      {
+          "tema": "Natureza",
+          "texto": "Para atender a nova exigência do órgão regulador, a empresa terá de implantar um sistema de controle ambiental, sob pena de multa.",
+          "enun": "Esse projeto é classificado como:",
+          "alts": [
+              "de expansão",
+              "obrigatório (regulatório)",
+              "de reposição",
+              "dependente",
+              "de novos produtos"
+          ],
+          "correta": 1,
+          "coment": "Exigência legal: o projeto é obrigatório — a decisão não é 'se', mas 'como' executá-lo ao menor custo."
+      },
+      {
+          "tema": "Investimento inicial",
+          "texto": "Uma empresa compra equipamento por R$ 800 mil, paga R$ 40 mil de frete e R$ 60 mil de instalação, e precisa de R$ 100 mil de capital de giro.",
+          "enun": "O investimento inicial (t₀) do projeto é, em R$ mil:",
+          "alts": [
+              "800",
+              "900",
+              "940",
+              "1.000",
+              "860"
+          ],
+          "correta": 3,
+          "coment": "t₀ = 800 + 40 + 60 + 100 = 1.000. Frete e instalação somam ao custo do ativo; o capital de giro é desembolso inicial."
+      },
+      {
+          "tema": "Capital de giro",
+          "texto": "—",
+          "enun": "Em relação ao capital de giro de um projeto, é correto afirmar que:",
+          "alts": [
+              "é um custo definitivo, nunca recuperado",
+              "é desembolsado no início e recuperado no encerramento do projeto",
+              "não integra o fluxo de caixa",
+              "é tratado como depreciação",
+              "substitui o valor residual"
+          ],
+          "correta": 1,
+          "coment": "O giro é investimento temporário: sai no início (e em reforços) e retorna quando o projeto termina, somando-se ao fluxo do último ano."
+      },
+      {
+          "tema": "Valor residual",
+          "texto": "—",
+          "enun": "O fluxo de caixa do último ano de um projeto normalmente inclui, além do fluxo operacional:",
+          "alts": [
+              "o reembolso do financiamento",
+              "o valor residual dos ativos e a recuperação do capital de giro",
+              "a depreciação acumulada",
+              "os juros pagos no período",
+              "o custo afundado recuperado"
+          ],
+          "correta": 1,
+          "coment": "Fluxo terminal = operação + valor residual líquido de impostos + recuperação do capital de giro."
+      },
+      {
+          "tema": "Fluxo incremental",
+          "texto": "—",
+          "enun": "O fluxo de caixa relevante para a avaliação de um projeto é:",
+          "alts": [
+              "o lucro líquido projetado",
+              "o fluxo de caixa total da empresa",
+              "o fluxo de caixa incremental: com o projeto menos sem o projeto",
+              "a receita bruta do projeto",
+              "o EBITDA projetado"
+          ],
+          "correta": 2,
+          "coment": "Avalia-se o incremento que o projeto traz ao caixa da empresa, em regime de caixa e após impostos."
+      },
+      {
+          "tema": "Custo afundado",
+          "texto": "Antes de decidir, a empresa pagou R$ 300 mil por estudo de viabilidade já concluído.",
+          "enun": "Na elaboração do fluxo incremental, os R$ 300 mil devem:",
+          "alts": [
+              "entrar em t₀ como investimento",
+              "ser rateados ao longo do projeto",
+              "ser ignorados, por serem custo afundado",
+              "entrar como custo de oportunidade",
+              "reduzir o valor residual"
+          ],
+          "correta": 2,
+          "coment": "O gasto já ocorreu e é irrecuperável decida-se como se decidir: custo afundado, irrelevante para a análise."
+      },
+      {
+          "tema": "Custo de oportunidade",
+          "texto": "O projeto usará um galpão próprio, hoje alugado a terceiros por R$ 40 mil mensais.",
+          "enun": "O aluguel perdido deve:",
+          "alts": [
+              "ser ignorado, pois o galpão é próprio",
+              "entrar no fluxo como custo de oportunidade",
+              "ser lançado como receita do projeto",
+              "compensar o valor residual",
+              "ser tratado como custo afundado"
+          ],
+          "correta": 1,
+          "coment": "Ao usar o galpão, a empresa abre mão do aluguel: renda alternativa sacrificada = custo de oportunidade, que integra o fluxo incremental."
+      },
+      {
+          "tema": "Efeitos colaterais",
+          "texto": "O novo produto deve reduzir em 15% as vendas do produto tradicional da empresa.",
+          "enun": "Essa redução de vendas deve:",
+          "alts": [
+              "ser ignorada, pois é outro produto",
+              "entrar no fluxo do novo projeto como erosão (efeito negativo)",
+              "ser registrada como custo afundado",
+              "ser contada como sinergia",
+              "ser excluída por ser estimativa"
+          ],
+          "correta": 1,
+          "coment": "Canibalização/erosão é efeito colateral negativo e, como afeta o caixa da empresa, subtrai do fluxo incremental do novo projeto."
+      },
+      {
+          "tema": "Juros",
+          "texto": "—",
+          "enun": "As despesas financeiras (juros) do empréstimo que financiará o projeto devem:",
+          "alts": [
+              "integrar o fluxo de caixa do projeto",
+              "ser excluídas do fluxo, pois já estão capturadas pela taxa de desconto",
+              "ser somadas ao investimento inicial",
+              "reduzir o capital de giro",
+              "integrar o valor residual"
+          ],
+          "correta": 1,
+          "coment": "O custo do financiamento já está na taxa de desconto (TMA/WACC). Colocar juros no fluxo seria contagem dupla."
+      },
+      {
+          "tema": "Depreciação",
+          "texto": "—",
+          "enun": "Sobre a depreciação na análise de projetos, é correto afirmar:",
+          "alts": [
+              "é desembolso de caixa anual",
+              "não é saída de caixa, mas gera economia de IR (escudo fiscal)",
+              "não tem qualquer efeito na análise",
+              "deve ser somada ao investimento inicial",
+              "substitui o imposto de renda"
+          ],
+          "correta": 1,
+          "coment": "Depreciação é despesa não desembolsável; seu efeito no fluxo é indireto, via escudo fiscal (depreciação × alíquota de IR)."
+      },
+      {
+          "tema": "Regime",
+          "texto": "—",
+          "enun": "A avaliação econômica de projetos adota o regime de:",
+          "alts": [
+              "competência, antes dos impostos",
+              "caixa, após o imposto de renda",
+              "competência, após os impostos",
+              "caixa, antes do imposto de renda",
+              "realização, conforme o contrato"
+          ],
+          "correta": 1,
+          "coment": "Regime de caixa (quando o dinheiro efetivamente entra/sai) e fluxos após IR: o que sobra para os financiadores."
+      },
+      {
+          "tema": "Convenção",
+          "texto": "—",
+          "enun": "No diagrama de fluxo de caixa de um projeto, por convenção:",
+          "alts": [
+              "os fluxos ocorrem no início de cada período",
+              "os fluxos ocorrem no fim de cada período, com t₀ representando o presente",
+              "entradas têm sinal negativo",
+              "t₀ ocorre após o primeiro ano",
+              "as saídas são representadas acima do eixo"
+          ],
+          "correta": 1,
+          "coment": "Convenção postecipada: entradas/saídas anuais no fim de cada período; t₀ = agora; entradas positivas (acima), saídas negativas (abaixo)."
+      },
+      {
+          "tema": "Fluxo não convencional",
+          "texto": "Um projeto apresenta a sequência de fluxos: −100, +60, +60, −50.",
+          "enun": "Esse fluxo é classificado como:",
+          "alts": [
+              "convencional",
+              "não convencional, com duas inversões de sinal",
+              "perpétuo",
+              "anuidade",
+              "independente"
+          ],
+          "correta": 1,
+          "coment": "− + + − : o sinal troca duas vezes → não convencional. Esse padrão pode gerar múltiplas TIRs (ex.: mineração com recuperação ambiental no fim)."
+      },
+      {
+          "tema": "Estatais",
+          "texto": "—",
+          "enun": "Na análise de projetos de investimento em empresas estatais, é correto afirmar que:",
+          "alts": [
+              "a análise financeira é dispensável, pois o objetivo é social",
+              "projetos regulatórios não exigem qualquer avaliação",
+              "a lógica de fluxo incremental continua valendo, ainda que o objetivo inclua missão institucional",
+              "somente projetos com lucro positivo podem ser aceitos",
+              "o capital de giro não se aplica a estatais"
+          ],
+          "correta": 2,
+          "coment": "Em estatais a missão pode prevalecer, mas a análise de custo-benefício permanece: comparam-se alternativas e mede-se o valor criado (ou o menor custo)."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Projeto de investimento é o comprometimento de recursos no presente com expectativa de:",
+          "alts": [
+              "reduzir o passivo",
+              "obter fluxos de caixa futuros",
+              "aumentar o capital social",
+              "quitar dívidas",
+              "distribuir dividendos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A decisão de investimento da empresa aparece, no balanço patrimonial, no:",
+          "alts": [
+              "passivo circulante",
+              "patrimônio líquido",
+              "ativo",
+              "resultado",
+              "passivo não circulante"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Dois projetos que disputam o mesmo objetivo, de modo que aceitar um elimina o outro, são:",
+          "alts": [
+              "independentes",
+              "dependentes",
+              "mutuamente excludentes",
+              "obrigatórios",
+              "contingentes"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O desembolso inicial de um projeto (t₀) possui sinal:",
+          "alts": [
+              "positivo",
+              "negativo",
+              "nulo",
+              "variável",
+              "duplo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Gasto já realizado e irrecuperável, que não deve influenciar a decisão sobre o projeto, é chamado de:",
+          "alts": [
+              "custo de oportunidade",
+              "custo fixo",
+              "custo afundado",
+              "custo variável",
+              "custo marginal"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O valor da melhor alternativa sacrificada ao empregar um recurso no projeto é o:",
+          "alts": [
+              "custo afundado",
+              "custo de oportunidade",
+              "valor residual",
+              "capital de giro",
+              "custo contábil"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Um fluxo do tipo − + + + (uma saída inicial seguida apenas de entradas) é denominado:",
+          "alts": [
+              "não convencional",
+              "convencional",
+              "perpétuo",
+              "irregular",
+              "híbrido"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A avaliação de projetos trabalha com fluxos medidos pelo regime de:",
+          "alts": [
+              "competência",
+              "realização",
+              "caixa",
+              "caixa-competência misto",
+              "exercício"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Projeto cuja execução é exigida por lei ou regulamento é classificado como:",
+          "alts": [
+              "de expansão",
+              "de reposição",
+              "obrigatório",
+              "independente",
+              "de novos produtos"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Os fluxos de caixa de um projeto devem ser considerados:",
+          "alts": [
+              "antes do imposto de renda",
+              "após o imposto de renda",
+              "sem impostos",
+              "antes das vendas",
+              "após o lucro"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Equipamento de R$ 500 mil, instalação de R$ 50 mil e capital de giro de R$ 80 mil.",
+          "enun": "O investimento inicial do projeto é, em R$ mil:",
+          "alts": [
+              "500",
+              "550",
+              "580",
+              "630",
+              "680"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Média",
+          "texto": "A empresa usará no projeto um terreno próprio que poderia ser vendido hoje por R$ 2 milhões.",
+          "enun": "Na análise, o valor do terreno deve:",
+          "alts": [
+              "ser ignorado, pois é ativo próprio",
+              "entrar em t₀ como custo de oportunidade",
+              "entrar como receita no último ano",
+              "ser depreciado ao longo do projeto",
+              "entrar como custo afundado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "A empresa já gastou R$ 200 mil em protótipo (concluído) e avalia agora investir R$ 1 milhão no lançamento.",
+          "enun": "No fluxo incremental do projeto de lançamento, os R$ 200 mil:",
+          "alts": [
+              "somam ao investimento inicial",
+              "são rateados em 5 anos",
+              "ficam de fora, por serem custo afundado",
+              "reduzem o capital de giro",
+              "entram como custo de oportunidade"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Sequência de fluxos de um projeto: −500, +300, +300, −100.",
+          "enun": "Quantas inversões de sinal há e como o fluxo se classifica?",
+          "alts": [
+              "1; convencional",
+              "2; não convencional",
+              "3; não convencional",
+              "0; convencional",
+              "2; convencional"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "O novo sistema reduzirá em R$ 100 mil/ano as receitas do sistema antigo da mesma empresa.",
+          "enun": "Esse efeito deve entrar no projeto do novo sistema como:",
+          "alts": [
+              "sinergia",
+              "custo afundado",
+              "erosão (canibalização)",
+              "valor residual",
+              "capital de giro"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Projeto com depreciação anual de R$ 100 mil e alíquota de IR de 34%.",
+          "enun": "A economia anual de imposto gerada pela depreciação (escudo fiscal) é, em R$ mil:",
+          "alts": [
+              "100",
+              "66",
+              "34",
+              "134",
+              "50"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Os juros do financiamento que viabiliza o projeto são excluídos do fluxo de caixa porque:",
+          "alts": [
+              "são despesas não desembolsáveis",
+              "já estão refletidos na taxa de desconto (TMA/WACC)",
+              "são custos afundados",
+              "são irrelevantes para a empresa",
+              "são dedutíveis do IR"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O capital de giro de um projeto é, via de regra:",
+          "alts": [
+              "desembolsado no início e recuperado no fim",
+              "despesa permanente, sem retorno",
+              "sinônimo de custo afundado",
+              "idêntico ao valor residual",
+              "alienado no primeiro ano"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "Ativo comprado por R$ 400 mil será vendido ao fim do projeto por R$ 120 mil, quando seu valor contábil será zero; IR de 25%.",
+          "enun": "O valor residual líquido de impostos é, em R$ mil:",
+          "alts": [
+              "120",
+              "90",
+              "30",
+              "100",
+              "80"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Um projeto de fluxo não convencional (mais de uma inversão de sinal) pode apresentar:",
+          "alts": [
+              "sempre VPL negativo",
+              "múltiplas taxas internas de retorno",
+              "payback infinito",
+              "TIR única e menor que a TMA",
+              "fluxo convencional equivalente"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto de 3 anos (R$ mil): ativo 900; giro 100; fluxo operacional anual 400; valor residual líquido 50.",
+          "enun": "O fluxo de caixa do ano 3 é, em R$ mil:",
+          "alts": [
+              "400",
+              "450",
+              "500",
+              "550",
+              "600"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "Mesmo projeto (ativo 900; giro 100; operação 400/ano por 3 anos; residual 50).",
+          "enun": "O investimento inicial em t₀ é, em R$ mil:",
+          "alts": [
+              "900",
+              "950",
+              "1.000",
+              "1.050",
+              "1.100"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Uma estatal avalia instalar sistema em prédio próprio hoje alugado por R$ 30 mil/mês; já pagou R$ 150 mil por consultoria; o projeto usará financiamento com juros de R$ 20 mil/mês.",
+          "enun": "No fluxo incremental mensal do projeto, deve(m) entrar:",
+          "alts": [
+              "os três valores",
+              "apenas os juros",
+              "apenas a consultoria",
+              "apenas o aluguel perdido",
+              "consultoria e aluguel"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto A gera VPL positivo e é independente do projeto B, também com VPL positivo; há capital para ambos.",
+          "enun": "A decisão correta é:",
+          "alts": [
+              "aceitar apenas o de maior VPL",
+              "aceitar os dois",
+              "rejeitar os dois, pelo risco conjunto",
+              "aceitar apenas A",
+              "escolher o de maior TIR apenas"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Receita incremental de R$ 1.000 mil e custos incrementais de R$ 600 mil por ano; IR de 30%; sem depreciação.",
+          "enun": "O fluxo operacional anual após IR é, em R$ mil:",
+          "alts": [
+              "400",
+              "300",
+              "280",
+              "700",
+              "330"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Receita incremental 1.000; custos incrementais 600; depreciação 200; IR 30% (valores em R$ mil/ano).",
+          "enun": "Considerando o escudo fiscal da depreciação, o fluxo operacional anual é, em R$ mil:",
+          "alts": [
+              "280",
+              "340",
+              "400",
+              "140",
+              "460"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto de mineração: investe 800 em t₀, recebe 500 em t₁ e t₂, e gasta 200 em t₃ com recuperação ambiental.",
+          "enun": "O fluxo desse projeto é:",
+          "alts": [
+              "convencional, uma inversão",
+              "não convencional, duas inversões",
+              "não convencional, três inversões",
+              "convencional, sem inversão",
+              "impossível de classificar"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "A diretoria quer somar aos custos do projeto uma parcela do salário do presidente, que não mudará com o projeto.",
+          "enun": "Esse rateio deve:",
+          "alts": [
+              "entrar como custo incremental",
+              "ficar de fora, pois não é incremental",
+              "entrar como custo de oportunidade",
+              "entrar como custo afundado",
+              "reduzir o valor residual"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto X e Y atendem à mesma necessidade; X tem VPL de R$ 2 mi e Y, de R$ 3 mi; são excludentes.",
+          "enun": "A escolha correta, pelo critério do VPL, é:",
+          "alts": [
+              "X, por ser o primeiro avaliado",
+              "Y, por gerar mais valor",
+              "ambos, pois ambos têm VPL positivo",
+              "nenhum, por serem excludentes",
+              "o de menor investimento inicial"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto exige giro de R$ 100 em t₀, reforço de R$ 50 em t₁ e gera operação de R$ 120 em t₁ e t₂, com residual zero em t₂.",
+          "enun": "O fluxo de caixa do ano 2 é, em R$:",
+          "alts": [
+              "120",
+              "150",
+              "220",
+              "270",
+              "70"
+          ],
+          "correta": 3
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Definir projeto de investimento e relacioná-lo às três decisões financeiras",
+      "Distinguir valor x preço e explicar por que projetos são avaliados por caixa, não por lucro",
+      "Classificar projetos: independentes x excludentes x dependentes",
+      "Classificar projetos quanto à natureza: expansão, reposição, modernização, novos produtos, obrigatórios",
+      "Montar o esqueleto do fluxo: t₀, operação, valor residual + giro no último ano",
+      "Aplicar a regra do fluxo incremental (COM menos SEM o projeto)",
+      "Identificar custo afundado (fora) e custo de oportunidade (dentro)",
+      "Explicar por que juros ficam fora do fluxo (dupla contagem com a taxa)",
+      "Reconhecer o papel da depreciação como escudo fiscal",
+      "Distinguir fluxo convencional de não convencional e o risco de múltiplas TIRs"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Incluir custo afundado (estudos já pagos) no investimento inicial do projeto.",
+      "Ignorar o custo de oportunidade de usar recursos próprios (galpão, terreno, equipamento ocioso).",
+      "Somar os juros do financiamento ao fluxo do projeto — contagem dupla com a taxa de desconto.",
+      "Tratar a depreciação como desembolso de caixa anual.",
+      "Esquecer o escudo fiscal da depreciação ao calcular o fluxo após IR.",
+      "Omitir o capital de giro do investimento inicial.",
+      "Esquecer de recuperar o capital de giro no fluxo do último ano.",
+      "Esquecer o valor residual (venda dos ativos) no fluxo terminal.",
+      "Avaliar projetos pelo lucro contábil em vez do fluxo de caixa incremental.",
+      "Usar regime de competência em vez de regime de caixa.",
+      "Confundir projetos excludentes com independentes e aceitar os dois quando só um cabe.",
+      "Rejeitar projeto dependente sem avaliar o projeto do qual ele depende.",
+      "Calcular o fluxo antes do imposto de renda.",
+      "Ratear para o projeto custos fixos que existiriam de qualquer forma (não incrementais).",
+      "Ignorar os efeitos colaterais (erosão/sinergia) sobre os demais produtos da empresa.",
+      "Contar as inversões de sinal errado e classificar fluxo não convencional como convencional.",
+      "Colocar os fluxos anuais no início do período em vez do fim (convenção postecipada).",
+      "Em projetos excludentes, escolher pelo menor investimento em vez do maior valor gerado.",
+      "Tributar o valor residual integralmente, esquecendo a base do ganho de capital (venda − valor contábil).",
+      "Em estatais, achar que projeto regulatório dispensa análise: decide-se a melhor forma de executá-lo, ao menor custo."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Projeto de investimento",
+          "Conjunto de ações que compromete recursos hoje em troca de fluxos de caixa futuros, sob risco."
+      ],
+      [
+          "Decisão de investimento",
+          "Escolha de em quais ativos/projetos aplicar os recursos da empresa; lado do ativo do balanço."
+      ],
+      [
+          "Fluxo de caixa incremental",
+          "Diferença entre o caixa da empresa com o projeto e sem o projeto; base de toda a avaliação."
+      ],
+      [
+          "Custo afundado (sunk cost)",
+          "Gasto já realizado e irrecuperável, irrelevante para a decisão; fica fora da análise."
+      ],
+      [
+          "Custo de oportunidade",
+          "Valor da melhor alternativa sacrificada ao usar um recurso no projeto; entra no fluxo."
+      ],
+      [
+          "Efeito colateral",
+          "Impacto do projeto nos demais negócios da empresa: erosão (negativo) ou sinergia (positivo)."
+      ],
+      [
+          "Erosão (canibalização)",
+          "Redução das vendas de produtos existentes causada pelo novo projeto; subtrai do fluxo incremental."
+      ],
+      [
+          "Capital de giro do projeto",
+          "Investimento em caixa, estoques e recebíveis necessário à operação; sai no início e retorna no fim."
+      ],
+      [
+          "Valor residual",
+          "Valor obtido com a venda dos ativos ao fim do projeto, líquido de impostos; entra no fluxo terminal."
+      ],
+      [
+          "Investimento inicial (t₀)",
+          "Desembolso do instante zero: ativo + frete + instalação + capital de giro; sinal negativo."
+      ],
+      [
+          "Escudo fiscal da depreciação",
+          "Economia de imposto gerada pela depreciação (depreciação × alíquota de IR)."
+      ],
+      [
+          "Fluxo convencional",
+          "Fluxo com uma única inversão de sinal: saída inicial seguida de entradas."
+      ],
+      [
+          "Fluxo não convencional",
+          "Fluxo com duas ou mais inversões de sinal; pode gerar múltiplas TIRs."
+      ],
+      [
+          "Projetos mutuamente excludentes",
+          "Projetos que disputam o mesmo objetivo; aceitar um elimina o outro."
+      ],
+      [
+          "Projetos independentes",
+          "Projetos cuja aceitação não interfere entre si; cada um avaliado isoladamente."
+      ],
+      [
+          "Projetos dependentes (contingentes)",
+          "Projetos cuja viabilidade depende da aceitação de outro projeto."
+      ],
+      [
+          "Regime de caixa",
+          "Critério que registra entradas e saídas quando o dinheiro efetivamente circula, e não quando a receita/despesa é reconhecida."
+      ],
+      [
+          "TMA",
+          "Taxa mínima de atratividade: taxa de desconto exigida para aceitar o projeto (detalhada no Tópico 05)."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

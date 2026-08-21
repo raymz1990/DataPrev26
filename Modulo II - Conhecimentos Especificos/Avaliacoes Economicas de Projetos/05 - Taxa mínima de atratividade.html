@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxa Mínima de Atratividade | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">05 - Taxa mínima de atratividade</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html" selected>05 - Taxa mínima de atratividade</option>
+    <option value="" disabled>06 - Parâmetros para análise de projetos (em breve)</option>
+    <option value="" disabled>07 - Indicadores: VPL, TIR, payback (em breve)</option>
+    <option value="" disabled>08 - Análise de sensibilidade e cenários (em breve)</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Taxa Mínima de Atratividade</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 05 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Taxa Mínima de Atratividade (TMA)</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 05</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">4h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópico 04 (métodos) + WACC e CAPM (Adm. Financeira 07 e 08)</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — a TMA é o insumo que decide VPL e TIR; cálculo de WACC é clássico</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Definir <b>taxa mínima de atratividade (TMA)</b> como o retorno mínimo exigido para aceitar um projeto — o custo de oportunidade do capital.</li>
+            <li>Decompor a TMA em <b>taxa livre de risco + prêmio de risco</b>.</li>
+            <li>Determinar a TMA pelas três vias: <b>custo de oportunidade</b>, <b>custo de capital (WACC)</b> e <b>CAPM</b> para o custo do capital próprio.</li>
+            <li>Calcular o <b>WACC</b> com o benefício fiscal da dívida: Kd × (1 − IR).</li>
+            <li>Explicar por que projetos mais arriscados exigem <b>TMA maior</b> (taxa ajustada ao risco).</li>
+            <li>Aplicar a TMA na decisão: desconta o VPL e serve de referência para a TIR — e reconhecer que sua <b>subjetividade</b> é uma limitação da análise.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A <b>TMA</b> é a <b>taxa mínima de retorno que um investimento precisa oferecer para ser aceito</b> — abaixo dela, o projeto destrói valor. Economicamente, ela é o <b>custo de oportunidade do capital</b>: o retorno da melhor alternativa de risco equivalente que se abandona ao investir no projeto.</p>
+          <p><b>Composição:</b> TMA = <b>taxa livre de risco</b> (título público de longo prazo — remunera o tempo) <b>+ prêmio de risco</b> (remunera a incerteza do projeto). Quanto maior o risco, maior o prêmio, maior a TMA, menor o VPL — e vice-versa.</p>
+          <p><b>Determinação prática:</b> a via mais usada é o <b>custo médio ponderado de capital (WACC)</b> — média do custo do capital próprio (Ke, estimado pelo <b>CAPM</b>: Ke = Rf + β × (Rm − Rf)) e do custo da dívida (Kd, líquido do IR, pois juros são dedutíveis), ponderada pelas participações na estrutura de capital. Projetos de risco diferente do risco médio da empresa pedem <b>taxa ajustada ao risco do projeto</b>, não o WACC genérico.</p>
+          <p><b>Papel na decisão:</b> a TMA desconta os fluxos no <b>VPL</b> e é a régua da <b>TIR</b> (aceitar se TIR &gt; TMA). TMA maior → VPL menor → mais projetos rejeitados. É também o elo entre o custo de capital e a criação de valor: <b>um projeto só cria valor quando sua TIR supera a TMA</b> — o que equivale a VPL &gt; 0. A escolha da TMA é parcialmente subjetiva (prêmio de risco, estrutura-alvo), o que a torna uma das limitações da análise (Tópico 02).</p>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Taxa Mínima<br>de Atratividade<br>(TMA)</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Conceito</h4><ul><li>Retorno mínimo exigido</li><li>Custo de oportunidade</li><li>Régua da decisão</li></ul></div>
+              <div class="mm-node"><h4>Composição</h4><ul><li>Taxa livre de risco (Rf)</li><li>+ Prêmio de risco</li><li>Risco ↑ → TMA ↑</li></ul></div>
+              <div class="mm-node"><h4>Vias de determinação</h4><ul><li>Custo de oportunidade</li><li>WACC (custo médio)</li><li>CAPM para o Ke</li></ul></div>
+              <div class="mm-node"><h4>WACC</h4><ul><li>Ke × E% + Kd(1−IR) × D%</li><li>Dívida tem escudo fiscal</li><li>Pesos de mercado</li></ul></div>
+              <div class="mm-node"><h4>CAPM</h4><ul><li>Ke = Rf + β(Rm − Rf)</li><li>β mede risco sistemático</li></ul></div>
+              <div class="mm-node"><h4>Uso na decisão</h4><ul><li>Desconta o VPL</li><li>Régua da TIR</li><li>TMA ↑ → VPL ↓</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Conceito: o que é a TMA</h3>
+          <p>A <b>taxa mínima de atratividade</b> é a <b>menor taxa de retorno que a empresa (ou o investidor) aceita obter de um projeto</b> para justificar o investimento. É o piso: retorno abaixo dela significa destruição de valor, porque o capital renderia mais na melhor alternativa disponível.</p>
+          <p>Economicamente, a TMA é um <b>custo de oportunidade</b> (Tópico 01): ao investir R$ 10 milhões no projeto A, a empresa renuncia ao retorno da melhor alternativa de <b>risco equivalente</b> — aplicar no mercado financeiro, em outro projeto, ou devolver aos acionistas. A TMA traduz essa renúncia em taxa.</p>
+          <div class="box info">
+            <div class="box-title">📘 Os dois papéis da TMA na decisão</div>
+            <p><b>1) No VPL:</b> é a taxa que desconta os fluxos — VPL = Σ FCt ÷ (1 + TMA)ᵗ − I₀. <b>2) Com a TIR:</b> é a régua de comparação — aceitar se TIR &gt; TMA. As duas vias levam à mesma decisão em fluxo convencional.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Composição: livre de risco + prêmio de risco</h3>
+          <table>
+            <thead><tr><th>Componente</th><th>O que remunera</th><th>Referência típica</th></tr></thead>
+            <tbody>
+              <tr><td><b>Taxa livre de risco (Rf)</b></td><td>O tempo (abrir mão da liquidez)</td><td>Título público federal de longo prazo (Tesouro IPCA+ / NTN-B)</td></tr>
+              <tr><td><b>Prêmio de risco</b></td><td>A incerteza dos fluxos do projeto</td><td>Prêmio de mercado × β (CAPM) ou prêmio estimado pela empresa</td></tr>
+            </tbody>
+          </table>
+          <p><b>TMA = Rf + prêmio de risco.</b> Quanto mais arriscado o projeto, maior o prêmio exigido, maior a TMA — e menor o VPL do mesmo fluxo. É a tradução operacional da relação risco × retorno (Adm. Financeira, Tópico 07).</p>
+          <div class="box fgv">
+            <div class="box-title">🏛 Cobrança típica</div>
+            <p>"A TMA pode ser decomposta em taxa livre de risco mais prêmio de risco" (certo). "A TMA independe do risco do projeto" (errado — o prêmio cresce com o risco).</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.3 Determinação pelo custo de capital: o WACC</h3>
+          <p>Para a empresa, o custo de oportunidade mais objetivo é o <b>custo dos recursos que financiam o projeto</b>: o <b>WACC</b> (custo médio ponderado de capital), visto no Tópico 08 de Administração Financeira:</p>
+          <p><b>WACC = Ke × (E ÷ (D + E)) + Kd × (1 − IR) × (D ÷ (D + E))</b></p>
+          <ul class="styled">
+            <li><b>Ke</b> — custo do capital próprio (acionistas): estimado pelo CAPM;</li>
+            <li><b>Kd</b> — custo da dívida (bancos, debêntures): multiplicado por <b>(1 − IR)</b> porque os juros são dedutíveis (escudo fiscal);</li>
+            <li><b>E e D</b> — valores de capital próprio e de terceiros, de preferência a <b>valores de mercado</b> (estrutura-alvo).</li>
+          </ul>
+          <div class="box fgv">
+            <div class="box-title">🏛 Exemplo numérico</div>
+            <p>Estrutura: 60% capital próprio (Ke = 18%) e 40% dívida (Kd = 12%), IR = 34%.<br>
+            WACC = 0,60 × 18% + 0,40 × 12% × (1 − 0,34) = 10,8% + 3,168% = <b>13,97% a.a.</b><br>
+            Um projeto financiado por essa estrutura precisa render pelo menos 13,97% para criar valor — essa é a TMA.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.4 O custo do capital próprio: CAPM</h3>
+          <p>O <b>CAPM</b> estima o Ke: <b>Ke = Rf + β × (Rm − Rf)</b>, onde Rf é a taxa livre de risco, β mede o risco sistemático do negócio e (Rm − Rf) é o prêmio de risco de mercado.</p>
+          <div class="box info">
+            <div class="box-title">📘 Exemplo</div>
+            <p>Rf = 8%, β = 1,2, prêmio de mercado (Rm − Rf) = 6% → Ke = 8% + 1,2 × 6% = <b>15,2% a.a.</b> β &gt; 1 (negócio mais arriscado que o mercado) eleva o Ke; β &lt; 1 reduz.</p>
+          </div>
+          <p>Ligação direta com o Tópico 07 de Administração Financeira: o CAPM precifica o risco <b>sistemático</b> (não diversificável); o risco específico é eliminado pela diversificação e não merece prêmio.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.5 TMA e risco: uma taxa para cada projeto?</h3>
+          <ul class="styled">
+            <li><b>Regra:</b> a taxa de desconto deve refletir o <b>risco do projeto</b>, não necessariamente o WACC médio da empresa.</li>
+            <li><b>Projeto com risco igual ao da empresa</b> (ex.: expansão da mesma atividade) → usar o WACC da empresa.</li>
+            <li><b>Projeto mais arriscado</b> (ex.: novo produto, novo mercado) → TMA <b>maior</b> que o WACC (prêmio adicional).</li>
+            <li><b>Projeto menos arriscado</b> (ex.: reposição de equipamento com tecnologia conhecida) → TMA <b>menor</b>.</li>
+            <li>Usar o WACC genérico para tudo gera distorção: aceita projetos arriscados demais e rejeita projetos seguros bons.</li>
+          </ul>
+          <div class="box warn">
+            <div class="box-title">⚠️ Erro clássico de prova</div>
+            <p>"A empresa deve usar sempre o mesmo WACC para todos os projetos" — <b>errado</b>: a taxa deve ser ajustada ao risco de cada projeto (abordagem de taxa ajustada ao risco).</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.6 Efeito da TMA na decisão</h3>
+          <p>A TMA é o botão que liga e desliga projetos:</p>
+          <table>
+            <thead><tr><th>Movimento da TMA</th><th>Efeito no VPL</th><th>Consequência</th></tr></thead>
+            <tbody>
+              <tr><td>TMA sobe</td><td>VPL cai (fluxos futuros valem menos)</td><td>Menos projetos aprovados; mais exigência de retorno</td></tr>
+              <tr><td>TMA desce</td><td>VPL sobe</td><td>Mais projetos aprovados</td></tr>
+            </tbody>
+          </table>
+          <p>Ponto de virada: quando a TMA <b>iguala a TIR</b>, o VPL zera — a empresa fica indiferente. Acima da TIR, VPL &lt; 0. Por isso TIR e VPL são coerentes em fluxo convencional (Tópico 04).</p>
+          <p>Macroeconomia aplicada: ciclos de alta da Selic elevam a Rf → sobem Ke, WACC e TMA → o investimento real se contrai. É o canal da política monetária sobre o investimento produtivo.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.7 Subjetividade e particularidades em estatais</h3>
+          <ul class="styled">
+            <li><b>Subjetividade:</b> prêmio de risco, β e estrutura-alvo envolvem julgamento — duas equipes podem chegar a TMAs diferentes (e decisões diferentes) para o mesmo projeto. Limitação reconhecida no Tópico 02.</li>
+            <li><b>Estatais e projetos sociais:</b> quando o objetivo inclui bem-estar social, usa-se a <b>taxa social de desconto</b> — em geral <b>menor</b> que a taxa privada, valorizando gerações futuras (Tópico 10).</li>
+            <li><b>Referência brasileira:</b> a Selic/TJLP (e hoje o Tesouro IPCA+) servem de piso de comparação — a famosa "taxa livre de risco" doméstica; BNDES historicamente usou a TJLP como custo de referência.</li>
+            <li><b>Governança:</b> em estatais, a TMA deve ser formalmente aprovada (comitê de investimentos) para evitar manipulação do VPL pela escolha da taxa.</li>
+          </ul>
+          <div class="box ok">
+            <div class="box-title">✅ Síntese do tópico</div>
+            <p>TMA = retorno mínimo exigido = custo de oportunidade do capital = Rf + prêmio de risco. Na prática, WACC (Ke via CAPM; Kd líquido de IR) ajustado ao risco do projeto. Ela desconta o VPL e mede a TIR: TMA ↑ → VPL ↓; VPL = 0 quando TMA = TIR. Escolha parcialmente subjetiva — e decisiva.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <p>Cobrança em duas frentes: <b>conceito</b> (o que é, do que se compõe) e <b>cálculo</b> (WACC e CAPM):</p>
+          <ol class="styled">
+            <li><b>Conceito:</b> "a TMA representa…" → o retorno mínimo exigido / custo de oportunidade do capital.</li>
+            <li><b>Decomposição:</b> TMA = taxa livre de risco + prêmio de risco; referência da Rf: título público de longo prazo.</li>
+            <li><b>Cálculo de WACC:</b> dá Ke, Kd, IR e os pesos — não esquecer o <b>(1 − IR)</b> na dívida.</li>
+            <li><b>Cálculo de CAPM:</b> Ke = Rf + β × (Rm − Rf) — atenção: multiplica-se β pelo <b>prêmio</b> (Rm − Rf), não por Rm.</li>
+            <li><b>Risco × TMA:</b> projeto mais arriscado → TMA maior → VPL menor.</li>
+            <li><b>Ponto de indiferença:</b> TMA = TIR → VPL = 0.</li>
+            <li><b>Taxa ajustada ao risco:</b> usar o WACC genérico para projeto mais arriscado que a média distorce a decisão.</li>
+          </ol>
+          <div class="box fgv">
+            <div class="box-title">🏛 Estilo de enunciado típico</div>
+            <p>"Uma empresa tem estrutura de 50% capital próprio (Ke = 16%) e 50% dívida (Kd = 10%), com IR de 34%. A TMA da empresa é…" — Gabarito: 0,5 × 16% + 0,5 × 10% × 0,66 = 8% + 3,3% = <b>11,3%</b>.</p>
+          </div>
+          <div class="box warn">
+            <div class="box-title">⚠️ Distrações frequentes</div>
+            <p>Esquecer o benefício fiscal da dívida (Kd sem o (1 − IR)); aplicar β sobre Rm em vez de (Rm − Rf); afirmar que a TMA independe do risco; dizer que TMA maior aumenta o VPL.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>TMA</b> = retorno mínimo exigido = <b>custo de oportunidade do capital</b>.</li>
+            <li><b>TMA = Rf + prêmio de risco</b>; Rf = título público de longo prazo.</li>
+            <li>Risco ↑ → prêmio ↑ → TMA ↑ → VPL ↓.</li>
+            <li><b>WACC = Ke × E% + Kd × (1 − IR) × D%</b> — dívida com escudo fiscal.</li>
+            <li><b>CAPM: Ke = Rf + β × (Rm − Rf)</b> — β multiplica o prêmio de mercado.</li>
+            <li>Pesos do WACC: preferencialmente <b>valores de mercado</b> / estrutura-alvo.</li>
+            <li>Taxa de desconto deve refletir o <b>risco do projeto</b>, não o WACC genérico.</li>
+            <li><b>TMA = TIR → VPL = 0</b> (ponto de indiferença).</li>
+            <li>TMA desconta o VPL e é a régua da TIR: <b>TIR &gt; TMA → aceita</b>.</li>
+            <li>Selic sobe → Rf sobe → WACC sobe → investimento real cai.</li>
+            <li>Em projetos sociais: <b>taxa social de desconto</b>, menor que a privada.</li>
+            <li>A TMA é parcialmente <b>subjetiva</b> — limitação da análise (Tópico 02).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Pergunta-relâmpago</th><th>Resposta</th></tr></thead>
+            <tbody>
+              <tr><td>O que é a TMA?</td><td>Retorno mínimo exigido para aceitar um projeto</td></tr>
+              <tr><td>Significado econômico?</td><td>Custo de oportunidade do capital</td></tr>
+              <tr><td>Decomposição da TMA?</td><td>Taxa livre de risco + prêmio de risco</td></tr>
+              <tr><td>Referência da Rf no Brasil?</td><td>Título público de longo prazo (Tesouro IPCA+)</td></tr>
+              <tr><td>Fórmula do WACC?</td><td>Ke×E% + Kd×(1−IR)×D%</td></tr>
+              <tr><td>Por que (1 − IR) na dívida?</td><td>Juros são dedutíveis — escudo fiscal</td></tr>
+              <tr><td>Fórmula do CAPM?</td><td>Ke = Rf + β × (Rm − Rf)</td></tr>
+              <tr><td>β multiplica o quê?</td><td>O prêmio de mercado (Rm − Rf), não Rm</td></tr>
+              <tr><td>Projeto mais arriscado que a média?</td><td>TMA maior que o WACC</td></tr>
+              <tr><td>TMA = TIR implica?</td><td>VPL = 0 (indiferença)</td></tr>
+              <tr><td>TMA sobe, VPL…?</td><td>Cai — fluxos futuros valem menos</td></tr>
+              <tr><td>Taxa de projetos sociais?</td><td>Taxa social de desconto (menor)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>TMA</td><td>Retorno mínimo exigido = custo de oportunidade do capital</td></tr>
+              <tr><td>Decomposição</td><td>TMA = Rf + prêmio de risco</td></tr>
+              <tr><td>WACC</td><td>WACC = Ke × E÷(D+E) + Kd × (1 − IR) × D÷(D+E)</td></tr>
+              <tr><td>CAPM</td><td>Ke = Rf + β × (Rm − Rf)</td></tr>
+              <tr><td>Prêmio de mercado</td><td>(Rm − Rf) — é ele que multiplica o β, não o Rm</td></tr>
+              <tr><td>Escudo fiscal da dívida</td><td>Kd efetivo = Kd × (1 − IR) — juros dedutíveis</td></tr>
+              <tr><td>Regra da TIR</td><td>Aceitar se TIR &gt; TMA</td></tr>
+              <tr><td>Ponto de indiferença</td><td>TMA = TIR ⇔ VPL = 0</td></tr>
+              <tr><td>Efeito no VPL</td><td>TMA ↑ → VPL ↓ (fluxos futuros valem menos)</td></tr>
+              <tr><td>Taxa ajustada ao risco</td><td>A taxa reflete o risco do projeto, não o WACC médio</td></tr>
+              <tr><td>Taxa social de desconto</td><td>Usada em projetos sociais/estatais; menor que a privada</td></tr>
+              <tr><td>Canal macroeconômico</td><td>Selic ↑ → Rf ↑ → WACC/TMA ↑ → investimento real ↓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas e quadros de memorização</h2></div>
+        <div class="card">
+          <h3>Três vias para determinar a TMA</h3>
+          <table>
+            <thead><tr><th>Via</th><th>Lógica</th><th>Quando usar</th></tr></thead>
+            <tbody>
+              <tr><td><b>Custo de oportunidade</b></td><td>Retorno da melhor alternativa abandonada</td><td>Investidor pessoa física; comparação com mercado financeiro</td></tr>
+              <tr><td><b>WACC</b></td><td>Custo médio ponderado das fontes de financiamento</td><td>Empresa: projetos de risco semelhante ao da operação</td></tr>
+              <tr><td><b>CAPM (Ke) + estrutura</b></td><td>Risco sistemático do negócio precifica o capital próprio</td><td>Estimar Ke quando não há valor de mercado óbvio</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplos calculados</h3>
+          <table>
+            <thead><tr><th>Caso</th><th>Cálculo</th><th>Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>WACC 60/40</td><td>0,60 × 18% + 0,40 × 12% × 0,66</td><td><b>13,97%</b></td></tr>
+              <tr><td>WACC 50/50</td><td>0,50 × 16% + 0,50 × 10% × 0,66</td><td><b>11,30%</b></td></tr>
+              <tr><td>CAPM</td><td>8% + 1,2 × 6%</td><td><b>15,2%</b></td></tr>
+              <tr><td>CAPM sem risco extra</td><td>β = 1 → Ke = Rf + (Rm − Rf) = Rm</td><td>Ke = retorno do mercado</td></tr>
+            </tbody>
+          </table>
+          <h3>TMA × decisão</h3>
+          <table>
+            <thead><tr><th>Situação</th><th>VPL</th><th>Decisão</th></tr></thead>
+            <tbody>
+              <tr><td>TIR &gt; TMA</td><td>&gt; 0</td><td>Aceitar</td></tr>
+              <tr><td>TIR = TMA</td><td>= 0</td><td>Indiferente</td></tr>
+              <tr><td>TIR &lt; TMA</td><td>&lt; 0</td><td>Rejeitar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🏛 A Selic como "gravidade" do investimento</div><p>Warren Buffett chama os juros básicos de "gravidade dos ativos": quando a Selic chegou a 14,25% (2015-2016), a Rf subiu tanto que quase nenhum projeto real batia a TMA — o investimento produtivo desabou. Quando caiu a 2% (2020-2021), projetos antes inviáveis "flutuaram" para VPL positivo.</p></div>
+        <div class="box curio"><div class="box-title">📉 A TJLP e o BNDES</div><p>Por décadas, o Brasil teve duas "taxas de referência": a Selic de mercado e a TJLP, fixada administrativamente e usada pelo BNDES. Projetos com crédito BNDES tinham custo de dívida abaixo do mercado — um WACC subsidiado que mudava a TMA de indústrias inteiras. A TJLP foi substituída pela TLP em 2018.</p></div>
+        <div class="box curio"><div class="box-title">🧮 A taxa social de 200 anos</div><p>No debate sobre mudança climática, o Relatório Stern (2006) usou taxa social de desconto baixíssima (~1,4%) — e concluiu que valia gastar trilhões hoje para evitar danos em 2100. Críticos com taxa de 5-6% chegavam à conclusão oposta. A escolha da TMA decide o futuro, literalmente.</p></div>
+        <div class="box curio"><div class="box-title">⚖️ O β da DATAPREV</div><p>Empresas de TI e serviços de dados tendem a ter β em torno de 1 (acompanham o mercado) — mas um projeto de modernização crítica com receita estável (processamento de benefícios) tem risco menor que lançar um novo produto digital: por isso a taxa ajustada ao risco existe.</p></div>
+        <div class="box curio"><div class="box-title">🎯 Manipular a TMA para "passar" o projeto</div><p>Como a TMA é parcialmente subjetiva, gestores interessados em aprovar um projeto podem "escolher" uma taxa baixa. Por isso boas empresas fixam a TMA em comitê, antes de ver os números do projeto — governança que o TCU cobra de estatais.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Metodologias de avaliação (Tópico 04)</td><td>A TMA é o insumo que desconta o VPL e compara a TIR</td></tr>
+              <tr><td>Indicadores VPL, TIR, payback (Tópico 07)</td><td>Todos dependem da TMA — exceto o payback simples</td></tr>
+              <tr><td>Risco x retorno (Adm. Fin. 07)</td><td>CAPM e a relação risco-retorno originam o Ke</td></tr>
+              <tr><td>Fontes de financiamento (Adm. Fin. 08)</td><td>O WACC nasce da estrutura de capital e do custo das fontes</td></tr>
+              <tr><td>Limitações da análise (Tópico 02)</td><td>A subjetividade da TMA é uma das limitações centrais</td></tr>
+              <tr><td>Parâmetros de análise (Tópico 06)</td><td>Vida econômica e valor residual entram nos fluxos descontados pela TMA</td></tr>
+              <tr><td>Sensibilidade e cenários (Tópico 08)</td><td>Testa o VPL para diferentes TMAs — a chamada "sensibilidade à taxa"</td></tr>
+              <tr><td>Risco e incerteza (Tópico 09)</td><td>Formaliza o ajuste da taxa ao risco do projeto</td></tr>
+              <tr><td>Projetos sociais (Tópico 10)</td><td>Substitui a TMA privada pela taxa social de desconto</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e refazer à mão os quatro exemplos da seção 14 (dois WACC e dois CAPM).</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com atenção ao (1 − IR) na dívida e ao β multiplicando o prêmio (Rm − Rf).</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado e revisar os flashcards; avançar para o Tópico 06 (parâmetros de análise de projetos).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas. (Custo de capital e TMA.)</li>
+            <li>ROSS, Stephen A. et al. <i>Administração Financeira</i>. Porto Alegre: AMGH. (CAPM e WACC.)</li>
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson.</li>
+            <li>DAMODARAN, Aswath. <i>Finanças Corporativas Aplicadas</i>. Porto Alegre: Bookman. (Taxas de desconto e prêmios de risco.)</li>
+            <li>BRASIL. Banco Central / Tesouro Nacional — séries Selic e Tesouro IPCA+ (referência de taxa livre de risco).</li>
+            <li>Provas anteriores da banca FGV (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 05/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t05";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que é a taxa mínima de atratividade (TMA)?",
+          "a": "O retorno mínimo exigido para aceitar um investimento — o custo de oportunidade do capital."
+      },
+      {
+          "q": "Qual o significado econômico da TMA?",
+          "a": "Custo de oportunidade: o retorno da melhor alternativa de risco equivalente que se abandona ao investir no projeto."
+      },
+      {
+          "q": "Qual a decomposição da TMA?",
+          "a": "TMA = taxa livre de risco (Rf) + prêmio de risco."
+      },
+      {
+          "q": "O que é a taxa livre de risco e qual sua referência no Brasil?",
+          "a": "Remunera o tempo, sem risco de calote; referência: título público federal de longo prazo (Tesouro IPCA+/NTN-B)."
+      },
+      {
+          "q": "Como o risco do projeto afeta a TMA?",
+          "a": "Mais risco → maior prêmio de risco → maior TMA → menor VPL do mesmo fluxo."
+      },
+      {
+          "q": "Fórmula do WACC?",
+          "a": "WACC = Ke × E÷(D+E) + Kd × (1 − IR) × D÷(D+E)."
+      },
+      {
+          "q": "Por que o custo da dívida entra no WACC multiplicado por (1 − IR)?",
+          "a": "Porque os juros são dedutíveis do imposto de renda — escudo fiscal que reduz o custo efetivo da dívida."
+      },
+      {
+          "q": "Fórmula do CAPM?",
+          "a": "Ke = Rf + β × (Rm − Rf). Atenção: β multiplica o prêmio de mercado (Rm − Rf), não o Rm."
+      },
+      {
+          "q": "O que mede o β no CAPM?",
+          "a": "O risco sistemático (não diversificável) do negócio em relação ao mercado; β > 1 = mais arriscado que o mercado."
+      },
+      {
+          "q": "Que pesos se usa no WACC?",
+          "a": "Preferencialmente valores de mercado (estrutura-alvo) de capital próprio e de terceiros."
+      },
+      {
+          "q": "A empresa deve usar o mesmo WACC para todos os projetos?",
+          "a": "Não — a taxa deve ser ajustada ao risco de cada projeto; WACC genérico vale só para risco igual ao da empresa."
+      },
+      {
+          "q": "Qual a relação entre TMA, TIR e VPL?",
+          "a": "TIR > TMA ⇔ VPL > 0 (aceitar); TMA = TIR ⇔ VPL = 0 (indiferente); TIR < TMA ⇔ VPL < 0 (rejeitar)."
+      },
+      {
+          "q": "O que acontece com o VPL quando a TMA sobe?",
+          "a": "Cai — os fluxos futuros são descontados mais fortemente. Por isso TMA alta rejeita mais projetos."
+      },
+      {
+          "q": "Qual o efeito da alta da Selic sobre o investimento real?",
+          "a": "Selic ↑ → Rf ↑ → Ke e WACC ↑ → TMA ↑ → VPL dos projetos ↓ → investimento real se contrai."
+      },
+      {
+          "q": "O que é a taxa social de desconto?",
+          "a": "Taxa usada em projetos sociais/públicos, em geral menor que a privada, para valorizar benefícios de longo prazo à sociedade."
+      },
+      {
+          "q": "Por que a TMA é uma limitação da análise?",
+          "a": "Prêmio de risco, β e estrutura-alvo envolvem julgamento — TMAs diferentes mudam a decisão sobre o mesmo projeto."
+      },
+      {
+          "q": "Exemplo: WACC com 60% capital próprio (Ke 18%) e 40% dívida (Kd 12%), IR 34%?",
+          "a": "0,60×18 + 0,40×12×0,66 = 10,8 + 3,17 ≈ 13,97% a.a."
+      },
+      {
+          "q": "Exemplo: CAPM com Rf 8%, β 1,2 e prêmio de mercado 6%?",
+          "a": "Ke = 8% + 1,2 × 6% = 15,2% a.a."
+      },
+      {
+          "q": "Por que fixar a TMA em comitê antes de ver os números?",
+          "a": "Para evitar que o gestor 'escolha' uma taxa baixa que aprove o projeto desejado — governança contra manipulação."
+      },
+      {
+          "q": "Projeto de risco igual ao da empresa usa qual taxa?",
+          "a": "O WACC da empresa; projetos mais arriscados pedem TMA maior; mais seguros, TMA menor."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Conceito",
+          "texto": "—",
+          "enun": "A taxa mínima de atratividade (TMA) representa:",
+          "alts": [
+              "a inflação esperada",
+              "o retorno mínimo exigido para aceitar um investimento",
+              "a taxa de juros do financiamento",
+              "o lucro mínimo contábil",
+              "a taxa de depreciação"
+          ],
+          "correta": 1,
+          "coment": "TMA = piso de retorno: abaixo dela, o projeto destrói valor e deve ser rejeitado."
+      },
+      {
+          "tema": "Conceito",
+          "texto": "—",
+          "enun": "Economicamente, a TMA é o(a):",
+          "alts": [
+              "custo afundado do projeto",
+              "custo de oportunidade do capital",
+              "taxa de inflação",
+              "lucro líquido mínimo",
+              "índice de liquidez"
+          ],
+          "correta": 1,
+          "coment": "Investir no projeto significa renunciar à melhor alternativa de risco equivalente — o retorno dela é o custo de oportunidade."
+      },
+      {
+          "tema": "Composição",
+          "texto": "—",
+          "enun": "A TMA pode ser decomposta em:",
+          "alts": [
+              "inflação + lucro",
+              "taxa livre de risco + prêmio de risco",
+              "juros + correção",
+              "dividendos + juros",
+              "custo fixo + custo variável"
+          ],
+          "correta": 1,
+          "coment": "Rf remunera o tempo; o prêmio de risco remunera a incerteza dos fluxos do projeto."
+      },
+      {
+          "tema": "Composição",
+          "texto": "—",
+          "enun": "No Brasil, a referência usual para a taxa livre de risco é:",
+          "alts": [
+              "a poupança",
+              "o título público federal de longo prazo",
+              "a taxa do cheque especial",
+              "o IGPM",
+              "o salário mínimo"
+          ],
+          "correta": 1,
+          "coment": "Tesouro IPCA+ (antiga NTN-B): sem risco de crédito soberano e de longo prazo — a Rf doméstica."
+      },
+      {
+          "tema": "Composição",
+          "texto": "—",
+          "enun": "Quanto maior o risco de um projeto:",
+          "alts": [
+              "menor a TMA exigida",
+              "maior o prêmio de risco e maior a TMA",
+              "menor o prêmio de risco",
+              "a TMA não muda",
+              "menor o VPL por causa da inflação"
+          ],
+          "correta": 1,
+          "coment": "Risco ↑ → prêmio ↑ → TMA ↑. Mesma sequência de fluxos passa a valer menos."
+      },
+      {
+          "tema": "WACC",
+          "texto": "Estrutura: 60% capital próprio (Ke = 18%) e 40% dívida (Kd = 12%); IR = 34%.",
+          "enun": "O WACC é, aproximadamente:",
+          "alts": [
+              "15,6%",
+              "13,97%",
+              "12,0%",
+              "10,8%",
+              "16,2%"
+          ],
+          "correta": 1,
+          "coment": "0,60 × 18% + 0,40 × 12% × (1 − 0,34) = 10,8% + 3,168% = 13,97%."
+      },
+      {
+          "tema": "WACC",
+          "texto": "—",
+          "enun": "No cálculo do WACC, o custo da dívida é multiplicado por (1 − IR) porque:",
+          "alts": [
+              "a dívida é mais arriscada",
+              "os juros são dedutíveis do imposto de renda (escudo fiscal)",
+              "a inflação corrói a dívida",
+              "o prazo é longo",
+              "a dívida é garantida"
+          ],
+          "correta": 1,
+          "coment": "A dedutibilidade dos juros reduz o custo efetivo da dívida: Kd × (1 − IR)."
+      },
+      {
+          "tema": "WACC",
+          "texto": "—",
+          "enun": "Os pesos da estrutura de capital no WACC devem ser, preferencialmente:",
+          "alts": [
+              "valores contábeis históricos",
+              "valores de mercado (estrutura-alvo)",
+              "valores nominais",
+              "valores de liquidação",
+              "valores de face da dívida"
+          ],
+          "correta": 1,
+          "coment": "O WACC mede o custo da estrutura de financiamento futura — valores de mercado/alvo, não o passado contábil."
+      },
+      {
+          "tema": "CAPM",
+          "texto": "Rf = 8%, β = 1,2, prêmio de mercado (Rm − Rf) = 6%.",
+          "enun": "O custo do capital próprio (Ke) é:",
+          "alts": [
+              "14,0%",
+              "15,2%",
+              "17,6%",
+              "12,8%",
+              "9,2%"
+          ],
+          "correta": 1,
+          "coment": "Ke = 8% + 1,2 × 6% = 8% + 7,2% = 15,2%."
+      },
+      {
+          "tema": "CAPM",
+          "texto": "—",
+          "enun": "No CAPM, o β multiplica:",
+          "alts": [
+              "a taxa livre de risco",
+              "o retorno do mercado (Rm)",
+              "o prêmio de risco de mercado (Rm − Rf)",
+              "a inflação",
+              "a TMA"
+          ],
+          "correta": 2,
+          "coment": "Ke = Rf + β × (Rm − Rf): o β pondera o prêmio de mercado, não o Rm — pegadinha frequente."
+      },
+      {
+          "tema": "CAPM",
+          "texto": "—",
+          "enun": "Um β maior que 1 indica que o negócio:",
+          "alts": [
+              "é menos arriscado que o mercado",
+              "é mais arriscado que o mercado, exigindo maior Ke",
+              "não tem risco",
+              "tem retorno garantido",
+              "dispensa prêmio de risco"
+          ],
+          "correta": 1,
+          "coment": "β > 1: risco sistemático acima da média → prêmio maior → Ke maior."
+      },
+      {
+          "tema": "Risco × TMA",
+          "texto": "—",
+          "enun": "Para um projeto significativamente mais arriscado que a operação média da empresa, a taxa de desconto deve ser:",
+          "alts": [
+              "o WACC da empresa",
+              "maior que o WACC (prêmio adicional)",
+              "menor que o WACC",
+              "a taxa livre de risco",
+              "zero"
+          ],
+          "correta": 1,
+          "coment": "Taxa ajustada ao risco: projeto mais arriscado → TMA acima do WACC médio; caso contrário, projetos ruins passariam."
+      },
+      {
+          "tema": "Decisão",
+          "texto": "—",
+          "enun": "Quando a TMA é exatamente igual à TIR do projeto, o VPL é:",
+          "alts": [
+              "positivo",
+              "negativo",
+              "zero",
+              "igual ao investimento",
+              "indeterminado"
+          ],
+          "correta": 2,
+          "coment": "TIR é a taxa que zera o VPL — se a TMA iguala a TIR, VPL = 0: ponto de indiferença."
+      },
+      {
+          "tema": "Decisão",
+          "texto": "—",
+          "enun": "A elevação da TMA, mantidos os fluxos do projeto, provoca:",
+          "alts": [
+              "aumento do VPL",
+              "redução do VPL",
+              "VPL inalterado",
+              "aumento da TIR",
+              "redução da TIR"
+          ],
+          "correta": 1,
+          "coment": "Desconto mais forte reduz o valor presente das entradas → VPL cai. TIR não depende da TMA."
+      },
+      {
+          "tema": "Decisão",
+          "texto": "—",
+          "enun": "A alta da taxa Selic tende a reduzir o investimento real porque:",
+          "alts": [
+              "reduz a inflação",
+              "eleva a Rf, o WACC e a TMA, diminuindo o VPL dos projetos",
+              "aumenta o lucro das empresas",
+              "reduz o prêmio de risco",
+              "aumenta a demanda"
+          ],
+          "correta": 1,
+          "coment": "Canal da política monetária: Selic ↑ → Rf ↑ → custo de capital ↑ → menos projetos passam no crivo da TMA."
+      },
+      {
+          "tema": "Estatais",
+          "texto": "—",
+          "enun": "Na avaliação de projetos sociais de uma estatal, a taxa de desconto apropriada é a:",
+          "alts": [
+              "taxa social de desconto, em geral menor que a privada",
+              "taxa de mercado mais alta possível",
+              "taxa do financiamento",
+              "inflação",
+              "Selic over"
+          ],
+          "correta": 0,
+          "coment": "Projetos sociais usam taxa social de desconto — menor, valorizando benefícios futuros à sociedade (Tópico 10)."
+      },
+      {
+          "tema": "WACC",
+          "texto": "Estrutura 50/50; Ke = 16%; Kd = 10%; IR = 34%.",
+          "enun": "O WACC é:",
+          "alts": [
+              "13,0%",
+              "11,3%",
+              "9,7%",
+              "12,6%",
+              "8,0%"
+          ],
+          "correta": 1,
+          "coment": "0,5 × 16% + 0,5 × 10% × 0,66 = 8% + 3,3% = 11,3%."
+      },
+      {
+          "tema": "Conceito",
+          "texto": "—",
+          "enun": "Sobre a TMA, é correto afirmar:",
+          "alts": [
+              "independe do risco do projeto",
+              "é a mesma para todas as empresas",
+              "é parcialmente subjetiva, pois prêmio de risco e estrutura-alvo envolvem julgamento",
+              "é sempre igual à Selic",
+              "não influencia o VPL"
+          ],
+          "correta": 2,
+          "coment": "A TMA depende do risco e envolve escolhas julgamentais — limitação reconhecida da análise de projetos."
+      },
+      {
+          "tema": "CAPM",
+          "texto": "Rf = 7%, β = 0,8, Rm = 15%.",
+          "enun": "O Ke pelo CAPM é:",
+          "alts": [
+              "15,0%",
+              "13,4%",
+              "12,0%",
+              "19,0%",
+              "7,8%"
+          ],
+          "correta": 1,
+          "coment": "Prêmio de mercado = 15% − 7% = 8%. Ke = 7% + 0,8 × 8% = 7% + 6,4% = 13,4%."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Um projeto só cria valor para a empresa quando sua TIR:",
+          "alts": [
+              "for menor que a TMA",
+              "supera a TMA (equivale a VPL > 0)",
+              "for igual à inflação",
+              "for menor que a Selic",
+              "for igual a zero"
+          ],
+          "correta": 1,
+          "coment": "TIR > TMA ⇔ VPL > 0: retorno acima do custo de oportunidade é a definição operacional de criação de valor."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A TMA é o retorno ______ exigido para aceitar um projeto.",
+          "alts": [
+              "máximo",
+              "mínimo",
+              "médio",
+              "contábil",
+              "nominal"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A TMA corresponde, economicamente, ao:",
+          "alts": [
+              "custo afundado",
+              "custo de oportunidade do capital",
+              "lucro líquido",
+              "capital de giro",
+              "valor residual"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "TMA = taxa livre de risco + ______.",
+          "alts": [
+              "inflação",
+              "prêmio de risco",
+              "lucro",
+              "depreciação",
+              "capital de giro"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "A referência da taxa livre de risco no Brasil é o:",
+          "alts": [
+              "cheque especial",
+              "título público federal de longo prazo",
+              "IGP-M",
+              "salário mínimo",
+              "CDI do financiamento imobiliário"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Quanto maior o risco de um projeto, ______ a TMA exigida.",
+          "alts": [
+              "menor",
+              "maior",
+              "nula",
+              "constante",
+              "irrelevante"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Aceita-se um projeto pela regra da TIR quando ela for:",
+          "alts": [
+              "menor que a TMA",
+              "maior que a TMA",
+              "igual a zero",
+              "negativa",
+              "igual à inflação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Se a TMA aumenta, o VPL de um projeto:",
+          "alts": [
+              "aumenta",
+              "diminui",
+              "não muda",
+              "zera sempre",
+              "dobra"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O WACC é o custo ______ do capital.",
+          "alts": [
+              "máximo",
+              "mínimo",
+              "médio ponderado",
+              "fixo",
+              "contábil"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "No WACC, o custo da dívida é ajustado por (1 − IR) devido ao(à):",
+          "alts": [
+              "inflação",
+              "escudo fiscal dos juros",
+              "prazo longo",
+              "garantia real",
+              "liquidez"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "No CAPM, Ke = Rf + β × (Rm − Rf), o termo (Rm − Rf) é o:",
+          "alts": [
+              "retorno do mercado",
+              "prêmio de risco de mercado",
+              "risco livre",
+              "beta",
+              "dividendo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Estrutura 60/40; Ke = 18%; Kd = 12%; IR = 34%.",
+          "enun": "O WACC é, aproximadamente:",
+          "alts": [
+              "15,6%",
+              "13,97%",
+              "12,0%",
+              "16,2%",
+              "10,8%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Estrutura 50/50; Ke = 16%; Kd = 10%; IR = 34%.",
+          "enun": "O WACC é:",
+          "alts": [
+              "13,0%",
+              "11,3%",
+              "9,7%",
+              "12,6%",
+              "8,0%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Rf = 8%; β = 1,2; prêmio de mercado = 6%.",
+          "enun": "O Ke pelo CAPM é:",
+          "alts": [
+              "14,0%",
+              "15,2%",
+              "17,6%",
+              "12,8%",
+              "9,2%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Rf = 7%; β = 0,8; Rm = 15%.",
+          "enun": "O Ke pelo CAPM é:",
+          "alts": [
+              "15,0%",
+              "13,4%",
+              "12,0%",
+              "19,0%",
+              "7,8%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Para projeto mais arriscado que a média da empresa, a taxa de desconto deve ser:",
+          "alts": [
+              "o WACC",
+              "maior que o WACC",
+              "menor que o WACC",
+              "a Rf",
+              "zero"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "TMA igual à TIR implica VPL:",
+          "alts": [
+              "positivo",
+              "negativo",
+              "zero",
+              "máximo",
+              "igual ao investimento"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Um β maior que 1 significa negócio:",
+          "alts": [
+              "menos arriscado que o mercado",
+              "mais arriscado que o mercado",
+              "sem risco",
+              "com retorno certo",
+              "irrelevante ao Ke"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Os pesos do WACC devem ser, preferencialmente, os valores:",
+          "alts": [
+              "contábeis",
+              "de mercado / estrutura-alvo",
+              "nominais",
+              "de face",
+              "históricos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A alta da Selic reduz o investimento real porque eleva:",
+          "alts": [
+              "o lucro",
+              "a Rf, o WACC e a TMA",
+              "a demanda",
+              "o prêmio de liquidez da dívida",
+              "a inflação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Projetos sociais de estatais usam, em geral, a:",
+          "alts": [
+              "taxa social de desconto (menor)",
+              "taxa de mercado mais alta",
+              "Selic over",
+              "TJLP",
+              "taxa do cheque especial"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre a TMA, é INCORRETO afirmar:",
+          "alts": [
+              "é o custo de oportunidade do capital",
+              "decompõe-se em Rf + prêmio de risco",
+              "independe do risco do projeto",
+              "é a régua da TIR",
+              "desconta os fluxos no VPL"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "WACC: 40% capital próprio (Ke = 20%), 60% dívida (Kd = 15%), IR = 34%.",
+          "enun": "O WACC é:",
+          "alts": [
+              "16,4%",
+              "17,0%",
+              "13,94%",
+              "12,0%",
+              "18,9%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "CAPM: Rf = 10%, β = 1,5, Rm = 18%.",
+          "enun": "O Ke é:",
+          "alts": [
+              "28,0%",
+              "22,0%",
+              "19,5%",
+              "25,0%",
+              "18,0%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Usar o WACC genérico da empresa para avaliar um projeto muito mais arriscado que a média tende a:",
+          "alts": [
+              "rejeitar bons projetos",
+              "aceitar projetos que deveriam ser rejeitados (VPL superestimado)",
+              "não afetar a decisão",
+              "zerar o VPL",
+              "aumentar a TIR"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Duas equipes avaliam o mesmo projeto e divergem na decisão apenas por usarem TMAs diferentes. Isso evidencia:",
+          "alts": [
+              "erro de cálculo",
+              "a subjetividade da TMA como limitação da análise",
+              "que a TIR é inválida",
+              "que o VPL não funciona",
+              "a falácia do custo afundado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A afirmativa 'um projeto só cria valor quando sua TIR supera a TMA' equivale a dizer que:",
+          "alts": [
+              "o payback é rápido",
+              "o VPL é positivo à taxa TMA",
+              "o lucro contábil é positivo",
+              "a dívida é barata",
+              "o β é menor que 1"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Se o β de um negócio fosse exatamente 1, o Ke seria:",
+          "alts": [
+              "a Rf",
+              "o retorno do mercado (Rm)",
+              "zero",
+              "o dobro de Rm",
+              "a inflação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Uma queda da Selic, tudo mais constante, tende a:",
+          "alts": [
+              "reduzir o VPL dos projetos",
+              "elevar o VPL dos projetos e estimular o investimento",
+              "elevar a TMA",
+              "reduzir a TIR dos projetos",
+              "não afetar o investimento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A governança recomenda fixar a TMA em comitê antes de conhecer os números do projeto para:",
+          "alts": [
+              "acelerar a aprovação",
+              "evitar a manipulação da taxa para aprovar projetos desejados",
+              "reduzir o IR",
+              "elevar o β",
+              "dispensar o estudo de viabilidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre TMA e decisão, assinale a correta:",
+          "alts": [
+              "TIR < TMA → aceitar",
+              "TMA = TIR → VPL máximo",
+              "TIR > TMA → VPL > 0 → aceitar",
+              "TMA maior → VPL maior",
+              "TMA independe da estrutura de capital"
+          ],
+          "correta": 2
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Definir TMA como retorno mínimo exigido / custo de oportunidade",
+      "Decompor a TMA em Rf + prêmio de risco",
+      "Calcular o WACC com o escudo fiscal da dívida (1 − IR)",
+      "Calcular o Ke pelo CAPM: Rf + β × (Rm − Rf)",
+      "Explicar o efeito do risco do projeto sobre a TMA (taxa ajustada ao risco)",
+      "Aplicar as regras: TIR > TMA ⇔ VPL > 0; TMA = TIR ⇔ VPL = 0",
+      "Prever o efeito da alta da TMA sobre o VPL",
+      "Relacionar Selic → Rf → WACC → investimento real",
+      "Reconhecer a subjetividade da TMA como limitação da análise",
+      "Distinguir TMA privada de taxa social de desconto"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Esquecer o (1 − IR) no custo da dívida ao calcular o WACC.",
+      "No CAPM, multiplicar o β por Rm em vez de (Rm − Rf).",
+      "Afirmar que a TMA independe do risco do projeto.",
+      "Achar que TMA maior aumenta o VPL — ela o reduz.",
+      "Usar o WACC genérico para projeto de risco muito diferente da média da empresa.",
+      "Confundir TMA com taxa de juros do financiamento específico.",
+      "Afirmar que TMA = TIR implica VPL positivo (implica VPL = 0).",
+      "Usar valores contábeis como pesos do WACC quando há valores de mercado.",
+      "Rejeitar projeto com TIR > TMA.",
+      "Afirmar que a TMA é a inflação esperada.",
+      "Ignorar que a Selic afeta a TMA via taxa livre de risco.",
+      "Somar β × Rm à Rf e chamar de CAPM.",
+      "Usar a poupança como taxa livre de risco (referência: título público de longo prazo).",
+      "Achar que projetos sociais usam taxa maior que a privada (é a social, menor).",
+      "Esquecer que a TMA é parcialmente subjetiva — limitação da análise.",
+      "Afirmar que β > 1 indica negócio menos arriscado que o mercado.",
+      "Calcular o WACC sem ponderar pelos percentuais de cada fonte.",
+      "Confundir custo de capital próprio (Ke) com custo da dívida (Kd).",
+      "Afirmar que a TIR depende da TMA — a TIR é intrínseca ao fluxo; a TMA é externa.",
+      "Escolher a TMA depois de ver o VPL, para aprovar o projeto (manipulação)."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "TMA (taxa mínima de atratividade)",
+          "Retorno mínimo exigido para aceitar um projeto; custo de oportunidade do capital."
+      ],
+      [
+          "Taxa livre de risco (Rf)",
+          "Retorno de aplicação sem risco de calote; referência: título público federal de longo prazo."
+      ],
+      [
+          "Prêmio de risco",
+          "Retorno adicional exigido para compensar a incerteza dos fluxos do projeto."
+      ],
+      [
+          "Custo de oportunidade",
+          "Retorno da melhor alternativa de risco equivalente sacrificada ao investir no projeto."
+      ],
+      [
+          "WACC",
+          "Custo médio ponderado de capital: Ke × E% + Kd × (1 − IR) × D%."
+      ],
+      [
+          "Ke (custo do capital próprio)",
+          "Retorno exigido pelos acionistas; estimado pelo CAPM."
+      ],
+      [
+          "Kd (custo da dívida)",
+          "Custo dos recursos de terceiros; efetivo = Kd × (1 − IR) pelo escudo fiscal."
+      ],
+      [
+          "Escudo fiscal",
+          "Economia de IR gerada pela dedutibilidade dos juros da dívida."
+      ],
+      [
+          "CAPM",
+          "Modelo que precifica o capital próprio: Ke = Rf + β × (Rm − Rf)."
+      ],
+      [
+          "Beta (β)",
+          "Medida do risco sistemático: β > 1 = mais arriscado que o mercado; β < 1 = menos."
+      ],
+      [
+          "Prêmio de risco de mercado",
+          "(Rm − Rf): excesso de retorno do mercado sobre a taxa livre de risco."
+      ],
+      [
+          "Taxa ajustada ao risco",
+          "Taxa de desconto que reflete o risco específico do projeto, e não o WACC genérico."
+      ],
+      [
+          "Taxa social de desconto",
+          "Taxa usada em projetos públicos/sociais, menor que a privada, valorizando gerações futuras."
+      ],
+      [
+          "Estrutura-alvo de capital",
+          "Proporção pretendida entre capital próprio e de terceiros, a valores de mercado — pesos do WACC."
+      ],
+      [
+          "Ponto de indiferença",
+          "TMA = TIR ⇔ VPL = 0: o projeto apenas remunera o custo de oportunidade."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

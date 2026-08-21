@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noções de Risco de Mercado (VaR) | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">12 - Risco de mercado (VAR)</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html">06 - Parâmetros para análise de projetos</option>
+    <option value="07 - Indicadores econômicos de projetos (VPL, TIR, payback).html">07 - Indicadores: VPL, TIR, payback</option>
+    <option value="08 - Análise de sensibilidade e cenários.html">08 - Análise de sensibilidade e cenários</option>
+    <option value="09 - Análise de risco e incerteza na avaliação de projetos.html">09 - Risco e incerteza em projetos</option>
+    <option value="10 - Análise de projetos sociais.html">10 - Análise de projetos sociais</option>
+    <option value="11 - Estrutura a termo, duration e prazo médio.html">11 - Estrutura a termo, duration e prazo médio</option>
+    <option value="12 - Noções de risco de mercado (VAR).html" selected>12 - Risco de mercado (VAR)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Risco de Mercado e VaR</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 12 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Noções de Risco de Mercado — VaR</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 12</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 4 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Média <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Estatística básica (média, desvio-padrão, normal) + Tópico 09</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Médio — interpretação do VaR e cálculo paramétrico simples</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Conceituar <b>risco de mercado</b> e identificar seus quatro tipos clássicos: taxa de juros, câmbio, ações e commodities.</li>
+            <li>Definir <b>VaR (Value at Risk)</b> com seus três elementos: valor, horizonte e nível de confiança.</li>
+            <li>Interpretar corretamente a frase do VaR: “há X% de chance de a perda <b>não exceder</b> determinado valor”.</li>
+            <li>Calcular o VaR pelo <b>método paramétrico</b>: VaR = V × z × σ × √t.</li>
+            <li>Distinguir os três métodos de cálculo: <b>paramétrico</b>, <b>simulação histórica</b> e <b>Monte Carlo</b>.</li>
+            <li>Apontar as <b>limitações do VaR</b> e o papel do <b>Expected Shortfall</b>, do backtesting e dos testes de estresse.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Risco de mercado</b> é o risco de perdas causadas por movimentos adversos nos preços e nas taxas de mercado: <b>juros</b>, <b>câmbio</b>, <b>ações</b> e <b>commodities</b>. Difere do risco de crédito (calote), de liquidez (não conseguir negociar) e operacional (falhas internas).</p>
+          <p>O <b>VaR (Value at Risk)</b> resume esse risco num número só: a <b>perda máxima esperada</b>, em condições normais de mercado, num dado <b>horizonte</b> e com dado <b>nível de confiança</b>. Exemplo: VaR de 1 dia, 95%, de R$ 33 mil para uma carteira de R$ 1 milhão significa: <b>há 95% de probabilidade de a perda diária não passar de R$ 33 mil — e 5% de chance de ela ser maior</b>.</p>
+          <ul class="styled">
+            <li><b>Paramétrico</b>: VaR = V × z × σ × √t (supõe retornos normais). z = 1,65 (95%) ou 2,33 (99%).</li>
+            <li><b>Simulação histórica</b>: ordena os retornos passados e lê o percentil (100 dias → 5º pior é o VaR 95%).</li>
+            <li><b>Monte Carlo</b>: simula milhares de cenários futuros e monta a distribuição de perdas.</li>
+          </ul>
+          <p>O VaR <b>não diz o tamanho da perda</b> quando ela ultrapassa o limite — quem mede a cauda é o <b>Expected Shortfall (CVaR)</b>: a média das perdas que excedem o VaR.</p>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Decore a interpretação da frase (não é “perda máxima possível”), a fórmula paramétrica com a <b>regra da raiz do tempo</b> (√t) e os valores de z (1,65 e 2,33). Cai conceito + cálculo simples.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Risco de<br>Mercado ·<br>VaR</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Risco de mercado</h4><ul><li>Taxa de juros</li><li>Câmbio</li><li>Ações</li><li>Commodities</li></ul></div>
+            <div class="mm-node"><h4>VaR — definição</h4><ul><li>Perda máxima esperada</li><li>Horizonte (1 dia, 10 dias)</li><li>Confiança (95%, 99%)</li><li>Não é a perda máxima possível</li></ul></div>
+            <div class="mm-node"><h4>Métodos</h4><ul><li>Paramétrico: V × z × σ × √t</li><li>Simulação histórica: percentil</li><li>Monte Carlo: cenários</li></ul></div>
+            <div class="mm-node"><h4>Limitações</h4><ul><li>Não mede a cauda</li><li>Pressupõe normalidade</li><li>Passado ≠ futuro</li></ul></div>
+            <div class="mm-node"><h4>Complementos</h4><ul><li>Expected Shortfall (CVaR)</li><li>Backtesting</li><li>Stress test</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Risco de mercado</h3>
+        <div class="card">
+          <p><b>Risco de mercado</b> é a possibilidade de perdas financeiras decorrentes de <b>movimentos adversos em preços e taxas de mercado</b>. É o risco de “o mercado andar contra você”, mesmo que ninguém dê calote e nada falhe internamente.</p>
+          <table>
+            <tr><th>Tipo</th><th>Fator de risco</th><th>Quem sofre</th></tr>
+            <tr><td><b>Taxa de juros</b></td><td>Variação das taxas (ETTJ)</td><td>Carteiras de títulos: juros ↑ → preço dos títulos ↓ (tópico 11)</td></tr>
+            <tr><td><b>Câmbio</b></td><td>Variação das moedas</td><td>Empresas exportadoras/importadoras, dívida em dólar</td></tr>
+            <tr><td><b>Preços de ações</b></td><td>Quedas do mercado acionário</td><td>Fundos de investimento, fundos de pensão</td></tr>
+            <tr><td><b>Commodities</b></td><td>Petróleo, soja, minério etc.</td><td>Empresas produtoras e consumidoras</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">Risco de mercado × outros riscos</div><p><b>Crédito</b>: o emissor não paga (default). <b>Liquidez</b>: não consegue vender o ativo sem perda grande. <b>Operacional</b>: falhas de processos, pessoas, sistemas. <b>Mercado</b>: os preços se movem contra a posição. A FGV adora pedir essa distinção.</p></div>
+        </div>
+
+        <h3>4.2 Volatilidade — a matéria-prima do VaR</h3>
+        <div class="card">
+          <p>Risco de mercado é medido pela <b>volatilidade</b>: o <b>desvio-padrão dos retornos</b> do ativo ou da carteira. Quanto maior a volatilidade, maiores as oscilações possíveis — e maior o VaR.</p>
+          <ul class="styled">
+            <li>Volatilidade costuma ser dada <b>ao ano</b>. Para convertê-la em diária, divide-se pela raiz dos dias úteis: σ<sub>diária</sub> = σ<sub>anual</sub>/√252.</li>
+            <li>Exemplo: σ anual de 20% → σ diária = 20%/√252 ≈ <b>1,26% ao dia</b>.</li>
+            <li>Na <b>distribuição normal</b>, ±1σ concentra ≈ 68% dos casos; ±1,65σ deixa 5% na cauda; ±2,33σ deixa 1% na cauda.</li>
+          </ul>
+        </div>
+
+        <h3>4.3 O que é o VaR</h3>
+        <div class="card">
+          <p>O <b>VaR (Value at Risk, “valor em risco”)</b> é a <b>perda máxima esperada</b> de uma posição, em condições normais de mercado, ao longo de um <b>horizonte de tempo</b>, com um dado <b>nível de confiança</b>. Três elementos inseparáveis:</p>
+          <ol class="styled">
+            <li><b>Valor</b> (quanto se pode perder): ex. R$ 33 mil;</li>
+            <li><b>Horizonte</b> (em quanto tempo): ex. 1 dia ou 10 dias;</li>
+            <li><b>Confiança</b> (com que probabilidade): ex. 95% ou 99%.</li>
+          </ol>
+          <p>A leitura correta: <i>“VaR de 1 dia a 95% = R$ 33 mil”</i> significa que <b>há 95% de probabilidade de a perda do dia não exceder R$ 33 mil</b> — ou, equivalentemente, <b>5% de chance de a perda ser MAIOR que R$ 33 mil</b> (1 dia a cada 20, em média).</p>
+          <div class="box warn"><div class="box-title">Pegadinha clássica</div><p>VaR <b>não é</b> “a maior perda possível” nem “a perda média”. É um <b>limiar estatístico</b>: nos 5% (ou 1%) piores cenários, a perda será maior — e o VaR não diz quanto maior. Quem responde isso é o Expected Shortfall (item 4.6).</p></div>
+        </div>
+
+        <h3>4.4 Os três métodos de cálculo</h3>
+        <div class="card">
+          <h4>a) Método paramétrico (delta-normal ou variância-covariância)</h4>
+          <p>Supõe que os retornos seguem distribuição normal. A fórmula:</p>
+          <p style="text-align:center"><b>VaR = V × z × σ × √t</b></p>
+          <ul class="styled">
+            <li><b>V</b> = valor da posição; <b>z</b> = quantil da normal (1,65 a 95%; 2,33 a 99%); <b>σ</b> = volatilidade diária; <b>t</b> = horizonte em dias.</li>
+          </ul>
+          <p><b>Exemplo</b>: carteira de R$ 1.000.000, σ diária de 2%, 1 dia:</p>
+          <ul class="styled">
+            <li>95%: VaR = 1.000.000 × 1,65 × 2% = <b>R$ 33.000</b></li>
+            <li>99%: VaR = 1.000.000 × 2,33 × 2% = <b>R$ 46.600</b></li>
+            <li>10 dias (95%): 33.000 × √10 ≈ <b>R$ 104.355</b></li>
+          </ul>
+          <h4>b) Simulação histórica</h4>
+          <p>Pega os retornos reais do passado (ex.: últimos 250 dias), aplica-os à carteira atual, <b>ordena do pior ao melhor</b> e lê o percentil. Com 100 observações, o VaR 95% é a <b>5ª pior perda</b>; o VaR 99%, a pior de todas. <b>Não supõe distribuição</b> — mas assume que o passado representa o futuro.</p>
+          <h4>c) Simulação de Monte Carlo</h4>
+          <p>Gera <b>milhares de cenários aleatórios</b> para os fatores de risco (com volatilidades e correlações estimadas), reprecifica a carteira em cada um e monta a distribuição de perdas. É o mais flexível (lida com opções e não linearidades) e o mais pesado computacionalmente.</p>
+        </div>
+
+        <h3>4.5 Confiança, horizonte e a regra da raiz do tempo</h3>
+        <div class="card">
+          <table>
+            <tr><th>Confiança</th><th>z (uma cauda)</th><th>Leitura</th></tr>
+            <tr><td>90%</td><td>1,28</td><td>10% de chance de perda maior</td></tr>
+            <tr><td>95%</td><td>1,65</td><td>5% de chance (≈ 1 dia em 20)</td></tr>
+            <tr><td>97,5%</td><td>1,96</td><td>2,5% de chance</td></tr>
+            <tr><td>99%</td><td>2,33</td><td>1% de chance (≈ 1 dia em 100)</td></tr>
+          </table>
+          <p><b>Regra da raiz do tempo</b>: para converter o horizonte, multiplica-se por √t. VaR de 10 dias = VaR de 1 dia × √10 ≈ × 3,16. Note: o VaR <b>não multiplica por 10</b> — os retornos diários não são perfeitamente somáveis.</p>
+          <div class="box info"><div class="box-title">Por que 10 dias e 99%?</div><p>Os Acordos de Basileia padronizaram o VaR regulatório em <b>99% de confiança e horizonte de 10 dias</b> para o cálculo do capital mínimo dos bancos contra risco de mercado.</p></div>
+        </div>
+
+        <h3>4.6 Limitações do VaR e o Expected Shortfall</h3>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Não mede a cauda</b>: diz onde começa o desastre, não o tamanho dele.</li>
+            <li><b>Pressupõe normalidade</b> (método paramétrico): retornos reais têm caudas gordas — crashes são mais frequentes que o previsto pela normal.</li>
+            <li><b>Baseia-se no passado</b>: volatilidades e correlações mudam — em crises, as correlações disparam para 1.</li>
+            <li><b>Pode não ser subaditivo</b>: a soma dos VaRs das partes pode ser menor que o VaR do todo, ferindo a lógica da diversificação.</li>
+          </ul>
+          <p>O <b>Expected Shortfall (ES ou CVaR)</b> corrige a primeira falha: é a <b>média das perdas que excedem o VaR</b>. Exemplo: se as 5 piores perdas de 100 dias foram −3,2%; −4,1%; −5,0%; −6,3% e −8,0%, o VaR 95% é 3,2% e o ES 95% é (3,2 + 4,1 + 5,0 + 6,3 + 8,0)/5 = <b>5,32%</b> da carteira.</p>
+          <p>Complementos de validação: <b>backtesting</b> (comparar as perdas reais com o VaR previsto — a 95%, exceções devem ocorrer em ≈ 5% dos dias; muito mais que isso indica modelo ruim) e <b>testes de estresse</b> (cenários extremos fora da estatística: crash de 2008, Covid-2020).</p>
+          <div class="box fgv"><div class="box-title">FGV cobra</div><p>“O VaR informa a perda máxima que a carteira pode sofrer?” — <b>Errado</b>: informa a perda que só é excedida com pequena probabilidade, em condições normais de mercado. Eventos extremos ficam fora.</p></div>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Interpretação da frase do VaR</b>: “VaR de R$ 33 mil, 1 dia, 95%” → 5% de chance de perda MAIOR que R$ 33 mil no dia. A banca troca por “perda máxima possível” para pegar o desatento.</li>
+            <li><b>Cálculo paramétrico direto</b>: VaR = V × z × σ × √t, fornecendo z, σ e o horizonte.</li>
+            <li><b>Regra da raiz do tempo</b>: passar de 1 dia para 10 dias multiplica por √10 ≈ 3,16 — não por 10.</li>
+            <li><b>Conversão anual → diária</b>: dividir a volatilidade anual por √252.</li>
+            <li><b>Escolha do método</b>: paramétrico (normal, rápido), histórico (sem distribuição, depende do passado), Monte Carlo (cenários simulados, flexível).</li>
+            <li><b>Limitações</b>: não mede a cauda (quem mede é o Expected Shortfall), supõe normalidade e usa dados passados.</li>
+            <li><b>Contexto DATAPREV/bancário</b>: VaR 99% em 10 dias é o padrão regulatório de Basileia para capital de risco de mercado.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>VaR</b> = perda máxima esperada, em condições normais, num <b>horizonte</b>, com dada <b>confiança</b>. Não é a perda máxima possível.</li>
+            <li><b>Frase exata</b>: “há 95% de probabilidade de a perda NÃO exceder R$ X em t dias” = “há 5% de chance de a perda exceder R$ X”.</li>
+            <li><b>Fórmula paramétrica</b>: VaR = V × z × σ × √t.</li>
+            <li><b>z</b>: 90% → 1,28 | 95% → 1,65 | 97,5% → 1,96 | 99% → 2,33.</li>
+            <li><b>√10 ≈ 3,16</b> (1 dia → 10 dias); <b>√252 ≈ 15,87</b> (anual → diário divide por 15,87).</li>
+            <li><b>Três métodos</b>: paramétrico, simulação histórica, Monte Carlo.</li>
+            <li><b>Expected Shortfall (CVaR)</b>: média das perdas além do VaR — mede a cauda.</li>
+            <li><b>Basileia</b>: capital por risco de mercado usa VaR 99%, 10 dias.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>Risco de mercado</b> = juros, câmbio, ações, commodities. ≠ crédito, ≠ liquidez, ≠ operacional.</li>
+            <li><b>VaR</b> responde: “qual perda só é superada com pequena probabilidade, em quanto tempo?”.</li>
+            <li><b>Exemplo-base</b>: R$ 1 mi, σ = 2%/dia → VaR 95% = R$ 33 mil; VaR 99% = R$ 46,6 mil; 10 dias → R$ 104,4 mil.</li>
+            <li><b>Volatilidade anual de 20%</b> vira 1,26% ao dia (÷√252).</li>
+            <li><b>Simulação histórica</b>: 100 dias ordenados → VaR 95% = 5ª pior perda. Sem pressuposto de normal.</li>
+            <li><b>Monte Carlo</b>: simula cenários; melhor para derivativos e não linearidades.</li>
+            <li><b>Limitação-chave</b>: VaR ignora o tamanho da cauda → complementar com <b>Expected Shortfall</b>, backtesting e stress.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Conceito</th><th>Fórmula</th><th>Exemplo</th></tr>
+            <tr><td><b>VaR paramétrico</b></td><td>VaR = V × z × σ × √t</td><td>1 mi × 1,65 × 2% = R$ 33.000</td></tr>
+            <tr><td><b>Regra da raiz do tempo</b></td><td>VaR(t) = VaR(1) × √t</td><td>33.000 × √10 ≈ R$ 104.355</td></tr>
+            <tr><td><b>Volatilidade diária</b></td><td>σ_d = σ_anual / √252</td><td>20% a.a. → 1,26% ao dia</td></tr>
+            <tr><td><b>Volatilidade anual</b></td><td>σ_anual = σ_d × √252</td><td>2% ao dia → 31,75% a.a.</td></tr>
+            <tr><td><b>Expected Shortfall</b></td><td>ES = média das perdas &gt; VaR</td><td>média de 3,2/4,1/5,0/6,3/8,0 = 5,32%</td></tr>
+            <tr><td><b>Simulação histórica</b></td><td>VaR 95% = percentil 5% das perdas</td><td>100 dias → 5ª pior perda</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>Quantis da distribuição normal (uma cauda)</h4>
+          <table>
+            <tr><th>Confiança</th><th>z</th><th>VaR (V = R$ 1 mi, σ = 2%/dia, 1 dia)</th></tr>
+            <tr><td>90%</td><td>1,28</td><td>R$ 25.600</td></tr>
+            <tr><td>95%</td><td>1,65</td><td>R$ 33.000</td></tr>
+            <tr><td>97,5%</td><td>1,96</td><td>R$ 39.200</td></tr>
+            <tr><td>99%</td><td>2,33</td><td>R$ 46.600</td></tr>
+          </table>
+          <h4>Comparativo dos três métodos</h4>
+          <table>
+            <tr><th>Método</th><th>Como calcula</th><th>Prós</th><th>Contras</th></tr>
+            <tr><td><b>Paramétrico</b></td><td>V × z × σ × √t</td><td>Rápido, simples, poucos dados</td><td>Supõe normalidade; ruim com opções</td></tr>
+            <tr><td><b>Simulação histórica</b></td><td>Reaplica retornos passados; lê o percentil</td><td>Sem pressuposto de distribuição; intuitivo</td><td>Passado pode não se repetir; precisa de série longa</td></tr>
+            <tr><td><b>Monte Carlo</b></td><td>Simula milhares de cenários futuros</td><td>Flexível; trata não linearidades</td><td>Pesado; depende dos parâmetros estimados</td></tr>
+          </table>
+          <h4>Backtesting — o que esperar</h4>
+          <table>
+            <tr><th>VaR</th><th>Exceções esperadas</th><th>Sinal de alerta</th></tr>
+            <tr><td>95% (1 dia)</td><td>≈ 5% dos dias (1 em 20)</td><td>Muito mais que 12–13 exceções em 250 dias</td></tr>
+            <tr><td>99% (1 dia)</td><td>≈ 1% dos dias (1 em 100)</td><td>Mais que 4–5 exceções em 250 dias</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">O relatório das 4h15</div><p>O VaR nasceu no J.P. Morgan, no início dos anos 1990: o presidente queria, todos os dias às 4h15 da tarde, <b>um único número</b> que respondesse “quanto podemos perder amanhã?”. Em 1994 o banco publicou a metodologia (RiskMetrics) de graça — e o VaR virou padrão mundial.</p></div>
+          <div class="box curio"><div class="box-title">2008: o cisne negro dos modelos</div><p>Na crise de 2008, bancos registraram perdas muitas vezes maiores que seus VaRs — eventos raríssimos aconteceram em sequência. A lição: caudas gordas + correlações que vão a 1 nas crises. Nassim Taleb popularizou a crítica em <i>O Cisne Negro</i>: o VaR mede bem o comum e mal o extremo.</p></div>
+          <div class="box curio"><div class="box-title">Por que Basileia migrou para o Expected Shortfall</div><p>Depois de 2008, o Comitê de Basileia substituiu o VaR pelo ES no padrão de capital (FRTB): medir a <b>média da cauda</b> captura melhor os desastres que o VaR deixa escapar.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: “perda máxima”</div><p>VaR 95% de R$ 33 mil NÃO significa “a carteira pode perder no máximo R$ 33 mil”. Significa que em 95% dos dias a perda fica até R$ 33 mil — nos outros 5%, pode ser bem maior. Essa troca de sentido é a pegadinha nº 1 da FGV.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: somar VaRs</div><p>O VaR da carteira NÃO é a soma dos VaRs dos ativos: a <b>diversificação</b> (correlações &lt; 1) reduz o risco total. VaR total ≤ soma das partes.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>← Tópico 09 (risco em projetos):</b> lá, risco do VPL via desvio-padrão e cenários; aqui, risco da carteira via VaR — a mesma lógica estatística.</li>
+            <li><b>← Tópico 11 (duration):</b> o VaR de uma carteira de títulos ≈ D_mod × volatilidade da taxa × valor — duration é a sensibilidade que alimenta o modelo.</li>
+            <li><b>← Estatística básica:</b> média, desvio-padrão, distribuição normal e quantis são a base do VaR paramétrico.</li>
+            <li><b>↔ Administração Financeira:</b> CMPC/TMA embutem prêmio por risco; o VaR quantifica o risco de mercado que justifica o prêmio.</li>
+            <li><b>↔ Legislação/regulação:</b> Basileia exige capital proporcional ao risco — VaR 99%, 10 dias é o padrão regulatório.</li>
+            <li><b>→ Gestão de investimentos da DATAPREV:</b> fundos e tesourarias reportam VaR diariamente para limitar exposições.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.3 (risco de mercado e definição do VaR); treinar a interpretação da frase</td><td>Explicar o VaR sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.4–4.5; refazer os cálculos paramétricos e a regra √t</td><td>Calcular VaR 95% e 99% sem ajuda</td></tr>
+            <tr><td>3</td><td>Estudar 4.6; resolver os 20 flashcards</td><td>Dominar limitações e Expected Shortfall</td></tr>
+            <tr><td>4</td><td>20 questões comentadas + mini-simulado de 30 + revisão de 5 minutos</td><td>≥ 80% e ≥ 24/30</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>JORION, P. <b>Value at Risk: The New Benchmark for Managing Financial Risk</b>. McGraw-Hill — a bíblia do VaR.</li>
+            <li>HULL, J. C. <b>Risk Management and Financial Institutions</b>. Wiley — métodos de VaR, ES e testes de estresse.</li>
+            <li>BANCO CENTRAL DO BRASIL / COMITÊ DE BASILEIA — documentos sobre capital regulatório para risco de mercado (padrão 99%, 10 dias).</li>
+            <li>ASSAF NETO, A. <b>Mercado Financeiro</b>. Atlas — risco de mercado e VaR no contexto brasileiro.</li>
+            <li>TALEB, N. N. <b>O Cisne Negro</b>. Best Business — a crítica clássica aos modelos de risco baseados na normal.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 12/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t12";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "O que é risco de mercado?",
+          "a": "É o risco de perdas causadas por movimentos adversos em preços e taxas de mercado. Quatro tipos clássicos: taxa de juros, câmbio, preços de ações e commodities."
+      },
+      {
+          "q": "Como o risco de mercado difere dos riscos de crédito, liquidez e operacional?",
+          "a": "Crédito = calote do emissor/contraparte. Liquidez = não conseguir vender o ativo sem grande desconto. Operacional = falhas de processos, pessoas e sistemas. Mercado = os preços se movem contra a posição."
+      },
+      {
+          "q": "O que é volatilidade?",
+          "a": "É o desvio-padrão dos retornos de um ativo ou carteira — mede a intensidade das oscilações. É a matéria-prima do VaR: quanto maior a volatilidade, maior o risco."
+      },
+      {
+          "q": "Como converter volatilidade anual em diária?",
+          "a": "Divide-se por √252 (dias úteis do ano): σ_diária = σ_anual/√252. Ex.: 20% a.a. ÷ 15,87 ≈ 1,26% ao dia. No sentido inverso, multiplica-se por √252."
+      },
+      {
+          "q": "O que é o VaR?",
+          "a": "Value at Risk: a perda máxima esperada de uma posição, em condições normais de mercado, num dado horizonte de tempo, com um dado nível de confiança. Três elementos: valor, horizonte e confiança."
+      },
+      {
+          "q": "Interprete: VaR de 1 dia, 95%, R$ 33 mil.",
+          "a": "Há 95% de probabilidade de a perda do dia NÃO exceder R$ 33 mil — ou 5% de chance de a perda ser MAIOR (em média, 1 dia a cada 20). Não é a perda máxima possível."
+      },
+      {
+          "q": "Qual a fórmula do VaR paramétrico?",
+          "a": "VaR = V × z × σ × √t, onde V = valor da posição, z = quantil da normal (1,65 a 95%; 2,33 a 99%), σ = volatilidade diária, t = horizonte em dias."
+      },
+      {
+          "q": "Quais os valores de z mais usados?",
+          "a": "90% → 1,28 | 95% → 1,65 | 97,5% → 1,96 | 99% → 2,33 (distribuição normal, uma cauda)."
+      },
+      {
+          "q": "O que é a regra da raiz do tempo?",
+          "a": "Para converter o VaR de 1 dia para t dias, multiplica-se por √t. VaR 10 dias = VaR 1 dia × √10 ≈ × 3,16. Nunca multiplicar por 10 diretamente."
+      },
+      {
+          "q": "Calcule: VaR 95%, 1 dia, V = R$ 1 milhão, σ = 2%/dia.",
+          "a": "VaR = 1.000.000 × 1,65 × 2% = R$ 33.000."
+      },
+      {
+          "q": "Calcule: VaR 99%, 1 dia, V = R$ 1 milhão, σ = 2%/dia.",
+          "a": "VaR = 1.000.000 × 2,33 × 2% = R$ 46.600."
+      },
+      {
+          "q": "Calcule: VaR 95%, 10 dias, V = R$ 1 milhão, σ = 2%/dia.",
+          "a": "VaR 1 dia = R$ 33.000; × √10 ≈ R$ 104.355."
+      },
+      {
+          "q": "Como funciona a simulação histórica?",
+          "a": "Aplicam-se os retornos reais do passado à carteira atual, ordenam-se as perdas da pior para a melhor e lê-se o percentil. Com 100 observações, o VaR 95% é a 5ª pior perda. Não supõe distribuição normal."
+      },
+      {
+          "q": "Como funciona a simulação de Monte Carlo?",
+          "a": "Geram-se milhares de cenários aleatórios para os fatores de risco, reprecifica-se a carteira em cada um e monta-se a distribuição de perdas. Flexível (trata opções), mas pesado computacionalmente."
+      },
+      {
+          "q": "Quais as principais limitações do VaR?",
+          "a": "Não mede o tamanho da perda além do limiar (a cauda); o método paramétrico supõe normalidade (retornos reais têm caudas gordas); usa dados do passado; pode não ser subaditivo."
+      },
+      {
+          "q": "O que é Expected Shortfall (ES ou CVaR)?",
+          "a": "É a média das perdas que EXCEDEM o VaR — mede o tamanho da cauda. Ex.: se as 5 piores perdas foram 3,2% a 8,0%, ES 95% = 5,32%. Basileia migrou do VaR para o ES no padrão de capital."
+      },
+      {
+          "q": "O que é backtesting do VaR?",
+          "a": "Comparar as perdas reais com o VaR previsto. A 95%, exceções devem ocorrer em ≈ 5% dos dias (≈ 12–13 em 250 dias). Muito mais exceções que isso indica modelo mal calibrado."
+      },
+      {
+          "q": "O que são testes de estresse (stress tests)?",
+          "a": "Simulação de cenários extremos fora da estatística histórica (crashes, crises) para avaliar perdas que o VaR não captura, pois ele vale apenas para 'condições normais de mercado'."
+      },
+      {
+          "q": "Qual o padrão regulatório de Basileia para risco de mercado?",
+          "a": "VaR de 99% de confiança e horizonte de 10 dias para o cálculo do capital mínimo dos bancos (na versão recente, migrando para Expected Shortfall)."
+      },
+      {
+          "q": "O VaR da carteira é a soma dos VaRs dos ativos?",
+          "a": "Não. A diversificação (correlações menores que 1) reduz o risco: VaR da carteira ≤ soma dos VaRs individuais. Somar os VaRs ignora o benefício da diversificação."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Conceito de VaR",
+          "texto": "O relatório de risco de um fundo informa: “VaR de 1 dia, com 95% de confiança: R$ 33 mil”.",
+          "enun": "A interpretação CORRETA dessa informação é:",
+          "alts": [
+              "a perda máxima possível no dia é de R$ 33 mil",
+              "há 95% de probabilidade de a perda do dia não exceder R$ 33 mil",
+              "a perda média esperada no dia é de R$ 33 mil",
+              "em 95% dos dias o fundo lucra R$ 33 mil",
+              "a perda de R$ 33 mil ocorre exatamente a cada 20 dias"
+          ],
+          "correta": 1,
+          "coment": "VaR é um limiar estatístico: 95% de chance de a perda ficar até R$ 33 mil — e 5% de chance de ser MAIOR (em média 1 dia em 20, mas sem calendário fixo). Não é perda máxima possível nem perda média."
+      },
+      {
+          "tema": "VaR paramétrico",
+          "texto": "Uma carteira vale R$ 1.000.000 e tem volatilidade diária de 2%. Adote z = 1,65 para 95%.",
+          "enun": "O VaR de 1 dia, a 95% de confiança, é:",
+          "alts": [
+              "R$ 20.000",
+              "R$ 33.000",
+              "R$ 46.600",
+              "R$ 16.500",
+              "R$ 104.355"
+          ],
+          "correta": 1,
+          "coment": "VaR = V × z × σ × √t = 1.000.000 × 1,65 × 0,02 × 1 = R$ 33.000. A alternativa E é o VaR de 10 dias (√10) — pegadinha de horizonte."
+      },
+      {
+          "tema": "VaR paramétrico",
+          "texto": "Para a mesma carteira (R$ 1 milhão, σ = 2%/dia), adote z = 2,33 para 99%.",
+          "enun": "O VaR de 1 dia a 99% é:",
+          "alts": [
+              "R$ 33.000",
+              "R$ 23.300",
+              "R$ 46.600",
+              "R$ 66.000",
+              "R$ 93.200"
+          ],
+          "correta": 2,
+          "coment": "1.000.000 × 2,33 × 0,02 = R$ 46.600. Maior confiança → z maior → VaR maior: o limiar precisa ser mais largo para 'segurar' 99% dos casos."
+      },
+      {
+          "tema": "Regra da raiz do tempo",
+          "texto": "O VaR de 1 dia de uma carteira, a 95%, é R$ 33.000.",
+          "enun": "Pela regra da raiz do tempo, o VaR de 10 dias, a 95%, é aproximadamente:",
+          "alts": [
+              "R$ 330.000",
+              "R$ 104.355",
+              "R$ 66.000",
+              "R$ 33.000",
+              "R$ 10.435"
+          ],
+          "correta": 1,
+          "coment": "VaR(10) = VaR(1) × √10 = 33.000 × 3,1623 ≈ R$ 104.355. Multiplicar por 10 (R$ 330 mil) é o erro clássico — retornos não são perfeitamente correlacionados no tempo."
+      },
+      {
+          "tema": "Volatilidade",
+          "texto": "A volatilidade anual de um ativo é 20%. Considere 252 dias úteis no ano.",
+          "enun": "A volatilidade diária aproximada é:",
+          "alts": [
+              "0,079%",
+              "1,26%",
+              "2,52%",
+              "1,59%",
+              "5,04%"
+          ],
+          "correta": 1,
+          "coment": "σ_diária = σ_anual/√252 = 20%/15,87 ≈ 1,26%. Converter pela raiz quadrada do tempo, nunca pela divisão direta (20%/252)."
+      },
+      {
+          "tema": "Elementos do VaR",
+          "texto": "Sobre a definição de Value at Risk, julgue: o VaR depende de três elementos.",
+          "enun": "Esses elementos são:",
+          "alts": [
+              "valor, prazo de carência e rating",
+              "valor, horizonte de tempo e nível de confiança",
+              "preço, prazo e liquidez",
+              "valor, correlação e beta",
+              "horizonte, spread e duration"
+          ],
+          "correta": 1,
+          "coment": "Valor (quanto pode perder), horizonte (em quanto tempo) e confiança (com que probabilidade). Tire um deles e a frase do VaR fica incompleta."
+      },
+      {
+          "tema": "Simulação histórica",
+          "texto": "Um analista ordena as perdas diárias dos últimos 100 pregões, da pior para a melhor, para estimar o VaR por simulação histórica.",
+          "enun": "O VaR a 95% corresponde:",
+          "alts": [
+              "à pior perda da série",
+              "à média das 5 piores perdas",
+              "à 5ª pior perda",
+              "à mediana da série",
+              "à média de todas as perdas"
+          ],
+          "correta": 2,
+          "coment": "Com 100 observações, 95% de confiança deixa 5% na cauda = 5 observações. O VaR é a 5ª pior perda (o percentil 5%). A MÉDIA das 5 piores é o Expected Shortfall."
+      },
+      {
+          "tema": "Expected Shortfall",
+          "texto": "As 5 piores perdas percentuais de uma série de 100 dias foram: −3,2%; −4,1%; −5,0%; −6,3% e −8,0%.",
+          "enun": "O Expected Shortfall a 95% é:",
+          "alts": [
+              "3,2%",
+              "8,0%",
+              "5,32%",
+              "26,6%",
+              "4,1%"
+          ],
+          "correta": 2,
+          "coment": "ES = média das perdas que excedem o VaR: (3,2 + 4,1 + 5,0 + 6,3 + 8,0)/5 = 5,32%. O VaR (3,2%) só diz onde a cauda começa; o ES diz o tamanho médio dela."
+      },
+      {
+          "tema": "Métodos de VaR",
+          "texto": "Três metodologias de cálculo do VaR são clássicas: paramétrica, simulação histórica e Monte Carlo.",
+          "enun": "A que NÃO pressupõe distribuição normal dos retornos e usa apenas dados reais do passado é:",
+          "alts": [
+              "paramétrica",
+              "Monte Carlo",
+              "simulação histórica",
+              "delta-gama",
+              "variância-covariância"
+          ],
+          "correta": 2,
+          "coment": "A simulação histórica reaplica os retornos reais observados — nenhum pressuposto de distribuição. A paramétrica supõe normal; Monte Carlo simula a partir de distribuições estimadas."
+      },
+      {
+          "tema": "Métodos de VaR",
+          "texto": "Uma carteira contém opções, cujo payoff é não linear.",
+          "enun": "O método de VaR mais adequado para capturar essa não linearidade é:",
+          "alts": [
+              "paramétrico (delta-normal)",
+              "simulação de Monte Carlo",
+              "média móvel",
+              "backtesting",
+              "percentil simples"
+          ],
+          "correta": 1,
+          "coment": "Monte Carlo reprecifica a carteira inteira em cada cenário simulado, capturando a não linearidade das opções. O paramétrico (linear, delta-normal) é o mais frágil nesse caso."
+      },
+      {
+          "tema": "Risco de mercado",
+          "texto": "Uma empresa tem dívida em dólares e receitas em reais.",
+          "enun": "O risco de mercado ao qual ela está exposta é principalmente o de:",
+          "alts": [
+              "taxa de juros",
+              "câmbio",
+              "preço de ações",
+              "commodities",
+              "crédito"
+          ],
+          "correta": 1,
+          "coment": "Desvalorização do real encarece a dívida em dólar: risco cambial, um dos quatro tipos de risco de mercado (juros, câmbio, ações, commodities)."
+      },
+      {
+          "tema": "Risco de mercado × outros riscos",
+          "texto": "Um fundo não consegue vender um título sem aceitar um desconto de 15% no preço.",
+          "enun": "Esse é um exemplo de risco:",
+          "alts": [
+              "de mercado",
+              "de crédito",
+              "de liquidez",
+              "operacional",
+              "cambial"
+          ],
+          "correta": 2,
+          "coment": "Dificuldade de negociar sem perda relevante = risco de LIQUIDEZ. Não houve movimento de preço de mercado nem calote — faltou comprador."
+      },
+      {
+          "tema": "Confiança e cauda",
+          "texto": "Um VaR calculado a 99% de confiança, para 1 dia.",
+          "enun": "Isso significa que, em condições normais, a perda deve exceder o VaR em média:",
+          "alts": [
+              "1 dia a cada 100",
+              "1 dia a cada 20",
+              "1 dia a cada 10",
+              "todos os dias",
+              "nunca"
+          ],
+          "correta": 0,
+          "coment": "99% de confiança = 1% de cauda = 1 dia em 100, em média. A 95%, seria 1 em 20. Frequência da exceção = 1 − confiança."
+      },
+      {
+          "tema": "Limitações do VaR",
+          "texto": "Sobre as limitações do VaR, analise: I) não informa o tamanho das perdas além do limiar; II) o método paramétrico supõe normalidade; III) capta perfeitamente eventos extremos como crashes.",
+          "enun": "Está(ão) correta(s):",
+          "alts": [
+              "apenas I",
+              "apenas I e II",
+              "apenas II e III",
+              "I, II e III",
+              "apenas III"
+          ],
+          "correta": 1,
+          "coment": "I e II corretas. III errada: o VaR vale para condições NORMAIS de mercado; eventos extremos (caudas gordas, correlações indo a 1) ficam fora — por isso existem stress test e Expected Shortfall."
+      },
+      {
+          "tema": "Backtesting",
+          "texto": "Um banco rodou 250 dias de backtesting do seu VaR diário a 95% e registrou 40 exceções (perdas acima do VaR).",
+          "enun": "A conclusão adequada é:",
+          "alts": [
+              "o modelo está bem calibrado",
+              "o modelo está mal calibrado: esperavam-se cerca de 12–13 exceções",
+              "o VaR deve ser recalculado a 90%",
+              "o backtesting é inconclusivo",
+              "o modelo superestima o risco"
+          ],
+          "correta": 1,
+          "coment": "A 95%, exceções esperadas ≈ 5% × 250 ≈ 12–13. Quarenta é três vezes isso: o modelo SUBESTIMA o risco e precisa ser revisto."
+      },
+      {
+          "tema": "Diversificação",
+          "texto": "Dois ativos têm, isoladamente, VaR de R$ 20 mil cada, e correlação de retornos inferior a 1.",
+          "enun": "O VaR da carteira com os dois ativos será:",
+          "alts": [
+              "exatamente R$ 40 mil",
+              "menor que R$ 40 mil",
+              "maior que R$ 40 mil",
+              "R$ 20 mil",
+              "zero"
+          ],
+          "correta": 1,
+          "coment": "Com correlação < 1, a diversificação reduz o risco: VaR da carteira < soma dos VaRs. Só seria R$ 40 mil com correlação perfeita (+1)."
+      },
+      {
+          "tema": "Basileia",
+          "texto": "Os Acordos de Basileia padronizaram parâmetros de VaR para o capital regulatório de risco de mercado dos bancos.",
+          "enun": "O padrão clássico é:",
+          "alts": [
+              "90% e 1 dia",
+              "95% e 1 dia",
+              "99% e 10 dias",
+              "95% e 10 dias",
+              "99% e 1 ano"
+          ],
+          "correta": 2,
+          "coment": "Basileia: 99% de confiança, horizonte de 10 dias (tempo estimado para desfazer posições em estresse). Par regulatório clássico cobrado em prova."
+      },
+      {
+          "tema": "VaR com horizonte e confiança",
+          "texto": "Uma posição de R$ 500.000 tem volatilidade diária de 1%. Adote z = 2,33 (99%).",
+          "enun": "O VaR de 10 dias, a 99%, é aproximadamente:",
+          "alts": [
+              "R$ 11.650",
+              "R$ 36.841",
+              "R$ 116.500",
+              "R$ 50.000",
+              "R$ 23.300"
+          ],
+          "correta": 1,
+          "coment": "VaR 1 dia = 500.000 × 2,33 × 1% = R$ 11.650; 10 dias: × √10 ≈ R$ 36.841. Combina os dois ajustes: confiança (z) e horizonte (√t)."
+      },
+      {
+          "tema": "Confiança × VaR",
+          "texto": "Mantidos valor, volatilidade e horizonte, o gestor eleva o nível de confiança de 95% para 99%.",
+          "enun": "O VaR:",
+          "alts": [
+              "diminui",
+              "permanece igual",
+              "aumenta",
+              "zera",
+              "depende da correlação"
+          ],
+          "correta": 2,
+          "coment": "Mais confiança = z maior (1,65 → 2,33) = limiar mais conservador = VaR maior. O número precisa 'cobrir' mais casos."
+      },
+      {
+          "tema": "Stress test",
+          "texto": "Um gestor quer saber quanto sua carteira perderia numa repetição do crash de 2008.",
+          "enun": "A ferramenta adequada para essa avaliação é:",
+          "alts": [
+              "o VaR paramétrico a 95%",
+              "o teste de estresse",
+              "o backtesting",
+              "a simulação histórica dos últimos 20 dias",
+              "a duration modificada"
+          ],
+          "correta": 1,
+          "coment": "Cenários extremos fora das 'condições normais' são papel do STRESS TEST. O VaR, por definição, não cobre a cauda extrema — e 20 dias de histórico não contêm 2008."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O VaR responde à pergunta:",
+          "alts": [
+              "qual o retorno esperado da carteira?",
+              "qual a perda máxima esperada, com dada confiança, num dado horizonte?",
+              "qual o prazo médio da carteira?",
+              "qual a taxa livre de risco?",
+              "qual o beta da carteira?"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "São tipos clássicos de risco de mercado, EXCETO:",
+          "alts": [
+              "taxa de juros",
+              "câmbio",
+              "ações",
+              "commodities",
+              "fraude interna"
+          ],
+          "correta": 4
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O valor de z para 95% de confiança (uma cauda) é:",
+          "alts": [
+              "1,28",
+              "1,65",
+              "1,96",
+              "2,33",
+              "2,58"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O valor de z para 99% de confiança (uma cauda) é:",
+          "alts": [
+              "1,65",
+              "1,96",
+              "2,33",
+              "2,58",
+              "3,09"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Para converter o VaR de 1 dia em VaR de 10 dias, multiplica-se por:",
+          "alts": [
+              "10",
+              "√10 ≈ 3,16",
+              "252",
+              "√252 ≈ 15,87",
+              "2"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Para converter volatilidade ANUAL em DIÁRIA, divide-se por:",
+          "alts": [
+              "√10",
+              "12",
+              "√252",
+              "√365",
+              "100"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O método de VaR que ordena perdas passadas e lê o percentil é:",
+          "alts": [
+              "paramétrico",
+              "Monte Carlo",
+              "simulação histórica",
+              "delta-gama",
+              "analítico"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O método que gera milhares de cenários aleatórios futuros é:",
+          "alts": [
+              "simulação histórica",
+              "simulação de Monte Carlo",
+              "paramétrico",
+              "backtesting",
+              "stress test"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O Expected Shortfall (CVaR) mede:",
+          "alts": [
+              "a perda máxima possível",
+              "a média das perdas que excedem o VaR",
+              "a volatilidade anual",
+              "o retorno esperado",
+              "a correlação da carteira"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "VaR a 95% de confiança implica exceções (perdas maiores que o VaR) em média:",
+          "alts": [
+              "5% dos dias",
+              "1% dos dias",
+              "95% dos dias",
+              "10% dos dias",
+              "nunca"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "“VaR de R$ 46.600, 1 dia, 99%” significa:",
+          "alts": [
+              "perda máxima possível de R$ 46.600",
+              "1% de chance de a perda diária exceder R$ 46.600",
+              "perda média diária de R$ 46.600",
+              "99% de chance de perder R$ 46.600",
+              "ganho esperado de R$ 46.600"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Carteira de R$ 1 milhão, σ = 2%/dia, z = 1,65. O VaR de 1 dia a 95% é:",
+          "alts": [
+              "R$ 16.500",
+              "R$ 33.000",
+              "R$ 46.600",
+              "R$ 20.000",
+              "R$ 66.000"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Se o VaR de 1 dia é R$ 33.000, o de 10 dias (mesma confiança) é aproximadamente:",
+          "alts": [
+              "R$ 330.000",
+              "R$ 104.355",
+              "R$ 66.000",
+              "R$ 33.000",
+              "R$ 3.300"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Volatilidade anual de 20% equivale, aproximadamente, a quanto ao dia?",
+          "alts": [
+              "0,08%",
+              "1,26%",
+              "2,00%",
+              "1,59%",
+              "0,50%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Mantidos os demais parâmetros, elevar a confiança de 95% para 99% faz o VaR:",
+          "alts": [
+              "cair",
+              "subir",
+              "permanecer igual",
+              "zerar",
+              "depender do retorno"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "A principal limitação do VaR é:",
+          "alts": [
+              "ser difícil de calcular",
+              "não informar o tamanho das perdas além do limiar",
+              "exigir dados de 100 anos",
+              "só valer para ações",
+              "ignorar a volatilidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "O padrão de Basileia para capital de risco de mercado usa VaR de:",
+          "alts": [
+              "90% e 1 dia",
+              "95% e 10 dias",
+              "99% e 10 dias",
+              "99% e 1 dia",
+              "97,5% e 1 mês"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Num backtesting de 250 dias com VaR 95%, o número de exceções esperado é cerca de:",
+          "alts": [
+              "1 a 2",
+              "12 a 13",
+              "25",
+              "50",
+              "125"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "O VaR de uma carteira diversificada, em relação à soma dos VaRs dos ativos, tende a ser:",
+          "alts": [
+              "maior",
+              "igual",
+              "menor",
+              "o dobro",
+              "zero"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Para carteiras com opções (payoffs não lineares), o método de VaR mais indicado é:",
+          "alts": [
+              "paramétrico delta-normal",
+              "simulação de Monte Carlo",
+              "percentil simples",
+              "média histórica",
+              "regra da raiz do tempo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "V = R$ 1 mi, σ = 2%/dia, z = 2,33 (99%). O VaR de 1 dia é:",
+          "alts": [
+              "R$ 33.000",
+              "R$ 46.600",
+              "R$ 23.300",
+              "R$ 104.355",
+              "R$ 66.000"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "V = R$ 500 mil, σ = 1%/dia, z = 2,33. O VaR de 10 dias a 99% é aproximadamente:",
+          "alts": [
+              "R$ 11.650",
+              "R$ 36.841",
+              "R$ 116.500",
+              "R$ 23.300",
+              "R$ 50.000"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Em 100 dias de simulação histórica, a 5ª pior perda foi −3,2%. O VaR 95% de uma carteira de R$ 2 mi é:",
+          "alts": [
+              "R$ 32.000",
+              "R$ 64.000",
+              "R$ 3.200",
+              "R$ 100.000",
+              "R$ 640.000"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "As 5 piores perdas foram 3,2%; 4,1%; 5,0%; 6,3%; 8,0%. O Expected Shortfall 95% é:",
+          "alts": [
+              "3,2%",
+              "8,0%",
+              "5,32%",
+              "26,6%",
+              "4,1%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Um banco teve 40 exceções em 250 dias no backtesting do VaR 95%. Isso indica que o modelo:",
+          "alts": [
+              "está calibrado",
+              "subestima o risco",
+              "superestima o risco",
+              "deve usar 99%",
+              "é irrelevante"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Dois ativos com VaR de R$ 20 mil cada e correlação 0,4. O VaR conjunto será:",
+          "alts": [
+              "R$ 40 mil",
+              "menor que R$ 40 mil",
+              "maior que R$ 40 mil",
+              "R$ 8 mil",
+              "zero"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Um título tem duration modificada 2,49 e a volatilidade diária da taxa é de 0,5%. A variação diária do preço a 95% (z = 1,65) é cerca de:",
+          "alts": [
+              "2,05%",
+              "1,24%",
+              "4,11%",
+              "0,82%",
+              "2,49%"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Considere: I) VaR pressupõe condições normais de mercado; II) a simulação histórica supõe normalidade; III) Monte Carlo trata não linearidades. Estão corretas:",
+          "alts": [
+              "apenas I",
+              "apenas I e III",
+              "apenas II e III",
+              "I, II e III",
+              "apenas III"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Se a volatilidade diária é 2%, a volatilidade ANUAL aproximada é:",
+          "alts": [
+              "24%",
+              "31,75%",
+              "10%",
+              "50,4%",
+              "5,04%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "“O VaR informa a perda máxima que a carteira pode sofrer no horizonte considerado.” Essa afirmação está:",
+          "alts": [
+              "correta",
+              "errada — o VaR é apenas um limiar estatístico, excedido com pequena probabilidade",
+              "correta apenas a 99%",
+              "correta apenas para 1 dia",
+              "correta em condições normais"
+          ],
+          "correta": 1
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei definir risco de mercado e distinguir de crédito, liquidez e operacional",
+      "Sei os 4 tipos de risco de mercado: juros, câmbio, ações e commodities",
+      "Sei definir VaR com seus 3 elementos: valor, horizonte e confiança",
+      "Sei interpretar a frase do VaR sem cair na pegadinha da 'perda máxima'",
+      "Sei calcular VaR paramétrico: V × z × σ × √t",
+      "Decorei os z: 95% → 1,65 e 99% → 2,33",
+      "Sei a regra da raiz do tempo (√10) e a conversão anual→diária (÷√252)",
+      "Sei diferenciar os 3 métodos: paramétrico, histórico e Monte Carlo",
+      "Sei explicar Expected Shortfall, backtesting e stress test",
+      "Sei o padrão de Basileia: VaR 99%, 10 dias"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Achar que VaR é a 'perda máxima possível' — é um limiar estatístico, excedido com pequena probabilidade",
+      "Achar que VaR é a 'perda média' — é a perda no percentil de confiança, não a média",
+      "Multiplicar o VaR diário por 10 para obter o de 10 dias — o correto é multiplicar por √10 ≈ 3,16",
+      "Dividir a volatilidade anual por 252 para obter a diária — divide-se por √252 ≈ 15,87",
+      "Trocar os valores de z: 95% = 1,65 e 99% = 2,33 (não 1,96, que é 97,5% em uma cauda)",
+      "Usar z de duas caudas quando a fórmula pede uma cauda",
+      "Confundir VaR com Expected Shortfall — o ES é a média das perdas ALÉM do VaR",
+      "Na simulação histórica com 100 dias, pegar a pior perda como VaR 95% — a 5ª pior é o VaR; a pior é o VaR 99%",
+      "Achar que a simulação histórica supõe distribuição normal — quem supõe é o método paramétrico",
+      "Achar que Monte Carlo usa só dados passados — ele simula cenários futuros a partir de parâmetros estimados",
+      "Ignorar que o VaR vale apenas para 'condições normais de mercado' — crashes ficam fora",
+      "Acreditar que o VaR capta eventos extremos — para isso servem os testes de estresse",
+      "Somar os VaRs dos ativos para obter o da carteira — a diversificação reduz o VaR total",
+      "Esquecer que maior confiança implica VaR maior (z maior, limiar mais conservador)",
+      "No backtesting, achar que zero exceções é ótimo — pode indicar VaR superestimado (modelo conservador demais)",
+      "Confundir risco de mercado com risco de crédito: mercado = preços se movem; crédito = calote",
+      "Classificar 'não conseguir vender o ativo' como risco de mercado — é risco de liquidez",
+      "Achar que o VaR elimina a necessidade de outros controles — é apenas uma medida, complementada por ES, stress e backtesting",
+      "Errar as unidades: σ deve estar no mesmo período do horizonte (diária para VaR diário)",
+      "Esquecer o padrão de Basileia: 99% de confiança e 10 dias de horizonte"
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Risco de mercado",
+          "Risco de perdas por movimentos adversos em preços e taxas de mercado (juros, câmbio, ações, commodities)."
+      ],
+      [
+          "VaR (Value at Risk)",
+          "Perda máxima esperada de uma posição, em condições normais, num dado horizonte e com dado nível de confiança."
+      ],
+      [
+          "Volatilidade",
+          "Desvio-padrão dos retornos; medida básica de risco de mercado."
+      ],
+      [
+          "Nível de confiança",
+          "Probabilidade de a perda NÃO exceder o VaR (95%, 99%)."
+      ],
+      [
+          "Horizonte de tempo",
+          "Período ao qual o VaR se refere (1 dia, 10 dias)."
+      ],
+      [
+          "Quantil (z)",
+          "Número de desvios-padrão associado ao nível de confiança na distribuição normal: 1,65 (95%) e 2,33 (99%)."
+      ],
+      [
+          "Método paramétrico (delta-normal)",
+          "VaR = V × z × σ × √t; supõe retornos normalmente distribuídos."
+      ],
+      [
+          "Simulação histórica",
+          "Cálculo do VaR pelo percentil das perdas passadas reais, sem pressuposto de distribuição."
+      ],
+      [
+          "Simulação de Monte Carlo",
+          "Cálculo do VaR por geração de milhares de cenários aleatórios futuros."
+      ],
+      [
+          "Regra da raiz do tempo",
+          "Conversão de horizonte: VaR(t) = VaR(1) × √t."
+      ],
+      [
+          "Expected Shortfall (ES / CVaR)",
+          "Média das perdas que excedem o VaR; mede o tamanho da cauda."
+      ],
+      [
+          "Backtesting",
+          "Validação do VaR comparando exceções reais com o esperado (≈ 5% dos dias a 95%)."
+      ],
+      [
+          "Teste de estresse",
+          "Avaliação de perdas em cenários extremos fora das condições normais."
+      ],
+      [
+          "Caudas gordas",
+          "Fenômeno dos retornos reais: eventos extremos mais frequentes que o previsto pela distribuição normal."
+      ],
+      [
+          "Acordos de Basileia",
+          "Normas internacionais de capital bancário; risco de mercado usa VaR 99%, 10 dias."
+      ],
+      [
+          "Diversificação",
+          "Combinação de ativos com correlação < 1 que reduz o VaR total da carteira."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

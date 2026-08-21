@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noções Básicas de Contabilidade | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Contabilidade Empresarial</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">01 - Noções básicas de contabilidade</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Noções básicas de contabilidade.html" selected>01 - Noções básicas de contabilidade</option>
+    <option value="" disabled>02 - Análise das demonstrações contábeis (em breve)</option>
+    <option value="" disabled>03 - Excel avançado (em breve)</option>
+    <option value="" disabled>04 - Linguagem R (em breve)</option>
+    <option value="" disabled>05 - Investimentos em coligadas e controladas (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Noções Básicas de Contabilidade</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Contabilidade Empresarial<br>Tópico 1 de 5<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Noções Básicas de Contabilidade</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Contabilidade Empresarial</b> &nbsp;›&nbsp; Tópico 1</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 4 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Média <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Nenhum — porta de entrada da contabilidade</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Alto — base do tópico 02 (demonstrações) e de Custos</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Conceituar <b>contabilidade</b>, identificar seu <b>objeto</b> (o patrimônio) e sua <b>finalidade</b> (informação útil à decisão).</li>
+            <li>Aplicar a <b>equação fundamental do patrimônio</b>: PL = Ativo − Passivo Exigível, nas três configurações da situação líquida.</li>
+            <li>Montar a estrutura básica do <b>Balanço Patrimonial</b>: ativo circulante/não circulante, passivo circulante/não circulante e PL.</li>
+            <li>Aplicar o método das <b>partidas dobradas</b> e a regra de <b>débito e crédito</b> por natureza de conta.</li>
+            <li>Classificar <b>fatos contábeis</b> em permutativos, modificativos (aumentativos/diminutivos) e mistos.</li>
+            <li>Distinguir <b>regime de competência</b> de <b>regime de caixa</b> e conhecer os <b>princípios contábeis</b> e as <b>características qualitativas</b> do CPC 00.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p><b>Contabilidade</b> é a ciência que estuda, registra, controla e interpreta os fatos que afetam o <b>patrimônio</b> das entidades — seu <b>objeto</b>. Sua <b>finalidade</b> é gerar informação útil para a tomada de decisão de usuários internos (gestores) e externos (sócios, bancos, fisco).</p>
+          <p>O patrimônio se divide em <b>bens</b> (dinheiro, estoques, máquinas), <b>direitos</b> (valores a receber) e <b>obrigações</b> (valores a pagar). Graficamente: <b>Ativo = bens + direitos</b>; <b>Passivo exigível = obrigações</b>; e o que sobra para os sócios é o <b>Patrimônio Líquido</b>: <b>PL = Ativo − Passivo Exigível</b>.</p>
+          <ul class="styled">
+            <li><b>PL &gt; 0</b>: situação líquida positiva (superávit) — o normal.</li>
+            <li><b>PL = 0</b>: situação nula/compensada.</li>
+            <li><b>PL &lt; 0</b>: situação negativa — o famoso <b>passivo a descoberto</b>.</li>
+          </ul>
+          <p>Os registros seguem as <b>partidas dobradas</b>: todo débito tem um crédito de igual valor. Contas de <b>Ativo e Despesa</b> têm natureza <b>devedora</b> (aumentam a débito); contas de <b>Passivo, PL e Receita</b> têm natureza <b>credora</b> (aumentam a crédito). Os <b>fatos contábeis</b> são <b>permutativos</b> (não alteram o PL), <b>modificativos</b> (alteram o PL para mais ou menos) ou <b>mistos</b> (os dois efeitos juntos). Tudo isso sob o <b>regime de competência</b>: receitas e despesas contam no período do <b>fato gerador</b>, não do recebimento/pagamento.</p>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Os três pontos mais cobrados: (1) classificação de fatos contábeis, (2) natureza devedora/credora das contas e (3) regime de competência × caixa. E lembre: o princípio da <b>atualização monetária foi revogado</b> — pegadinha frequente.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Noções<br>Básicas de<br>Contabilidade</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Conceitos</h4><ul><li>Objeto: patrimônio</li><li>Finalidade: informação útil</li><li>Usuários: internos e externos</li></ul></div>
+            <div class="mm-node"><h4>Patrimônio</h4><ul><li>Bens, direitos, obrigações</li><li>PL = A − Passivo Exigível</li><li>PL&lt;0 = passivo a descoberto</li></ul></div>
+            <div class="mm-node"><h4>Partidas dobradas</h4><ul><li>Débito = crédito</li><li>Ativo/Despesa: natureza devedora</li><li>Passivo/PL/Receita: credora</li></ul></div>
+            <div class="mm-node"><h4>Fatos contábeis</h4><ul><li>Permutativos: PL intacto</li><li>Modificativos: alteram PL</li><li>Mistos: permut. + modific.</li></ul></div>
+            <div class="mm-node"><h4>Normas</h4><ul><li>Regime de competência</li><li>Princípios contábeis</li><li>CPC 00: características qualitativas</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Conceito, objeto e finalidade</h3>
+        <div class="card">
+          <p><b>Contabilidade</b> é a ciência social que estuda, registra, controla e interpreta as variações do <b>patrimônio</b> das entidades. Três perguntas de prova respondidas de uma vez:</p>
+          <ul class="styled">
+            <li><b>Objeto</b> (o que ela estuda): o <b>patrimônio</b> — conjunto de bens, direitos e obrigações da entidade.</li>
+            <li><b>Finalidade</b> (para que serve): fornecer <b>informações úteis</b> para a tomada de decisões econômicas.</li>
+            <li><b>Usuários</b> (para quem): <b>internos</b> (administradores, gestores) e <b>externos</b> (sócios, investidores, bancos, fornecedores, governo/fisco).</li>
+          </ul>
+          <p>O campo de aplicação tradicional são as <b>aziendas</b> — patrimônios geridos com fins econômicos (empresas). Hoje a contabilidade também se aplica a entes públicos e a pessoas físicas.</p>
+        </div>
+
+        <h3>4.2 O patrimônio e a equação fundamental</h3>
+        <div class="card">
+          <table>
+            <tr><th>Elemento</th><th>Definição</th><th>Exemplos</th></tr>
+            <tr><td><b>Bens</b></td><td>Coisas que a entidade possui</td><td>Caixa, estoques, veículos, imóveis, software (intangível)</td></tr>
+            <tr><td><b>Direitos</b></td><td>Valores a receber de terceiros</td><td>Clientes (duplicatas a receber), depósitos judiciais</td></tr>
+            <tr><td><b>Obrigações</b></td><td>Valores a pagar a terceiros</td><td>Fornecedores, empréstimos, salários a pagar, impostos a recolher</td></tr>
+          </table>
+          <p>Bens + direitos formam o <b>Ativo</b> (aplicações de recursos). Obrigações formam o <b>Passivo Exigível</b> (origem de recursos de terceiros). A diferença pertence aos sócios: o <b>Patrimônio Líquido (PL)</b>.</p>
+          <p style="text-align:center"><b>Ativo = Passivo Exigível + PL&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;PL = Ativo − Passivo Exigível</b></p>
+          <p><b>Exemplo</b>: empresa com Ativo de R$ 500.000 e Passivo Exigível de R$ 300.000 → PL = 500.000 − 300.000 = <b>R$ 200.000</b> (situação positiva). Se o Passivo fosse R$ 550.000 → PL = <b>−R$ 50.000</b>: <b>passivo a descoberto</b> (situação líquida negativa).</p>
+          <div class="box warn"><div class="box-title">Pegadinha</div><p>"Passivo a descoberto" NÃO é uma conta do passivo: é a <b>situação líquida negativa</b> (PL &lt; 0), quando as dívidas superam bens + direitos.</p></div>
+        </div>
+
+        <h3>4.3 Estrutura do Balanço Patrimonial</h3>
+        <div class="card">
+          <table>
+            <tr><th>Ativo</th><th>Passivo + PL</th></tr>
+            <tr><td><b>Ativo Circulante</b> — caixa, bancos, clientes, estoques (realizáveis até 12 meses)</td><td><b>Passivo Circulante</b> — fornecedores, salários, impostos (exigíveis até 12 meses)</td></tr>
+            <tr><td><b>Ativo Não Circulante</b> — realizável a longo prazo, investimentos, imobilizado, intangível</td><td><b>Passivo Não Circulante</b> — dívidas de longo prazo<br><br><b>PL</b> — capital social, reservas, lucros/prejuízos acumulados</td></tr>
+          </table>
+          <p>Regras de ordenação: o <b>Ativo</b> segue ordem <b>decrescente de liquidez</b> (do que vira dinheiro mais rápido para o mais lento); o <b>Passivo</b>, ordem <b>decrescente de exigibilidade</b> (do que vence primeiro para o último). O PL, por definição, <b>não é exigível</b>.</p>
+          <div class="box info"><div class="box-title">Exemplo numérico</div><p>Ativo Circulante R$ 300 mil + Ativo Não Circulante R$ 200 mil = Ativo R$ 500 mil. Do outro lado: Passivo Circulante R$ 180 mil + Passivo Não Circulante R$ 120 mil = Passivo Exigível R$ 300 mil; PL = 500 − 300 = <b>R$ 200 mil</b>. Os dois lados sempre fecham: 300 + 200 = 180 + 120 + 200.</p></div>
+        </div>
+
+        <h3>4.4 Partidas dobradas, contas e a regra débito–crédito</h3>
+        <div class="card">
+          <p><b>Conta</b> é o nome dado a cada elemento patrimonial ou de resultado (Caixa, Clientes, Fornecedores, Receita de Vendas...). Todo registro usa o método das <b>partidas dobradas</b>: <b>não há devedor sem credor correspondente</b> — a soma dos débitos é sempre igual à soma dos créditos.</p>
+          <table>
+            <tr><th>Natureza</th><th>Contas</th><th>Aumenta com</th><th>Diminui com</th></tr>
+            <tr><td><b>Devedora</b></td><td>Ativo e Despesa</td><td><b>Débito</b></td><td>Crédito</td></tr>
+            <tr><td><b>Credora</b></td><td>Passivo, PL e Receita</td><td><b>Crédito</b></td><td>Débito</td></tr>
+          </table>
+          <p><b>Exemplo</b>: compra de um veículo de R$ 50.000 à vista → <b>Débito</b> Veículos (Ativo ↑) R$ 50.000 e <b>Crédito</b> Caixa (Ativo ↓) R$ 50.000. As fórmulas de lançamento vão da 1ª (1 débito × 1 crédito) à 4ª (vários débitos × vários créditos).</p>
+        </div>
+
+        <h3>4.5 Fatos contábeis: permutativos, modificativos e mistos</h3>
+        <div class="card">
+          <table>
+            <tr><th>Tipo</th><th>Efeito</th><th>Exemplo</th></tr>
+            <tr><td><b>Permutativo</b> (qualitativo)</td><td>Troca elementos entre si; <b>não altera o PL</b></td><td>Compra de veículo à vista por R$ 50 mil: sai caixa, entra veículo — PL intacto</td></tr>
+            <tr><td><b>Modificativo aumentativo</b></td><td><b>Aumenta o PL</b> (envolve receita)</td><td>Receita de juros de R$ 10 mil recebida no caixa: Ativo ↑ e PL ↑</td></tr>
+            <tr><td><b>Modificativo diminutivo</b></td><td><b>Diminui o PL</b> (envolve despesa)</td><td>Despesa de salários de R$ 8 mil paga: Ativo ↓ e PL ↓</td></tr>
+            <tr><td><b>Misto (composto)</b></td><td>Permutativo + modificativo ao mesmo tempo</td><td>Venda à vista por R$ 12 mil de mercadoria que custou R$ 7 mil: caixa +12, estoque −7, <b>lucro +5</b> no PL</td></tr>
+          </table>
+          <div class="box fgv"><div class="box-title">FGV cobra</div><p>Classificar um fato narrado é questão certa em prova. Regra prática: apareceu <b>receita ou despesa</b>, o PL muda → modificativo (ou misto, se também houver permuta). Só trocou contas patrimoniais → permutativo.</p></div>
+        </div>
+
+        <h3>4.6 Regime de competência × regime de caixa</h3>
+        <div class="card">
+          <p><b>Regime de competência</b> (obrigatório na contabilidade): receitas e despesas são reconhecidas <b>no período do fato gerador</b>, independentemente do recebimento ou pagamento. <b>Regime de caixa</b>: reconhece pelo <b>fluxo financeiro</b> (entrada/saída de dinheiro).</p>
+          <p><b>Exemplo</b>: folha de salários de dezembro paga em 5 de janeiro. Competência → despesa de <b>dezembro</b>. Caixa → despesa de <b>janeiro</b>. A contabilidade adota a <b>competência</b>.</p>
+        </div>
+
+        <h3>4.7 Princípios contábeis e características qualitativas (CPC 00)</h3>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Entidade</b>: o patrimônio da empresa não se confunde com o dos sócios.</li>
+            <li><b>Continuidade</b>: presume-se que a entidade continuará operando.</li>
+            <li><b>Oportunidade</b>: registro tempestivo e completo das variações patrimoniais.</li>
+            <li><b>Registro pelo valor original</b>: os elementos entram pelos valores da transação (custo histórico).</li>
+            <li><b>Competência</b>: reconhecimento pelo fato gerador.</li>
+            <li><b>Prudência</b>: entre dois valores válidos para o Ativo, o menor; para o Passivo, o maior.</li>
+          </ul>
+          <div class="box warn"><div class="box-title">Pegadinha de prova</div><p>O princípio da <b>atualização monetária foi REVOGADO</b> (Lei 12.838/2013, que alterou a Lei 6.404/76). Se a alternativa o listar como princípio vigente, está errada.</p></div>
+          <p>O <b>CPC 00 (Estrutura Conceitual)</b> define as características qualitativas da informação útil: <b>fundamentais</b> — <b>relevância</b> (capaz de influenciar decisões) e <b>representação fidedigna</b> (completa, neutra e livre de erros); e <b>de melhoria</b> — <b>comparabilidade, verificabilidade, tempestividade e compreensibilidade</b>.</p>
+        </div>
+
+        <h3>4.8 Visão geral: do BP à DRE</h3>
+        <div class="card">
+          <p>O <b>BP</b> é uma <b>fotografia</b> do patrimônio numa data (estático); a <b>DRE</b> é um <b>filme</b> do resultado num período (dinâmica). Exemplo de DRE simplificada:</p>
+          <table>
+            <tr><td>Receita de vendas</td><td>R$ 100.000</td></tr>
+            <tr><td>(−) CMV (custo das mercadorias vendidas)</td><td>(R$ 60.000)</td></tr>
+            <tr><td><b>= Lucro bruto</b></td><td><b>R$ 40.000</b></td></tr>
+            <tr><td>(−) Despesas operacionais</td><td>(R$ 25.000)</td></tr>
+            <tr><td><b>= LAIR</b> (lucro antes do IR)</td><td><b>R$ 15.000</b></td></tr>
+            <tr><td>(−) IR/CSLL</td><td>(R$ 3.000)</td></tr>
+            <tr><td><b>= Lucro líquido</b></td><td><b>R$ 12.000</b></td></tr>
+          </table>
+          <p>O lucro líquido fecha o ciclo: ele vai para o PL (lucros acumulados) — ligando a DRE ao Balanço. Detalharemos cada demonstração no tópico 02.</p>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Objeto × finalidade</b>: objeto = patrimônio; finalidade = informação útil à decisão. A banca troca os dois de lugar.</li>
+            <li><b>Equação fundamental</b>: dado Ativo e Passivo, calcular o PL; identificar passivo a descoberto (PL negativo).</li>
+            <li><b>Classificação de fatos contábeis</b>: narrar um fato (compra à vista, receita de juros, venda com lucro) e pedir permutativo/modificativo/misto.</li>
+            <li><b>Débito e crédito</b>: "contas de natureza devedora aumentam por débito" — Ativo e Despesa; credoras (Passivo, PL, Receita) aumentam por crédito.</li>
+            <li><b>Regime de competência × caixa</b>: despesa incorrida em dezembro e paga em janeiro pertence a dezembro (competência).</li>
+            <li><b>Princípios</b>: reconhecer enunciados; pegadinha da atualização monetária (revogada).</li>
+            <li><b>CPC 00</b>: características fundamentais (relevância e representação fidedigna) × de melhoria (comparabilidade, verificabilidade, tempestividade, compreensibilidade).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Patrimônio</b> = bens + direitos + obrigações. <b>Objeto</b> da contabilidade = patrimônio.</li>
+            <li><b>Equação fundamental</b>: PL = Ativo − Passivo Exigível.</li>
+            <li><b>PL &lt; 0</b> = passivo a descoberto (situação líquida negativa).</li>
+            <li><b>Ativo</b>: ordem decrescente de <b>liquidez</b>. <b>Passivo</b>: decrescente de <b>exigibilidade</b>.</li>
+            <li><b>Natureza devedora</b>: Ativo e Despesa (aumentam a débito). <b>Credora</b>: Passivo, PL e Receita (aumentam a crédito).</li>
+            <li><b>Partidas dobradas</b>: Σ débitos = Σ créditos, sempre.</li>
+            <li><b>Fatos</b>: permutativo (PL intacto), modificativo (altera PL: receita ↑ / despesa ↓), misto (permuta + resultado).</li>
+            <li><b>Competência</b>: reconhece no fato gerador. <b>Caixa</b>: no dinheiro. A contabilidade usa <b>competência</b>.</li>
+            <li><b>Princípios vigentes</b>: entidade, continuidade, oportunidade, registro pelo valor original, competência, prudência. <b>Atualização monetária: revogada</b>.</li>
+            <li><b>CPC 00</b>: fundamentais = relevância + representação fidedigna; melhoria = comparabilidade, verificabilidade, tempestividade, compreensibilidade.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li>Contabilidade estuda o <b>patrimônio</b> para gerar <b>informação útil</b> a usuários internos e externos.</li>
+            <li><b>PL = A − PE</b>. PL negativo = passivo a descoberto.</li>
+            <li>BP: Ativo (liquidez) = Passivo (exigibilidade) + PL (não exigível).</li>
+            <li>Débito aumenta <b>Ativo/Despesa</b>; crédito aumenta <b>Passivo/PL/Receita</b>.</li>
+            <li>Fatos: <b>permutativo</b> não mexe no PL; <b>modificativo</b> mexe; <b>misto</b> faz os dois (venda com lucro).</li>
+            <li><b>Competência</b> = fato gerador; é o regime da contabilidade.</li>
+            <li>Princípios: entidade, continuidade, oportunidade, valor original, competência, prudência (atualização monetária foi revogada).</li>
+            <li>CPC 00: relevância e representação fidedigna são as características <b>fundamentais</b>.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Conceito</th><th>Fórmula / Regra</th><th>Exemplo</th></tr>
+            <tr><td><b>Equação fundamental</b></td><td>PL = Ativo − Passivo Exigível</td><td>500 − 300 = PL 200 mil</td></tr>
+            <tr><td><b>Equação do balanço</b></td><td>Ativo = Passivo Exigível + PL</td><td>500 = 300 + 200 ✓</td></tr>
+            <tr><td><b>Passivo a descoberto</b></td><td>PL &lt; 0</td><td>A 500 − PE 550 = PL −50</td></tr>
+            <tr><td><b>Partidas dobradas</b></td><td>Σ Débitos = Σ Créditos</td><td>D Veículos 50 mil / C Caixa 50 mil</td></tr>
+            <tr><td><b>Natureza devedora</b></td><td>Ativo e Despesa: aumentam a débito</td><td>Compra de estoque: D Estoques</td></tr>
+            <tr><td><b>Natureza credora</b></td><td>Passivo, PL, Receita: aumentam a crédito</td><td>Venda: C Receita de Vendas</td></tr>
+            <tr><td><b>Regime de competência</b></td><td>Receita/despesa no período do fato gerador</td><td>Salário de dez. pago em jan. → despesa de dez.</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>Classificação dos fatos contábeis</h4>
+          <table>
+            <tr><th>Fato</th><th>Tipo</th><th>Efeito no PL</th></tr>
+            <tr><td>Compra de móveis à vista</td><td>Permutativo</td><td>Não altera</td></tr>
+            <tr><td>Pagamento de dívida com juros</td><td>Misto</td><td>Diminui (juros = despesa)</td></tr>
+            <tr><td>Receita de aluguel recebida</td><td>Modificativo aumentativo</td><td>Aumenta</td></tr>
+            <tr><td>Despesa de energia paga</td><td>Modificativo diminutivo</td><td>Diminui</td></tr>
+            <tr><td>Compra de estoque a prazo</td><td>Permutativo</td><td>Não altera</td></tr>
+            <tr><td>Venda com lucro, à vista</td><td>Misto</td><td>Aumenta (lucro)</td></tr>
+          </table>
+          <h4>Natureza das contas — guia rápido</h4>
+          <table>
+            <tr><th>Grupo</th><th>Natureza</th><th>Aumenta</th><th>Diminui</th></tr>
+            <tr><td>Ativo</td><td>Devedora</td><td>Débito</td><td>Crédito</td></tr>
+            <tr><td>Despesa</td><td>Devedora</td><td>Débito</td><td>Crédito</td></tr>
+            <tr><td>Passivo</td><td>Credora</td><td>Crédito</td><td>Débito</td></tr>
+            <tr><td>PL</td><td>Credora</td><td>Crédito</td><td>Débito</td></tr>
+            <tr><td>Receita</td><td>Credora</td><td>Crédito</td><td>Débito</td></tr>
+          </table>
+          <h4>Competência × Caixa</h4>
+          <table>
+            <tr><th>Critério</th><th>Competência</th><th>Caixa</th></tr>
+            <tr><td>Momento do registro</td><td>Fato gerador</td><td>Recebimento/pagamento</td></tr>
+            <tr><td>Uso na contabilidade</td><td><b>Obrigatório</b></td><td>Auxiliar (DFC usa fluxo)</td></tr>
+            <tr><td>Ex.: venda a prazo em dez., recebida em jan.</td><td>Receita de dezembro</td><td>Receita de janeiro</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">O monge que inventou a contabilidade moderna</div><p>Luca Pacioli, frade italiano, publicou em <b>1494</b> o primeiro tratado sobre <b>partidas dobradas</b> — o mesmo método usado até hoje, mais de 500 anos depois. Ele é chamado de "pai da contabilidade".</p></div>
+          <div class="box curio"><div class="box-title">Por que "débito" e "crédito"?</div><p>Vêm do latim <i>debere</i> (dever) e <i>credere</i> (confiar). No comércio medieval, débito era o que o cliente devia; crédito, o que se confiava a ele. Na contabilidade moderna, os termos <b>não significam "coisa ruim" e "coisa boa"</b> — são apenas os dois lados do lançamento.</p></div>
+          <div class="box curio"><div class="box-title">A DATAPREV e a contabilidade pública</div><p>A DATAPREV, como empresa pública, segue a Lei 6.404/76 e os padrões internacionais (IFRS/CPC) — mas também dialoga com as normas de contabilidade aplicadas ao setor público federal. Regime de competência é obrigatório nos dois mundos.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: atualização monetária</div><p>Era princípio até 2013. A Lei 12.838/2013 <b>revogou</b> o princípio da atualização monetária. Questões antigas ainda o citam como vigente — em prova nova, marque como revogado.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: "débito é aumento de dívida"</div><p>Não! <b>Débito aumenta Ativo e Despesa</b>; <b>crédito aumenta Passivo, PL e Receita</b>. Débitar Fornecedores (passivo) DIMINUI a dívida. Esqueça o sentido bancário da palavra.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>→ Tópico 02 (demonstrações contábeis):</b> BP e DRE vistos aqui em visão geral serão dissecados com indicadores de liquidez, endividamento e rentabilidade.</li>
+            <li><b>→ Tópico 05 (coligadas e controladas):</b> o método de equivalência patrimonial depende do conceito de PL construído aqui.</li>
+            <li><b>↔ Custos:</b> a contabilidade de custos é um ramo da contabilidade geral — CMV, estoques e rateios partem dos mesmos registros.</li>
+            <li><b>↔ Orçamento:</b> o orçamento empresarial usa a contabilidade como base de dados (realizado × orçado).</li>
+            <li><b>↔ Administração Financeira:</b> a análise financeira (capital de giro, alavancagem) se alimenta do BP e da DRE.</li>
+            <li><b>↔ Matemática Financeira:</b> juros de empréstimos e atualização de valores viram lançamentos contábeis pelo regime de competência.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.3 (conceito, patrimônio, BP); refazer os exemplos da equação fundamental</td><td>Calcular PL e identificar passivo a descoberto sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.4–4.5 (partidas dobradas e fatos); classificar 10 fatos inventados por você</td><td>Classificar qualquer fato sem hesitar</td></tr>
+            <tr><td>3</td><td>Estudar 4.6–4.8 (regimes, princípios, DRE); resolver os 20 flashcards</td><td>Distinguir competência de caixa e citar os princípios</td></tr>
+            <tr><td>4</td><td>20 questões comentadas + mini-simulado de 30 + revisão de 5 minutos</td><td>≥ 80% e ≥ 24/30</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>IUDÍCIBUS, S. et al. <b>Contabilidade Introdutória</b>. Atlas — o clássico brasileiro de fundamentos.</li>
+            <li>RIBEIRO, O. M. <b>Contabilidade Básica Fácil</b>. Saraiva — didático para iniciantes.</li>
+            <li><b>CPC 00 (R2)</b> — Estrutura Conceitual para Relatório Financeiro: características qualitativas da informação.</li>
+            <li><b>Lei 6.404/76</b> (Lei das S/A), alterada pela Lei 12.838/2013 — princípios e estrutura das demonstrações.</li>
+            <li>MARION, J. C. <b>Contabilidade Básica</b>. Atlas — alternativa direta para prova.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Contabilidade Empresarial · Tópico 1/5</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_contab_t01";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Qual é o objeto da contabilidade?",
+          "a": "O patrimônio das entidades — conjunto de bens, direitos e obrigações. (Finalidade ≠ objeto: a finalidade é fornecer informação útil à decisão.)"
+      },
+      {
+          "q": "O que são bens, direitos e obrigações?",
+          "a": "Bens: coisas que a entidade possui (caixa, estoques, imóveis). Direitos: valores a receber de terceiros (clientes). Obrigações: valores a pagar a terceiros (fornecedores, empréstimos)."
+      },
+      {
+          "q": "Qual a equação fundamental do patrimônio?",
+          "a": "Ativo = Passivo Exigível + PL, ou seja, PL = Ativo − Passivo Exigível."
+      },
+      {
+          "q": "O que é passivo a descoberto?",
+          "a": "É a situação líquida NEGATIVA: PL < 0, quando as obrigações superam bens + direitos. Não é uma conta — é uma configuração patrimonial."
+      },
+      {
+          "q": "Ativo de R$ 500 mil e Passivo Exigível de R$ 550 mil. Qual o PL?",
+          "a": "PL = 500 − 550 = −R$ 50 mil. Situação líquida negativa (passivo a descoberto)."
+      },
+      {
+          "q": "Como o Ativo é ordenado no Balanço Patrimonial?",
+          "a": "Em ordem DECRESCENTE de liquidez (do que vira dinheiro mais rápido ao mais lento). O Passivo segue ordem decrescente de exigibilidade."
+      },
+      {
+          "q": "O que são partidas dobradas?",
+          "a": "Método em que todo débito tem um crédito correspondente de igual valor: a soma dos débitos é sempre igual à soma dos créditos. 'Não há devedor sem credor'."
+      },
+      {
+          "q": "Quais contas têm natureza devedora?",
+          "a": "Ativo e Despesa: aumentam por DÉBITO, diminuem por crédito. (Passivo, PL e Receita são credoras: aumentam por crédito.)"
+      },
+      {
+          "q": "Comprar um veículo à vista por R$ 50 mil: qual o lançamento?",
+          "a": "Débito Veículos (Ativo ↑) R$ 50 mil; Crédito Caixa (Ativo ↓) R$ 50 mil. Fato PERMUTATIVO — PL inalterado."
+      },
+      {
+          "q": "O que é fato contábil permutativo?",
+          "a": "Fato que apenas troca elementos patrimoniais entre si, sem alterar o PL. Ex.: compra de estoque à vista ou a prazo."
+      },
+      {
+          "q": "O que é fato contábil modificativo?",
+          "a": "Fato que altera o PL: aumentativo (envolve receita — ex.: juros recebidos) ou diminutivo (envolve despesa — ex.: salários pagos)."
+      },
+      {
+          "q": "O que é fato contábil misto (composto)?",
+          "a": "Permutativo + modificativo ao mesmo tempo. Ex.: venda à vista por R$ 12 mil de mercadoria que custou R$ 7 mil → lucro de R$ 5 mil no PL."
+      },
+      {
+          "q": "Qual a diferença entre regime de competência e de caixa?",
+          "a": "Competência: receita/despesa reconhecida no período do FATO GERADOR (obrigatório na contabilidade). Caixa: reconhecida pelo RECEBIMENTO/PAGAMENTO."
+      },
+      {
+          "q": "Despesa de salários de dezembro paga em janeiro: a que período pertence?",
+          "a": "A dezembro, pelo regime de competência (fato gerador = trabalho realizado em dezembro)."
+      },
+      {
+          "q": "Quais são os princípios contábeis vigentes?",
+          "a": "Entidade, Continuidade, Oportunidade, Registro pelo Valor Original, Competência e Prudência. (Atualização monetária foi REVOGADA pela Lei 12.838/2013.)"
+      },
+      {
+          "q": "O que diz o princípio da entidade?",
+          "a": "O patrimônio da empresa não se confunde com o dos sócios/ proprietários — a contabilidade registra os fatos da ENTIDADE."
+      },
+      {
+          "q": "O que diz o princípio da prudência?",
+          "a": "Entre dois valores igualmente válidos, usar o MENOR para o Ativo e o MAIOR para o Passivo (postura conservadora)."
+      },
+      {
+          "q": "Quais as características qualitativas FUNDAMENTAIS do CPC 00?",
+          "a": "Relevância (capaz de influenciar decisões) e representação fidedigna (completa, neutra e livre de erros)."
+      },
+      {
+          "q": "Quais as características qualitativas de MELHORIA do CPC 00?",
+          "a": "Comparabilidade, verificabilidade, tempestividade e compreensibilidade."
+      },
+      {
+          "q": "Qual a diferença entre BP e DRE?",
+          "a": "BP é uma FOTOGRAFIA do patrimônio numa data (estático). DRE é o FILME do resultado num período (dinâmico): receitas − despesas = lucro/prejuízo."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Conceito e objeto",
+          "texto": "Sobre a contabilidade, considere as afirmativas: I) seu objeto é o patrimônio das entidades; II) sua finalidade é fornecer informações úteis à tomada de decisão; III) seus usuários são apenas os gestores internos.",
+          "enun": "Está(ão) correta(s):",
+          "alts": [
+              "apenas I",
+              "apenas II",
+              "apenas I e II",
+              "apenas II e III",
+              "I, II e III"
+          ],
+          "correta": 2,
+          "coment": "I e II corretas: objeto = patrimônio; finalidade = informação útil à decisão. III errada: os usuários são internos E externos (sócios, bancos, fisco, fornecedores)."
+      },
+      {
+          "tema": "Equação fundamental",
+          "texto": "Uma empresa apresenta Ativo total de R$ 500.000 e Passivo Exigível de R$ 300.000.",
+          "enun": "O Patrimônio Líquido da empresa é:",
+          "alts": [
+              "R$ 800.000",
+              "R$ 200.000",
+              "R$ 300.000",
+              "−R$ 200.000",
+              "R$ 500.000"
+          ],
+          "correta": 1,
+          "coment": "PL = Ativo − Passivo Exigível = 500.000 − 300.000 = R$ 200.000. A equação fundamental é Ativo = Passivo + PL."
+      },
+      {
+          "tema": "Passivo a descoberto",
+          "texto": "Outra empresa tem Ativo de R$ 400.000 e obrigações totais de R$ 460.000.",
+          "enun": "Sua situação líquida é:",
+          "alts": [
+              "positiva de R$ 60.000",
+              "nula",
+              "negativa de R$ 60.000 — passivo a descoberto",
+              "positiva de R$ 460.000",
+              "indefinida sem o PL"
+          ],
+          "correta": 2,
+          "coment": "PL = 400 − 460 = −R$ 60.000. PL negativo = situação líquida negativa, chamada de PASSIVO A DESCOBERTO. Não é uma conta, é uma configuração patrimonial."
+      },
+      {
+          "tema": "Balanço Patrimonial",
+          "texto": "No Balanço Patrimonial, as contas do Ativo são dispostas segundo critério específico.",
+          "enun": "O Ativo é ordenado por:",
+          "alts": [
+              "ordem alfabética",
+              "ordem decrescente de liquidez",
+              "ordem crescente de valor",
+              "ordem decrescente de exigibilidade",
+              "ordem cronológica de aquisição"
+          ],
+          "correta": 1,
+          "coment": "Ativo: ordem DECRESCENTE DE LIQUIDEZ (do mais líquido ao menos). Ordem decrescente de exigibilidade é o critério do PASSIVO — a FGV troca os dois de propósito."
+      },
+      {
+          "tema": "Partidas dobradas",
+          "texto": "O método das partidas dobradas rege todos os registros contábeis.",
+          "enun": "Segundo esse método:",
+          "alts": [
+              "cada débito pode existir sem crédito correspondente",
+              "a soma dos débitos é sempre igual à soma dos créditos",
+              "débitos sempre aumentam o patrimônio",
+              "créditos representam apenas dívidas",
+              "o PL nunca é debitado"
+          ],
+          "correta": 1,
+          "coment": "'Não há devedor sem credor correspondente': Σ débitos = Σ créditos em todo lançamento. Débito/crédito são convenções de lado, não 'coisa boa/ruim'."
+      },
+      {
+          "tema": "Natureza das contas",
+          "texto": "Sobre a natureza das contas contábeis, analise: as contas do Ativo e as Despesas têm natureza devedora.",
+          "enun": "Isso significa que essas contas:",
+          "alts": [
+              "aumentam por crédito",
+              "aumentam por débito",
+              "têm sempre saldo credor",
+              "não aceitam débitos",
+              "pertencem ao passivo"
+          ],
+          "correta": 1,
+          "coment": "Natureza devedora = aumentam a DÉBITO (Ativo e Despesa). Natureza credora = aumentam a CRÉDITO (Passivo, PL e Receita). Tabela que a FGV cobra em toda prova."
+      },
+      {
+          "tema": "Lançamento contábil",
+          "texto": "A empresa compra um veículo de R$ 50.000, pagando à vista em dinheiro.",
+          "enun": "O lançamento correto é:",
+          "alts": [
+              "Débito Caixa / Crédito Veículos",
+              "Débito Veículos / Crédito Caixa",
+              "Débito Veículos / Crédito Fornecedores",
+              "Débito Despesa / Crédito Caixa",
+              "Débito Caixa / Crédito Capital Social"
+          ],
+          "correta": 1,
+          "coment": "Entra o bem (Débito Veículos, Ativo ↑) e sai o dinheiro (Crédito Caixa, Ativo ↓). Como é à vista, não há Fornecedores. E não é despesa: é aquisição de bem — fato permutativo."
+      },
+      {
+          "tema": "Fatos contábeis",
+          "texto": "A empresa pagou salários de R$ 8.000 em dinheiro.",
+          "enun": "Esse fato contábil é classificado como:",
+          "alts": [
+              "permutativo",
+              "modificativo aumentativo",
+              "modificativo diminutivo",
+              "misto",
+              "não é fato contábil"
+          ],
+          "correta": 2,
+          "coment": "Há despesa (salários), que DIMINUI o PL: fato modificativo diminutivo. Caixa ↓ e PL ↓. Se fosse só troca de contas patrimoniais, seria permutativo."
+      },
+      {
+          "tema": "Fatos contábeis",
+          "texto": "A empresa vendeu à vista, por R$ 12.000, mercadorias que haviam custado R$ 7.000.",
+          "enun": "Esse fato é classificado como:",
+          "alts": [
+              "permutativo",
+              "modificativo aumentativo",
+              "modificativo diminutivo",
+              "misto (composto)",
+              "receita antecipada"
+          ],
+          "correta": 3,
+          "coment": "Há permuta (caixa +12 mil, estoque −7 mil) E modificação do PL (lucro +5 mil): fato MISTO. Toda venda com lucro ou prejuízo é fato misto."
+      },
+      {
+          "tema": "Fatos contábeis",
+          "texto": "A empresa compra mercadorias a prazo, no valor de R$ 20.000.",
+          "enun": "O efeito sobre o Patrimônio Líquido é:",
+          "alts": [
+              "aumenta o PL",
+              "diminui o PL",
+              "não altera o PL",
+              "aumenta o PL em R$ 20.000",
+              "diminui o PL em R$ 20.000"
+          ],
+          "correta": 2,
+          "coment": "Compra a prazo: D Estoques (Ativo ↑) / C Fornecedores (Passivo ↑). Só troca de contas patrimoniais = fato PERMUTATIVO, PL intacto."
+      },
+      {
+          "tema": "Regime de competência",
+          "texto": "A folha de salários de dezembro de 2025, no valor de R$ 30.000, foi paga em 5 de janeiro de 2026.",
+          "enun": "Pelo regime de competência, a despesa pertence ao exercício de:",
+          "alts": [
+              "janeiro de 2026, mês do pagamento",
+              "dezembro de 2025, mês do fato gerador",
+              "2026, por ser o ano do desembolso",
+              "metade em cada exercício",
+              "o exercício escolhido pela empresa"
+          ],
+          "correta": 1,
+          "coment": "Competência: a despesa é do período em que o fato gerador ocorreu (trabalho prestado em dezembro/2025), independente do pagamento. Pelo regime de caixa seria janeiro — mas a contabilidade usa a competência."
+      },
+      {
+          "tema": "Regime de competência",
+          "texto": "Uma empresa vendeu R$ 50.000 a prazo em dezembro, com recebimento previsto para março.",
+          "enun": "Pelo regime de competência, a receita é reconhecida em:",
+          "alts": [
+              "março, quando receber",
+              "dezembro, quando ocorreu a venda",
+              "no mês do pagamento do cliente",
+              "apenas quando o dinheiro entrar",
+              "em qualquer mês"
+          ],
+          "correta": 1,
+          "coment": "Fato gerador = entrega da mercadoria/prestação (dezembro). O recebimento em março afeta só o caixa, não a competência da receita."
+      },
+      {
+          "tema": "Princípios contábeis",
+          "texto": "O princípio que determina que o patrimônio da empresa não se confunde com o dos sócios é o da:",
+          "alts": [
+              "continuidade",
+              "entidade",
+              "prudência",
+              "competência",
+              "oportunidade"
+          ],
+          "correta": 1,
+          "coment": "Princípio da ENTIDADE: autonomia patrimonial — a empresa é uma pessoa distinta dos donos. Saque do sócio para uso pessoal não é despesa da empresa, por exemplo."
+      },
+      {
+          "tema": "Princípios contábeis",
+          "texto": "Entre dois valores igualmente válidos para registrar um ativo, o contador escolhe o menor.",
+          "enun": "Esse comportamento decorre do princípio da:",
+          "alts": [
+              "entidade",
+              "continuidade",
+              "prudência",
+              "oportunidade",
+              "competência"
+          ],
+          "correta": 2,
+          "coment": "PRUDÊNCIA: menor valor para o Ativo, maior para o Passivo, quando houver opções igualmente válidas — postura conservadora que evita superestimar o patrimônio."
+      },
+      {
+          "tema": "Princípios contábeis",
+          "texto": "Sobre os princípios contábeis vigentes, julgue a afirmação: “o princípio da atualização monetária permanece vigente na legislação societária”.",
+          "enun": "A afirmação está:",
+          "alts": [
+              "correta",
+              "errada — foi revogado pela Lei 12.838/2013",
+              "correta apenas para bancos",
+              "correta apenas para o ativo imobilizado",
+              "correta desde 1976"
+          ],
+          "correta": 1,
+          "coment": "O princípio da ATUALIZAÇÃO MONETÁRIA foi revogado em 2013 (Lei 12.838, que alterou a Lei 6.404/76). Pegadinha clássica: questões antigas o citam como vigente."
+      },
+      {
+          "tema": "CPC 00",
+          "texto": "Segundo a Estrutura Conceitual (CPC 00), as características qualitativas FUNDAMENTAIS da informação financeira útil são:",
+          "alts": [
+              "comparabilidade e tempestividade",
+              "relevância e representação fidedigna",
+              "verificabilidade e compreensibilidade",
+              "prudência e competência",
+              "materialidade e periodicidade"
+          ],
+          "correta": 1,
+          "coment": "Fundamentais: RELEVÂNCIA (influencia decisões) e REPRESENTAÇÃO FIDEDIGNA (completa, neutra, livre de erros). As outras quatro (comparabilidade, verificabilidade, tempestividade, compreensibilidade) são de MELHORIA."
+      },
+      {
+          "tema": "Representação fidedigna",
+          "texto": "Para ser perfeitamente fidedigna, a representação de um fenômeno econômico deve possuir três atributos.",
+          "enun": "São eles:",
+          "alts": [
+              "completa, neutra e livre de erros",
+              "relevante, tempestiva e verificável",
+              "comparável, neutra e material",
+              "completa, relevante e compreensível",
+              "prudente, neutra e tempestiva"
+          ],
+          "correta": 0,
+          "coment": "Representação fidedigna = COMPLETA + NEUTRA + LIVRE DE ERROS. Relevância é a outra característica fundamental — não confundir os dois blocos."
+      },
+      {
+          "tema": "Classificação no BP",
+          "texto": "Uma duplicata a receber com vencimento em 18 meses deve ser classificada no:",
+          "alts": [
+              "ativo circulante",
+              "ativo não circulante — realizável a longo prazo",
+              "passivo circulante",
+              "patrimônio líquido",
+              "ativo não circulante — imobilizado"
+          ],
+          "correta": 1,
+          "coment": "Direitos exigíveis após 12 meses do balanço → Ativo Não Circulante, subgrupo REALIZÁVEL A LONGO PRAZO. O corte é o exercício seguinte (12 meses)."
+      },
+      {
+          "tema": "PL — componentes",
+          "texto": "São contas típicas do Patrimônio Líquido:",
+          "alts": [
+              "caixa e bancos",
+              "clientes e estoques",
+              "capital social, reservas e lucros acumulados",
+              "fornecedores e empréstimos",
+              "imobilizado e intangível"
+          ],
+          "correta": 2,
+          "coment": "PL = capital social, reservas (de capital, de lucros), lucros ou prejuízos acumulados, ajustes de avaliação patrimonial, ações em tesouraria. Caixa/estoques são Ativo; fornecedores/empréstimos são Passivo."
+      },
+      {
+          "tema": "DRE",
+          "texto": "Receita de vendas R$ 100.000; CMV R$ 60.000; despesas operacionais R$ 25.000; IR/CSLL R$ 3.000.",
+          "enun": "O lucro líquido do exercício é:",
+          "alts": [
+              "R$ 40.000",
+              "R$ 15.000",
+              "R$ 12.000",
+              "R$ 100.000",
+              "R$ 37.000"
+          ],
+          "correta": 2,
+          "coment": "100.000 − 60.000 = 40.000 (lucro bruto); − 25.000 = 15.000 (LAIR); − 3.000 = R$ 12.000 (lucro líquido). Estrutura básica da DRE — será detalhada no tópico 02."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O objeto da contabilidade é:",
+          "alts": [
+              "o lucro das empresas",
+              "o patrimônio das entidades",
+              "o fluxo de caixa",
+              "o imposto de renda",
+              "o mercado financeiro"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Bens + direitos formam:",
+          "alts": [
+              "o passivo",
+              "o patrimônio líquido",
+              "o ativo",
+              "o resultado",
+              "o capital social"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "A equação fundamental do patrimônio é:",
+          "alts": [
+              "Ativo = PL − Passivo",
+              "PL = Ativo − Passivo Exigível",
+              "Passivo = Ativo + PL",
+              "Ativo = Bens − Direitos",
+              "PL = Receitas − Despesas"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Passivo a descoberto ocorre quando:",
+          "alts": [
+              "o ativo é maior que o passivo",
+              "o PL é negativo",
+              "a empresa tem lucro",
+              "o caixa é zero",
+              "o passivo é zero"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Contas de natureza DEVEDORA aumentam por:",
+          "alts": [
+              "crédito",
+              "débito",
+              "transferência",
+              "compensação",
+              "apropriação"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "São contas de natureza CREDORA:",
+          "alts": [
+              "ativo e despesa",
+              "passivo, PL e receita",
+              "ativo e receita",
+              "despesa e passivo",
+              "caixa e bancos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O regime de competência reconhece receitas e despesas no momento:",
+          "alts": [
+              "do recebimento/pagamento",
+              "do fato gerador",
+              "do balanço",
+              "da declaração fiscal",
+              "da assinatura do contrato"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Fato contábil que NÃO altera o PL é o:",
+          "alts": [
+              "modificativo aumentativo",
+              "modificativo diminutivo",
+              "permutativo",
+              "misto",
+              "composto"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "O Balanço Patrimonial é:",
+          "alts": [
+              "um filme do período",
+              "uma fotografia do patrimônio numa data",
+              "um relatório de fluxo de caixa",
+              "uma declaração fiscal",
+              "uma demonstração de lucros"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "",
+          "enun": "Características qualitativas FUNDAMENTAIS da informação (CPC 00):",
+          "alts": [
+              "comparabilidade e tempestividade",
+              "relevância e representação fidedigna",
+              "verificabilidade e compreensibilidade",
+              "prudência e continuidade",
+              "materialidade e neutralidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Ativo = R$ 500 mil; Passivo Exigível = R$ 300 mil. O PL é:",
+          "alts": [
+              "R$ 800 mil",
+              "R$ 200 mil",
+              "R$ 300 mil",
+              "−R$ 200 mil",
+              "R$ 500 mil"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Ativo = R$ 400 mil; obrigações = R$ 460 mil. A situação líquida é:",
+          "alts": [
+              "positiva de R$ 60 mil",
+              "nula",
+              "negativa de R$ 60 mil (passivo a descoberto)",
+              "positiva de R$ 460 mil",
+              "zero"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Compra de veículo à vista por R$ 50 mil. Lançamento correto:",
+          "alts": [
+              "D Caixa / C Veículos",
+              "D Veículos / C Caixa",
+              "D Veículos / C Fornecedores",
+              "D Despesa / C Caixa",
+              "D Caixa / C Capital"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Venda à vista por R$ 12 mil de mercadoria que custou R$ 7 mil é fato:",
+          "alts": [
+              "permutativo",
+              "modificativo aumentativo",
+              "modificativo diminutivo",
+              "misto",
+              "receita antecipada"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Compra de mercadorias a prazo por R$ 20 mil. Efeito no PL:",
+          "alts": [
+              "aumenta",
+              "diminui",
+              "não altera",
+              "aumenta R$ 20 mil",
+              "diminui R$ 20 mil"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Salários de dezembro pagos em janeiro: pelo regime de competência, a despesa é de:",
+          "alts": [
+              "janeiro",
+              "dezembro",
+              "o mês do desembolso",
+              "metade em cada mês",
+              "o ano do pagamento"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "“O patrimônio da empresa não se confunde com o dos sócios” é o princípio da:",
+          "alts": [
+              "continuidade",
+              "entidade",
+              "prudência",
+              "competência",
+              "oportunidade"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Menor valor para o ativo, maior para o passivo, entre opções válidas: princípio da:",
+          "alts": [
+              "entidade",
+              "continuidade",
+              "prudência",
+              "oportunidade",
+              "competência"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "O princípio da atualização monetária:",
+          "alts": [
+              "vigora normalmente",
+              "foi revogado pela Lei 12.838/2013",
+              "só vale para bancos",
+              "só vale para o imobilizado",
+              "vigora desde 1976"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "",
+          "enun": "Duplicata a receber com vencimento em 18 meses classifica-se no:",
+          "alts": [
+              "ativo circulante",
+              "ativo não circulante — realizável a longo prazo",
+              "passivo circulante",
+              "patrimônio líquido",
+              "imobilizado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Representação fidedigna exige que a informação seja:",
+          "alts": [
+              "completa, neutra e livre de erros",
+              "relevante, tempestiva e verificável",
+              "comparável, neutra e material",
+              "completa, relevante e compreensível",
+              "prudente, neutra e tempestiva"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Pagamento de dívida de R$ 10 mil com juros de R$ 1 mil, em dinheiro, é fato:",
+          "alts": [
+              "permutativo",
+              "modificativo aumentativo",
+              "misto diminutivo",
+              "modificativo diminutivo",
+              "compensatório"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Débitar a conta Fornecedores (passivo) tem como efeito:",
+          "alts": [
+              "aumentar a dívida",
+              "diminuir a dívida",
+              "aumentar o ativo",
+              "aumentar o PL",
+              "não altera nada"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "São características qualitativas de MELHORIA (CPC 00):",
+          "alts": [
+              "relevância e representação fidedigna",
+              "comparabilidade, verificabilidade, tempestividade e compreensibilidade",
+              "prudência e competência",
+              "materialidade e relevância",
+              "neutralidade e completude"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Receita R$ 100 mil; CMV R$ 60 mil; despesas R$ 25 mil; IR R$ 3 mil. Lucro líquido:",
+          "alts": [
+              "R$ 40 mil",
+              "R$ 15 mil",
+              "R$ 12 mil",
+              "R$ 100 mil",
+              "R$ 37 mil"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "venda: D Caixa 12; C Receita 12; baixa: D CMV 7; C Estoques 7 — no total 2 débitos × 2 créditos",
+          "enun": "D Caixa 12.000 / C Estoques 7.000 / C Receita de Vendas 12.000 — D Estoques... reescrevendo: venda à vista com lucro tem quantos débitos e créditos?",
+          "alts": [
+              "1 débito e 1 crédito",
+              "1 débito e 2 créditos (2ª fórmula)",
+              "2 débitos e 1 crédito (3ª fórmula)",
+              "2 débitos e 2 créditos",
+              "3 débitos e 1 crédito"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Venda à vista por R$ 12 mil, custo R$ 7 mil",
+          "enun": "No registro de uma venda à vista com lucro, lançam-se: D Caixa / C Receita de Vendas e D CMV / C Estoques. Quantas contas debitadas e creditadas há no total?",
+          "alts": [
+              "1 débito e 1 crédito",
+              "1 débito e 2 créditos",
+              "2 débitos e 1 crédito",
+              "2 débitos e 2 créditos",
+              "3 débitos e 2 créditos"
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Sobre continuidade: se a entidade NÃO for presumir continuidade, seus ativos devem ser avaliados:",
+          "alts": [
+              "pelo custo histórico",
+              "pelo valor de realização/liquidação",
+              "pelo valor original",
+              "pelo valor de reposição",
+              "pelo valor nominal"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Oportunidade exige que as variações patrimoniais sejam registradas:",
+          "alts": [
+              "de forma tempestiva e completa",
+              "apenas no fechamento do ano",
+              "quando houver dinheiro",
+              "por ordem alfabética",
+              "apenas se relevantes"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "",
+          "enun": "Usuário EXTERNO típico da informação contábil:",
+          "alts": [
+              "diretor financeiro",
+              "gerente de produção",
+              "banco credor",
+              "controller",
+              "comprador interno"
+          ],
+          "correta": 2
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei o objeto (patrimônio) e a finalidade (informação útil) da contabilidade",
+      "Sei aplicar PL = Ativo − Passivo Exigível e identificar passivo a descoberto",
+      "Sei a estrutura do BP: AC/ANC × PC/PNC/PL e as ordenações (liquidez/exigibilidade)",
+      "Domino a regra débito/crédito por natureza de conta",
+      "Sei classificar fatos: permutativo, modificativo (aument./diminut.) e misto",
+      "Sei distinguir regime de competência de regime de caixa com exemplos",
+      "Sei os 6 princípios vigentes e que atualização monetária foi revogada",
+      "Sei as características fundamentais (relevância + fidedigna) e de melhoria do CPC 00",
+      "Sei montar uma DRE simplificada até o lucro líquido",
+      "Sei diferenciar usuários internos de externos da informação contábil"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Confundir objeto com finalidade: objeto é o PATRIMÔNIO; a finalidade é gerar informação útil",
+      "Achar que passivo a descoberto é uma conta do passivo — é a situação líquida NEGATIVA (PL < 0)",
+      "Inverter a equação: é PL = Ativo − Passivo Exigível, não Ativo = PL − Passivo",
+      "Ordenar o ativo por exigibilidade — ativo é por LIQUIDEZ; exigibilidade é do passivo",
+      "Achar que débito significa dívida ou 'coisa ruim' — débito é apenas o lado esquerdo do lançamento",
+      "Achar que débito aumenta o passivo — passivo aumenta a CRÉDITO; débito diminui o passivo",
+      "Esquecer que DESPESA tem natureza devedora (aumenta a débito), como o ativo",
+      "Esquecer que RECEITA tem natureza credora (aumenta a crédito), como o passivo",
+      "Classificar compra de estoque a prazo como modificativa — é permutativa (PL intacto)",
+      "Classificar venda com lucro como apenas permutativa — é fato MISTO (permuta + lucro no PL)",
+      "Achar que toda entrada de caixa é receita — empréstimo recebido entra no caixa, mas é obrigação (passivo)",
+      "Achar que toda saída de caixa é despesa — compra de veículo à vista sai caixa, mas é bem (ativo)",
+      "Reconhecer despesa pelo pagamento — pelo regime de competência, vale o fato gerador",
+      "Achar que a contabilidade adota o regime de caixa — adota a competência",
+      "Listar atualização monetária como princípio vigente — foi revogada em 2013",
+      "Trocar o princípio da entidade com o da continuidade",
+      "Achar que prudência permite escolher qualquer valor — só entre opções igualmente válidas",
+      "Confundir características fundamentais (relevância, fidedigna) com as de melhoria (C-V-T-C)",
+      "Esquecer que PL não é exigível — não entra na ordem de exigibilidade do passivo",
+      "Confundir BP (estático, fotografia) com DRE (dinâmica, filme do período)"
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Contabilidade",
+          "Ciência que estuda, registra, controla e interpreta as variações do patrimônio das entidades."
+      ],
+      [
+          "Patrimônio",
+          "Conjunto de bens, direitos e obrigações da entidade; objeto da contabilidade."
+      ],
+      [
+          "Bens",
+          "Coisas possuídas pela entidade: caixa, estoques, veículos, imóveis, marcas (intangíveis)."
+      ],
+      [
+          "Direitos",
+          "Valores a receber de terceiros: clientes, duplicatas a receber, depósitos judiciais."
+      ],
+      [
+          "Obrigações",
+          "Valores a pagar a terceiros: fornecedores, empréstimos, salários a pagar."
+      ],
+      [
+          "Ativo",
+          "Bens + direitos; aplicações de recursos; ordenado por liquidez."
+      ],
+      [
+          "Passivo Exigível",
+          "Obrigações com terceiros; origem de recursos; ordenado por exigibilidade."
+      ],
+      [
+          "Patrimônio Líquido (PL)",
+          "Ativo − Passivo Exigível; riqueza residual dos sócios; não exigível."
+      ],
+      [
+          "Passivo a descoberto",
+          "Situação líquida negativa: PL < 0 (obrigações superam bens + direitos)."
+      ],
+      [
+          "Partidas dobradas",
+          "Método de registro: para cada débito, crédito de igual valor; Σ débitos = Σ créditos."
+      ],
+      [
+          "Débito",
+          "Lado esquerdo do lançamento; aumenta Ativo e Despesa; diminui Passivo, PL e Receita."
+      ],
+      [
+          "Crédito",
+          "Lado direito do lançamento; aumenta Passivo, PL e Receita; diminui Ativo e Despesa."
+      ],
+      [
+          "Fato permutativo",
+          "Troca entre elementos patrimoniais sem alterar o PL."
+      ],
+      [
+          "Fato modificativo",
+          "Altera o PL: aumentativo (receita) ou diminutivo (despesa)."
+      ],
+      [
+          "Fato misto (composto)",
+          "Permutativo + modificativo simultâneos (ex.: venda com lucro)."
+      ],
+      [
+          "Regime de competência",
+          "Receitas e despesas reconhecidas no período do fato gerador; obrigatório na contabilidade."
+      ],
+      [
+          "Regime de caixa",
+          "Reconhecimento pelo recebimento/pagamento (fluxo financeiro)."
+      ],
+      [
+          "CPC 00 (Estrutura Conceitual)",
+          "Define objetivo e características qualitativas: fundamentais (relevância, representação fidedigna) e de melhoria (comparabilidade, verificabilidade, tempestividade, compreensibilidade)."
+      ],
+      [
+          "Balanço Patrimonial (BP)",
+          "Demonstração estática: fotografia do patrimônio numa data."
+      ],
+      [
+          "DRE",
+          "Demonstração do Resultado do Exercício: receitas − despesas = lucro/prejuízo do período."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

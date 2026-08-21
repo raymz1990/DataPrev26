@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Sensibilidade e Cenários | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">08 - Análise de sensibilidade e cenários</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html">06 - Parâmetros para análise de projetos</option>
+    <option value="07 - Indicadores econômicos de projetos (VPL, TIR, payback).html">07 - Indicadores: VPL, TIR, payback</option>
+    <option value="08 - Análise de sensibilidade e cenários.html" selected>08 - Análise de sensibilidade e cenários</option>
+    <option value="" disabled>09 - Risco e incerteza em projetos (em breve)</option>
+    <option value="" disabled>10 - Análise de projetos sociais (em breve)</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Análise de Sensibilidade e Cenários</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 08 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Análise de Sensibilidade e Cenários</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 08</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 5 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Média <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Tópicos 04–07 (VPL, TIR e payback dominados)</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Alto — FGV cobra interpretação das técnicas e cálculo de VPL por cenário</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Explicar por que o VPL “pontual” não basta: as premissas do fluxo de caixa são <b>incertas</b> e precisam ser estressadas.</li>
+            <li>Distinguir <b>análise de sensibilidade</b> (uma variável por vez) de <b>análise de cenários</b> (várias variáveis simultaneamente).</li>
+            <li>Montar uma tabela de sensibilidade do VPL e identificar a <b>variável crítica</b> do projeto.</li>
+            <li>Calcular o <b>ponto de equilíbrio (break-even)</b> de uma variável: o nível que torna o VPL igual a zero.</li>
+            <li>Construir cenários <b>otimista / base / pessimista</b> e calcular o <b>VPL esperado</b> ponderado por probabilidades.</li>
+            <li>Conceituar <b>árvore de decisão</b> e <b>simulação de Monte Carlo</b> e reconhecer as limitações de cada técnica.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>O VPL do tópico anterior era um número só — calculado sobre premissas “mais prováveis” de vendas, custos e taxa. Mas premissas erram. As técnicas deste tópico respondem: <b>“e se eu estiver errado?”</b></p>
+          <ul class="styled">
+            <li><b>Análise de sensibilidade</b> — varia <b>uma variável por vez</b> (entradas, custos, TMA, prazo) e observa o efeito no VPL. Revela a <b>variável crítica</b>: aquela cuja pequena variação mais abala o projeto. Limite: ignora que variáveis se movem juntas e não atribui probabilidades.</li>
+            <li><b>Análise de cenários</b> — varia <b>várias variáveis ao mesmo tempo</b>, em combinações coerentes: cenário otimista, base e pessimista. Com probabilidades atribuídas, calcula-se o <b>VPL esperado</b> = Σ (probabilidade × VPL do cenário).</li>
+            <li><b>Ponto de equilíbrio (break-even)</b> — o nível da variável que torna o <b>VPL = 0</b>. Responde: “até quanto as vendas podem cair antes de o projeto virar prejuízo?”</li>
+            <li><b>Árvore de decisão</b> — sequencia decisões e eventos probabilísticos ao longo do tempo, calculando valores esperados “de trás para frente”.</li>
+            <li><b>Simulação de Monte Carlo</b> — atribui distribuições de probabilidade às variáveis e sorteia milhares de combinações, gerando a <b>distribuição do VPL</b> e a probabilidade de VPL &gt; 0.</li>
+          </ul>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>A banca adora a diferença conceitual: <b>sensibilidade = uma variável por vez</b>; <b>cenários = várias variáveis combinadas</b>. E o break-even clássico: nível da variável que <b>zera o VPL</b>.</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Análise de<br>Sensibilidade<br>e Cenários</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Sensibilidade</h4><ul><li>1 variável por vez</li><li>Tabela VPL × variável</li><li>Revela variável crítica</li><li>Ignora correlação e probabilidade</li></ul></div>
+            <div class="mm-node"><h4>Cenários</h4><ul><li>Várias variáveis juntas</li><li>Otimista / base / pessimista</li><li>Com probs → VPL esperado</li></ul></div>
+            <div class="mm-node"><h4>Break-even</h4><ul><li>Nível que zera o VPL</li><li>“Margem de segurança” do projeto</li><li>Ex.: entrada mínima, TMA máxima (= TIR)</li></ul></div>
+            <div class="mm-node"><h4>Árvore de decisão</h4><ul><li>Decisões + eventos sequenciais</li><li>Valor esperado “de trás para frente”</li><li>Captura flexibilidade gerencial</li></ul></div>
+            <div class="mm-node"><h4>Monte Carlo</h4><ul><li>Distribuições p/ variáveis</li><li>Milhares de sorteios</li><li>Resultado: distribuição do VPL, P(VPL&gt;0)</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Por que estressar o projeto?</h3>
+        <div class="card">
+          <p>Todo VPL nasce de um fluxo de caixa <b>projetado</b>: vendas estimadas, custos estimados, TMA estimada. Se as premissas falham, o VPL falha (lembra do GIGO do tópico 02). Um único número — “VPL = +R$ 243,43” — esconde <b>quão frágil</b> essa conclusão é. As técnicas de análise de risco do projeto medem exatamente essa fragilidade, antes de o dinheiro ser empenhado.</p>
+          <p>Em projetos públicos e de infraestrutura — o universo da DATAPREV e das estatais — isso é ainda mais sério: o TCU e os manuais de avaliação (como os do BNDES e do Banco Mundial) exigem análise de sensibilidade e cenários como parte obrigatória do estudo de viabilidade.</p>
+        </div>
+
+        <h3>4.2 Análise de sensibilidade — uma variável por vez</h3>
+        <div class="card">
+          <p>Retomemos o exemplo-base do tópico 07: investimento de R$ 1.000, entradas de R$ 500 por 3 anos, TMA de 10% → <b>VPL = +R$ 243,43</b>. Agora variamos <b>uma premissa por vez</b>, mantendo as demais fixas:</p>
+          <table>
+            <tr><th>Variável alterada</th><th>Variação</th><th>Novo VPL</th><th>Δ VPL</th></tr>
+            <tr><td>—</td><td>base</td><td>+243,43</td><td>—</td></tr>
+            <tr><td>Entradas anuais</td><td>+10% (R$ 550)</td><td>+367,77</td><td>+124,35</td></tr>
+            <tr><td>Entradas anuais</td><td>−10% (R$ 450)</td><td>+119,08</td><td>−124,35</td></tr>
+            <tr><td>TMA</td><td>12% (+2 p.p.)</td><td>+200,92</td><td>−42,51</td></tr>
+            <tr><td>TMA</td><td>14% (+4 p.p.)</td><td>+160,82</td><td>−82,61</td></tr>
+            <tr><td>TMA</td><td>25% (+15 p.p.)</td><td><b>−24,00</b></td><td>−267,43</td></tr>
+          </table>
+          <p><b>Leitura:</b> o projeto é bem mais sensível às <b>entradas</b> do que à TMA: uma queda de apenas 10% nas entradas destrói metade do VPL, enquanto a taxa precisa subir 15 p.p. para zerá-lo. As entradas são a <b>variável crítica</b> — é nelas que a equipe deve concentrar esforço de previsão e gestão.</p>
+          <div class="box info"><div class="box-title">Gráfico de tornado</div><p>Na prática, ordena-se o impacto de cada variável em barras horizontais (maiores no topo) — o chamado <b>diagrama de tornado</b>. Quanto mais longa a barra, mais sensível o VPL àquela variável.</p></div>
+          <div class="box warn"><div class="box-title">Limitações (cobradas!)</div><p>A sensibilidade (1) <b>não considera a probabilidade</b> de cada variação ocorrer; (2) <b>não considera a correlação</b> entre variáveis — na vida real, vendas e preços não variam isoladamente; (3) não aponta o que fazer, apenas onde o projeto dói.</p></div>
+        </div>
+
+        <h3>4.3 Identificando a variável crítica</h3>
+        <div class="card">
+          <p>Para comparar variáveis em bases diferentes (R$, %, anos), usa-se a <b>sensibilidade proporcional</b>: quantos por cento o VPL varia para cada 1% (ou 1 p.p.) de variação da variável. No exemplo: −10% nas entradas → −51% no VPL (sensibilidade ≈ 5,1); +2 p.p. na TMA → −17,5% no VPL. A variável com maior resposta proporcional é a crítica — e a candidata a <b>cláusulas de proteção</b> (contratos de longo prazo, hedge, garantias mínimas).</p>
+        </div>
+
+        <h3>4.4 Análise de cenários — variáveis combinadas</h3>
+        <div class="card">
+          <p>Na vida real, as variáveis andam <b>juntas</b>: recessão derruba vendas <i>e</i> eleva a taxa de desconto. A análise de cenários monta combinações coerentes de premissas:</p>
+          <table>
+            <tr><th>Cenário</th><th>Premissas</th><th>VPL</th><th>Probabilidade</th></tr>
+            <tr><td><b>Otimista</b></td><td>Entradas R$ 5.000/ano; TMA 10%</td><td>+2.434,26</td><td>30%</td></tr>
+            <tr><td><b>Base</b></td><td>Entradas R$ 4.500/ano; TMA 12%</td><td>+808,24</td><td>50%</td></tr>
+            <tr><td><b>Pessimista</b></td><td>Entradas R$ 4.000/ano; TMA 14%</td><td><b>−713,47</b></td><td>20%</td></tr>
+          </table>
+          <p>(Projeto de R$ 10.000, vida de 3 anos.) Com probabilidades atribuídas, calcula-se o <b>VPL esperado</b>:</p>
+          <p style="text-align:center">VE = 0,30 × 2.434,26 + 0,50 × 808,24 + 0,20 × (−713,47) = <b>+ R$ 991,70</b></p>
+          <p><b>Decisão:</b> VPL esperado positivo → aceita-se <i>em valor esperado</i>. Mas atenção: há 20% de chance de VPL negativo. Quanto a empresa tolera esse risco é questão de <b>preferência ao risco</b>, não de matemática.</p>
+          <div class="box fgv"><div class="box-title">Diferença que a FGV cobra</div><p><b>Sensibilidade:</b> mexe em <b>uma</b> variável de cada vez. <b>Cenários:</b> mexem em <b>várias</b> simultaneamente, de forma coerente. Se o enunciado fala em “cenário otimista/pessimista”, é análise de cenários — não de sensibilidade.</p></div>
+        </div>
+
+        <h3>4.5 Ponto de equilíbrio (break-even) — o nível que zera o VPL</h3>
+        <div class="card">
+          <p>O break-even financeiro inverte a pergunta: em vez de “quanto vale o projeto se as entradas forem X?”, pergunta-se <b>“qual o X que zera o VPL?”</b></p>
+          <p><b>Exemplo (exemplo-base):</b> qual a entrada anual mínima para o projeto de R$ 1.000 (3 anos, 10%) não destruir valor?</p>
+          <p style="text-align:center">PMT × 2,4869 = 1.000 → PMT = 1.000 / 2,4869 = <b>R$ 402,11</b></p>
+          <p>Como a premissa-base é R$ 500, o projeto tolera queda de até <b>19,6%</b> nas entradas ((500 − 402,11)/500) antes de o VPL zerar — essa folga é a <b>margem de segurança</b> do projeto. Repare: a TMA máxima que zera o VPL é a própria <b>TIR</b> (23,4%) — o break-even da taxa de desconto.</p>
+        </div>
+
+        <h3>4.6 Árvore de decisão e valor esperado</h3>
+        <div class="card">
+          <p>Quando decisões e eventos se <b>sequenciam</b> no tempo (lançar piloto → observar resultado → expandir ou abandonar), a ferramenta é a <b>árvore de decisão</b>: nós de decisão (quadrados) alternam-se com nós de chance (círculos), e resolve-se <b>de trás para frente</b> (backward induction), escolhendo em cada nó a alternativa de maior valor esperado.</p>
+          <p><b>Exemplo numérico:</b> projeto de R$ 1.000; ano 1 pode render R$ 700 (60%) ou R$ 300 (40%); no ano 2, renderá R$ 800 no ramo alto ou R$ 400 no baixo; TMA 10%.</p>
+          <ul class="styled">
+            <li>Ramo alto: VPL = −1.000 + 700/1,10 + 800/1,10² = <b>+297,52</b></li>
+            <li>Ramo baixo: VPL = −1.000 + 300/1,10 + 400/1,10² = <b>−396,69</b></li>
+            <li>VPL esperado = 0,6 × 297,52 + 0,4 × (−396,69) = <b>+ R$ 19,83</b></li>
+          </ul>
+          <p>Em valor esperado, aceita-se. Mas se houver <b>flexibilidade gerencial</b> — abandonar ao fim do ano 1 se o ramo for baixo — o prejuízo do ramo baixo é limitado e o valor sobe: a flexibilidade tem valor (embrião das <b>opções reais</b>, tópico 09).</p>
+        </div>
+
+        <h3>4.7 Simulação de Monte Carlo e panorama das técnicas</h3>
+        <div class="card">
+          <p>A <b>simulação de Monte Carlo</b> generaliza tudo: em vez de 3 cenários, atribui-se uma <b>distribuição de probabilidade</b> a cada variável (vendas ~ normal, TMA ~ triangular etc.) e o computador sorteia <b>milhares de combinações</b>, calculando um VPL para cada. O resultado é a <b>distribuição do VPL</b>: média, desvio-padrão e, principalmente, <b>P(VPL &gt; 0)</b> — a probabilidade de o projeto criar valor.</p>
+          <table>
+            <tr><th>Técnica</th><th>Variáveis por vez</th><th>Usa probabilidades?</th><th>Produto</th></tr>
+            <tr><td>Sensibilidade</td><td>Uma</td><td>Não</td><td>Variável crítica</td></tr>
+            <tr><td>Cenários</td><td>Várias (discretas)</td><td>Opcional (VE)</td><td>VPL por cenário</td></tr>
+            <tr><td>Break-even</td><td>Uma</td><td>Não</td><td>Nível que zera o VPL</td></tr>
+            <tr><td>Árvore de decisão</td><td>Sequencial</td><td>Sim</td><td>Estratégia ótima + VE</td></tr>
+            <tr><td>Monte Carlo</td><td>Todas (contínuas)</td><td>Sim (distribuições)</td><td>Distribuição do VPL</td></tr>
+          </table>
+          <div class="box warn"><div class="box-title">Limitações gerais</div><p>Todas dependem da qualidade das premissas e das probabilidades — que são subjetivas. Monte Carlo, em particular, dá ar de precisão científica a chutes sofisticados: lixo dentro, lixo fora, agora com gráficos bonitos.</p></div>
+        </div>
+      </section>
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Distinção conceitual</b> sensibilidade × cenários — a cobrança nº 1: “uma variável por vez” versus “combinações simultâneas e coerentes de variáveis”.</li>
+            <li><b>Cálculo de VPL por cenário</b> e do <b>VPL esperado</b> com probabilidades dadas (multiplica e soma — cai muito).</li>
+            <li><b>Break-even</b>: cálculo do nível da variável que zera o VPL (ex.: entrada anual mínima) e a leitura de “margem de segurança”.</li>
+            <li><b>Variável crítica</b>: dada uma tabela de sensibilidade, identificar qual variável mais afeta o VPL.</li>
+            <li><b>Limitações da sensibilidade</b>: não atribui probabilidades e ignora correlações — assertiva clássica de certo/errado.</li>
+            <li><b>Monte Carlo conceitual</b>: distribuições de probabilidade, milhares de iterações, resultado = distribuição do VPL e P(VPL &gt; 0).</li>
+            <li><b>Árvore de decisão</b>: valor esperado e resolução “de trás para frente”; às vezes com opção de abandonar/expandir.</li>
+            <li><b>TIR como break-even da taxa</b>: a TMA máxima que zera o VPL é a TIR — ponte entre os tópicos 07 e 08.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Sensibilidade = 1 variável por vez</b>; cenários = <b>várias variáveis juntas</b> (otimista/base/pessimista).</li>
+            <li><b>VPL esperado = Σ (probabilidade × VPL do cenário)</b>. Decide por VE &gt; 0, mas informe a chance de VPL &lt; 0.</li>
+            <li><b>Break-even</b>: nível da variável que faz <b>VPL = 0</b>. Entrada mínima = I₀ ÷ fator de anuidade (fluxos iguais).</li>
+            <li>A <b>TIR é o break-even da TMA</b>: taxa acima da TIR torna o VPL negativo.</li>
+            <li><b>Variável crítica</b> = aquela cuja variação mais altera o VPL (análise porcentual, não absoluta).</li>
+            <li>Limitações da sensibilidade: <b>sem probabilidades</b> e <b>sem correlação</b> entre variáveis.</li>
+            <li><b>Monte Carlo</b>: distribuições → milhares de sorteios → distribuição do VPL → P(VPL &gt; 0).</li>
+            <li><b>Árvore de decisão</b>: resolve-se de trás para frente (backward induction), escolhendo o maior VE em cada nó.</li>
+            <li><b>Margem de segurança</b> = distância entre a premissa-base e o break-even (em %).</li>
+            <li>Nenhuma técnica elimina a subjetividade das premissas — elas <b>medem</b> o risco do projeto, não o apagam.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>Problema:</b> o VPL pontual depende de premissas incertas. Estressar as premissas mede a fragilidade da decisão.</li>
+            <li><b>Sensibilidade:</b> varie uma variável por vez e monte a tabela VPL × variação. A que mais balança o VPL é a variável crítica.</li>
+            <li><b>Cenários:</b> combine variáveis de forma coerente (otimista/base/pessimista). Com probabilidades, some: VE = Σ pᵢ × VPLᵢ.</li>
+            <li><b>Break-even:</b> iguale o VPL a zero e isole a variável. Ex.: PMT mínimo = I₀ ÷ fator de anuidade; margem de segurança = % de folga até lá.</li>
+            <li><b>Ponte com o tópico 07:</b> a TIR é o break-even da taxa de desconto.</li>
+            <li><b>Árvore de decisão:</b> eventos e decisões em sequência; valor esperado; resolver de trás para frente.</li>
+            <li><b>Monte Carlo:</b> distribuições nas variáveis, milhares de sorteios, distribuição do VPL e P(VPL &gt; 0).</li>
+            <li><b>Limitações:</b> sensibilidade ignora probabilidade e correlação; cenários dependem de probabilidades subjetivas; Monte Carlo não cria informação, só organiza.</li>
+            <li><b>Regra de bolso:</b> enunciado com “cenário otimista e pessimista” → cenários; com “e se as vendas caírem 10%?” → sensibilidade; com “nível que torna o projeto indiferente” → break-even.</li>
+            <li><b>Decisão final:</b> VE &gt; 0 é necessário, mas não basta — reporte também a probabilidade de perda e a margem de segurança.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Conceito</th><th>Fórmula</th><th>Uso</th></tr>
+            <tr><td><b>VPL do cenário i</b></td><td>VPLᵢ = −I₀ + Σ FCₜᵢ/(1+kᵢ)ᵗ</td><td>recalcular o VPL para cada combinação de premissas</td></tr>
+            <tr><td><b>VPL esperado</b></td><td>VE = Σ pᵢ × VPLᵢ, com Σ pᵢ = 1</td><td>decisão sob probabilidades</td></tr>
+            <tr><td><b>Break-even (entradas iguais)</b></td><td>PMT* = I₀ ÷ fator de anuidade(n; k)</td><td>entrada anual mínima para VPL = 0</td></tr>
+            <tr><td><b>Margem de segurança</b></td><td>(premissa-base − break-even) ÷ premissa-base</td><td>queda máxima tolerável antes de VPL &lt; 0</td></tr>
+            <tr><td><b>Break-even da taxa</b></td><td>k* tal que VPL(k*) = 0 → k* = TIR</td><td>TMA máxima tolerável</td></tr>
+            <tr><td><b>Sensibilidade proporcional</b></td><td>(Δ% no VPL) ÷ (Δ% na variável)</td><td>comparar variáveis e achar a crítica</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">Fatores de anuidade úteis</div><p>(n=3; 10%) = 2,4869 · (n=3; 12%) = 2,4018 · (n=3; 14%) = 2,3216 · (n=4; 10%) = 3,1699. Ex.: I₀ = 1.000, n = 3, k = 10% → PMT* = 1.000/2,4869 = R$ 402,11.</p></div>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>Sensibilidade do exemplo-base (−1.000; +500 × 3; TMA 10%; VPL base +243,43)</h4>
+          <table>
+            <tr><th>Variação</th><th>Entradas (VPL)</th><th>TMA (VPL)</th></tr>
+            <tr><td>+10% / −2 p.p. (8%)</td><td>+367,77</td><td>+288,55</td></tr>
+            <tr><td>Base</td><td>+243,43</td><td>+243,43</td></tr>
+            <tr><td>−10% / +2 p.p. (12%)</td><td>+119,08</td><td>+200,92</td></tr>
+            <tr><td>−19,6% / +13,4 p.p. (23,4%)</td><td><b>0 (break-even)</b></td><td><b>≈ 0 (TIR)</b></td></tr>
+          </table>
+          <h4>Cenários consolidados (projeto −10.000; 3 anos)</h4>
+          <table>
+            <tr><th>Cenário</th><th>Entradas</th><th>TMA</th><th>VPL</th><th>Prob.</th><th>Contribuição</th></tr>
+            <tr><td>Otimista</td><td>5.000</td><td>10%</td><td>+2.434,26</td><td>30%</td><td>+730,28</td></tr>
+            <tr><td>Base</td><td>4.500</td><td>12%</td><td>+808,24</td><td>50%</td><td>+404,12</td></tr>
+            <tr><td>Pessimista</td><td>4.000</td><td>14%</td><td>−713,47</td><td>20%</td><td>−142,69</td></tr>
+            <tr><td colspan="4"><b>VPL esperado</b></td><td>100%</td><td><b>+991,70</b></td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">Monte Carlo: o nome é um cassino</div><p>A técnica foi batizada em homenagem ao cassino de Mônaco pelos cientistas do Projeto Manhattan (Ulam e von Neumann, anos 1940), que a usaram para simular difusão de nêutrons. Da bomba atômica para a avaliação de projetos — a matemática é a mesma: sortear incertezas milhares de vezes.</p></div>
+          <div class="box curio"><div class="box-title">O tornado dos analistas</div><p>O “diagrama de tornado” deve o nome ao formato: as barras das variáveis mais impactantes no topo, decrescendo até as irrelevantes — como um funil. Consultorias apresentam o tornado antes de qualquer cifra: ele diz onde a due diligence deve gastar tempo.</p></div>
+          <div class="box curio"><div class="box-title">Previsões de megaprojetos erram sistematicamente</div><p>Bent Flyvbjerg estudou milhares de megaprojetos e encontrou estouros de custo crônicos — a “lei dos megaprojetos”: over budget, over schedule, under benefits. A análise de cenários pessimistas honestos é o antídoto técnico contra o otimismo excessivo (tópico 02).</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: VE positivo ≠ decisão óbvia</div><p>VPL esperado de +R$ 20 com 40% de chance de perder R$ 400 não é a mesma coisa que VPL certo de +R$ 20. O VE trata a decisão como repetível; projetos únicos e grandes exigem olhar a <b>distribuição</b>, não só a média.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: break-even contábil ≠ break-even financeiro</div><p>O ponto de equilíbrio contábil zera o lucro; o financeiro zera o VPL. O break-even financeiro é sempre mais exigente, pois embute o custo de oportunidade do capital (a TMA).</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>← Tópico 07 (VPL, TIR, payback):</b> todas as técnicas daqui estressam o VPL calculado lá; a TIR reaparece como break-even da taxa.</li>
+            <li><b>← Tópico 05 (TMA):</b> variar a TMA em ±2 p.p. é testar a robustez do WACC/CAPM estimados lá.</li>
+            <li><b>← Tópico 02 (vieses):</b> cenários pessimistas honestos combatem o otimismo excessivo e o viés de ancoragem nas premissas.</li>
+            <li><b>→ Tópico 09 (Risco e incerteza):</b> aprofunda o que começamos aqui — taxa ajustada ao risco, equivalente certo e opções reais (a flexibilidade da árvore de decisão).</li>
+            <li><b>→ Tópico 10 (Projetos sociais):</b> a taxa social de desconto é controversa — análise de sensibilidade sobre ela é praticamente obrigatória.</li>
+            <li><b>↔ Custos (Módulo II):</b> o break-even financeiro (VPL = 0) é primo do ponto de equilíbrio contábil/econômico (receita = custos); as margens de segurança são análogas.</li>
+            <li><b>↔ Estatística/Probabilidade:</b> valor esperado, distribuições e variância — a base matemática de cenários probabilizados e Monte Carlo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.3; refazer a tabela de sensibilidade do exemplo-base</td><td>Montar a tabela sem consultar</td></tr>
+            <tr><td>2</td><td>Estudar 4.4–4.5 (cenários e break-even); resolver os 20 flashcards</td><td>VPL esperado e PMT* saem de cor</td></tr>
+            <tr><td>3</td><td>Estudar 4.6–4.7 (árvore, Monte Carlo); resolver as 20 questões comentadas</td><td>≥ 80% de acerto</td></tr>
+            <tr><td>4</td><td>Mini-simulado de 30 questões com cronômetro</td><td>≥ 24 acertos; revisar erros</td></tr>
+            <tr><td>5</td><td>Revisão em 5 minutos + Para decorar + checklist</td><td>Explicar a diferença sensibilidade × cenários em 1 frase</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>ROSS, S. A.; WESTERFIELD, R. W.; JORDAN, B. D. <b>Princípios de Administração Financeira</b>. Atlas — capítulo “Avaliando projetos com risco” (sensibilidade, cenários, break-even, Monte Carlo).</li>
+            <li>BREALEY, R.; MYERS, S.; ALLEN, F. <b>Princípios de Finanças Corporativas</b>. McGraw-Hill — análise de projetos e risco.</li>
+            <li>ASSAF NETO, A.; LIMA, F. G. <b>Curso de Administração Financeira</b>. Atlas — técnicas de decisão sob incerteza.</li>
+            <li>FLYVBJERG, B. <b>How Big Things Get Done</b>. Currency — evidências sobre falhas de previsão em megaprojetos.</li>
+            <li>BANCO MUNDIAL / BNDES. <b>Guias de avaliação econômica de projetos</b> — exigência de análise de sensibilidade em estudos de viabilidade.</li>
+            <li>Provas FGV: questões de sensibilidade, cenários e break-even em concursos de área fiscal, controle e estatais.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 08/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t08";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Qual o objetivo da análise de sensibilidade em projetos?",
+          "a": "Medir o impacto no VPL (ou na TIR) da variação de UMA premissa por vez, mantendo as demais constantes — revelando qual variável mais ameaça o projeto."
+      },
+      {
+          "q": "Qual a diferença entre análise de sensibilidade e análise de cenários?",
+          "a": "Sensibilidade varia uma variável por vez; cenários variam várias variáveis simultaneamente, em combinações coerentes (otimista, base, pessimista)."
+      },
+      {
+          "q": "O que é a variável crítica de um projeto?",
+          "a": "A variável cuja pequena variação provoca a maior variação (proporcional) no VPL. É onde a gestão deve concentrar previsão e proteção (contratos, hedge)."
+      },
+      {
+          "q": "Quais são as duas limitações clássicas da análise de sensibilidade?",
+          "a": "(1) Não atribui probabilidade às variações; (2) ignora a correlação entre as variáveis (na prática, elas variam juntas)."
+      },
+      {
+          "q": "O que é o ponto de equilíbrio (break-even) financeiro de um projeto?",
+          "a": "O nível de uma variável (vendas, entradas, preço) que torna o VPL exatamente igual a zero — o limite entre criar e destruir valor."
+      },
+      {
+          "q": "Projeto: I₀ = 1.000, 3 anos, TMA 10% (fator 2,4869). Qual a entrada anual mínima para VPL = 0?",
+          "a": "PMT* = 1.000 / 2,4869 = R$ 402,11. Se a premissa-base é R$ 500, a margem de segurança é de 19,6% de queda."
+      },
+      {
+          "q": "O que é margem de segurança na análise de break-even?",
+          "a": "A distância percentual entre a premissa-base e o ponto de equilíbrio: (base − break-even)/base. Quanto maior, mais robusto o projeto."
+      },
+      {
+          "q": "Qual a relação entre TIR e break-even?",
+          "a": "A TIR é o break-even da taxa de desconto: se a TMA superar a TIR, o VPL fica negativo. A distância TIR − TMA é a margem de segurança da taxa."
+      },
+      {
+          "q": "Como se calcula o VPL esperado em análise de cenários?",
+          "a": "VE = Σ (probabilidade do cenário × VPL do cenário), com as probabilidades somando 100%."
+      },
+      {
+          "q": "Cenários: otimista +2.434 (30%), base +808 (50%), pessimista −713 (20%). Qual o VPL esperado?",
+          "a": "0,30×2.434 + 0,50×808 + 0,20×(−713) ≈ +R$ 992. Aceita em valor esperado, mas com 20% de chance de VPL negativo."
+      },
+      {
+          "q": "VPL esperado positivo garante boa decisão?",
+          "a": "Não necessariamente. O VE pressupõe decisões repetidas; em projeto único, deve-se olhar também a probabilidade de VPL < 0 e a tolerância ao risco do decisor."
+      },
+      {
+          "q": "O que é uma árvore de decisão e como se resolve?",
+          "a": "Diagrama de decisões (nós quadrados) e eventos probabilísticos (nós circulares) em sequência. Resolve-se de trás para frente (backward induction), escolhendo o maior valor esperado em cada nó."
+      },
+      {
+          "q": "O que a simulação de Monte Carlo entrega que as outras técnicas não entregam?",
+          "a": "A distribuição de probabilidade completa do VPL — média, dispersão e P(VPL > 0) — a partir de distribuições atribuídas às variáveis e milhares de sorteios."
+      },
+      {
+          "q": "O que é o diagrama de tornado?",
+          "a": "Gráfico de barras horizontais ordenadas pelo impacto de cada variável no VPL (maiores no topo). Resume visualmente a análise de sensibilidade."
+      },
+      {
+          "q": "Por que a análise de cenários é mais realista que a de sensibilidade?",
+          "a": "Porque combina variações simultâneas e coerentes das variáveis, capturando correlações (ex.: recessão derruba vendas e eleva a TMA ao mesmo tempo)."
+      },
+      {
+          "q": "Qual a diferença entre break-even contábil e financeiro?",
+          "a": "O contábil zera o lucro; o financeiro zera o VPL. O financeiro é mais exigente, pois inclui a remuneração do capital (TMA) como custo."
+      },
+      {
+          "q": "No exemplo-base (−1.000; 500×3; 10%), o que acontece com o VPL se as entradas caírem 10%?",
+          "a": "VP = 450 × 2,4869 = 1.119,08 → VPL = +119,08. Queda de 10% nas entradas destrói 51% do VPL (+243,43 → +119,08)."
+      },
+      {
+          "q": "E se a TMA subir de 10% para 25%?",
+          "a": "VP = 500 × 1,9520 = 976,00 → VPL = −24,00: o projeto vira inviável. A TMA máxima tolerável é a TIR (≈23,4%)."
+      },
+      {
+          "q": "O que é flexibilidade gerencial e por que a árvore de decisão a captura?",
+          "a": "A possibilidade de adaptar decisões conforme eventos ocorrem (abandonar, expandir, adiar). A árvore modela essas decisões sequenciais — coisa que o VPL estático ignora."
+      },
+      {
+          "q": "Qual o ponto fraco comum a cenários e Monte Carlo?",
+          "a": "A subjetividade das probabilidades e distribuições atribuídas. Lixo dentro, lixo fora — a técnica organiza a incerteza, não a elimina."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Conceito — sensibilidade × cenários",
+          "texto": "A principal diferença entre a análise de sensibilidade e a análise de cenários é que:",
+          "enun": "",
+          "alts": [
+              "A sensibilidade usa probabilidades; os cenários, não.",
+              "A sensibilidade varia uma variável por vez; os cenários variam várias variáveis simultaneamente, de forma coerente.",
+              "Os cenários só se aplicam a projetos públicos.",
+              "A sensibilidade calcula o VPL esperado; os cenários calculam a TIR.",
+              "Não há diferença: são sinônimos."
+          ],
+          "correta": 1,
+          "coment": "É a distinção mais cobrada: sensibilidade = uma variável isolada; cenários = combinações simultâneas e coerentes de várias variáveis (otimista/base/pessimista)."
+      },
+      {
+          "tema": "VPL esperado",
+          "texto": "Um projeto tem três cenários: otimista (prob. 30%, VPL = +2.434,26), base (prob. 50%, VPL = +808,24) e pessimista (prob. 20%, VPL = −713,47). O VPL esperado é aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 991,70",
+              "+R$ 808,24",
+              "+R$ 1.242,00",
+              "+R$ 730,28",
+              "+R$ 404,12"
+          ],
+          "correta": 0,
+          "coment": "VE = 0,30×2.434,26 + 0,50×808,24 + 0,20×(−713,47) = 730,28 + 404,12 − 142,69 = +991,70. A alternativa B é o VPL do cenário base — pegadinha de quem ignora as probabilidades."
+      },
+      {
+          "tema": "Break-even",
+          "texto": "Um projeto exige R$ 1.000 iniciais e gera entradas anuais iguais por 3 anos, com TMA de 10% (fator de anuidade = 2,4869). A entrada anual mínima para que o VPL não seja negativo é, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "R$ 333,33",
+              "R$ 402,11",
+              "R$ 450,00",
+              "R$ 500,00",
+              "R$ 243,43"
+          ],
+          "correta": 1,
+          "coment": "Break-even: PMT* × 2,4869 = 1.000 → PMT* = 402,11. A alternativa A é a divisão simples 1.000/3 — ignora o VDT."
+      },
+      {
+          "tema": "Margem de segurança",
+          "texto": "No projeto anterior, se a premissa-base de entradas é R$ 500/ano, a margem de segurança (queda máxima tolerável antes de VPL < 0) é de aproximadamente:",
+          "enun": "",
+          "alts": [
+              "10,0%",
+              "19,6%",
+              "24,9%",
+              "33,3%",
+              "50,0%"
+          ],
+          "correta": 1,
+          "coment": "(500 − 402,11)/500 = 19,58% ≈ 19,6%. Acima dessa queda, o VPL fica negativo."
+      },
+      {
+          "tema": "TIR como break-even",
+          "texto": "Se a TIR de um projeto é 23,4% e a TMA é 10%, pode-se afirmar que:",
+          "enun": "",
+          "alts": [
+              "O VPL zera se a TMA subir para 23,4% — a TIR é o break-even da taxa de desconto.",
+              "O projeto deixa de ser viável se a TMA cair abaixo de 10%.",
+              "A margem de segurança das entradas é de 23,4%.",
+              "O payback descontado é de 23,4 anos.",
+              "O VPL esperado é de 23,4% do investimento."
+          ],
+          "correta": 0,
+          "coment": "Por definição, a TIR é a taxa que zera o VPL: logo, TMA > TIR ⇔ VPL < 0. A folga TIR − TMA (13,4 p.p.) é a margem de segurança da taxa."
+      },
+      {
+          "tema": "Sensibilidade — cálculo",
+          "texto": "Um projeto tem VPL base de +R$ 243,43 com entradas de R$ 500/ano por 3 anos (TMA 10%). Se as entradas caírem 10% (R$ 450), o novo VPL será, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 243,43",
+              "+R$ 119,08",
+              "−R$ 124,35",
+              "+R$ 219,09",
+              "R$ 0,00"
+          ],
+          "correta": 1,
+          "coment": "VP = 450 × 2,4869 = 1.119,08 → VPL = 1.119,08 − 1.000 = +119,08. Queda de 10% nas entradas derruba 51% do VPL — as entradas são a variável crítica."
+      },
+      {
+          "tema": "Variável crítica",
+          "texto": "Em uma análise de sensibilidade, identifica-se como variável crítica aquela:",
+          "enun": "",
+          "alts": [
+              "De maior valor absoluto no fluxo de caixa.",
+              "Cuja variação proporcional provoca a maior variação no VPL.",
+              "Que aparece no primeiro ano do projeto.",
+              "Que a diretoria escolheu acompanhar.",
+              "De menor variância histórica."
+          ],
+          "correta": 1,
+          "coment": "A criticidade mede-se pela resposta do VPL à variação da variável — idealmente em termos proporcionais, para comparar variáveis de naturezas diferentes."
+      },
+      {
+          "tema": "Limitações da sensibilidade",
+          "texto": "São limitações reconhecidas da análise de sensibilidade:",
+          "enun": "",
+          "alts": [
+              "Não atribuir probabilidades às variações e ignorar a correlação entre variáveis.",
+              "Exigir computadores para ser calculada.",
+              "Não permitir variar mais de uma variável no projeto inteiro.",
+              "Produzir sempre VPLs negativos.",
+              "Depender da existência de mercado de capitais."
+          ],
+          "correta": 0,
+          "coment": "As duas falhas clássicas: nada diz sobre a probabilidade de cada desvio e trata cada variável como independente, quando na prática elas se movem juntas."
+      },
+      {
+          "tema": "Monte Carlo",
+          "texto": "A simulação de Monte Carlo aplicada à avaliação de projetos consiste em:",
+          "enun": "",
+          "alts": [
+              "Escolher o pior cenário possível e rejeitar projetos com VPL negativo nele.",
+              "Atribuir distribuições de probabilidade às variáveis, sortear milhares de combinações e obter a distribuição do VPL.",
+              "Calcular o VPL com a taxa livre de risco.",
+              "Sortear aleatoriamente o projeto a ser aprovado.",
+              "Substituir o VPL pela TIR na decisão."
+          ],
+          "correta": 1,
+          "coment": "Monte Carlo: variáveis viram distribuições; cada sorteio gera um VPL; milhares de sorteios geram a distribuição do VPL, com média e P(VPL > 0)."
+      },
+      {
+          "tema": "Árvore de decisão",
+          "texto": "Um projeto de R$ 1.000 pode seguir dois ramos: alto (prob. 60%): entradas de 700 e 800; baixo (prob. 40%): entradas de 300 e 400. Com TMA de 10%, o VPL esperado é, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "−R$ 396,69",
+              "+R$ 19,83",
+              "+R$ 297,52",
+              "+R$ 178,51",
+              "−R$ 158,68"
+          ],
+          "correta": 1,
+          "coment": "Ramo alto: −1.000 + 636,36 + 661,16 = +297,52. Ramo baixo: −1.000 + 272,73 + 330,58 = −396,69. VE = 0,6×297,52 + 0,4×(−396,69) = +19,83."
+      },
+      {
+          "tema": "Árvore — método de resolução",
+          "texto": "A técnica correta de resolução de uma árvore de decisão é:",
+          "enun": "",
+          "alts": [
+              "Da raiz para as folhas, escolhendo o maior VPL de cada ramo.",
+              "De trás para frente (backward induction), escolhendo em cada nó de decisão a alternativa de maior valor esperado.",
+              "Pela média simples de todos os VPLs terminais.",
+              "Pelo maior VPL terminal, ignorando probabilidades.",
+              "Pelo payback de cada ramo."
+          ],
+          "correta": 1,
+          "coment": "Backward induction: resolvem-se primeiro os nós mais à direita (decisões finais) e retrocede-se, carregando os valores esperados até a decisão inicial."
+      },
+      {
+          "tema": "VE e risco",
+          "texto": "Um projeto tem VPL esperado de +R$ 19,83, com 40% de probabilidade de VPL = −R$ 396,69. A leitura mais adequada é:",
+          "enun": "",
+          "alts": [
+              "Aceitar sem ressalvas, pois o VE é positivo.",
+              "Rejeitar, pois existe cenário negativo.",
+              "O VE é positivo, mas a decisão deve considerar a probabilidade relevante de perda e a tolerância ao risco do decisor.",
+              "Recalcular o VE sem o cenário pessimista.",
+              "O VE foi calculado errado, pois é baixo demais."
+          ],
+          "correta": 2,
+          "coment": "VE > 0 é argumento para aceitar, mas não fecha a questão: 40% de chance de perda é informação essencial. O VE trata a decisão como se repetida infinitas vezes — projetos únicos pedem análise da distribuição."
+      },
+      {
+          "tema": "Cenários — cálculo",
+          "texto": "Um projeto de R$ 6.000 tem três cenários de 3 anos: otimista (entradas 2.800, TMA 10% → VPL +963,19), base (2.500, 12% → VPL +4,58) e pessimista (2.000, 14% → VPL −1.356,74). Com probabilidades 30%/40%/30%, o VPL esperado é:",
+          "enun": "",
+          "alts": [
+              "+R$ 288,96",
+              "−R$ 116,23",
+              "+R$ 4,58",
+              "−R$ 407,02",
+              "+R$ 963,19"
+          ],
+          "correta": 1,
+          "coment": "VE = 0,3×963,19 + 0,4×4,58 + 0,3×(−1.356,74) = 288,96 + 1,83 − 407,02 = −116,23. Apesar de dois cenários positivos, o VE é negativo → rejeita em valor esperado."
+      },
+      {
+          "tema": "Break-even com dados novos",
+          "texto": "Um investimento de R$ 2.000 renderá entradas anuais iguais por 3 anos, com TMA de 10% (fator 2,4869). Se a premissa-base é R$ 900/ano, até quanto as entradas podem cair antes de o VPL zerar?",
+          "enun": "",
+          "alts": [
+              "Até R$ 666,67 (queda de 25,9%).",
+              "Até R$ 804,23 (queda de 10,6%).",
+              "Até R$ 720,00 (queda de 20%).",
+              "Até R$ 500,00 (queda de 44,4%).",
+              "Até R$ 900,00 (nenhuma queda)."
+          ],
+          "correta": 1,
+          "coment": "Break-even: PMT* = 2.000/2,4869 = 804,23. Margem: (900 − 804,23)/900 = 10,6% de queda tolerável. (Conferindo: 720×2,4869 = 1.790,53 → VPL = −209,47 — uma queda de 20% já inviabiliza.)"
+      },
+      {
+          "tema": "Sensibilidade da TMA",
+          "texto": "Mantidas as entradas de R$ 500/ano por 3 anos e o investimento de R$ 1.000, o VPL a 12% é +200,92; a 14% é +160,82; a 25% é −24,00. Conclui-se que:",
+          "enun": "",
+          "alts": [
+              "O projeto é muito sensível à TMA: 2 p.p. zeram o VPL.",
+              "O VPL cresce com a TMA.",
+              "O VPL é relativamente pouco sensível à TMA no curto prazo — a taxa precisa superar ≈23,4% para inviabilizá-lo.",
+              "A TIR do projeto é 25%.",
+              "O break-even da TMA é 14%."
+          ],
+          "correta": 2,
+          "coment": "De 10% a 25% (+15 p.p.) o VPL só perde 267,43 — enquanto 10% de queda nas entradas já tira 124,35. A TMA crítica é a TIR, ≈23,4%."
+      },
+      {
+          "tema": "Cenários — premissa",
+          "texto": "A vantagem da análise de cenários sobre a de sensibilidade está em:",
+          "enun": "",
+          "alts": [
+              "Dispensar o cálculo do VPL.",
+              "Capturar variações conjuntas e coerentes das variáveis, refletindo que elas se correlacionam.",
+              "Eliminar a subjetividade das probabilidades.",
+              "Não exigir estimativas de fluxo de caixa.",
+              "Produzir sempre um único valor de VPL."
+          ],
+          "correta": 1,
+          "coment": "Cenários agrupam premissas compatíveis entre si (recessão = vendas baixas + TMA alta), superando a hipótese irrealista de independência da análise de sensibilidade."
+      },
+      {
+          "tema": "Monte Carlo — resultado",
+          "texto": "O principal produto de uma simulação de Monte Carlo em avaliação de projetos é:",
+          "enun": "",
+          "alts": [
+              "Um único VPL mais preciso.",
+              "A distribuição de probabilidade do VPL, incluindo P(VPL > 0).",
+              "A TIR exata do projeto.",
+              "O cenário mais provável.",
+              "O break-even de todas as variáveis."
+          ],
+          "correta": 1,
+          "coment": "O diferencial do Monte Carlo é entregar a distribuição inteira do VPL — não um ponto — permitindo afirmar, por exemplo, “há 85% de chance de o projeto criar valor”."
+      },
+      {
+          "tema": "Decisão integrada",
+          "texto": "Uma análise de sensibilidade mostrou que o VPL de um projeto zera se as vendas caírem 8%, mas tolera alta de 20 p.p. na TMA. A recomendação gerencial mais adequada é:",
+          "enun": "",
+          "alts": [
+              "Concentrar esforços em garantir as vendas (contratos, metas), pois elas são a variável crítica.",
+              "Renegociar a taxa de desconto com o banco.",
+              "Abandonar o projeto imediatamente.",
+              "Aumentar o investimento inicial para diluir o risco.",
+              "Ignorar a TMA, pois ela não importa."
+          ],
+          "correta": 0,
+          "coment": "A análise de sensibilidade não decide sozinha — ela orienta a gestão: a variável crítica (vendas, com margem de só 8%) merece proteção; a TMA tem folga enorme."
+      },
+      {
+          "tema": "Flexibilidade gerencial",
+          "texto": "Na árvore de decisão, a possibilidade de abandonar o projeto após um mau primeiro resultado, limitando perdas, é exemplo de:",
+          "enun": "",
+          "alts": [
+              "Viés de otimismo.",
+              "Flexibilidade gerencial, que agrega valor ao projeto e é ignorada pelo VPL estático.",
+              "Falácia do custo afundado.",
+              "Análise de sensibilidade.",
+              "Racionamento de capital."
+          ],
+          "correta": 1,
+          "coment": "Flexibilidade (abandonar, expandir, adiar) tem valor econômico real — é o embrião da teoria das opções reais (tópico 09). O VPL “estático” supõe um único caminho rígido."
+      },
+      {
+          "tema": "Conceito — propósito",
+          "texto": "O propósito central das técnicas de sensibilidade, cenários, break-even e Monte Carlo é:",
+          "enun": "",
+          "alts": [
+              "Substituir o VPL como critério de decisão.",
+              "Medir a fragilidade da decisão em relação às premissas, antes de o capital ser empenhado.",
+              "Eliminar a incerteza do projeto.",
+              "Calcular o lucro contábil esperado.",
+              "Escolher a taxa de desconto correta."
+          ],
+          "correta": 1,
+          "coment": "Nenhuma técnica elimina incerteza nem substitui o VPL — elas medem quanto a conclusão “VPL > 0” depende das premissas adotadas."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "A análise de sensibilidade consiste em:",
+          "enun": "",
+          "alts": [
+              "Variar várias variáveis ao mesmo tempo.",
+              "Variar uma variável por vez e observar o efeito no resultado do projeto.",
+              "Atribuir probabilidades aos cenários.",
+              "Sortear milhares de combinações.",
+              "Calcular o lucro contábil máximo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A análise de cenários difere da de sensibilidade porque:",
+          "enun": "",
+          "alts": [
+              "Usa apenas duas variáveis.",
+              "Combina variações simultâneas e coerentes de várias variáveis.",
+              "Não usa o VPL.",
+              "Dispensa premissas.",
+              "Só serve para projetos públicos."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Os três cenários clássicos da análise de cenários são:",
+          "enun": "",
+          "alts": [
+              "Curto, médio e longo prazo.",
+              "Otimista, base (mais provável) e pessimista.",
+              "Contábil, econômico e financeiro.",
+              "Nacional, regional e local.",
+              "Primário, secundário e terciário."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "O ponto de equilíbrio (break-even) financeiro de um projeto é o nível da variável que torna:",
+          "enun": "",
+          "alts": [
+              "O lucro máximo.",
+              "O VPL igual a zero.",
+              "A TIR igual a zero.",
+              "O payback igual a 1 ano.",
+              "A TMA igual a zero."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "O VPL esperado de um projeto com cenários probabilizados é:",
+          "enun": "",
+          "alts": [
+              "O maior VPL entre os cenários.",
+              "A soma ponderada dos VPLs pelas probabilidades dos cenários.",
+              "O VPL do cenário base.",
+              "A média simples dos VPLs, ignorando probabilidades.",
+              "O menor VPL possível."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A variável crítica de um projeto é aquela:",
+          "enun": "",
+          "alts": [
+              "De maior valor em reais.",
+              "Cuja variação mais impacta o VPL.",
+              "Que ocorre no primeiro ano.",
+              "Que não pode ser prevista.",
+              "De menor custo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A simulação de Monte Carlo gera como resultado principal:",
+          "enun": "",
+          "alts": [
+              "Um único VPL.",
+              "A distribuição de probabilidade do VPL.",
+              "A TIR do projeto.",
+              "O payback médio.",
+              "O orçamento do projeto."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A árvore de decisão é resolvida:",
+          "enun": "",
+          "alts": [
+              "Da esquerda para a direita.",
+              "De trás para frente, escolhendo o maior valor esperado em cada nó de decisão.",
+              "Pela média dos ramos.",
+              "Pela TIR de cada ramo.",
+              "Pelo ramo mais longo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Uma limitação da análise de sensibilidade é:",
+          "enun": "",
+          "alts": [
+              "Não poder variar nenhuma variável.",
+              "Não atribuir probabilidades às variações analisadas.",
+              "Exigir dados de mercado de capitais.",
+              "Só valer para projetos pequenos.",
+              "Depender de simulação computacional."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A margem de segurança de um projeto, em relação a uma variável, é:",
+          "enun": "",
+          "alts": [
+              "O valor do investimento inicial.",
+              "A distância (geralmente em %) entre a premissa-base e o break-even.",
+              "A TIR do projeto.",
+              "O VPL do cenário otimista.",
+              "A taxa de inflação esperada."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Projeto: −1.000 hoje; +500/ano por 3 anos; TMA 10% (fator 2,4869); VPL base +243,43. Se as entradas subirem 10% (550), o VPL será aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 267,77",
+              "+R$ 367,77",
+              "+R$ 243,43",
+              "+R$ 467,77",
+              "+R$ 119,08"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "No mesmo projeto, a entrada anual mínima para VPL = 0 (break-even) é:",
+          "enun": "",
+          "alts": [
+              "R$ 333,33",
+              "R$ 402,11",
+              "R$ 450,00",
+              "R$ 486,90",
+              "R$ 500,00"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Cenários: otimista (30%, +963,19), base (40%, +4,58), pessimista (30%, −1.356,74). O VPL esperado é:",
+          "enun": "",
+          "alts": [
+              "+R$ 288,96",
+              "+R$ 4,58",
+              "−R$ 116,23",
+              "−R$ 407,02",
+              "+R$ 646,00"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Um investimento de R$ 2.000 com entradas de R$ 900/ano por 3 anos (TMA 10%, fator 2,4869) tem VPL base de +238,17. Se as entradas caírem 20% (720), o VPL será aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 190,54",
+              "−R$ 209,47",
+              "+R$ 28,70",
+              "R$ 0,00",
+              "−R$ 238,17"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "A TIR de um projeto é 18% e a TMA é 12%. Sobre a margem de segurança da taxa, é correto afirmar:",
+          "enun": "",
+          "alts": [
+              "O projeto zera o VPL se a TMA subir para 12%.",
+              "A TMA pode subir até 18% (folga de 6 p.p.) antes de o VPL ficar negativo.",
+              "A margem de segurança é de 18%.",
+              "O VPL é negativo.",
+              "A TIR deve ser recalculada com a TMA nova."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Em valor esperado, um projeto com cenários +800 (50%) e −200 (50%) tem VE de:",
+          "enun": "",
+          "alts": [
+              "+R$ 600,00",
+              "+R$ 300,00",
+              "+R$ 500,00",
+              "−R$ 200,00",
+              "+R$ 800,00"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Um projeto de R$ 5.000 com entradas de R$ 2.500/ano por 3 anos tem VPL de +1.004,58 à TMA de 12%. Se a TMA subir para 15% (fator 2,2832), o novo VPL será aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 708,06",
+              "+R$ 1.004,58",
+              "+R$ 296,52",
+              "−R$ 708,06",
+              "+R$ 2.500,00"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "Árvore de decisão: projeto de R$ 1.000; ramo alto (60%): VPL +297,52; ramo baixo (40%): VPL −396,69. O VPL esperado é:",
+          "enun": "",
+          "alts": [
+              "+R$ 297,52",
+              "−R$ 396,69",
+              "+R$ 19,83",
+              "−R$ 99,17",
+              "+R$ 178,51"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Se a entrada mínima de equilíbrio (break-even) de um projeto é R$ 804,23/ano e a premissa-base é R$ 900/ano, a margem de segurança é de aproximadamente:",
+          "enun": "",
+          "alts": [
+              "8,0%",
+              "10,6%",
+              "19,6%",
+              "25,9%",
+              "89,4%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "A afirmativa correta sobre Monte Carlo é:",
+          "enun": "",
+          "alts": [
+              "Elimina a subjetividade das premissas.",
+              "Atribui distribuições às variáveis e estima P(VPL > 0), mas a qualidade do resultado depende das distribuições adotadas.",
+              "Só pode ser usada com três cenários.",
+              "É obrigatória em qualquer projeto.",
+              "Substitui o cálculo do VPL."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto-base: VPL +243,43. Sensibilidade: entradas −10% → VPL +119,08; TMA +2 p.p. → VPL +200,92. Conclui-se corretamente que:",
+          "enun": "",
+          "alts": [
+              "A TMA é a variável crítica.",
+              "As entradas são a variável crítica: variação de 10% nelas derruba 51% do VPL, enquanto 2 p.p. na TMA tiram só 17,5%.",
+              "O projeto é insensível às duas variáveis.",
+              "O VPL base está errado.",
+              "O break-even das entradas é −10%."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto tem VPL esperado de +R$ 991,70, com 20% de probabilidade de VPL = −713,47. A decisão mais fundamentada é:",
+          "enun": "",
+          "alts": [
+              "Aceitar automaticamente, pois o VE é positivo.",
+              "Rejeitar automaticamente, pois há cenário negativo.",
+              "Ponderar o VE positivo contra a chance de perda, conforme a tolerância ao risco do decisor — o VE sozinho não encerra a análise.",
+              "Ignorar o cenário pessimista por ser improvável.",
+              "Recalcular o VE excluindo o pior cenário."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre a relação entre break-even financeiro e contábil, é correto afirmar:",
+          "enun": "",
+          "alts": [
+              "São sempre iguais.",
+              "O financeiro (VPL = 0) é mais exigente, pois embute a remuneração do capital à TMA.",
+              "O contábil é mais exigente, pois inclui a depreciação.",
+              "O financeiro ignora custos fixos.",
+              "O contábil usa a TIR como taxa."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Em uma árvore de decisão, se o projeto puder ser abandonado ao fim do ano 1 no ramo ruim (evitando a segunda entrada negativa), o valor do projeto:",
+          "enun": "",
+          "alts": [
+              "Diminui, pois abandonar gera custos.",
+              "Não se altera, pois o VPL é estático.",
+              "Aumenta, pois a flexibilidade gerencial limita perdas — valor capturado pela árvore, mas não pelo VPL estático.",
+              "Zera, pois o projeto deixa de existir.",
+              "Depende apenas da TMA."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um analista apresentou: cenário otimista (prob. 25%, VPL +2.000), base (prob. 50%, VPL +600) e pessimista (prob. 25%, VPL −1.200). O VPL esperado e a leitura correta são:",
+          "enun": "",
+          "alts": [
+              "+R$ 600,00; aceitar pelo cenário base.",
+              "+R$ 500,00; aceitar, com 25% de chance de perda.",
+              "+R$ 300,00; rejeitar.",
+              "+R$ 1.400,00; aceitar sem ressalvas.",
+              "−R$ 300,00; rejeitar."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Assinale a afirmativa INCORRETA sobre as técnicas de análise de risco do projeto:",
+          "enun": "",
+          "alts": [
+              "A sensibilidade não atribui probabilidades às variações.",
+              "Os cenários combinam variações simultâneas de várias variáveis.",
+              "O break-even zera o VPL.",
+              "Monte Carlo dispensa a atribuição de distribuições às variáveis.",
+              "A árvore de decisão se resolve de trás para frente."
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto de R$ 12.000, com entradas de R$ 5.000/ano por 4 anos e TMA de 10% (fator 3,1699), tem VPL de +3.849,33. A entrada anual de break-even e a margem de segurança são, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "R$ 3.000,00; 40,0%",
+              "R$ 3.785,65; 24,3%",
+              "R$ 4.000,00; 20,0%",
+              "R$ 4.227,27; 15,5%",
+              "R$ 3.169,90; 36,6%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Dois projetos têm o mesmo VPL base. No projeto X, uma queda de 10% nas vendas torna o VPL negativo; no projeto Y, a mesma queda reduz o VPL pela metade, mas o mantém positivo. Comparando-os:",
+          "enun": "",
+          "alts": [
+              "São igualmente arriscados, pois têm o mesmo VPL base.",
+              "X é mais arriscado em relação às vendas: menor margem de segurança na variável crítica.",
+              "Y é mais arriscado, pois perde mais VPL em reais.",
+              "Impossível comparar sem as TIRs.",
+              "X deve ser preferido, pois reage mais."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto de R$ 8.000 gera R$ 3.500/ano por 3 anos (TMA 10%, fator 2,4869; VPL base +703,98). Se as entradas caírem 30% (2.450), o VPL será aproximadamente:",
+          "enun": "",
+          "alts": [
+              "+R$ 492,79",
+              "−R$ 1.907,21",
+              "R$ 0,00",
+              "+R$ 703,98",
+              "−R$ 211,19"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre o papel das técnicas de sensibilidade e cenários na decisão de investimento, a afirmação mais precisa é:",
+          "enun": "",
+          "alts": [
+              "Substituem o VPL como critério de aceitação.",
+              "Complementam o VPL: medem a fragilidade da decisão diante de premissas incertas, mas não eliminam a incerteza nem a subjetividade das probabilidades.",
+              "Servem apenas para projetos do setor público.",
+              "Eliminam a necessidade de estimar fluxos de caixa.",
+              "Garantem que projetos aprovados nunca darão prejuízo."
+          ],
+          "correta": 1
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei distinguir análise de sensibilidade (1 variável) de análise de cenários (várias variáveis combinadas).",
+      "Monto a tabela de sensibilidade do VPL variando entradas e TMA e identifico a variável crítica.",
+      "Calculo o break-even de uma variável: nível que zera o VPL (ex.: PMT* = I₀ ÷ fator de anuidade).",
+      "Calculo a margem de segurança: (premissa-base − break-even) ÷ premissa-base.",
+      "Sei que a TIR é o break-even da taxa de desconto (TMA máxima tolerável).",
+      "Calculo o VPL esperado de cenários probabilizados: VE = Σ pᵢ × VPLᵢ.",
+      "Sei que VE > 0 não encerra a análise: devo olhar a probabilidade de VPL < 0 e a tolerância ao risco.",
+      "Conceituo árvore de decisão (backward induction) e flexibilidade gerencial.",
+      "Conceituo Monte Carlo: distribuições → milhares de sorteios → distribuição do VPL e P(VPL > 0).",
+      "Fiz o mini-simulado com ≥ 24/30 e revisei todos os erros comentados."
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Confundir análise de sensibilidade (uma variável por vez) com análise de cenários (várias variáveis simultâneas) — o erro conceitual mais cobrado.",
+      "Calcular o VPL esperado como média simples dos cenários, ignorando as probabilidades.",
+      "Esquecer de conferir se as probabilidades dos cenários somam 100%.",
+      "No break-even de fluxos iguais, dividir o investimento pelo número de anos em vez de dividir pelo fator de anuidade — ignora o VDT.",
+      "Confundir break-even financeiro (VPL = 0) com contábil (lucro = 0) — o financeiro é mais exigente.",
+      "Achar que o cenário base é o VPL esperado — o VE pondera todos os cenários.",
+      "Escolher a variável crítica pelo valor absoluto em reais, e não pela resposta proporcional do VPL.",
+      "Concluir “aceitar” só porque o VE é positivo, sem reportar a probabilidade de VPL negativo.",
+      "Na árvore de decisão, resolver da raiz para as folhas — o correto é de trás para frente (backward induction).",
+      "Ignorar a correlação entre variáveis na sensibilidade e tratá-la como defeito dos cenários.",
+      "Acreditar que Monte Carlo elimina a subjetividade — ele depende das distribuições atribuídas.",
+      "Esquecer que a TIR é o break-even da taxa de desconto: TMA > TIR ⇒ VPL < 0.",
+      "Calcular a margem de segurança em reais quando a questão pede em percentual da premissa-base.",
+      "Variá-la várias variáveis ao mesmo tempo e continuar chamando de análise de sensibilidade.",
+      "Atribuir probabilidades maiores ao cenário otimista sem justificativa — viés de otimismo disfarçado.",
+      "Ignorar a flexibilidade gerencial (abandonar/expandir) e tratar o projeto como caminho único e rígido.",
+      "Somar VPLs de cenários sem ponderar — só a ponderação por probabilidade gera o VE.",
+      "Tratar o pior cenário como impossível por ter baixa probabilidade — é ele que quebra empresas.",
+      "Não recalcular o VPL inteiro ao mudar a TMA — os fluxos mudam de valor presente, não apenas o saldo.",
+      "Usar o resultado do Monte Carlo (P(VPL > 0)) como se fosse certeza estatística do futuro."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Análise de sensibilidade",
+          "Técnica que varia uma premissa por vez (entradas, TMA, custos) e mede o efeito no VPL, revelando a variável crítica do projeto."
+      ],
+      [
+          "Análise de cenários",
+          "Técnica que varia várias premissas simultaneamente em combinações coerentes (otimista, base, pessimista), podendo gerar o VPL esperado."
+      ],
+      [
+          "Cenário base (mais provável)",
+          "Combinação de premissas considerada a mais provável; não deve ser confundido com o VPL esperado, que pondera todos os cenários."
+      ],
+      [
+          "VPL esperado (VE)",
+          "Soma ponderada dos VPLs dos cenários pelas respectivas probabilidades: VE = Σ pᵢ × VPLᵢ."
+      ],
+      [
+          "Ponto de equilíbrio (break-even) financeiro",
+          "Nível de uma variável que torna o VPL igual a zero; marca o limite entre criar e destruir valor."
+      ],
+      [
+          "Margem de segurança",
+          "Distância percentual entre a premissa-base e o break-even; mede a folga do projeto antes de destruir valor."
+      ],
+      [
+          "Variável crítica",
+          "Variável cuja variação proporcional provoca o maior impacto no VPL; prioridade de previsão e de proteção contratual."
+      ],
+      [
+          "Diagrama de tornado",
+          "Gráfico de barras ordenadas pelo impacto de cada variável no VPL; resume visualmente a análise de sensibilidade."
+      ],
+      [
+          "Árvore de decisão",
+          "Representação sequencial de decisões e eventos probabilísticos, resolvida de trás para frente pelo maior valor esperado."
+      ],
+      [
+          "Backward induction",
+          "Método de resolução da árvore de decisão: dos nós finais para o inicial, escolhendo o maior VE em cada decisão."
+      ],
+      [
+          "Flexibilidade gerencial",
+          "Capacidade de adaptar o projeto a eventos futuros (abandonar, expandir, adiar); tem valor econômico ignorado pelo VPL estático."
+      ],
+      [
+          "Simulação de Monte Carlo",
+          "Atribui distribuições de probabilidade às variáveis e sorteia milhares de combinações, gerando a distribuição do VPL e P(VPL > 0)."
+      ],
+      [
+          "Break-even contábil",
+          "Nível de operação que zera o lucro contábil; menos exigente que o financeiro, pois ignora o custo de oportunidade do capital."
+      ],
+      [
+          "Correlação entre variáveis",
+          "Tendência de variáveis se moverem juntas (ex.: vendas e TMA em recessão); ignorada pela sensibilidade, capturada pelos cenários."
+      ],
+      [
+          "Tolerância ao risco",
+          "Disposição do decisor em aceitar probabilidades de perda; explica por que VE > 0 não é critério suficiente em projetos únicos."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fontes de Financiamento a Longo Prazo | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Administração Financeira</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">08 - Fontes de financiamento a longo prazo</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceitos básicos de administração financeira.html">01 - Conceitos básicos</option>
+    <option value="02 - Finanças corporativas.html">02 - Finanças corporativas</option>
+    <option value="03 - Alavancagem operacional e financeira.html">03 - Alavancagem operacional e financeira</option>
+    <option value="04 - Planejamento financeiro de curto prazo.html">04 - Planejamento financeiro de curto prazo</option>
+    <option value="05 - Planejamento financeiro de longo prazo.html">05 - Planejamento financeiro de longo prazo</option>
+    <option value="06 - Valor do dinheiro no tempo.html">06 - Valor do dinheiro no tempo</option>
+    <option value="07 - Risco x retorno.html">07 - Risco x retorno</option>
+    <option value="08 - Fontes de financiamento a longo prazo.html" selected>08 - Fontes de financiamento a longo prazo</option>
+    <option value="" disabled>09 - Estratégias de investimentos (em breve)</option>
+    <option value="" disabled>10 - Valuation (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Fontes de Financiamento a Longo Prazo</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Administração Financeira<br>Tópico 08 de 10<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Fontes de Financiamento a Longo Prazo</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Administração Financeira</b> &nbsp;›&nbsp; Tópico 08</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="lbl">Tempo estimado</div><div class="val">6h de estudo ativo</div></div>
+        <div class="meta-card"><div class="lbl">Dificuldade</div><div class="val">Média <span class="diff-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div></div>
+        <div class="meta-card"><div class="lbl">Pré-requisitos</div><div class="val">Tópicos 01, 02 e 07 — conceitos básicos, finanças corporativas e risco x retorno</div></div>
+        <div class="meta-card"><div class="lbl">Peso na prova</div><div class="val">Alto — base da estrutura de capital e do custo médio ponderado de capital (WACC)</div></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Identificar as principais <b>fontes de financiamento de longo prazo</b>: capital próprio, capital de terceiros e instrumentos híbridos.</li>
+            <li>Distinguir <b>fontes internas</b> (lucros retidos) de <b>fontes externas</b> (emissão de ações, debêntures, empréstimos, leasing).</li>
+            <li>Comparar as <b>vantagens e desvantagens do capital próprio x capital de terceiros</b>, incluindo o <b>benefício fiscal dos juros</b>.</li>
+            <li>Caracterizar <b>ações</b> (ordinárias e preferenciais) e <b>debêntures</b> (simples, conversíveis, incentivadas).</li>
+            <li>Diferenciar <b>mercado primário</b> de <b>mercado secundário</b> e reconhecer os papéis de <b>CVM</b> e <b>B3</b>.</li>
+            <li>Calcular o <b>custo da dívida após o imposto de renda</b> e relacionar as fontes ao <b>WACC</b>.</li>
+            <li>Reconhecer fontes típicas de estatais e infraestrutura: <b>BNDES</b>, <b>debêntures incentivadas</b> e <b>project finance</b>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>As decisões de investimento de longo prazo (máquinas, fábricas, projetos) exigem <b>fontes de financiamento de longo prazo</b> — respeitando o <b>princípio do casamento de prazos</b>: ativos permanentes financiados com recursos permanentes. As fontes dividem-se em <b>capital próprio</b> (lucros retidos e emissão de ações) e <b>capital de terceiros</b> (debêntures, empréstimos bancários, BNDES, leasing), além dos <b>instrumentos híbridos</b> (debêntures conversíveis, bônus de subscrição).</p>
+          <p>O <b>capital próprio</b> não tem obrigação de pagamento nem vencimento, mas é a fonte <b>mais cara</b>: os acionistas assumem mais risco (são os últimos a receber) e exigem retorno maior. A <b>dívida</b> é mais barata — tem prioridade no recebimento e os <b>juros são dedutíveis do imposto de renda</b> (benefício fiscal) — mas cria obrigações fixas e eleva o <b>risco financeiro</b> da empresa.</p>
+          <p>Cada fonte tem um custo: o custo do capital próprio (Ke) é estimado pelo <b>CAPM</b> (Tópico 07); o custo da dívida, após o IR, é <b>Kd × (1 − IR)</b>. A combinação das fontes gera o <b>WACC</b>, que é a taxa mínima de atratividade dos projetos e a base do valuation (Tópico 10).</p>
+          <p>No mercado de capitais, a empresa capta no <b>mercado primário</b> (IPO e emissões subsequentes — o dinheiro vai para a empresa); as negociações entre investidores ocorrem no <b>mercado secundário</b> (B3). A <b>CVM</b> regula e fiscaliza. No contexto brasileiro, destacam-se o <b>BNDES</b> (financiamento de longo prazo ao desenvolvimento) e as <b>debêntures incentivadas</b> (Lei 12.431/2011), isentas de IR para a pessoa física, usadas em projetos de infraestrutura.</p>
+        </div>
+      </section>
+
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="card">
+          <div class="mindmap">
+            <div class="mm-root">Fontes de<br>Financiamento<br>de Longo Prazo</div>
+            <div class="mm-branches">
+              <div class="mm-node"><h4>Capital próprio</h4><ul><li>Lucros retidos (interna)</li><li>Ações ON e PN (externa)</li><li>Sem vencimento, mais caro</li></ul></div>
+              <div class="mm-node"><h4>Capital de terceiros</h4><ul><li>Debêntures</li><li>Empréstimos / BNDES</li><li>Leasing</li></ul></div>
+              <div class="mm-node"><h4>Híbridos</h4><ul><li>Debêntures conversíveis</li><li>Bônus de subscrição</li><li>VC / Private equity</li></ul></div>
+              <div class="mm-node"><h4>Mercado de capitais</h4><ul><li>Primário: empresa capta</li><li>Secundário: B3</li><li>CVM regula e fiscaliza</li></ul></div>
+              <div class="mm-node"><h4>Custos</h4><ul><li>Ke via CAPM</li><li>Kd após IR: Kd(1−IR)</li><li>WACC</li></ul></div>
+              <div class="mm-node"><h4>Trade-off da dívida</h4><ul><li>Benefício fiscal dos juros</li><li>Risco financeiro ↑</li><li>Estrutura de capital</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 EXPLICAÇÃO COMPLETA -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação completa</h2></div>
+
+        <div class="card">
+          <h3>4.1 Panorama: classificação das fontes de financiamento</h3>
+          <p>As fontes de longo prazo podem ser classificadas por dois critérios combinados:</p>
+          <table>
+            <thead><tr><th>Critério</th><th>Categorias</th><th>Exemplos</th></tr></thead>
+            <tbody>
+              <tr><td><b>Origem</b></td><td>Internas × externas</td><td>Internas: lucros retidos, depreciação (geração interna de caixa). Externas: ações, debêntures, empréstimos, leasing.</td></tr>
+              <tr><td><b>Propriedade</b></td><td>Capital próprio × capital de terceiros</td><td>Próprio: lucros retidos, ações. Terceiros: debêntures, financiamentos, leasing.</td></tr>
+            </tbody>
+          </table>
+          <div class="box info">
+            <div class="box-title">📘 Princípio do casamento de prazos (hedging financeiro)</div>
+            <p>Projetos e ativos permanentes (longo prazo) devem ser financiados com fontes de longo prazo (patrimônio líquido e dívida de LP); ativos circulantes, com fontes de curto prazo. Financiar ativo permanente com dívida curta cria risco de liquidez — erro clássico cobrado em prova.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Capital próprio: lucros retidos e ações</h3>
+          <p><b>Lucros retidos</b> são a fonte interna mais importante: a empresa reinveste o lucro em vez de distribuí-lo como dividendos. É autofinanciamento — não exige negociação com terceiros —, mas <b>não é de graça</b>: tem custo de oportunidade igual ao retorno exigido pelos acionistas (Ke).</p>
+          <p><b>Ações</b> são títulos de propriedade (capital próprio externo), emitidos no mercado de capitais:</p>
+          <table>
+            <thead><tr><th>Tipo</th><th>Características</th></tr></thead>
+            <tbody>
+              <tr><td><b>Ordinárias (ON)</b></td><td>Dão <b>direito a voto</b> nas assembleias (poder de controle).</td></tr>
+              <tr><td><b>Preferenciais (PN)</b></td><td><b>Preferência na distribuição de dividendos</b> e no reembolso de capital; em geral sem voto.</td></tr>
+            </tbody>
+          </table>
+          <table>
+            <thead><tr><th>Vantagens do capital próprio</th><th>Desvantagens</th></tr></thead>
+            <tbody>
+              <tr><td>Não tem vencimento nem obrigação de pagamento</td><td>Custo mais alto (acionista exige mais retorno — é o último da fila)</td></tr>
+              <tr><td>Não aumenta o risco financeiro</td><td>Emissão de ações dilui o controle dos atuais sócios</td></tr>
+              <tr><td>Melhora a capacidade de endividamento futuro</td><td>Dividendos NÃO são dedutíveis do imposto de renda</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>4.3 IPO, follow-on e mercado primário × secundário</h3>
+          <p>A primeira venda de ações ao público é o <b>IPO (Initial Public Offering)</b>; emissões posteriores são <b>follow-on</b>. Ambas ocorrem no <b>mercado primário</b> — o investidor compra da empresa, e <b>o dinheiro entra no caixa da empresa</b>.</p>
+          <p>Depois, as ações passam a ser negociadas entre investidores no <b>mercado secundário</b> (a bolsa de valores, no Brasil a <b>B3</b>) — ali a empresa não recebe nada; o mercado secundário dá <b>liquidez</b> ao investidor. A <b>CVM</b> (Comissão de Valores Mobiliários) regula e fiscaliza o mercado de capitais.</p>
+          <div class="box warn">
+            <div class="box-title">⚠ Pegadinha FGV</div>
+            <p>Só o mercado <b>primário</b> canaliza recursos novos para a empresa. A negociação diária na bolsa é mercado <b>secundário</b> — transferência de propriedade entre investidores.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.4 Debêntures: o título de dívida de longo prazo das empresas</h3>
+          <p><b>Debêntures</b> são títulos de dívida emitidos por sociedades anônimas para captar recursos de médio e longo prazo diretamente no mercado (sem intermediário bancário). O debenturista é <b>credor</b> da empresa — não sócio.</p>
+          <table>
+            <thead><tr><th>Tipo</th><th>Característica</th></tr></thead>
+            <tbody>
+              <tr><td><b>Simples (não conversível)</b></td><td>Resgatada em dinheiro no vencimento.</td></tr>
+              <tr><td><b>Conversível em ações</b></td><td>Pode ser trocada por ações da empresa — instrumento <b>híbrido</b> (dívida + opção de virar capital próprio).</td></tr>
+              <tr><td><b>Permutável</b></td><td>Pode ser trocada por ações de <b>outras</b> companhias.</td></tr>
+              <tr><td><b>Incentivada (Lei 12.431/2011)</b></td><td>Emitida para projetos de <b>infraestrutura</b>; rendimento <b>isento de IR para a pessoa física</b>.</td></tr>
+            </tbody>
+          </table>
+          <p>A remuneração pode ser prefixada, flutuante (CDI) ou indexada à inflação (IPCA + juros). As condições constam da <b>escritura de emissão</b>, e um <b>agente fiduciário</b> representa os debenturistas.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.5 Empréstimos, financiamentos e o papel do BNDES</h3>
+          <p><b>Financiamentos bancários de longo prazo</b> são contratos com instituições financeiras, em geral com garantias reais (alienação fiduciária do bem financiado) e amortização periódica (Tabela Price ou SAC — Tópico de Matemática Financeira).</p>
+          <p>No Brasil, o <b>BNDES</b> é a principal fonte de financiamento de longo prazo ao investimento produtivo e à infraestrutura, com prazos longos e custo historicamente referenciado à <b>TJLP/TLP</b> — taxas abaixo das de mercado, por se tratar de fomento (política pública de desenvolvimento). Para estatais como a DATAPREV e para empresas de infraestrutura, é fonte recorrente em provas.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.6 Leasing (arrendamento mercantil)</h3>
+          <p>No <b>leasing</b>, uma empresa de arrendamento compra o bem (máquina, veículo, imóvel) e o cede à empresa usuária mediante pagamentos periódicos; ao final, há <b>valor residual garantido/opção de compra</b>.</p>
+          <ul class="styled">
+            <li><b>Leasing financeiro:</b> prazo longo, cobre substancialmente o valor do bem; a intenção é adquiri-lo ao final (equivalente econômico a um financiamento).</li>
+            <li><b>Leasing operacional:</b> prazo mais curto que a vida útil; funciona como aluguel, com possibilidade de devolução.</li>
+          </ul>
+          <p>Vantagens: financia até 100% do bem, libera capital de giro e as contraprestações são dedutíveis do IR. Desvantagem: em geral custo maior que a compra financiada direta.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.7 Instrumentos híbridos e capital de risco</h3>
+          <p>Entre a dívida pura e o capital próprio puro existem instrumentos <b>híbridos</b>:</p>
+          <table>
+            <thead><tr><th>Instrumento</th><th>Natureza híbrida</th></tr></thead>
+            <tbody>
+              <tr><td><b>Debênture conversível</b></td><td>Começa como dívida; pode virar ação (capital próprio).</td></tr>
+              <tr><td><b>Bônus de subscrição</b></td><td>Direito de comprar ações no futuro por preço prefixado; emitido junto a debêntures ou ações como "adoçante".</td></tr>
+              <tr><td><b>Ações preferenciais</b></td><td>Capital próprio com característica de renda (preferência em dividendos fixos ou mínimos).</td></tr>
+              <tr><td><b>Venture capital / Private equity</b></td><td>Capital próprio de investidores de risco, para empresas em crescimento (VC) ou maduras (PE), em troca de participação societária.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>4.8 O custo das fontes: Ke, Kd após impostos e WACC</h3>
+          <p>Cada fonte tem um custo explícito ou implícito — e a comparação entre eles é o coração deste tópico:</p>
+          <ul class="styled">
+            <li><b>Custo do capital próprio (Ke):</b> retorno exigido pelos acionistas; estimado pelo CAPM: Ke = Rf + β × (Rm − Rf). Aplica-se também aos lucros retidos (custo de oportunidade).</li>
+            <li><b>Custo da dívida após o IR:</b> <b>Kd × (1 − IR)</b>. Como os juros da dívida são despesas dedutíveis, cada R$ 1 de juros economiza IR — a dívida fica efetivamente mais barata.</li>
+            <li><b>WACC (CMPC):</b> média ponderada: WACC = (E/V) × Ke + (D/V) × Kd × (1 − IR).</li>
+          </ul>
+          <div class="box fgv">
+            <div class="box-title">🏛 Exemplo numérico padrão</div>
+            <p>Empresa com 60% de capital próprio (Ke = 15%) e 40% de dívida (Kd = 12%), alíquota de IR de 34%:</p>
+            <p>Kd após IR = 12% × (1 − 0,34) = <b>7,92%</b> &nbsp;→&nbsp; WACC = 0,60 × 15% + 0,40 × 7,92% = 9% + 3,17% ≈ <b>12,2%</b>.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4.9 O trade-off do endividamento</h3>
+          <p>Mais dívida reduz o custo médio de capital (a dívida é mais barata e tem benefício fiscal), mas <b>aumenta o risco financeiro</b>: juros e amortizações são obrigações fixas, e o descumprimento leva à falência. A teoria da <b>estrutura de capital</b> (Modigliani &amp; Miller e a teoria do trade-off) busca a combinação ótima que <b>minimiza o WACC e maximiza o valor da empresa</b> — conexão direta com o Tópico 02 (finanças corporativas) e com a alavancagem financeira (Tópico 03).</p>
+        </div>
+      </section>
+
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra este assunto</h2></div>
+        <div class="card">
+          <h3>Perfil da banca</h3>
+          <p>Tópico predominantemente <b>conceitual e comparativo</b>: a FGV pede para identificar características de cada fonte (ações × debêntures × empréstimos × leasing), vantagens e desvantagens do capital próprio frente à dívida e a lógica do benefício fiscal dos juros. Os cálculos, quando aparecem, são curtos: custo da dívida após o IR, custo do capital próprio via CAPM e WACC simples.</p>
+          <h3>Forma de cobrança e nível de dificuldade</h3>
+          <ul class="styled">
+            <li>Comparação capital próprio × capital de terceiros (custo, risco, controle, dedutibilidade fiscal).</li>
+            <li>Características das debêntures — simples, conversíveis e incentivadas (Lei 12.431).</li>
+            <li>Distinção mercado primário × secundário e papéis de CVM e B3.</li>
+            <li>Cálculo de Kd após o IR e de WACC com números redondos.</li>
+            <li>Dificuldade média — os erros vêm de inverter quem é mais caro (próprio) e de esquecer o benefício fiscal da dívida.</li>
+          </ul>
+          <h3>Assuntos favoritos da banca</h3>
+          <table>
+            <thead><tr><th>Assunto favorito</th><th>Frequência</th></tr></thead>
+            <tbody>
+              <tr><td>Vantagens e desvantagens do capital próprio × dívida</td><td>Muito alta</td></tr>
+              <tr><td>Benefício fiscal dos juros (Kd após IR)</td><td>Muito alta</td></tr>
+              <tr><td>Debêntures (características e tipos)</td><td>Alta</td></tr>
+              <tr><td>Mercado primário × secundário</td><td>Alta</td></tr>
+              <tr><td>Custo do capital próprio via CAPM e WACC</td><td>Alta</td></tr>
+              <tr><td>Ações ON × PN</td><td>Média-alta</td></tr>
+              <tr><td>Leasing e BNDES como fontes de LP</td><td>Média</td></tr>
+            </tbody>
+          </table>
+          <h3>Pegadinhas recorrentes</h3>
+          <ol class="styled">
+            <li>Afirmar que o capital próprio é "gratuito" — lucros retidos têm custo de oportunidade (Ke).</li>
+            <li>Dizer que a dívida é mais cara — em geral é mais barata, pois o credor tem prioridade e os juros são dedutíveis do IR.</li>
+            <li>Confundir ações PN (preferência em dividendos, sem voto) com ON (voto).</li>
+            <li>Afirmar que no mercado secundário a empresa recebe recursos — só no primário.</li>
+            <li>Tratar debenturista como sócio — é credor.</li>
+            <li>Esquecer que a debênture conversível é instrumento híbrido.</li>
+          </ol>
+          <h3>Sinais de alerta durante a prova</h3>
+          <ul class="styled">
+            <li>"Sem obrigação de pagamento" e "diluição de controle" → capital próprio (ações).</li>
+            <li>"Dedutível do imposto de renda" → juros da dívida; dividendos NÃO são dedutíveis.</li>
+            <li>"Isenção de IR para pessoa física" + "infraestrutura" → debênture incentivada (Lei 12.431/2011).</li>
+            <li>"Financiamento de longo prazo ao desenvolvimento" no Brasil → BNDES.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 DECORE -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Decore para a prova</h2></div>
+        <div class="card">
+          <div class="box tip"><div class="box-title">🧠 Quem custa mais?</div><p>Capital <b>próprio é mais caro</b> que dívida: o acionista é o último a receber e assume mais risco. A dívida é mais barata — e ainda tem <b>benefício fiscal</b>.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Benefício fiscal</div><p><b>Kd após IR = Kd × (1 − IR)</b>. Juros são dedutíveis; dividendos não.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Ações ON × PN</div><p><b>ON: vOto</b>. <b>PN: Preferência</b> em dividendos e reembolso, em geral sem voto.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Primário × secundário</div><p>Primário: a empresa emite e <b>recebe o dinheiro</b> (IPO, follow-on). Secundário: investidores negociam entre si (B3) — a empresa não recebe nada.</p></div>
+          <div class="box tip"><div class="box-title">🧠 Debêntures</div><p>Título de <b>dívida</b> de sociedade anônima; debenturista é credor, não sócio. Conversível = híbrido. Incentivada (Lei 12.431) = infraestrutura, isenta de IR para PF.</p></div>
+          <div class="box tip"><div class="box-title">🧠 WACC</div><p>WACC = (E/V)×Ke + (D/V)×Kd×(1−IR). Ke vem do CAPM. O WACC é a TMA dos projetos e a base do valuation.</p></div>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO 5 MIN -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Resumo para revisão de 5 minutos</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Fontes de LP: capital próprio (lucros retidos, ações) e capital de terceiros (debêntures, empréstimos, BNDES, leasing), além dos híbridos.</li>
+            <li>Casamento de prazos: ativo permanente se financia com recurso permanente.</li>
+            <li>Capital próprio: sem vencimento nem pagamento obrigatório, sem risco financeiro adicional — mas mais caro e dilui controle. Lucros retidos têm custo de oportunidade (não são grátis).</li>
+            <li>Ações: ON dá voto; PN tem preferência em dividendos/reembolso, em geral sem voto.</li>
+            <li>Mercado primário: empresa capta (IPO, follow-on). Secundário: negociação entre investidores (B3). CVM regula e fiscaliza.</li>
+            <li>Debênture: título de dívida de S.A.; debenturista é credor. Conversível = híbrido. Incentivada (Lei 12.431/2011): infraestrutura, isenta de IR para pessoa física.</li>
+            <li>Leasing: arrendamento com opção de compra; financeiro ≈ financiamento do bem; operacional ≈ aluguel.</li>
+            <li>Custo da dívida após o IR: Kd × (1 − IR) — juros são dedutíveis; dividendos não são.</li>
+            <li>Ke via CAPM: Ke = Rf + β × (Rm − Rf). WACC = (E/V)Ke + (D/V)Kd(1−IR) — é a TMA dos projetos.</li>
+            <li>Mais dívida barateia o capital, mas eleva o risco financeiro: existe estrutura ótima que minimiza o WACC.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas e conceitos-chave</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Fórmula / Conceito</th><th>Expressão e significado</th></tr></thead>
+            <tbody>
+              <tr><td>Custo da dívida após o IR</td><td>Kd × (1 − IR) — os juros são dedutíveis: a dívida fica efetivamente mais barata</td></tr>
+              <tr><td>Custo do capital próprio (Ke)</td><td>Ke = Rf + β × (Rm − Rf) — retorno exigido pelos acionistas, via CAPM; vale também para lucros retidos</td></tr>
+              <tr><td>WACC / CMPC</td><td>WACC = (E/V) × Ke + (D/V) × Kd × (1 − IR) — custo médio ponderado; é a TMA dos projetos</td></tr>
+              <tr><td>E/V e D/V</td><td>Pesos do capital próprio e da dívida sobre o valor total do financiamento (E + D = V)</td></tr>
+              <tr><td>Benefício fiscal da dívida</td><td>Economia de imposto = juros × alíquota de IR — razão pela qual a dívida é a fonte mais barata</td></tr>
+              <tr><td>Casamento de prazos</td><td>Ativos permanentes (LP) financiados com fontes de LP; circulantes, com curto prazo</td></tr>
+              <tr><td>Trade-off do endividamento</td><td>Mais dívida ↓ WACC (até certo ponto), mas ↑ risco financeiro — existe estrutura ótima de capital</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas-resumo</h2></div>
+        <div class="card">
+          <h3>Capital próprio × capital de terceiros</h3>
+          <table>
+            <thead><tr><th>Critério</th><th>Capital próprio</th><th>Capital de terceiros</th></tr></thead>
+            <tbody>
+              <tr><td>Quem fornece</td><td>Sócios/acionistas (lucros retidos, ações)</td><td>Credores (debêntures, bancos, leasing)</td></tr>
+              <tr><td>Vencimento</td><td>Não tem</td><td>Tem prazo definido</td></tr>
+              <tr><td>Pagamento</td><td>Dividendos (não obrigatórios)</td><td>Juros + amortização (obrigatórios)</td></tr>
+              <tr><td>Custo</td><td>Mais alto</td><td>Mais baixo (prioridade + benefício fiscal)</td></tr>
+              <tr><td>Dedutibilidade do IR</td><td>Dividendos NÃO são dedutíveis</td><td>Juros SÃO dedutíveis</td></tr>
+              <tr><td>Risco financeiro</td><td>Não aumenta</td><td>Aumenta</td></tr>
+              <tr><td>Controle</td><td>Emissão de ações dilui</td><td>Não dilui</td></tr>
+            </tbody>
+          </table>
+          <h3>Instrumentos de longo prazo — resumo</h3>
+          <table>
+            <thead><tr><th>Instrumento</th><th>Natureza</th><th>Marco</th></tr></thead>
+            <tbody>
+              <tr><td>Ações ON/PN</td><td>Capital próprio externo</td><td>ON: voto; PN: preferência em dividendos</td></tr>
+              <tr><td>Lucros retidos</td><td>Capital próprio interno</td><td>Autofinanciamento; custo = Ke</td></tr>
+              <tr><td>Debêntures</td><td>Dívida de mercado</td><td>Emitidas por S.A.; escritura e agente fiduciário</td></tr>
+              <tr><td>Debêntures incentivadas</td><td>Dívida de mercado</td><td>Lei 12.431/2011: infraestrutura, isenta de IR para PF</td></tr>
+              <tr><td>Financiamento BNDES</td><td>Dívida bancária de fomento</td><td>LP, custo subsidiado (TJLP/TLP), desenvolvimento</td></tr>
+              <tr><td>Leasing financeiro</td><td>Arrendamento</td><td>Financia o bem com opção de compra ao final</td></tr>
+              <tr><td>Debênture conversível / bônus de subscrição</td><td>Híbrido</td><td>Dívida que pode virar capital próprio</td></tr>
+            </tbody>
+          </table>
+          <h3>Exemplo numérico — custo das fontes</h3>
+          <table>
+            <thead><tr><th>Fonte</th><th>Peso</th><th>Custo bruto</th><th>Custo efetivo</th><th>Contribuição ao WACC</th></tr></thead>
+            <tbody>
+              <tr><td>Capital próprio</td><td>60%</td><td>Ke = 15%</td><td>15%</td><td>9,00%</td></tr>
+              <tr><td>Dívida</td><td>40%</td><td>Kd = 12%</td><td>12% × (1 − 0,34) = 7,92%</td><td>3,17%</td></tr>
+              <tr><td><b>WACC</b></td><td>100%</td><td>—</td><td>—</td><td><b>≈ 12,2%</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades</h2></div>
+        <div class="box curio"><div class="box-title">🎓 A primeira bolsa e a primeira ação</div><p>A primeira companhia de capital aberto da história foi a Companhia Holandesa das Índias Orientais (VOC), que emitiu ações em 1602 na Bolsa de Amsterdã — o primeiro mercado secundário organizado do mundo. O modelo de financiar empreendimentos de longo prazo (viagens de anos) com capital de milhares de investidores nasceu ali.</p></div>
+        <div class="box curio"><div class="box-title">📚 O Nobel da estrutura de capital</div><p>Franco Modigliani e Merton Miller ganharam o Nobel (1985 e 1990) por provar que, num mundo sem impostos nem custos de falência, a estrutura de capital não altera o valor da empresa. No mundo real, o benefício fiscal da dívida e os custos de dificuldade financeira criam o "trade-off" que as empresas otimizam até hoje.</p></div>
+        <div class="box curio"><div class="box-title">🔬 Debêntures que financiam o Brasil</div><p>As debêntures incentivadas (Lei 12.431/2011) canalizam a poupança das famílias para rodovias, portos, saneamento e energia: a pessoa física recebe rendimento isento de IR, e o projeto de infraestrutura obtém dívida mais barata. É uma das raras formas de a pessoa física emprestar diretamente a grandes projetos — e um exemplo perfeito de política pública via mercado de capitais.</p></div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros tópicos do edital</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Tópico relacionado</th><th>Natureza da relação</th></tr></thead>
+            <tbody>
+              <tr><td>Finanças corporativas (Tópico 02)</td><td>A decisão de financiamento e a estrutura de capital são uma das três grandes decisões financeiras</td></tr>
+              <tr><td>Alavancagem (Tópico 03)</td><td>A dívida de LP é a base da alavancagem financeira: amplia ROE e o risco</td></tr>
+              <tr><td>Planejamento de longo prazo (Tópico 05)</td><td>A NAF/EFN indica quanto a empresa precisará captar — e estas são as fontes disponíveis</td></tr>
+              <tr><td>Risco x retorno (Tópico 07)</td><td>O custo do capital próprio (Ke) é calculado pelo CAPM; o beta reflete o risco sistemático</td></tr>
+              <tr><td>Estratégias de investimentos (Tópico 09)</td><td>Ações e debêntures são as classes de ativos analisadas sob a ótica do investidor</td></tr>
+              <tr><td>Valuation (Tópico 10)</td><td>O WACC é a taxa que desconta os fluxos de caixa da empresa</td></tr>
+              <tr><td>Avaliações Econômicas de Projetos (matéria)</td><td>A TMA dos projetos é o WACC — construído a partir destas fontes</td></tr>
+              <tr><td>Matemática Financeira (matéria)</td><td>Amortização (Price/SAC) e taxas aparecem nos contratos de financiamento</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 18 PLANO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de revisão</h2></div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Prazo</th><th>Ação recomendada</th></tr></thead>
+            <tbody>
+              <tr><td><b>24 horas</b></td><td>Reler a revisão de 5 minutos e a tabela capital próprio × dívida; refazer o exemplo do WACC.</td></tr>
+              <tr><td><b>7 dias</b></td><td>Refazer as 20 questões comentadas, com foco em debêntures, benefício fiscal e mercado primário × secundário.</td></tr>
+              <tr><td><b>30 dias</b></td><td>Rodar o mini simulado cronometrado; revisar as fórmulas antes de avançar para o Tópico 09 (Estratégias de investimentos).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>GITMAN, Lawrence J. <i>Princípios de Administração Financeira</i>. São Paulo: Pearson. (Fontes de financiamento de longo prazo.)</li>
+            <li>ROSS, Stephen A.; WESTERFIELD, Randolph W.; JAFFE, Jeffrey; JORDAN, Bradford D. <i>Administração Financeira</i>. Porto Alegre: AMGH. (Estrutura de capital e custo de capital.)</li>
+            <li>ASSAF NETO, Alexandre. <i>Finanças Corporativas e Valor</i>. São Paulo: Atlas.</li>
+            <li>BRIGHAM, Eugene F.; EHRHARDT, Michael C. <i>Administração Financeira: Teoria e Prática</i>. São Paulo: Cengage.</li>
+            <li>Lei nº 12.431/2011 — debêntures incentivadas de infraestrutura (legislação federal).</li>
+            <li>Provas anteriores da banca FGV — concursos institucionais e bancários (fonte oficial: portal FGV Conhecimento).</li>
+            <li>Edital de abertura do concurso DATAPREV 2026 — Perfil 10, Gestão Econômico-Financeira (documento oficial do certame).</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Administração Financeira · Tópico 08/10</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_admfin_t08";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Quais são as principais fontes de financiamento de longo prazo?",
+          "a": "Capital próprio (lucros retidos e emissão de ações) e capital de terceiros (debêntures, empréstimos/financiamentos, BNDES, leasing), além dos instrumentos híbridos."
+      },
+      {
+          "q": "O que é autofinanciamento?",
+          "a": "Financiamento com recursos gerados internamente — principalmente lucros retidos. Não depende de terceiros, mas tem custo de oportunidade (Ke)."
+      },
+      {
+          "q": "Lucros retidos são uma fonte gratuita?",
+          "a": "Não. Têm custo de oportunidade: o retorno que o acionista obteria se recebesse o lucro e o aplicasse (custo do capital próprio, Ke)."
+      },
+      {
+          "q": "Qual a diferença entre ações ordinárias e preferenciais?",
+          "a": "ON dão direito a voto (controle); PN têm preferência na distribuição de dividendos e no reembolso de capital, em geral sem voto."
+      },
+      {
+          "q": "Por que o capital próprio é mais caro que a dívida?",
+          "a": "O acionista é o último a receber (mais risco residual) e exige retorno maior; além disso, dividendos não são dedutíveis do IR — ao contrário dos juros da dívida."
+      },
+      {
+          "q": "O que é o mercado primário?",
+          "a": "Onde a empresa emite valores mobiliários e capta recursos novos (IPO, follow-on): o dinheiro vai para o caixa da empresa."
+      },
+      {
+          "q": "E o mercado secundário?",
+          "a": "Onde investidores negociam títulos entre si (a B3); dá liquidez, mas a empresa não recebe nada nessas operações."
+      },
+      {
+          "q": "Qual é o papel da CVM?",
+          "a": "Regular e fiscalizar o mercado de valores mobiliários no Brasil (ações, debêntures, fundos)."
+      },
+      {
+          "q": "O que é uma debênture?",
+          "a": "Título de dívida de médio/longo prazo emitido por sociedade anônima. O debenturista é credor da empresa, não sócio."
+      },
+      {
+          "q": "O que é uma debênture conversível?",
+          "a": "Instrumento híbrido: começa como dívida e pode ser convertida em ações da empresa emissora."
+      },
+      {
+          "q": "O que são debêntures incentivadas?",
+          "a": "Emitidas para projetos de infraestrutura (Lei 12.431/2011); rendimento isento de IR para a pessoa física."
+      },
+      {
+          "q": "O que é leasing financeiro?",
+          "a": "Arrendamento de longo prazo que financia o bem: empresa de leasing compra o ativo e o cede à usuária, com opção de compra ao final (valor residual)."
+      },
+      {
+          "q": "Qual é o papel do BNDES?",
+          "a": "Principal fonte de financiamento de longo prazo ao investimento e à infraestrutura no Brasil, com custo de fomento (historicamente TJLP/TLP)."
+      },
+      {
+          "q": "Como se calcula o custo da dívida após o imposto de renda?",
+          "a": "Kd × (1 − IR). Ex.: Kd = 12% e IR = 34% → custo efetivo = 7,92%."
+      },
+      {
+          "q": "Por que os juros da dívida geram benefício fiscal?",
+          "a": "Porque são despesa dedutível do imposto de renda — cada R$ 1 de juros reduz a base tributável, economizando IR."
+      },
+      {
+          "q": "Como se estima o custo do capital próprio (Ke)?",
+          "a": "Pelo CAPM: Ke = Rf + β × (Rm − Rf) — o retorno exigido pelos acionistas dado o risco sistemático."
+      },
+      {
+          "q": "Qual é a fórmula do WACC?",
+          "a": "WACC = (E/V) × Ke + (D/V) × Kd × (1 − IR) — média ponderada dos custos das fontes; é a TMA dos projetos."
+      },
+      {
+          "q": "O que é o princípio do casamento de prazos?",
+          "a": "Ativos de longo prazo devem ser financiados com fontes de longo prazo; ativos circulantes, com fontes de curto prazo."
+      },
+      {
+          "q": "Qual é o trade-off do endividamento?",
+          "a": "Mais dívida reduz o custo médio de capital (dívida barata + benefício fiscal), mas eleva o risco financeiro — existe uma estrutura ótima que minimiza o WACC."
+      },
+      {
+          "q": "O que são bônus de subscrição?",
+          "a": "Direito de comprar ações da empresa no futuro por preço prefixado; instrumento híbrido, muitas vezes emitido junto com debêntures."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Classificação das fontes",
+          "texto": "—",
+          "enun": "Sobre as fontes de financiamento de longo prazo, é correto afirmar que:",
+          "alts": [
+              "Lucros retidos são fonte externa de capital de terceiros.",
+              "Ações e debêntures são, respectivamente, capital próprio e capital de terceiros.",
+              "Leasing é fonte de capital próprio.",
+              "Debêntures conferem direito a voto.",
+              "Empréstimos bancários são capital próprio."
+          ],
+          "correta": 1,
+          "coment": "Ações = capital próprio (propriedade); debêntures = capital de terceiros (dívida de mercado). Lucros retidos são fonte interna e própria; leasing é capital de terceiros."
+      },
+      {
+          "tema": "Casamento de prazos",
+          "texto": "—",
+          "enun": "O princípio do casamento de prazos (hedging financeiro) recomenda que:",
+          "alts": [
+              "Ativos permanentes sejam financiados com empréstimos de curto prazo.",
+              "Investimentos de longo prazo sejam financiados com fontes de longo prazo.",
+              "Todo o ativo circulante seja financiado com capital próprio.",
+              "A empresa nunca utilize capital de terceiros.",
+              "As dívidas de curto prazo financiem máquinas e equipamentos."
+          ],
+          "correta": 1,
+          "coment": "Prazo do financiamento deve casar com o prazo do ativo: permanente com permanente (PL + dívida LP); circulante com curto prazo. Financiar ativo permanente com dívida curta gera risco de liquidez."
+      },
+      {
+          "tema": "Lucros retidos",
+          "texto": "—",
+          "enun": "A respeito dos lucros retidos como fonte de financiamento, é correto afirmar que:",
+          "alts": [
+              "São gratuitos, pois não exigem pagamento de juros.",
+              "Têm custo de oportunidade igual ao retorno exigido pelos acionistas (Ke).",
+              "São capital de terceiros.",
+              "Aumentam o risco financeiro da empresa.",
+              "Dependem de aprovação da CVM."
+          ],
+          "correta": 1,
+          "coment": "Lucros retidos são autofinanciamento: não há desembolso explícito, mas o acionista abre mão de receber dividendos para aplicar em outro lugar — o custo é o retorno exigido, Ke."
+      },
+      {
+          "tema": "Ações ON × PN",
+          "texto": "—",
+          "enun": "A diferença essencial entre ações ordinárias e preferenciais é que:",
+          "alts": [
+              "As PN dão direito a voto e as ON não.",
+              "As ON dão direito a voto; as PN têm preferência na distribuição de dividendos e no reembolso de capital.",
+              "As PN são títulos de dívida.",
+              "As ON pagam dividendos fixos.",
+              "Não há diferença econômica entre elas."
+          ],
+          "correta": 1,
+          "coment": "Mnemônico: ON = vOto (controle); PN = Preferência (dividendos e reembolso, em geral sem voto). Ambas são capital próprio."
+      },
+      {
+          "tema": "Custo das fontes",
+          "texto": "—",
+          "enun": "Em condições normais, a ordem correta de custo (do mais caro ao mais barato) das fontes de financiamento é:",
+          "alts": [
+              "Dívida > ações preferenciais > ações ordinárias",
+              "Capital próprio (ações) > capital de terceiros (dívida)",
+              "Dívida > capital próprio",
+              "Leasing > ações ordinárias",
+              "Todas têm o mesmo custo"
+          ],
+          "correta": 1,
+          "coment": "O capital próprio é o mais caro: o acionista é o último da fila (maior risco residual) e os dividendos não são dedutíveis. A dívida é mais barata (prioridade + benefício fiscal)."
+      },
+      {
+          "tema": "Mercado primário × secundário",
+          "texto": "—",
+          "enun": "Uma empresa realiza um follow-on e vende novas ações ao público. Essa operação ocorre no:",
+          "alts": [
+              "Mercado secundário, e a empresa não recebe os recursos.",
+              "Mercado primário, e os recursos entram no caixa da empresa.",
+              "Mercado secundário, e os recursos vão para a B3.",
+              "Mercado primário, e os recursos vão para a CVM.",
+              "Mercado interbancário."
+          ],
+          "correta": 1,
+          "coment": "IPO e follow-on são emissões novas — mercado primário: o investidor compra da empresa e o dinheiro financia a empresa. No secundário (B3), investidores apenas trocam papéis entre si."
+      },
+      {
+          "tema": "Debêntures",
+          "texto": "—",
+          "enun": "Sobre as debêntures, é correto afirmar que:",
+          "alts": [
+              "São títulos de propriedade que dão direito a voto.",
+              "São títulos de dívida emitidos por sociedades anônimas; o debenturista é credor da empresa.",
+              "Só podem ser emitidas por bancos.",
+              "Pagam dividendos obrigatórios.",
+              "São sempre conversíveis em ações."
+          ],
+          "correta": 1,
+          "coment": "Debênture é dívida de S.A.: o investidor empresta dinheiro à empresa. Podem ser simples, conversíveis ou permutáveis — não conferem condição de sócio."
+      },
+      {
+          "tema": "Debênture conversível",
+          "texto": "—",
+          "enun": "Uma debênture conversível em ações é classificada como instrumento:",
+          "alts": [
+              "De capital próprio puro.",
+              "De dívida pura.",
+              "Híbrido — dívida que pode se transformar em capital próprio.",
+              "Derivativo de câmbio.",
+              "De renda fixa bancária."
+          ],
+          "correta": 2,
+          "coment": "A debênture conversível nasce dívida e pode virar ação: mistura características das duas naturezas — por isso é híbrida."
+      },
+      {
+          "tema": "Debêntures incentivadas",
+          "texto": "—",
+          "enun": "As debêntures incentivadas (Lei 12.431/2011) caracterizam-se por:",
+          "alts": [
+              "Serem emitidas apenas pelo Tesouro Nacional.",
+              "Financiarem projetos de infraestrutura e pagarem rendimento isento de IR à pessoa física.",
+              "Serem isentas de risco de crédito.",
+              "Terem prazo máximo de 1 ano.",
+              "Serem garantidas pelo FGC."
+          ],
+          "correta": 1,
+          "coment": "Criadas para canalizar poupança privada para infraestrutura: em troca, o governo concede isenção de IR ao investidor pessoa física — e a emissora obtém dívida mais barata."
+      },
+      {
+          "tema": "Benefício fiscal",
+          "texto": "Uma empresa capta dívida a 12% ao ano e sua alíquota de imposto de renda é 34%.",
+          "enun": "O custo efetivo da dívida após o imposto de renda é:",
+          "alts": [
+              "12,00%",
+              "7,92%",
+              "8,16%",
+              "4,08%",
+              "15,84%"
+          ],
+          "correta": 1,
+          "coment": "Kd após IR = 12% × (1 − 0,34) = 12% × 0,66 = 7,92%. Os juros reduzem a base do IR, barateando a dívida."
+      },
+      {
+          "tema": "Dividendos × juros",
+          "texto": "—",
+          "enun": "Do ponto de vista fiscal, a diferença entre dividendos e juros da dívida é que:",
+          "alts": [
+              "Ambos são dedutíveis do imposto de renda.",
+              "Nenhum é dedutível.",
+              "Apenas os juros são dedutíveis; os dividendos não.",
+              "Apenas os dividendos são dedutíveis.",
+              "Ambos são isentos de tributação para a empresa."
+          ],
+          "correta": 2,
+          "coment": "Juros são despesa dedutível (benefício fiscal da dívida). Dividendos são distribuição de lucro — não são despesa e não reduzem o IR."
+      },
+      {
+          "tema": "Custo do capital próprio",
+          "texto": "Rf = 6%, retorno esperado do mercado = 14% e beta da empresa = 1,2.",
+          "enun": "O custo do capital próprio (Ke), pelo CAPM, é:",
+          "alts": [
+              "14,0%",
+              "15,6%",
+              "13,2%",
+              "9,6%",
+              "16,8%"
+          ],
+          "correta": 1,
+          "coment": "Ke = Rf + β × (Rm − Rf) = 6% + 1,2 × (14% − 6%) = 6% + 9,6% = 15,6%."
+      },
+      {
+          "tema": "WACC",
+          "texto": "Empresa financiada com 60% de capital próprio (Ke = 15%) e 40% de dívida (Kd = 12%), com IR de 34%.",
+          "enun": "O WACC da empresa é aproximadamente:",
+          "alts": [
+              "13,80%",
+              "12,17%",
+              "10,92%",
+              "11,40%",
+              "14,28%"
+          ],
+          "correta": 1,
+          "coment": "WACC = 0,60 × 15% + 0,40 × 12% × (1 − 0,34) = 9,0% + 0,40 × 7,92% = 9,0% + 3,17% ≈ 12,17%."
+      },
+      {
+          "tema": "Leasing",
+          "texto": "—",
+          "enun": "Sobre o leasing (arrendamento mercantil), é correto afirmar que:",
+          "alts": [
+              "É uma modalidade de emissão de ações.",
+              "No leasing financeiro, uma empresa compra o bem e o cede à usuária, com opção de compra ao final do contrato.",
+              "O leasing operacional transfere a propriedade no início do contrato.",
+              "As contraprestações de leasing nunca são dedutíveis do IR.",
+              "Leasing é sinônimo de debênture."
+          ],
+          "correta": 1,
+          "coment": "No leasing financeiro, a arrendadora adquire o bem e a empresa usuária paga contraprestações, com opção de compra (valor residual) no fim — funciona economicamente como financiamento do bem."
+      },
+      {
+          "tema": "BNDES",
+          "texto": "—",
+          "enun": "No Brasil, a principal instituição de fomento ao financiamento de longo prazo para investimento produtivo e infraestrutura é:",
+          "alts": [
+              "O Banco Central.",
+              "A CVM.",
+              "O BNDES.",
+              "A B3.",
+              "O Tesouro Nacional."
+          ],
+          "correta": 2,
+          "coment": "O BNDES é o banco de desenvolvimento: oferece prazos longos e custo subsidiado (TJLP/TLP), corrigindo a falha de mercado do crédito de longo prazo no Brasil."
+      },
+      {
+          "tema": "Vantagens da dívida",
+          "texto": "—",
+          "enun": "Assinale a alternativa que apresenta uma vantagem do financiamento por capital de terceiros em relação ao capital próprio:",
+          "alts": [
+              "Não tem vencimento.",
+              "Não cria obrigações de pagamento.",
+              "Não dilui o controle dos sócios e tem custo menor, com juros dedutíveis do IR.",
+              "Aumenta o valor do patrimônio líquido.",
+              "Elimina o risco financeiro."
+          ],
+          "correta": 2,
+          "coment": "A dívida preserva o controle (credor não vota), custa menos que o capital próprio e ainda gera benefício fiscal. As contrapartidas são o vencimento, os pagamentos obrigatórios e o maior risco financeiro."
+      },
+      {
+          "tema": "Risco financeiro",
+          "texto": "—",
+          "enun": "O principal risco associado ao aumento do endividamento de longo prazo é:",
+          "alts": [
+              "A diluição do controle societário.",
+              "O comprometimento do caixa com juros e amortizações obrigatórios, elevando o risco de dificuldade financeira e falência.",
+              "A perda de liquidez das ações na bolsa.",
+              "A redução do lucro operacional.",
+              "O aumento do custo da dívida abaixo do custo do capital próprio."
+          ],
+          "correta": 1,
+          "coment": "Juros e amortizações são obrigações fixas, independentemente do resultado: quanto mais dívida, maior o risco financeiro. É o lado negativo do trade-off do endividamento."
+      },
+      {
+          "tema": "Trade-off",
+          "texto": "—",
+          "enun": "Pela teoria do trade-off da estrutura de capital, a estrutura ótima é aquela que:",
+          "alts": [
+              "Maximiza o endividamento, pois dívida é sempre mais barata.",
+              "Minimiza o WACC (e maximiza o valor da empresa), equilibrando benefício fiscal e custos de dificuldade financeira.",
+              "Elimina totalmente a dívida.",
+              "Maximiza o custo do capital próprio.",
+              "Iguala Ke e Kd."
+          ],
+          "correta": 1,
+          "coment": "Até certo ponto, a dívida barata reduz o WACC; além dele, o risco financeiro eleva os custos. O ponto ótimo minimiza o WACC e maximiza o valor da firma."
+      },
+      {
+          "tema": "Instrumentos híbridos",
+          "texto": "—",
+          "enun": "O bônus de subscrição é um instrumento que:",
+          "alts": [
+              "Obriga o investidor a comprar debêntures.",
+              "Confere o direito de subscrever (comprar) ações da empresa no futuro por preço prefixado — característica híbrida.",
+              "É um título de dívida do Tesouro.",
+              "Elimina o risco da debênture à qual é anexado.",
+              "Garante dividendos fixos."
+          ],
+          "correta": 1,
+          "coment": "O bônus de subscrição funciona como uma opção de compra de ações emitida pela própria empresa — frequentemente anexado a debêntures como incentivo ('adoçante') à captação."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "—",
+          "enun": "Assinale a alternativa que combina corretamente os conceitos deste tópico:",
+          "alts": [
+              "O capital próprio é sempre o mais barato, pois não tem vencimento; debêntures dão direito a voto.",
+              "A dívida é mais barata por causa da prioridade do credor e do benefício fiscal; o capital próprio não tem pagamento obrigatório, mas custa mais e dilui controle quando emitido.",
+              "No mercado secundário, a empresa recebe os recursos da emissão; no primário, os investidores negociam entre si.",
+              "Debêntures incentivadas são emitidas pelo BNDES com garantia do FGC.",
+              "Dividendos e juros são igualmente dedutíveis do imposto de renda."
+          ],
+          "correta": 1,
+          "coment": "Síntese correta: dívida barata (prioridade + dedutibilidade) × capital próprio caro, porém sem obrigações fixas e com diluição de controle na emissão. As demais invertem os conceitos."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Ações emitidas por uma empresa são classificadas como:",
+          "alts": [
+              "Capital de terceiros",
+              "Capital próprio",
+              "Dívida de curto prazo",
+              "Instrumento híbrido",
+              "Derivativo"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Debêntures são títulos de:",
+          "alts": [
+              "Propriedade da empresa",
+              "Dívida emitida por sociedades anônimas",
+              "Capital próprio",
+              "Renda variável com voto",
+              "Depósito bancário"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Lucros retidos são fonte de financiamento:",
+          "alts": [
+              "Externa e de terceiros",
+              "Interna e própria (autofinanciamento)",
+              "Externa e própria",
+              "Interna e de terceiros",
+              "Bancária"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "As ações preferenciais (PN) caracterizam-se por:",
+          "alts": [
+              "Direito a voto garantido",
+              "Preferência na distribuição de dividendos, em geral sem voto",
+              "Serem títulos de dívida",
+              "Terem prazo de vencimento",
+              "Serem emitidas pelo BNDES"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "No mercado primário:",
+          "alts": [
+              "Investidores negociam títulos entre si",
+              "A empresa emite títulos e recebe os recursos da captação",
+              "Só operam bancos centrais",
+              "Não há emissão de ações",
+              "Os recursos vão para a CVM"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "IPO significa:",
+          "alts": [
+              "Oferta pública subsequente de ações",
+              "Primeira oferta pública de ações da empresa",
+              "Emissão de debêntures incentivadas",
+              "Fusão de duas empresas",
+              "Compra de ações no mercado secundário"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O órgão que regula e fiscaliza o mercado de valores mobiliários no Brasil é:",
+          "alts": [
+              "Banco Central",
+              "CVM",
+              "BNDES",
+              "Tesouro Nacional",
+              "B3"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "Em geral, a fonte de financiamento de MAIOR custo para a empresa é:",
+          "alts": [
+              "A dívida bancária",
+              "As debêntures",
+              "O capital próprio (ações/lucros retidos)",
+              "O leasing",
+              "O BNDES"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O benefício fiscal da dívida decorre do fato de que:",
+          "alts": [
+              "Dividendos são dedutíveis do IR",
+              "Os juros da dívida são dedutíveis do imposto de renda",
+              "A dívida não paga juros",
+              "O capital próprio é tributado em dobro",
+              "Debêntures são isentas de IOF"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "—",
+          "enun": "O debenturista, em relação à empresa emissora, é:",
+          "alts": [
+              "Sócio",
+              "Acionista preferencial",
+              "Credor",
+              "Controlador",
+              "Fiador"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Uma dívida custa 10% a.a. e a alíquota de IR é 34%. O custo efetivo após o imposto é:",
+          "alts": [
+              "10,0%",
+              "6,6%",
+              "3,4%",
+              "13,4%",
+              "7,0%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Com Rf = 5%, Rm = 13% e β = 1,0, o custo do capital próprio pelo CAPM é:",
+          "alts": [
+              "18%",
+              "8%",
+              "13%",
+              "5%",
+              "10%"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Empresa com 50% de capital próprio (Ke = 16%) e 50% de dívida (Kd = 10%), IR de 34%: o WACC é aproximadamente:",
+          "alts": [
+              "13,0%",
+              "11,3%",
+              "9,7%",
+              "12,0%",
+              "10,0%"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A debênture incentivada (Lei 12.431/2011) tem como característica:",
+          "alts": [
+              "Garantia do FGC",
+              "Isenção de IR para a pessoa física e destinação a projetos de infraestrutura",
+              "Conversão obrigatória em ações",
+              "Emissão exclusiva por bancos públicos",
+              "Prazo máximo de 2 anos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Uma desvantagem da emissão de novas ações como fonte de financiamento é:",
+          "alts": [
+              "Obrigação de pagar juros fixos",
+              "Diluição do controle dos atuais acionistas",
+              "Vencimento de curto prazo",
+              "Impedimento de distribuir dividendos",
+              "Redução do patrimônio líquido"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "No leasing financeiro, ao final do contrato, a empresa usuária normalmente:",
+          "alts": [
+              "Devolve o bem obrigatoriamente, sem opção",
+              "Pode exercer a opção de compra pelo valor residual",
+              "Converte o bem em ações",
+              "Transfere o bem ao BNDES",
+              "Renova sem custo algum"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O principal papel do BNDES no financiamento de longo prazo é:",
+          "alts": [
+              "Fiscalizar o mercado de capitais",
+              "Oferecer crédito de fomento com prazos longos e custo subsidiado ao investimento produtivo",
+              "Emitir ações de estatais",
+              "Controlar a inflação",
+              "Garantir depósitos bancários"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "O casamento de prazos recomenda financiar a compra de uma fábrica (ativo permanente) com:",
+          "alts": [
+              "Empréstimo bancário de 90 dias",
+              "Cheque especial",
+              "Fontes de longo prazo (PL ou dívida de LP)",
+              "Fornecedores",
+              "Desconto de duplicatas"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "Ações ordinárias (ON) conferem, essencialmente:",
+          "alts": [
+              "Dividendos fixos e garantidos",
+              "Direito a voto nas assembleias",
+              "Preferência no reembolso de capital",
+              "Isenção de risco",
+              "Rentabilidade prefixada"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "—",
+          "enun": "A emissão de debêntures, em comparação com o empréstimo bancário, permite à empresa:",
+          "alts": [
+              "Captar diretamente no mercado, dispensando o intermediário bancário",
+              "Evitar qualquer registro na CVM",
+              "Eliminar o pagamento de juros",
+              "Garantir rating máximo",
+              "Dispensar escritura de emissão"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Duas empresas idênticas se financiam: A só com capital próprio; B com 50% de dívida (Kd = 10%, IR = 34%). Considerando apenas o custo das fontes, B terá WACC:",
+          "alts": [
+              "Maior que o de A, pois dívida é mais arriscada",
+              "Menor que o de A, pois a dívida é mais barata e tem benefício fiscal",
+              "Igual ao de A, pois o risco compensa",
+              "Zero",
+              "Impossível determinar"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "O custo de oportunidade dos lucros retidos é melhor aproximado por:",
+          "alts": [
+              "Zero, pois são recursos internos",
+              "Pela taxa Selic",
+              "Pelo custo do capital próprio (Ke), estimado pelo CAPM",
+              "Pela inflação acumulada",
+              "Pelo custo da dívida após o IR"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Com Rf = 6%, Rm = 14%, β = 1,5, estrutura de 50% próprio e 50% dívida a 8% (IR 34%): Ke e WACC são:",
+          "alts": [
+              "Ke = 18% e WACC ≈ 11,6%",
+              "Ke = 14% e WACC ≈ 11,6%",
+              "Ke = 18% e WACC = 13%",
+              "Ke = 12% e WACC ≈ 8,6%",
+              "Ke = 20% e WACC ≈ 12,6%"
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre debêntures conversíveis, é correto afirmar que:",
+          "alts": [
+              "São dívida pura em qualquer hipótese",
+              "São capital próprio desde a emissão",
+              "São híbridas: dívida com a possibilidade de conversão em ações da emissora",
+              "Dão direito a voto imediato",
+              "São sempre incentivadas"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Uma estatal de tecnologia precisa financiar um data center de longo prazo. A combinação de fontes MAIS coerente com o casamento de prazos é:",
+          "alts": [
+              "Desconto de duplicatas e cheque especial",
+              "Debêntures de longo prazo e/ou financiamento BNDES",
+              "Empréstimos de 30 dias renováveis",
+              "Antecipação de recebíveis",
+              "Hot money"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Se o endividamento de uma empresa aumenta além da estrutura ótima, o efeito esperado é:",
+          "alts": [
+              "WACC continua caindo indefinidamente",
+              "WACC sobe, pois o custo do risco financeiro supera o benefício fiscal adicional",
+              "O custo da dívida zera",
+              "O beta da empresa diminui",
+              "O valor da empresa é maximizado"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Um investidor pessoa física busca renda fixa de longo prazo com isenção de IR, emitida por empresa privada para financiar saneamento. O instrumento adequado é:",
+          "alts": [
+              "CDB",
+              "Ação preferencial",
+              "Debênture incentivada (Lei 12.431/2011)",
+              "Letra de câmbio",
+              "Bônus de subscrição"
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Sobre mercado primário e secundário, assinale a afirmativa correta:",
+          "alts": [
+              "No secundário, a empresa capta recursos novos",
+              "No primário, ocorrem IPO e follow-on, com entrada de recursos no caixa da empresa; no secundário, os investidores negociam entre si, dando liquidez",
+              "Ambos transferem recursos à empresa emissora",
+              "O secundário é regulado e o primário não",
+              "A B3 é o mercado primário brasileiro"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "A teoria de Modigliani e Miller, em sua versão sem impostos nem custos de falência, conclui que:",
+          "alts": [
+              "A dívida sempre aumenta o valor da empresa",
+              "A estrutura de capital é irrelevante para o valor da empresa",
+              "O capital próprio é sempre a melhor escolha",
+              "O WACC cresce com a dívida",
+              "Empresas não devem pagar dividendos"
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "—",
+          "enun": "Assinale a afirmativa correta sobre as fontes de financiamento de longo prazo:",
+          "alts": [
+              "Debêntures dão direito a voto e dividendos fixos",
+              "Dividendos são dedutíveis do IR, ao contrário dos juros",
+              "O leasing financeiro é equivalente econômico a um financiamento do bem, com opção de compra ao final",
+              "Lucros retidos são fonte externa de capital",
+              "O capital próprio é sempre a fonte mais barata"
+          ],
+          "correta": 2
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Classificar fontes: capital próprio x de terceiros; internas x externas",
+      "Aplicar o princípio do casamento de prazos",
+      "Explicar por que o capital próprio é mais caro que a dívida",
+      "Distinguir ações ON (voto) de PN (preferência em dividendos)",
+      "Diferenciar mercado primário (empresa capta) de secundário (B3)",
+      "Caracterizar debêntures: simples, conversíveis (híbridas) e incentivadas (Lei 12.431)",
+      "Explicar o benefício fiscal: Kd após IR = Kd × (1 − IR)",
+      "Calcular Ke pelo CAPM e o WACC = (E/V)Ke + (D/V)Kd(1−IR)",
+      "Descrever leasing financeiro x operacional e o papel do BNDES",
+      "Explicar o trade-off do endividamento e a estrutura ótima de capital"
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Achar que lucros retidos são gratuitos — têm custo de oportunidade (Ke).",
+      "Inverter a ordem de custo: o capital próprio é MAIS caro que a dívida.",
+      "Esquecer o benefício fiscal: o custo efetivo da dívida é Kd × (1 − IR).",
+      "Achar que dividendos são dedutíveis do IR — só os juros são.",
+      "Confundir ON com PN: ON dá voto; PN tem preferência em dividendos, em geral sem voto.",
+      "Afirmar que no mercado secundário a empresa recebe recursos — só no primário.",
+      "Tratar o debenturista como sócio — ele é credor.",
+      "Classificar debênture como capital próprio — é dívida.",
+      "Esquecer que a debênture conversível é instrumento híbrido.",
+      "Confundir debênture incentivada (isenta de IR para PF) com debênture simples.",
+      "Trocar os papéis: CVM regula o mercado; B3 é a bolsa; BNDES é banco de fomento.",
+      "Financiar ativo permanente com dívida de curto prazo — viola o casamento de prazos.",
+      "Achar que leasing financeiro é aluguel puro — é equivalente a financiamento, com opção de compra.",
+      "Calcular o WACC usando o Kd bruto, sem o ajuste (1 − IR).",
+      "Esquecer que os pesos do WACC (E/V e D/V) devem somar 100%.",
+      "Cravar que mais dívida sempre reduz o WACC — além do ponto ótimo, o risco financeiro eleva o custo.",
+      "Achar que emitir ações não tem custo por não ter vencimento — o custo é o retorno exigido pelos acionistas.",
+      "Confundir bônus de subscrição (direito de comprar ações) com debênture.",
+      "Acreditar que follow-on é operação do mercado secundário — é emissão primária.",
+      "Ignorar que estatais e projetos de infraestrutura usam BNDES e debêntures incentivadas como fontes típicas de LP."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Capital próprio",
+          "Recursos dos sócios/acionistas: capital integralizado, lucros retidos e ações emitidas. Sem vencimento nem pagamento obrigatório."
+      ],
+      [
+          "Capital de terceiros",
+          "Recursos de credores: debêntures, empréstimos, financiamentos, leasing. Exigem juros e amortização em prazos definidos."
+      ],
+      [
+          "Autofinanciamento",
+          "Financiamento com recursos gerados internamente, sobretudo lucros retidos."
+      ],
+      [
+          "Lucros retidos",
+          "Parcela do lucro reinvestida na empresa em vez de distribuída; fonte interna com custo de oportunidade (Ke)."
+      ],
+      [
+          "Ações ordinárias (ON)",
+          "Títulos de propriedade com direito a voto nas assembleias."
+      ],
+      [
+          "Ações preferenciais (PN)",
+          "Títulos de propriedade com preferência em dividendos e reembolso de capital, em geral sem voto."
+      ],
+      [
+          "IPO",
+          "Initial Public Offering: primeira oferta pública de ações da empresa no mercado primário."
+      ],
+      [
+          "Follow-on",
+          "Oferta pública subsequente de ações, após o IPO."
+      ],
+      [
+          "Mercado primário",
+          "Mercado em que a empresa emite títulos e recebe os recursos da captação."
+      ],
+      [
+          "Mercado secundário",
+          "Mercado de negociação entre investidores (B3); dá liquidez, sem transferir recursos à empresa."
+      ],
+      [
+          "CVM",
+          "Comissão de Valores Mobiliários: regula e fiscaliza o mercado de capitais brasileiro."
+      ],
+      [
+          "Debênture",
+          "Título de dívida de médio/longo prazo emitido por sociedade anônima; o debenturista é credor."
+      ],
+      [
+          "Debênture conversível",
+          "Debênture que pode ser trocada por ações da emissora — instrumento híbrido."
+      ],
+      [
+          "Debênture incentivada",
+          "Debênture de infraestrutura (Lei 12.431/2011), com rendimento isento de IR para pessoa física."
+      ],
+      [
+          "Leasing (arrendamento mercantil)",
+          "Contrato em que a arrendadora compra o bem e o cede à usuária, com opção de compra ao final; modalidades financeira e operacional."
+      ],
+      [
+          "Bônus de subscrição",
+          "Direito de adquirir ações no futuro por preço prefixado; emitido junto a outros títulos."
+      ],
+      [
+          "Benefício fiscal da dívida",
+          "Economia de imposto gerada pela dedutibilidade dos juros: Kd após IR = Kd × (1 − IR)."
+      ],
+      [
+          "WACC / CMPC",
+          "Custo médio ponderado de capital: (E/V)Ke + (D/V)Kd(1−IR); taxa mínima de atratividade dos projetos."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>

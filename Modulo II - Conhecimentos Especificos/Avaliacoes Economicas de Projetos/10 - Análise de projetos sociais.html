@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Projetos Sociais | DATAPREV Perfil 10 | FGV</title>
+<style>
+  :root{
+    --ink-950:#0b1220; --ink-900:#101a2e; --ink-800:#16223b; --ink-700:#1e2d4d; --ink-600:#2c3e63;
+    --paper:#f6f4ee; --paper-2:#efece2;
+    --gold:#b8892b; --gold-light:#e0b563; --gold-dark:#8a6520;
+    --green-ok:#2f7a4f; --red-err:#a63d3d; --blue-info:#2a5b8a;
+    --text-main:#1b2333; --text-soft:#4a5468; --border-soft:#dcd7c8;
+    --card-bg:#ffffff; --shadow:0 2px 10px rgba(16,26,46,.08); --radius:10px;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,'Courier New',monospace;
+  }
+  [data-theme="dark"]{
+    --paper:#0d1424; --paper-2:#101a2e; --text-main:#e8e6dc; --text-soft:#a7aec2;
+    --border-soft:#26314f; --card-bg:#131d33; --shadow:0 2px 14px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--text-main);font-family:var(--sans);line-height:1.65;transition:background .25s ease,color .25s ease;}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink-900);letter-spacing:.2px;}
+  [data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] h3,[data-theme="dark"] h4{color:#f1eee2;}
+  a{color:var(--blue-info);}
+  p{color:var(--text-main);}
+  code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-family:var(--mono);font-size:13px;}
+  [data-theme="dark"] code{background:var(--ink-800);}
+  .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+  @media(max-width:960px){.app{grid-template-columns:1fr;}}
+  .sidebar{background:var(--ink-950);color:#dfe3ee;position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--ink-700);z-index:40;}
+  @media(max-width:960px){
+    .sidebar{position:fixed;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 30px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;padding:6px 6px 16px;border-bottom:1px solid var(--ink-700);margin-bottom:14px;}
+  .brand .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);font-weight:600;}
+  .brand .title{font-family:var(--serif);font-size:17px;color:#fff;line-height:1.3;}
+  .search-box{margin-bottom:14px;}
+  .search-box input{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--ink-600);background:var(--ink-900);color:#eef0f6;font-size:13px;}
+  .search-box input::placeholder{color:#8996b3;}
+  .toc a{display:block;font-size:13.2px;color:#c4cadd;text-decoration:none;padding:7px 10px;border-radius:7px;margin-bottom:2px;border-left:2px solid transparent;}
+  .toc a:hover{background:var(--ink-800);color:#fff;}
+  .toc a.active{background:var(--ink-800);color:var(--gold-light);border-left:2px solid var(--gold);}
+  .toc .num{color:var(--gold-light);font-family:var(--mono);font-size:11px;margin-right:6px;}
+  .sidebar-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--ink-700);font-size:11.5px;color:#8996b3;}
+  .topbar{display:none;position:sticky;top:0;z-index:50;background:var(--ink-950);color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;}
+  @media(max-width:960px){.topbar{display:flex;}}
+  .burger{background:none;border:1px solid var(--ink-600);color:#fff;border-radius:8px;padding:7px 11px;font-size:16px;}
+  .readbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));z-index:100;width:0%;transition:width .1s linear;}
+  main{padding:0;max-width:980px;margin:0 auto;width:100%;}
+  .container{padding:32px 28px 80px;}
+  @media(max-width:600px){.container{padding:20px 16px 60px;}}
+  section{scroll-margin-top:18px;margin-bottom:52px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  .section-head .idx{font-family:var(--mono);color:var(--gold-dark);font-weight:700;font-size:14px;}
+  .section-head h2{margin:0;font-size:22px;}
+  .hero{background:linear-gradient(160deg,var(--ink-950) 0%,var(--ink-800) 60%,var(--ink-700) 100%);color:#f2efe4;padding:38px 28px 30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,43,.25),transparent 70%);}
+  .hero .kicker{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;}
+  .hero h1{color:#fff;font-size:clamp(24px,4vw,34px);margin:8px 0 6px;max-width:720px;}
+  .hero .breadcrumb{font-size:13px;color:#b9c0d6;margin-bottom:18px;}
+  .hero .breadcrumb b{color:#e7e2d2;}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px;position:relative;z-index:1;}
+  .meta-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;backdrop-filter:blur(2px);}
+  .meta-card .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#a9b1c9;margin-bottom:3px;}
+  .meta-card .val{font-size:14px;font-weight:600;color:#fff;}
+  .diff-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+  .diff-dots span{width:8px;height:8px;border-radius:50%;background:#3d4a6b;display:inline-block;}
+  .diff-dots span.on{background:var(--gold-light);}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 28px;background:var(--paper-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:39;}
+  @media(max-width:960px){.toolbar{position:static;}}
+  .btn{border:1px solid var(--border-soft);background:var(--card-bg);color:var(--text-main);padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);}
+  .btn:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn.primary{background:var(--gold);color:#241a06;border-color:var(--gold);font-weight:600;}
+  .spacer{flex:1;}
+  .reading-time{font-size:12.5px;color:var(--text-soft);}
+  .card{background:var(--card-bg);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px;}
+  .box{border-radius:var(--radius);padding:14px 16px;margin:14px 0;border:1px solid var(--border-soft);}
+  .box-title{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .box.tip{background:#eef6ef;border-color:#bfe0c6;} .box.tip .box-title{color:var(--green-ok);}
+  [data-theme="dark"] .box.tip{background:#0f2318;border-color:#1f4a2e;}
+  .box.warn{background:#fbeeee;border-color:#e6b8b8;} .box.warn .box-title{color:var(--red-err);}
+  [data-theme="dark"] .box.warn{background:#2a1414;border-color:#5a2727;}
+  .box.info{background:#eaf2f9;border-color:#bcd6ec;} .box.info .box-title{color:var(--blue-info);}
+  [data-theme="dark"] .box.info{background:#0f1f30;border-color:#1f3d5c;}
+  .box.fgv{background:#faf3e5;border-color:var(--gold-light);} .box.fgv .box-title{color:var(--gold-dark);}
+  [data-theme="dark"] .box.fgv{background:#241c0c;border-color:#5c451a;}
+  .box.curio{background:#f2eefa;border-color:#cbb9e8;} .box.curio .box-title{color:#6b3fa3;}
+  [data-theme="dark"] .box.curio{background:#1c1329;border-color:#3f2c5c;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--border-soft);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--paper-2);font-family:var(--serif);color:var(--ink-900);}
+  [data-theme="dark"] th{color:#f1eee2;}
+  tr:nth-child(even) td{background:rgba(0,0,0,.02);}
+  [data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:var(--gold);color:#241a06;margin-right:4px;}
+  .tag.soft{background:var(--paper-2);color:var(--text-soft);border:1px solid var(--border-soft);}
+  ul.styled li, ol.styled li{margin-bottom:6px;}
+  .mindmap{display:flex;flex-direction:column;align-items:center;gap:0;overflow-x:auto;padding:16px 4px;}
+  .mm-root{background:var(--ink-900);color:#fff;padding:12px 22px;border-radius:10px;font-weight:700;font-family:var(--serif);font-size:16px;box-shadow:var(--shadow);text-align:center;}
+  .mm-branches{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .mm-branches::before{content:"";position:absolute;top:-26px;left:50%;width:1px;height:26px;background:var(--gold);}
+  .mm-node{background:var(--card-bg);border:1.5px solid var(--gold);border-radius:9px;padding:10px 14px;min-width:150px;max-width:190px;box-shadow:var(--shadow);position:relative;}
+  .mm-node::before{content:"";position:absolute;top:-16px;left:50%;width:1px;height:16px;background:var(--gold);}
+  .mm-node h4{margin:0 0 6px;font-size:13.5px;color:var(--gold-dark);}
+  .mm-node ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-soft);}
+  .mm-node ul li{margin-bottom:3px;}
+  .fc-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .fc{perspective:1200px;height:150px;cursor:pointer;}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;border-radius:10px;padding:14px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);border:1px solid var(--border-soft);}
+  .fc-front{background:var(--card-bg);}
+  .fc-back{background:var(--ink-900);color:#eee9da;transform:rotateY(180deg);}
+  .fc-face .fc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);margin-bottom:6px;}
+  .fc-back .fc-lbl{color:var(--gold-light);}
+  .fc-face p{font-size:13.5px;margin:0;color:inherit;}
+  .q-card{border:1px solid var(--border-soft);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;background:var(--card-bg);}
+  .q-head{font-size:12px;color:var(--text-soft);display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .q-stmt{font-size:14.5px;margin-bottom:10px;}
+  .q-opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--border-soft);border-radius:7px;margin-bottom:7px;cursor:pointer;font-size:13.5px;}
+  .q-opts label:hover{border-color:var(--gold);}
+  .q-opts input{margin-top:3px;}
+  .q-opts label.correct{border-color:var(--green-ok);background:#eef6ef;}
+  .q-opts label.wrong{border-color:var(--red-err);background:#fbeeee;}
+  [data-theme="dark"] .q-opts label.correct{background:#0f2318;}
+  [data-theme="dark"] .q-opts label.wrong{background:#2a1414;}
+  .q-feedback{display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:#eef6ef;border:1px solid #bfe0c6;}
+  .q-feedback.no{background:#fbeeee;border:1px solid #e6b8b8;}
+  [data-theme="dark"] .q-feedback.ok{background:#0f2318;border-color:#1f4a2e;}
+  [data-theme="dark"] .q-feedback.no{background:#2a1414;border-color:#5a2727;}
+  .sim-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px;background:var(--paper-2);border-radius:9px;}
+  .sim-timer{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-900);}
+  [data-theme="dark"] .sim-timer{color:#f1eee2;}
+  .sim-result{display:none;text-align:center;padding:24px;border-radius:10px;background:var(--card-bg);border:1px solid var(--border-soft);margin-bottom:20px;}
+  .sim-result.show{display:block;}
+  .sim-score{font-size:42px;font-weight:800;font-family:var(--serif);color:var(--gold-dark);}
+  .sim-bar-outer{width:100%;height:10px;background:var(--paper-2);border-radius:6px;overflow:hidden;margin:14px 0;}
+  .sim-bar-inner{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width .8s ease;}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px dashed var(--border-soft);font-size:14px;}
+  .checklist input{margin-top:4px;width:16px;height:16px;accent-color:var(--gold-dark);}
+  .checklist input:checked ~ span{text-decoration:line-through;color:var(--text-soft);}
+  .checklist-progress{font-size:13px;color:var(--text-soft);margin-bottom:10px;}
+  .gloss dt{font-weight:700;color:var(--ink-900);margin-top:10px;font-family:var(--serif);}
+  [data-theme="dark"] .gloss dt{color:#f1eee2;}
+  .gloss dd{margin:2px 0 0;color:var(--text-soft);font-size:13.5px;}
+  #backtop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--ink-900);color:var(--gold-light);border:1px solid var(--gold-dark);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:60;box-shadow:var(--shadow);}
+  #backtop.show{display:flex;}
+  .footer-nav{display:flex;justify-content:space-between;gap:14px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-soft);flex-wrap:wrap;}
+  mark.hl{background:var(--gold-light);color:#241a06;padding:0 2px;border-radius:2px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;}
+
+  /* ===== NAVBAR GLOBAL FIXA ===== */
+  .ge-navbar{
+    position:fixed;top:0;left:0;right:0;height:44px;z-index:500;
+    background:var(--ink-950);color:#dfe3ee;
+    display:flex;align-items:center;gap:8px;padding:0 16px;
+    border-bottom:1px solid var(--ink-700);
+    font-size:12.5px;overflow-x:auto;white-space:nowrap;
+  }
+  .ge-navbar a{color:#c4cadd;text-decoration:none;flex:none;}
+  .ge-navbar a:hover{color:var(--gold-light);}
+  .ge-navbar .ge-sep{color:#5a6685;flex:none;}
+  .ge-navbar .ge-crumb{color:#c4cadd;flex:none;}
+  .ge-navbar .ge-crumb.current{color:var(--gold-light);font-weight:600;}
+  .ge-navbar .ge-spacer{flex:1;min-width:12px;}
+  .ge-navbar select{
+    flex:none;background:var(--ink-900);color:#eef0f6;border:1px solid var(--ink-600);
+    border-radius:6px;padding:4px 8px;font-size:12px;max-width:220px;
+  }
+  body{padding-top:44px;}
+  .readbar{top:44px !important;}
+  .topbar{top:44px !important;}
+  .sidebar{top:44px !important;height:calc(100vh - 44px) !important;}
+  @media(max-width:960px){
+    .ge-navbar{padding:0 10px;font-size:11.5px;}
+    .ge-navbar select{max-width:140px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ge-navbar">
+  <a href="../../index.html">🏠 Início</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Módulo II – Conhecimentos Específicos</a>
+  <span class="ge-sep">›</span>
+  <a href="../../index.html">Avaliações Econômicas de Projetos</a>
+  <span class="ge-sep">›</span>
+  <span class="ge-crumb current">10 - Análise de projetos sociais</span>
+  <span class="ge-spacer"></span>
+  <select onchange="if(this.value) location.href=this.value;">
+    <option value="">Ir para tópico…</option>
+    <option value="01 - Conceito de projeto de investimento.html">01 - Conceito de projeto de investimento</option>
+    <option value="02 - Importância, características e limitações da elaboração e análise de projetos.html">02 - Importância, características e limitações</option>
+    <option value="03 - Etapas na elaboração de projetos.html">03 - Etapas na elaboração de projetos</option>
+    <option value="04 - Metodologias de avaliação e seleção de projetos.html">04 - Metodologias de avaliação e seleção</option>
+    <option value="05 - Taxa mínima de atratividade.html">05 - Taxa mínima de atratividade</option>
+    <option value="06 - Parâmetros para análise de projetos.html">06 - Parâmetros para análise de projetos</option>
+    <option value="07 - Indicadores econômicos de projetos (VPL, TIR, payback).html">07 - Indicadores: VPL, TIR, payback</option>
+    <option value="08 - Análise de sensibilidade e cenários.html">08 - Análise de sensibilidade e cenários</option>
+    <option value="09 - Análise de risco e incerteza na avaliação de projetos.html">09 - Risco e incerteza em projetos</option>
+    <option value="10 - Análise de projetos sociais.html" selected>10 - Análise de projetos sociais</option>
+    <option value="" disabled>11 - Estrutura a termo, duration e prazo médio (em breve)</option>
+    <option value="" disabled>12 - Risco de mercado (VAR) (em breve)</option>
+  </select>
+</nav>
+
+<div class="readbar" id="readbar"></div>
+<div class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Abrir menu">☰ Sumário</button>
+  <button class="btn" id="themeToggleMobile" style="background:transparent;color:#fff;border-color:#3d4a6b;">🌓</button>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">DATAPREV · Perfil 10 · FGV</span>
+      <span class="title">Análise de Projetos Sociais</span>
+    </div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar no conteúdo (Ctrl+K)…"></div>
+    <nav class="toc" id="tocNav">
+      <a href="#objetivos"><span class="num">01</span>Objetivos de aprendizagem</a>
+      <a href="#resumo-exec"><span class="num">02</span>Resumo executivo</a>
+      <a href="#mapa-mental"><span class="num">03</span>Mapa mental</a>
+      <a href="#explicacao"><span class="num">04</span>Explicação completa</a>
+      <a href="#fgv-cobra"><span class="num">05</span>Como a FGV cobra</a>
+      <a href="#decore"><span class="num">06</span>Decore para a prova</a>
+      <a href="#revisao-5min"><span class="num">07</span>Revisão de 5 minutos</a>
+      <a href="#flashcards"><span class="num">08</span>Flashcards</a>
+      <a href="#questoes"><span class="num">09</span>Questões comentadas</a>
+      <a href="#simulado"><span class="num">10</span>Mini simulado</a>
+      <a href="#checklist"><span class="num">11</span>Checklist</a>
+      <a href="#erros"><span class="num">12</span>Erros mais comuns</a>
+      <a href="#formulas"><span class="num">13</span>Fórmulas e conceitos-chave</a>
+      <a href="#tabelas"><span class="num">14</span>Tabelas-resumo</a>
+      <a href="#glossario"><span class="num">15</span>Glossário</a>
+      <a href="#curiosidades"><span class="num">16</span>Curiosidades</a>
+      <a href="#ligacoes"><span class="num">17</span>Ligações com outros tópicos</a>
+      <a href="#plano"><span class="num">18</span>Plano de revisão</a>
+      <a href="#referencias"><span class="num">19</span>Referências</a>
+    </nav>
+    <div class="sidebar-foot">Módulo II — Avaliações Econômicas de Projetos<br>Tópico 10 de 12<br>Material de estudo offline — DATAPREV 2026</div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="kicker">Concurso DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      <h1>Análise de Projetos Sociais</h1>
+      <div class="breadcrumb">Módulo II &nbsp;›&nbsp; <b>Avaliações Econômicas de Projetos</b> &nbsp;›&nbsp; Tópico 10</div>
+      <div class="meta-grid">
+        <div class="meta-card"><span>Tempo estimado</span><strong>≈ 4 horas</strong></div>
+        <div class="meta-card"><span>Dificuldade</span><strong>Média <span class="dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></strong></div>
+        <div class="meta-card"><span>Pré-requisitos</span><strong>Tópicos 05–08 (TMA, VPL, sensibilidade)</strong></div>
+        <div class="meta-card"><span>Peso na prova</span><strong>Médio-alto — ACB, taxa social de desconto e custo-efetividade</strong></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="themeToggle">🌗 Modo claro/escuro</button>
+      <button class="btn" id="expandAll">⤢ Expandir tudo</button>
+      <button class="btn" id="collapseAll">⤡ Recolher tudo</button>
+      <span class="spacer"></span>
+      <span class="reading-time" id="readingTime">⏱ calculando leitura…</span>
+    </div>
+
+    <div class="container">
+
+      <!-- 1 OBJETIVOS -->
+      <section id="objetivos">
+        <div class="section-head"><span class="idx">01</span><h2>Objetivos de aprendizagem</h2></div>
+        <div class="card">
+          <p>Ao final deste estudo, o(a) candidato(a) deverá ser capaz de:</p>
+          <ul class="styled">
+            <li>Explicar o que distingue a <b>avaliação social</b> da avaliação privada de projetos: maximização do bem-estar da sociedade, não do lucro.</li>
+            <li>Conceituar <b>externalidades</b> e <b>preços-sombra</b> e incorporá-los à análise custo-benefício (ACB).</li>
+            <li>Aplicar os critérios de decisão sociais: <b>VPL social &gt; 0</b> e <b>razão benefício/custo (RB/C) &gt; 1</b>.</li>
+            <li>Explicar a <b>taxa social de desconto (TSD)</b>, por que tende a ser menor que a de mercado e como ela muda decisões.</li>
+            <li>Conhecer as técnicas de monetização de intangíveis: <b>disposição a pagar</b> e <b>valor estatístico da vida (VEV)</b>.</li>
+            <li>Distinguir <b>custo-benefício</b> de <b>custo-efetividade</b> e aplicar esta última quando benefícios não são monetizáveis.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- 2 RESUMO EXECUTIVO -->
+      <section id="resumo-exec">
+        <div class="section-head"><span class="idx">02</span><h2>Resumo executivo</h2></div>
+        <div class="card">
+          <p>A avaliação <b>privada</b> pergunta: “o projeto dá lucro para quem investe?”. A avaliação <b>social</b> pergunta: “o projeto aumenta o bem-estar da <b>sociedade</b>?”. As respostas divergem por três motivos:</p>
+          <ul class="styled">
+            <li><b>Externalidades</b> — efeitos sobre terceiros que não passam pelos preços: a ponte que descongestiona a cidade (positiva), a fábrica que polui (negativa). A ACB os monetiza e os inclui no fluxo.</li>
+            <li><b>Preços distorcidos</b> — impostos, subsídios e monopólios afastam os preços de mercado dos valores sociais reais; usa-se o <b>preço-sombra</b> (o valor social verdadeiro).</li>
+            <li><b>Horizonte e equidade</b> — o Estado se importa com gerações futuras e com <b>quem</b> recebe os benefícios; daí a <b>taxa social de desconto</b> (em geral menor que a de mercado) e os pesos distributivos.</li>
+          </ul>
+          <p>Ferramentas: <b>análise custo-benefício</b> (tudo monetizado: VPL social &gt; 0 ou RB/C &gt; 1) e <b>análise custo-efetividade</b> (quando o benefício não é monetizável: menor custo por unidade de resultado — por vida salva, por aluno atendido).</p>
+          <div class="box fgv"><div class="box-title">Síntese FGV</div><p>Projeto pode ter <b>VPL privado negativo e VPL social positivo</b> (externalidade positiva) — justificativa clássica da ação estatal. E: taxa social de desconto <b>menor</b> favorece projetos de longo prazo (saúde, educação, infraestrutura).</p></div>
+        </div>
+      </section>
+      <!-- 3 MAPA MENTAL -->
+      <section id="mapa-mental">
+        <div class="section-head"><span class="idx">03</span><h2>Mapa mental</h2></div>
+        <div class="mindmap">
+          <div class="mm-root">Análise de<br>Projetos<br>Sociais</div>
+          <div class="mm-branches">
+            <div class="mm-node"><h4>Por que difere</h4><ul><li>Bem-estar social, não lucro</li><li>Externalidades</li><li>Preços-sombra</li><li>Equidade distributiva</li></ul></div>
+            <div class="mm-node"><h4>Custo-benefício (ACB)</h4><ul><li>Tudo monetizado</li><li>VPL social &gt; 0</li><li>RB/C &gt; 1</li></ul></div>
+            <div class="mm-node"><h4>Taxa social de desconto</h4><ul><li>Em geral &lt; taxa de mercado</li><li>Valoriza o longo prazo</li><li>Controversa: oportunidade × preferência temporal</li></ul></div>
+            <div class="mm-node"><h4>Monetizar intangíveis</h4><ul><li>Disposição a pagar</li><li>Valor estatístico da vida</li><li>Custo de viagem, hedônicos</li></ul></div>
+            <div class="mm-node"><h4>Custo-efetividade</h4><ul><li>Benefício não monetizado</li><li>Menor custo por resultado</li><li>Ex.: R$ por vida salva</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <!-- 4 EXPLICAÇÃO -->
+      <section id="explicacao">
+        <div class="section-head"><span class="idx">04</span><h2>Explicação detalhada</h2></div>
+
+        <h3>4.1 Avaliação privada × avaliação social</h3>
+        <div class="card">
+          <p>A avaliação privada (tópicos 04–09) maximiza a riqueza do investidor: entram no fluxo apenas as receitas e os custos <b>de quem paga o projeto</b>. A avaliação social — usada por governos, Banco Mundial, BNDES e estatais — maximiza o <b>bem-estar da sociedade inteira</b>: entram no fluxo todos os efeitos sobre todos os afetados, monetizados ou não.</p>
+          <table>
+            <tr><th>Critério</th><th>Avaliação privada</th><th>Avaliação social</th></tr>
+            <tr><td>Objetivo</td><td>Lucro / riqueza do investidor</td><td>Bem-estar da sociedade</td></tr>
+            <tr><td>Efeitos considerados</td><td>Só os do investidor</td><td>Todos, incluindo terceiros (externalidades)</td></tr>
+            <tr><td>Preços usados</td><td>Preços de mercado</td><td>Preços-sombra (quando o mercado distorce)</td></tr>
+            <tr><td>Taxa de desconto</td><td>TMA (custo de capital)</td><td>Taxa social de desconto</td></tr>
+            <tr><td>Critério</td><td>VPL &gt; 0</td><td>VPL social &gt; 0 / RB/C &gt; 1</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">A lógica da intervenção estatal</div><p>Um hospital público pode ter <b>VPL privado negativo</b> (não gera receita) e <b>VPL social muito positivo</b> (vidas salvas, produtividade recuperada). É a existência dessa lacuna — o chamado <b>benefício social líquido</b> — que justifica economicamente a atuação do Estado.</p></div>
+        </div>
+
+        <h3>4.2 Externalidades e preços-sombra</h3>
+        <div class="card">
+          <p><b>Externalidade</b> é o efeito da atividade sobre terceiros, não compensado por preços: a usina que polui o rio (negativa), a vacinação que protege quem não se vacinou (positiva), a estrada que valoriza a região (positiva). Na ACB, externalidades são <b>internalizadas</b>: monetizadas e somadas ao fluxo do projeto.</p>
+          <p><b>Preço-sombra</b> é o valor social de um bem ou insumo quando o preço de mercado está distorcido. Exemplos clássicos:</p>
+          <ul class="styled">
+            <li><b>Mão de obra desempregada</b>: o custo social de contratar um desempregado é o valor do que ele deixaria de produzir — próximo de <b>zero</b>, e não o salário pago.</li>
+            <li><b>Câmbio</b>: em economia com câmbio controlado, a taxa-sombra reflete a escassez real de divisas.</li>
+            <li><b>Impostos indiretos</b>: são <b>transferências</b> dentro da sociedade (são custo privado, mas não custo social) — saem da conta social.</li>
+          </ul>
+          <div class="box warn"><div class="box-title">Transferência ≠ custo social</div><p>Impostos, subsídios e multas apenas transferem recursos entre agentes da mesma sociedade. Na avaliação social, <b>não são custo nem benefício</b> — diferente da avaliação privada, onde imposto é custo. Pegadinha recorrente.</p></div>
+        </div>
+
+        <h3>4.3 Análise custo-benefício (ACB) — critérios de decisão</h3>
+        <div class="card">
+          <p>Monetizados benefícios e custos sociais, a mecânica é a mesma do VPL — mudam o conteúdo dos fluxos e a taxa:</p>
+          <p style="text-align:center"><b>VPL social = VP(benefícios sociais) − VP(custos sociais)</b> &nbsp;·&nbsp; <b>RB/C = VP(benefícios) ÷ VP(custos)</b></p>
+          <p>Regras: <b>VPL social &gt; 0</b> ⇔ <b>RB/C &gt; 1</b> → o projeto é socialmente desejável. Entre projetos mutuamente excludentes, escolhe-se o <b>maior VPL social</b> (a RB/C sofre do mesmo problema de escala da TIR: um projeto pequeno pode ter RB/C alta e criar pouco valor).</p>
+          <p><b>Exemplo:</b> obra de saneamento custa R$ 100 milhões e gera benefícios sociais estimados de R$ 25 milhões/ano por 5 anos (menos doenças, menos horas perdidas, valorização imobiliária). À TSD de 6%: VP = 25 × 4,2124 = 105,31 → <b>VPL social = +5,31 mi; RB/C = 1,05</b> → aprova-se. À taxa de mercado de 12%: VP = 25 × 3,6048 = 90,12 → <b>VPL = −9,88 mi; RB/C = 0,90</b> → rejeitaria. A escolha da taxa decide o projeto.</p>
+        </div>
+
+        <h3>4.4 Taxa social de desconto (TSD)</h3>
+        <div class="card">
+          <p>A TSD é a taxa com que a sociedade troca bem-estar futuro por presente. Em geral, adota-se valor <b>menor que a taxa de mercado</b>, por dois argumentos:</p>
+          <ul class="styled">
+            <li><b>Visão de longo prazo</b>: o Estado é (quase) eterno e representa também as gerações futuras, que não têm voz no mercado de hoje — taxa alta “apaga” os benefícios delas.</li>
+            <li><b>Preferência temporal social</b>: a sociedade tende a ser menos impaciente que os indivíduos isolados; além disso, o risco público agregado é menor que o privado.</li>
+          </ul>
+          <p>A controvérsia técnica: <b>escola do custo de oportunidade</b> (TSD = retorno que o capital teria no setor privado — taxa alta) × <b>escola da preferência temporal social</b> (TSD = taxa ética de impaciência — taxa baixa). Consequência prática: <b>TSD baixa aprova projetos de longo prazo</b> (educação, clima, infraestrutura), cujos benefícios vêm em décadas; TSD alta os reprova.</p>
+          <div class="box fgv"><div class="box-title">Como a FGV cobra</div><p>“Taxa social de desconto menor que a de mercado favorece projetos com benefícios distantes no tempo” — verdadeiro. A pegadinha: afirmar que a TSD deve ser sempre igual à taxa de mercado ou à TMA da estatal.</p></div>
+        </div>
+
+        <h3>4.5 Monetizando o intangível</h3>
+        <div class="card">
+          <p>Como colocar preço em saúde, tempo e vida? Técnicas consagradas:</p>
+          <ul class="styled">
+            <li><b>Disposição a pagar (DAP)</b> — quanto as pessoas pagariam pelo benefício (pesquisas de preferência declarada ou revelada).</li>
+            <li><b>Valor estatístico da vida (VEV)</b> — deriva da DAP por redução de risco: se 10.000 pessoas aceitam pagar R$ 500 cada para reduzir o risco de morte em 1/10.000, o VEV = 10.000 × R$ 500 = <b>R$ 5 milhões</b> por vida estatística. (Não é “o preço de uma vida”: é o valor agregado de pequenas reduções de risco.)</li>
+            <li><b>Método do custo de viagem</b> — o valor de um parque é inferido do quanto as pessoas gastam para visitá-lo.</li>
+            <li><b>Preços hedônicos</b> — o diferencial de preço de imóveis perto de áreas verdes revela o valor do meio ambiente.</li>
+            <li><b>Custos evitados / produtividade recuperada</b> — saúde: internações evitadas + dias de trabalho recuperados.</li>
+          </ul>
+        </div>
+
+        <h3>4.6 Análise custo-efetividade</h3>
+        <div class="card">
+          <p>Quando o benefício é legítimo, mas <b>monetizá-lo é inadequado ou impossível</b> (vidas, alfabetização), inverte-se a lógica: fixa-se o objetivo e compara-se o <b>custo por unidade de resultado</b>:</p>
+          <table>
+            <tr><th>Programa</th><th>Custo</th><th>Resultado</th><th>Custo-efetividade</th></tr>
+            <tr><td>A — vacinação ampliada</td><td>R$ 50 mi</td><td>200 mortes evitadas</td><td><b>R$ 250 mil/vida</b> ✓</td></tr>
+            <tr><td>B — campanha de triagem</td><td>R$ 30 mi</td><td>100 mortes evitadas</td><td>R$ 300 mil/vida</td></tr>
+          </table>
+          <p>O programa A é mais custo-efetivo: entrega o mesmo resultado com menos recursos. A análise custo-efetividade <b>não pergunta se o objetivo vale a pena</b> (isso é decisão política) — pergunta qual é a forma <b>mais barata</b> de alcançá-lo.</p>
+          <div class="box info"><div class="box-title">ACB × ACE</div><p><b>Custo-benefício</b>: benefícios monetizados → VPL social, RB/C. <b>Custo-efetividade</b>: benefício em unidades físicas → menor custo por unidade. Na dúvida da prova: falou em “vidas salvas”, “alunos atendidos” sem valor em R$ → custo-efetividade.</p></div>
+        </div>
+
+        <h3>4.7 Equidade distributiva e o contexto DATAPREV</h3>
+        <div class="card">
+          <p>A ACB padrão soma benefícios sem perguntar <b>quem</b> os recebe. A análise distributiva corrige isso com <b>pesos</b>: R$ 1 de benefício para uma família pobre “vale mais” socialmente que R$ 1 para uma rica. Um projeto pode perder em eficiência (VPL social menor) e vencer em equidade — a escolha final é política, informada pela técnica.</p>
+          <p>No universo DATAPREV: a modernização de sistemas previdenciários tem VPL social ligado a <b>redução de filas, menor tempo de concessão de benefícios, combate a fraudes</b> — benefícios cuja maior parte vai para a população mais pobre. A EVTEA (Lei 14.133/2021), o PPA e os manuais de ACB do governo federal formalizam esse tipo de avaliação em contratações de TI.</p>
+        </div>
+      </section>
+      <!-- 5 COMO A FGV COBRA -->
+      <section id="fgv-cobra">
+        <div class="section-head"><span class="idx">05</span><h2>Como a FGV cobra</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>Privada × social</b>: o que muda (objetivo, externalidades, preços-sombra, taxa) — assertivas de julgamento.</li>
+            <li><b>Externalidades</b>: identificar exemplos e classificar positiva/negativa; internalizá-las no fluxo social.</li>
+            <li><b>Transferências não são custo social</b>: impostos e subsídios saem da conta social (pegadinha clássica).</li>
+            <li><b>RB/C e VPL social</b>: cálculo direto com taxa dada; regra RB/C &gt; 1 ⇔ VPL social &gt; 0.</li>
+            <li><b>Taxa social de desconto</b>: menor que a de mercado; favorece projetos de longo prazo; controvérsia oportunidade × preferência temporal.</li>
+            <li><b>Custo-benefício × custo-efetividade</b>: distinguir e calcular custo por unidade de resultado.</li>
+            <li><b>VEV</b>: cálculo pela disposição a pagar por redução de risco.</li>
+            <li><b>VPL privado &lt; 0 e social &gt; 0</b>: justificativa econômica da ação estatal.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6 PARA DECORAR -->
+      <section id="decore">
+        <div class="section-head"><span class="idx">06</span><h2>Para decorar</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>Avaliação social = bem-estar da <b>sociedade</b>; privada = riqueza do <b>investidor</b>.</li>
+            <li><b>Externalidade</b>: efeito sobre terceiros fora dos preços — internalizar na ACB.</li>
+            <li><b>Preço-sombra</b>: valor social quando o preço de mercado é distorcido (desempregado ≈ custo social baixo).</li>
+            <li><b>Impostos e subsídios são transferências</b>: não entram como custo/benefício social.</li>
+            <li>Critérios: <b>VPL social &gt; 0</b> ⇔ <b>RB/C &gt; 1</b>; excludentes → maior VPL social (RB/C ignora escala).</li>
+            <li><b>TSD &lt; taxa de mercado</b>: Estado é eterno e defende as gerações futuras; TSD baixa aprova projetos de longo prazo.</li>
+            <li><b>VEV</b> = DAP agregada por redução de risco: 10.000 × R$ 500 = R$ 5 mi por vida estatística.</li>
+            <li><b>Custo-efetividade</b>: benefício não monetizável → menor custo por unidade de resultado.</li>
+            <li>VPL privado &lt; 0 com VPL social &gt; 0 = lacuna que justifica o Estado.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 7 REVISÃO EM 5 MINUTOS -->
+      <section id="revisao-5min">
+        <div class="section-head"><span class="idx">07</span><h2>Revisão em 5 minutos</h2></div>
+        <div class="card">
+          <ol class="styled">
+            <li><b>Social ≠ privada:</b> muda o objetivo (bem-estar), os fluxos (externalidades), os preços (sombra) e a taxa (TSD).</li>
+            <li><b>Externalidades:</b> internalizar — poluição entra como custo social; vacina como benefício social.</li>
+            <li><b>Transferências</b> (impostos, subsídios) ficam fora da conta social.</li>
+            <li><b>ACB:</b> monetizar tudo → VPL social &gt; 0 ⇔ RB/C &gt; 1 → aprova.</li>
+            <li><b>Exemplo:</b> 100 mi, 25 mi/ano × 5 anos: a 6% → +5,31 (RB/C 1,05); a 12% → −9,88 (0,90). A taxa decide.</li>
+            <li><b>TSD:</b> em geral &lt; mercado; quanto menor, mais projetos de longo prazo passam.</li>
+            <li><b>Intangíveis:</b> disposição a pagar, VEV, custo de viagem, hedônicos, custos evitados.</li>
+            <li><b>ACE:</b> objetivo fixo → menor custo por resultado (R$ 250 mil/vida vence R$ 300 mil/vida).</li>
+            <li><b>Equidade:</b> pesos distributivos — R$ 1 para o pobre vale mais que R$ 1 para o rico.</li>
+            <li><b>Lacuna social:</b> privado &lt; 0 e social &gt; 0 → papel do Estado.</li>
+          </ol>
+        </div>
+      </section>
+      <!-- 8 FLASHCARDS -->
+      <section id="flashcards">
+        <div class="section-head"><span class="idx">08</span><h2>Flashcards</h2></div>
+        <div class="fc-controls">
+          <button class="btn" id="fcFlipAll">🔄 Virar todos</button>
+          <button class="btn" id="fcShuffle">🔀 Embaralhar</button>
+          <span class="reading-time">Clique em um card para revelar a resposta.</span>
+        </div>
+        <div class="fc-grid" id="fcGrid"></div>
+      </section>
+
+      <!-- 9 QUESTÕES -->
+      <section id="questoes">
+        <div class="section-head"><span class="idx">09</span><h2>Questões comentadas</h2></div>
+        <p>20 questões inéditas, estilo FGV, com gabarito e comentário. Escolha uma alternativa para ver a correção.</p>
+        <div id="qGrid"></div>
+      </section>
+
+      <!-- 10 SIMULADO -->
+      <section id="simulado">
+        <div class="section-head"><span class="idx">10</span><h2>Mini simulado (30 questões)</h2></div>
+        <div class="sim-toolbar">
+          <button class="btn primary" id="simStart">▶ Iniciar simulado</button>
+          <span class="sim-timer" id="simTimer">00:00</span>
+          <span class="spacer"></span>
+          <button class="btn" id="simSubmit" style="display:none;">✔ Corrigir agora</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div class="sim-score" id="simScore">0/30</div>
+          <div id="simPercent" style="color:var(--text-soft);">0%</div>
+          <div class="sim-bar-outer"><div class="sim-bar-inner" id="simBar"></div></div>
+          <div id="simTimeSpent" style="font-size:13px;color:var(--text-soft);"></div>
+        </div>
+        <div id="simGrid" style="display:none;"></div>
+      </section>
+
+      <!-- 11 CHECKLIST -->
+      <section id="checklist">
+        <div class="section-head"><span class="idx">11</span><h2>Checklist de domínio</h2></div>
+        <div class="card">
+          <div class="checklist-progress" id="cklProgress">0 de 0 itens concluídos</div>
+          <div class="checklist" id="cklList"></div>
+        </div>
+      </section>
+
+      <!-- 12 ERROS -->
+      <section id="erros">
+        <div class="section-head"><span class="idx">12</span><h2>Erros mais comuns dos candidatos</h2></div>
+        <div class="card"><ol class="styled" id="errosList"></ol></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 13 FÓRMULAS -->
+      <section id="formulas">
+        <div class="section-head"><span class="idx">13</span><h2>Fórmulas essenciais</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Indicador</th><th>Fórmula</th><th>Regra</th></tr>
+            <tr><td><b>VPL social</b></td><td>VP(benefícios sociais) − VP(custos sociais), à TSD</td><td>&gt; 0 → socialmente desejável</td></tr>
+            <tr><td><b>RB/C</b></td><td>VP(benefícios) ÷ VP(custos)</td><td>&gt; 1 ⇔ VPL social &gt; 0</td></tr>
+            <tr><td><b>Benefício social líquido</b></td><td>VPL social − VPL privado</td><td>a lacuna que o Estado cobre</td></tr>
+            <tr><td><b>VEV</b></td><td>DAP por redução de risco × nº de pessoas</td><td>10.000 × R$ 500 = R$ 5 mi/vida estatística</td></tr>
+            <tr><td><b>Custo-efetividade</b></td><td>custo total ÷ unidades de resultado</td><td>menor vence (objetivo fixo)</td></tr>
+          </table>
+          <div class="box info"><div class="box-title">Fatores de anuidade</div><p>(n=5; 6%) = 4,2124 · (n=5; 10%) = 3,7908 · (n=5; 12%) = 3,6048 · (n=4; 8%) = 3,3121.</p></div>
+        </div>
+      </section>
+
+      <!-- 14 TABELAS -->
+      <section id="tabelas">
+        <div class="section-head"><span class="idx">14</span><h2>Tabelas de apoio</h2></div>
+        <div class="card">
+          <h4>O efeito da taxa: mesmo projeto, duas decisões (custo 100 mi; benefícios 25 mi/ano × 5 anos)</h4>
+          <table>
+            <tr><th>Taxa</th><th>Fator</th><th>VP benefícios</th><th>VPL social</th><th>RB/C</th><th>Decisão</th></tr>
+            <tr><td>6% (TSD)</td><td>4,2124</td><td>105,31</td><td>+5,31</td><td>1,05</td><td><b>Aprova</b></td></tr>
+            <tr><td>10%</td><td>3,7908</td><td>94,77</td><td>−5,23</td><td>0,95</td><td>Rejeita</td></tr>
+            <tr><td>12% (mercado)</td><td>3,6048</td><td>90,12</td><td>−9,88</td><td>0,90</td><td>Rejeita</td></tr>
+          </table>
+          <h4>Privada × social — mapa de diferenças</h4>
+          <table>
+            <tr><th>Item</th><th>Privada</th><th>Social</th></tr>
+            <tr><td>Externalidades</td><td>Ignora</td><td>Internaliza (monetiza)</td></tr>
+            <tr><td>Impostos/subsídios</td><td>Custo/benefício</td><td>Transferência — fora da conta</td></tr>
+            <tr><td>Preços</td><td>Mercado</td><td>Sombra</td></tr>
+            <tr><td>Taxa</td><td>TMA</td><td>TSD (em geral menor)</td></tr>
+            <tr><td>Decisão</td><td>VPL &gt; 0</td><td>VPL social &gt; 0 / RB/C &gt; 1</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- 15 GLOSSÁRIO -->
+      <section id="glossario">
+        <div class="section-head"><span class="idx">15</span><h2>Glossário</h2></div>
+        <div class="card"><dl class="gloss" id="glossList"></dl></div>
+      </section>
+
+
+
+
+
+
+
+      <!-- 16 CURIOSIDADES -->
+      <section id="curiosidades">
+        <div class="section-head"><span class="idx">16</span><h2>Curiosidades e pegadinhas</h2></div>
+        <div class="card">
+          <div class="box curio"><div class="box-title">O relatório que mudou a TSD do planeta</div><p>O <b>Relatório Stern</b> (2006) sobre mudança climática usou TSD perto de 1,4% — e concluiu que agir já era muito mais barato que esperar. Críticos (Nordhaus) usaram ~5% e chegaram à conclusão oposta. A “batalha das taxas” mostrou que, em horizontes de século, a TSD <i>é</i> a decisão.</p></div>
+          <div class="box curio"><div class="box-title">Quanto vale uma vida estatística?</div><p>Estudos nos EUA situam o VEV entre US$ 7 e 13 milhões; no Brasil, estudos com salários e risco ocupacional chegam a valores de alguns milhões de reais. Órgãos como o DENATRAN usam VEV para decidir obras de segurança viária.</p></div>
+          <div class="box curio"><div class="box-title">A ponte que “deu lucro” sem pedágio</div><p>A ponte de San Francisco–Oakland (Bay Bridge) jamais se pagaria como negócio privado nos anos 1930 — mas sua ACB social era estrondosa (tempo, comércio, integração regional). É o arquétipo do projeto com VPL privado &lt; 0 e social &gt;&gt; 0.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: imposto é custo social?</div><p>Não. Imposto é custo <b>privado</b> (sai do bolso do investidor) mas é receita do governo — dentro da sociedade, é mera transferência. Na ACB, some com impostos e subsídios do fluxo.</p></div>
+          <div class="box warn"><div class="box-title">Pegadinha: RB/C alta = melhor projeto?</div><p>Não necessariamente. RB/C mede retorno por real investido, mas ignora escala: projeto de R$ 1 mi com RB/C 2,0 cria R$ 1 mi de valor; projeto de R$ 100 mi com RB/C 1,3 cria R$ 30 mi. Em excludentes, compare os <b>VPLs sociais</b>.</p></div>
+        </div>
+      </section>
+
+      <!-- 17 LIGAÇÕES -->
+      <section id="ligacoes">
+        <div class="section-head"><span class="idx">17</span><h2>Ligações com outros temas</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li><b>← Tópico 05 (TMA):</b> a TSD é a “TMA do setor público” — mesma mecânica de desconto, outra fundamentação.</li>
+            <li><b>← Tópico 07 (VPL):</b> VPL social e RB/C são o VPL aplicado a fluxos sociais; as regras de decisão são análogas.</li>
+            <li><b>← Tópico 08 (sensibilidade):</b> como a TSD é controversa, a sensibilidade do VPL social à taxa é praticamente obrigatória.</li>
+            <li><b>← Tópico 03 (etapas):</b> a EVTEA da Lei 14.133/2021 institucionaliza a avaliação técnico-econômica em contratações públicas.</li>
+            <li><b>↔ Orçamento (Módulo II):</b> PPA e LDO são o instrumento de seleção de projetos públicos; a ACB fundamenta a escolha.</li>
+            <li><b>↔ Economia do bem-estar:</b> externalidades e bens públicos são falhas de mercado — microfundamento da ação estatal.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 18 PLANO DE ESTUDO -->
+      <section id="plano">
+        <div class="section-head"><span class="idx">18</span><h2>Plano de estudo do tópico</h2></div>
+        <div class="card">
+          <table>
+            <tr><th>Dia</th><th>Atividade</th><th>Meta</th></tr>
+            <tr><td>1</td><td>Ler 4.1–4.3 (privada × social, externalidades, ACB); refazer o exemplo do saneamento nas duas taxas</td><td>VPL social e RB/C saem sem consulta</td></tr>
+            <tr><td>2</td><td>Estudar 4.4–4.5 (TSD e intangíveis); resolver os 20 flashcards</td><td>Explicar a TSD e calcular o VEV</td></tr>
+            <tr><td>3</td><td>Estudar 4.6–4.7 (ACE e equidade); resolver as 20 questões comentadas</td><td>≥ 80% de acerto</td></tr>
+            <tr><td>4</td><td>Mini-simulado de 30 questões com cronômetro</td><td>≥ 24 acertos; revisar erros</td></tr>
+            <tr><td>5</td><td>Revisão em 5 minutos + Para decorar + checklist</td><td>Recitar o mapa privada × social de cor</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 19 REFERÊNCIAS -->
+      <section id="referencias">
+        <div class="section-head"><span class="idx">19</span><h2>Referências e aprofundamento</h2></div>
+        <div class="card">
+          <ul class="styled">
+            <li>BANCO MUNDIAL. <b>Guia de análise custo-benefício de projetos de investimento</b> — manual padrão de ACB social.</li>
+            <li>BOARDMAN, A. et al. <b>Cost-Benefit Analysis: Concepts and Practice</b>. Pearson — referência acadêmica clássica.</li>
+            <li>STERN, N. <b>The Economics of Climate Change (Stern Review)</b>. 2006 — a controvérsia da taxa social de desconto.</li>
+            <li>BRASIL. Ministério da Economia. <b>Diretrizes para avaliação de projetos de investimento público</b> — prática federal brasileira.</li>
+            <li>Lei nº 14.133/2021 — EVTEA e avaliação de viabilidade em contratações públicas.</li>
+            <li>Provas FGV (SEFAZ, TCU, BNDES, DATAPREV): questões de ACB, externalidades e taxa social de desconto.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <span>Módulo II · Avaliações Econômicas de Projetos · Tópico 10/12</span>
+        <span>DATAPREV 2026 · Perfil 10 · Gestão Econômico-Financeira · Banca FGV</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="backtop" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = "dataprev_p10_avalproj_t10";
+
+  function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); localStorage.setItem(STORAGE_KEY+"_theme", t); }
+  applyTheme(localStorage.getItem(STORAGE_KEY+"_theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"));
+  function toggleTheme(){ applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light":"dark"); }
+  document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+  document.getElementById("themeToggleMobile").addEventListener("click", toggleTheme);
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("burgerBtn").addEventListener("click", ()=> sidebar.classList.toggle("open"));
+  document.querySelectorAll(".toc a").forEach(a=>a.addEventListener("click", ()=> sidebar.classList.remove("open")));
+
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById("readbar").style.width = (height>0 ? (scrollTop/height*100):0) + "%";
+    document.getElementById("backtop").classList.toggle("show", scrollTop>500);
+    let current = sections[0];
+    for(const s of sections){ if(s.getBoundingClientRect().top - 90 <= 0) current = s; }
+    tocLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+current.id));
+  }
+  document.addEventListener("scroll", onScroll);
+  onScroll();
+  document.getElementById("backtop").addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+  const wordCount = document.querySelector("main").innerText.trim().split(/\s+/).length;
+  document.getElementById("readingTime").textContent = "⏱ leitura ≈ " + Math.max(1,Math.round(wordCount/200)) + " min · " + wordCount + " palavras";
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll("main mark.hl").forEach(m=>{ m.outerHTML = m.innerHTML; });
+    if(q.length<3) return;
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT, null);
+    const nodes=[]; let n;
+    while(n=walker.nextNode()){ if(n.nodeValue.toLowerCase().includes(q) && n.parentNode.tagName!=="SCRIPT" && n.parentNode.tagName!=="STYLE") nodes.push(n); }
+    let firstHit=null;
+    nodes.forEach(node=>{
+      const idx = node.nodeValue.toLowerCase().indexOf(q);
+      const span = document.createElement("span");
+      span.innerHTML = node.nodeValue.slice(0,idx) + "<mark class='hl'>" + node.nodeValue.slice(idx, idx+q.length) + "</mark>" + node.nodeValue.slice(idx+q.length);
+      node.parentNode.replaceChild(span, node);
+      if(!firstHit) firstHit = span;
+    });
+    if(firstHit) firstHit.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("searchInput").focus(); }
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.add("open")));
+  document.getElementById("collapseAll").addEventListener("click", ()=>document.querySelectorAll(".collapsible").forEach(c=>c.classList.remove("open")));
+
+  /* FLASHCARDS */
+  const flashcards = [
+      {
+          "q": "Qual a diferença fundamental entre avaliação privada e avaliação social de projetos?",
+          "a": "A privada maximiza a riqueza do investidor (só os fluxos dele); a social maximiza o bem-estar da sociedade inteira (todos os afetados, incluindo terceiros)."
+      },
+      {
+          "q": "O que é uma externalidade?",
+          "a": "Efeito de uma atividade sobre terceiros, não mediado por preços. Positiva: vacina, educação. Negativa: poluição, congestionamento. Na ACB, deve ser monetizada e internalizada."
+      },
+      {
+          "q": "O que é preço-sombra?",
+          "a": "O valor social de um bem ou insumo quando o preço de mercado está distorcido (impostos, subsídios, monopólio, desemprego). Ex.: o custo social de contratar um desempregado é próximo de zero, não o salário."
+      },
+      {
+          "q": "Impostos entram na análise custo-benefício social?",
+          "a": "Não como custo/benefício social: são transferências dentro da sociedade (saem de um bolso, entram em outro). Entram apenas na avaliação privada."
+      },
+      {
+          "q": "Quais são os critérios de decisão da ACB?",
+          "a": "VPL social > 0 ⇔ RB/C > 1 → projeto socialmente desejável. Entre excludentes, escolhe-se o maior VPL social (RB/C ignora escala)."
+      },
+      {
+          "q": "O que é a taxa social de desconto (TSD)?",
+          "a": "A taxa com que a sociedade desconta bem-estar futuro. Em geral menor que a de mercado, pois o Estado representa também as gerações futuras e é menos impaciente."
+      },
+      {
+          "q": "Qual o efeito de uma TSD baixa na seleção de projetos?",
+          "a": "Favorece projetos de longo prazo (educação, saúde, clima), cujos benefícios vêm em décadas — taxa alta praticamente “apaga” esses benefícios no desconto."
+      },
+      {
+          "q": "Projeto: custo 100 mi; benefícios de 25 mi/ano por 5 anos. A 6% (fator 4,2124) e a 12% (fator 3,6048), quais as decisões?",
+          "a": "A 6%: VP = 105,31 → VPL social +5,31 mi, RB/C = 1,05 → aprova. A 12%: VP = 90,12 → −9,88 mi, RB/C = 0,90 → rejeita. A taxa decide o projeto."
+      },
+      {
+          "q": "O que é o valor estatístico da vida (VEV)?",
+          "a": "A disposição agregada a pagar por pequenas reduções de risco: se 10.000 pessoas pagam R$ 500 para reduzir o risco de morte em 1/10.000, VEV = R$ 5 milhões por vida estatística."
+      },
+      {
+          "q": "Cite quatro técnicas de monetização de benefícios intangíveis.",
+          "a": "Disposição a pagar; valor estatístico da vida; método do custo de viagem; preços hedônicos (e custos evitados/produtividade recuperada)."
+      },
+      {
+          "q": "Quando se usa análise custo-efetividade em vez de custo-benefício?",
+          "a": "Quando o benefício é legítimo, mas monetizá-lo é impossível ou inadequado (vidas, alfabetização): fixa-se o objetivo e escolhe-se o menor custo por unidade de resultado."
+      },
+      {
+          "q": "Programa A: 50 mi, 200 vidas salvas. Programa B: 30 mi, 100 vidas. Qual é mais custo-efetivo?",
+          "a": "A: 250 mil por vida; B: 300 mil por vida → A é mais custo-efetivo."
+      },
+      {
+          "q": "O que a análise custo-efetividade NÃO faz?",
+          "a": "Não julga se o objetivo vale a pena (decisão política) — apenas encontra a forma mais barata de alcançá-lo."
+      },
+      {
+          "q": "O que são pesos distributivos na avaliação social?",
+          "a": "Fatores que valorizam mais os benefícios dirigidos aos mais pobres: R$ 1 para uma família pobre pesa mais que R$ 1 para uma rica. Trazem equidade para dentro da ACB."
+      },
+      {
+          "q": "O que é o benefício social líquido de um projeto?",
+          "a": "A diferença VPL social − VPL privado. Se o privado é negativo e o social positivo, há lacuna que justifica a ação do Estado."
+      },
+      {
+          "q": "Por que a RB/C sofre de problema de escala?",
+          "a": "Porque mede retorno por real investido: projeto pequeno com RB/C 2,0 cria menos valor total que projeto grande com RB/C 1,3. Em excludentes, compare VPLs sociais."
+      },
+      {
+          "q": "Qual a controvérsia técnica sobre a TSD?",
+          "a": "Custo de oportunidade (TSD = retorno do capital privado → taxa alta) × preferência temporal social (TSD = impaciência ética da sociedade → taxa baixa)."
+      },
+      {
+          "q": "Dê exemplo de projeto com VPL privado negativo e social positivo.",
+          "a": "Hospital público, saneamento, vacinação: não geram receita suficiente para o investidor, mas os benefícios sociais (vidas, produtividade, tempo) superam os custos."
+      },
+      {
+          "q": "Qual a relação entre ACB e a EVTEA da Lei 14.133/2021?",
+          "a": "A EVTEA institucionaliza a avaliação técnica e econômica da viabilidade de contratações públicas — a ACB social é sua fundamentação econômica."
+      },
+      {
+          "q": "Na avaliação social, o que acontece com subsídios recebidos pelo projeto?",
+          "a": "Saem da conta: são transferências (o que é benefício para o investidor é custo para o governo — efeito social líquido zero, fora distorções)."
+      }
+  ];
+  const fcGrid = document.getElementById("fcGrid");
+  flashcards.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className="fc";
+    div.innerHTML = `<div class="fc-inner">
+      <div class="fc-face fc-front"><div class="fc-lbl">Pergunta ${i+1}</div><p>${c.q}</p></div>
+      <div class="fc-face fc-back"><div class="fc-lbl">Resposta</div><p>${c.a}</p></div>
+    </div>`;
+    div.addEventListener("click", ()=>div.classList.toggle("flipped"));
+    fcGrid.appendChild(div);
+  });
+  document.getElementById("fcFlipAll").addEventListener("click", ()=>document.querySelectorAll(".fc").forEach(f=>f.classList.toggle("flipped")));
+  document.getElementById("fcShuffle").addEventListener("click", ()=>{
+    const arr = Array.from(fcGrid.children);
+    arr.sort(()=>Math.random()-0.5).forEach(el=>fcGrid.appendChild(el));
+  });
+
+  /* QUESTÕES (20) */
+  const questoes = [
+      {
+          "tema": "Privada × social",
+          "texto": "A diferença essencial entre a avaliação privada e a avaliação social de um projeto é que a avaliação social:",
+          "enun": "",
+          "alts": [
+              "Usa sempre taxa de desconto maior.",
+              "Considera os efeitos sobre toda a sociedade, incluindo externalidades sobre terceiros.",
+              "Ignora os custos do projeto.",
+              "Só se aplica a projetos lucrativos.",
+              "Dispensa a monetização de benefícios."
+          ],
+          "correta": 1,
+          "coment": "A avaliação social maximiza o bem-estar da sociedade: inclui efeitos sobre terceiros (externalidades), usa preços-sombra e a taxa social de desconto."
+      },
+      {
+          "tema": "Externalidades",
+          "texto": "Uma campanha de vacinação que protege também pessoas não vacinadas é exemplo de:",
+          "enun": "",
+          "alts": [
+              "Externalidade negativa.",
+              "Externalidade positiva.",
+              "Bem privado.",
+              "Custo afundado.",
+              "Transferência social."
+          ],
+          "correta": 1,
+          "coment": "O efeito benéfico sobre terceiros não é capturado pelos preços: externalidade positiva — clássica justificativa de provisão pública."
+      },
+      {
+          "tema": "Transferências",
+          "texto": "Na análise custo-benefício social, os impostos pagos por um projeto são tratados como:",
+          "enun": "",
+          "alts": [
+              "Custo social.",
+              "Benefício social.",
+              "Transferências — não entram como custo nem benefício social.",
+              "Externalidade negativa.",
+              "Preço-sombra."
+          ],
+          "correta": 2,
+          "coment": "Imposto sai do investidor e entra no governo: dentro da sociedade, o efeito líquido é zero (transferência). É custo apenas na avaliação privada."
+      },
+      {
+          "tema": "Preço-sombra",
+          "texto": "Um projeto de obras públicas emprega trabalhadores desempregados. Na avaliação social, o custo dessa mão de obra deve ser estimado:",
+          "enun": "",
+          "alts": [
+              "Pelo salário integral pago.",
+              "Por valor próximo de zero — o custo social é o que deixariam de produzir em outra ocupação.",
+              "Pelo dobro do salário.",
+              "Pela média salarial da construção civil.",
+              "Pelo salário mínimo."
+          ],
+          "correta": 1,
+          "coment": "Preço-sombra do trabalho desempregado: o custo de oportunidade social é quase nulo, pois a alternativa do trabalhador era o desemprego. O salário pago é, em boa parte, transferência."
+      },
+      {
+          "tema": "ACB — cálculo",
+          "texto": "Uma obra de saneamento custa R$ 100 milhões e gera benefícios sociais de R$ 25 milhões/ano por 5 anos. À taxa social de desconto de 6% (fator de anuidade 4,2124), o VPL social e a RB/C são, aproximadamente:",
+          "enun": "",
+          "alts": [
+              "−R$ 9,88 mi; RB/C = 0,90.",
+              "+R$ 5,31 mi; RB/C = 1,05.",
+              "+R$ 105,31 mi; RB/C = 4,21.",
+              "+R$ 25,00 mi; RB/C = 1,25.",
+              "R$ 0; RB/C = 1,00."
+          ],
+          "correta": 1,
+          "coment": "VP benefícios = 25 × 4,2124 = 105,31; VPL social = 105,31 − 100 = +5,31; RB/C = 105,31/100 = 1,05 → socialmente desejável."
+      },
+      {
+          "tema": "TSD — efeito",
+          "texto": "O mesmo projeto (100 mi; 25 mi/ano × 5 anos) avaliado à taxa de mercado de 12% (fator 3,6048) apresenta VPL de −9,88 mi. A conclusão correta é:",
+          "enun": "",
+          "alts": [
+              "O projeto é sempre inviável.",
+              "A escolha da taxa de desconto pode inverter a decisão: TSD baixa aprova, taxa de mercado reprova.",
+              "A TSD não afeta o VPL.",
+              "O cálculo a 6% está errado.",
+              "A RB/C independe da taxa."
+          ],
+          "correta": 1,
+          "coment": "Taxa menor valoriza os benefícios futuros: de −9,88 (12%) para +5,31 (6%). Em projetos de longo prazo, a TSD é a variável decisiva."
+      },
+      {
+          "tema": "TSD — conceito",
+          "texto": "A principal justificativa para a taxa social de desconto ser menor que a taxa de mercado é:",
+          "enun": "",
+          "alts": [
+              "O Estado consegue empréstimos mais baratos.",
+              "O Estado representa também as gerações futuras e é menos impaciente que os indivíduos.",
+              "Projetos públicos não têm risco.",
+              "A inflação é menor no setor público.",
+              "A taxa de mercado é sempre manipulada."
+          ],
+          "correta": 1,
+          "coment": "O horizonte do Estado é intergeracional e sua impaciência (preferência temporal) é menor — daí a TSD tipicamente abaixo da taxa privada."
+      },
+      {
+          "tema": "VEV",
+          "texto": "Uma pesquisa revela que 10.000 pessoas aceitam pagar R$ 500 cada uma por uma redução de 1/10.000 no risco de morte. O valor estatístico da vida implícito é:",
+          "enun": "",
+          "alts": [
+              "R$ 500.",
+              "R$ 50 mil.",
+              "R$ 5 milhões.",
+              "R$ 500 mil.",
+              "R$ 50 milhões."
+          ],
+          "correta": 2,
+          "coment": "VEV = 10.000 × R$ 500 = R$ 5.000.000 por vida estatística. Não é o “preço de uma vida”: é a soma das disposições a pagar por pequenas reduções de risco."
+      },
+      {
+          "tema": "Custo-efetividade",
+          "texto": "Dois programas com o mesmo objetivo: A custa R$ 50 mi e evita 200 mortes; B custa R$ 30 mi e evita 100. Pela análise custo-efetividade:",
+          "enun": "",
+          "alts": [
+              "B vence, pois custa menos.",
+              "A vence: R$ 250 mil por vida contra R$ 300 mil de B.",
+              "Empatam.",
+              "B vence, pois é mais barato por programa.",
+              "Não é possível comparar sem monetizar as vidas."
+          ],
+          "correta": 1,
+          "coment": "ACE = custo por unidade de resultado: A = 50 mi/200 = 250 mil/vida; B = 30 mi/100 = 300 mil/vida. A é mais custo-efetivo — mesmo custando mais no total."
+      },
+      {
+          "tema": "ACE × ACB",
+          "texto": "A análise custo-efetividade é preferida à custo-benefício quando:",
+          "enun": "",
+          "alts": [
+              "Os benefícios são monetizáveis.",
+              "O objetivo é dado (politicamente decidido) e os benefícios não são adequadamente monetizáveis.",
+              "O projeto é privado.",
+              "A taxa de desconto é alta.",
+              "Há externalidades negativas."
+          ],
+          "correta": 1,
+          "coment": "ACE não pergunta “vale a pena?” (isso já foi decidido), mas “qual a forma mais barata de alcançar o objetivo?” — ideal para saúde e educação."
+      },
+      {
+          "tema": "Lacuna social",
+          "texto": "Um hospital público tem VPL privado de −R$ 20 milhões e VPL social de +R$ 80 milhões. A interpretação econômica correta é:",
+          "enun": "",
+          "alts": [
+              "O hospital não deve ser construído, pois não dá lucro.",
+              "O benefício social líquido de +R$ 100 milhões justifica a provisão estatal.",
+              "Os cálculos estão errados: os dois VPLs devem ser iguais.",
+              "O hospital deve ser privatizado.",
+              "O VPL social é irrelevante para a decisão."
+          ],
+          "correta": 1,
+          "coment": "Benefício social líquido = VPL social − VPL privado = 80 − (−20) = +100 mi. É exatamente essa lacuna que fundamenta economicamente a ação do Estado."
+      },
+      {
+          "tema": "RB/C — escala",
+          "texto": "O projeto X custa R$ 1 mi e tem VP de benefícios de R$ 2 mi (RB/C = 2,0); o projeto Y custa R$ 100 mi e tem VP de benefícios de R$ 130 mi (RB/C = 1,3). Sendo mutuamente excludentes, deve-se escolher:",
+          "enun": "",
+          "alts": [
+              "X, pois tem maior RB/C.",
+              "Y, pois tem maior VPL social (+30 mi contra +1 mi).",
+              "X, pois é mais barato.",
+              "Empate.",
+              "Nenhum, pois RB/C de Y é baixa."
+          ],
+          "correta": 1,
+          "coment": "RB/C ignora escala (mesmo defeito da TIR). O objetivo é maximizar o valor criado: Y cria +30 mi de bem-estar social contra +1 mi de X."
+      },
+      {
+          "tema": "Externalidade negativa",
+          "texto": "Uma fábrica projeta lucro privado de R$ 10 mi/ano, mas sua poluição causa R$ 4 mi/ano em danos à saúde da população vizinha. Na avaliação social, o benefício anual relevante é:",
+          "enun": "",
+          "alts": [
+              "R$ 10 mi.",
+              "R$ 6 mi — o dano à saúde é internalizado como custo social.",
+              "R$ 14 mi.",
+              "R$ 4 mi.",
+              "Zero."
+          ],
+          "correta": 1,
+          "coment": "A externalidade negativa entra no fluxo social: 10 − 4 = 6 mi/ano. A avaliação privada ignora os 4 mi (são custo de terceiros)."
+      },
+      {
+          "tema": "Monetização",
+          "texto": "O método do custo de viagem, usado para valorar parques e áreas de lazer, infere o valor do bem ambiental a partir de:",
+          "enun": "",
+          "alts": [
+              "Do custo de construção do parque.",
+              "De quanto os visitantes gastam (tempo e dinheiro) para visitá-lo.",
+              "Do IPTU dos imóveis vizinhos.",
+              "Da renda dos frequentadores.",
+              "Do orçamento da prefeitura."
+          ],
+          "correta": 1,
+          "coment": "Preferência revelada: o gasto que as pessoas efetivamente fazem para usufruir o parque revela quanto o valoram."
+      },
+      {
+          "tema": "Pesos distributivos",
+          "texto": "Na análise social com pesos distributivos, R$ 1 de benefício para uma família de baixa renda:",
+          "enun": "",
+          "alts": [
+              "Vale o mesmo que R$ 1 para uma família rica.",
+              "Vale mais, refletindo a maior utilidade marginal da renda dos pobres.",
+              "Vale menos, pois gera menos impostos.",
+              "Não entra no cálculo.",
+              "Deve ser descontado à TIR."
+          ],
+          "correta": 1,
+          "coment": "Os pesos distributivos incorporam equidade à eficiência: o mesmo real gera mais bem-estar em quem tem menos."
+      },
+      {
+          "tema": "TSD — controvérsia",
+          "texto": "A controvérsia técnica sobre o nível da taxa social de desconto opõe:",
+          "enun": "",
+          "alts": [
+              "Inflação × deflação.",
+              "Custo de oportunidade do capital (taxa alta) × preferência temporal social (taxa baixa).",
+              "Setor público × setor privado.",
+              "Curto × longo prazo no mesmo projeto.",
+              "Nominal × real."
+          ],
+          "correta": 1,
+          "coment": "Duas escolas: a do custo de oportunidade (o recurso renderia mais no setor privado → TSD alta) e a da preferência temporal social (impaciência ética baixa → TSD baixa)."
+      },
+      {
+          "tema": "EVTEA",
+          "texto": "A EVTEA (Estudo de Viabilidade Técnica e Econômica Ambiental), da Lei 14.133/2021, relaciona-se à análise de projetos sociais porque:",
+          "enun": "",
+          "alts": [
+              "Substitui a ACB por critérios políticos.",
+              "Institucionaliza a avaliação técnica e econômica da viabilidade — cuja fundamentação é a análise custo-benefício social.",
+              "Aplica-se apenas a projetos privados.",
+              "Proíbe projetos com VPL social negativo.",
+              "Dispensa estimativa de custos."
+          ],
+          "correta": 1,
+          "coment": "A EVTEA é a formalização, na lei de licitações, da avaliação econômica de projetos públicos — a ACB social é sua base teórica."
+      },
+      {
+          "tema": "Equidade × eficiência",
+          "texto": "Um projeto de saneamento em bairros pobres tem VPL social menor que uma alternativa em bairros ricos, mas beneficia população muito mais vulnerável. A análise social completa deve:",
+          "enun": "",
+          "alts": [
+              "Escolher sempre o maior VPL social.",
+              "Informar o trade-off eficiência × equidade (com pesos distributivos) — a escolha final é política, informada tecnicamente.",
+              "Escolher sempre o projeto nos bairros pobres.",
+              "Ignorar a distribuição dos benefícios.",
+              "Rejeitar os dois."
+          ],
+          "correta": 1,
+          "coment": "A técnica ilumina o trade-off (quanto se perde em eficiência, quanto se ganha em equidade); quem decide é o processo político — não o analista."
+      },
+      {
+          "tema": "Preço-sombra — câmbio",
+          "texto": "Em um país com câmbio oficialmente controlado e escasso, a avaliação social de um projeto importador de equipamentos deve usar:",
+          "enun": "",
+          "alts": [
+              "A taxa de câmbio oficial.",
+              "A taxa de câmbio-sombra, que reflete a escassez real de divisas.",
+              "A taxa de câmbio futura esperada.",
+              "A taxa do mercado negro.",
+              "O custo histórico do câmbio."
+          ],
+          "correta": 1,
+          "coment": "Preço oficial controlado ≠ valor social real: a taxa-sombra captura o custo de oportunidade verdadeiro das divisas escassas."
+      },
+      {
+          "tema": "Síntese",
+          "texto": "Sobre análise de projetos sociais, assinale a afirmativa correta:",
+          "enun": "",
+          "alts": [
+              "Projetos sociais dispensam análise econômica.",
+              "A ACB monetiza benefícios e custos sociais, incluindo externalidades, e aplica VPL social > 0 (RB/C > 1) à taxa social de desconto.",
+              "A TSD deve ser sempre maior que a de mercado.",
+              "Impostos são o maior custo social dos projetos públicos.",
+              "Custo-efetividade e custo-benefício são sinônimos."
+          ],
+          "correta": 1,
+          "coment": "Síntese do tópico: ACB = fluxos sociais monetizados (com externalidades, sem transferências, a preços-sombra) descontados à TSD; critérios VPL social > 0 e RB/C > 1."
+      }
+  ];
+  const qGrid = document.getElementById("qGrid");
+  questoes.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag">${q.tema}</span><span class="tag soft">Questão ${i+1}</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="q${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+      <div class="q-feedback"></div>
+    `;
+    card.querySelectorAll(".q-opts label").forEach(lbl=>{
+      lbl.addEventListener("click", function(){
+        const chosen = parseInt(this.dataset.idx,10);
+        const opts = card.querySelectorAll(".q-opts label");
+        opts.forEach(o=>{o.classList.remove("correct","wrong");});
+        opts[q.correta].classList.add("correct");
+        if(chosen!==q.correta) this.classList.add("wrong");
+        const fb = card.querySelector(".q-feedback");
+        fb.className = "q-feedback show " + (chosen===q.correta ? "ok":"no");
+        fb.innerHTML = `<b>${chosen===q.correta?"✔ Correto! ":"✘ Incorreto. "}Gabarito: ${String.fromCharCode(65+q.correta)}.</b><br>${q.coment}`;
+      });
+    });
+    qGrid.appendChild(card);
+  });
+
+  /* SIMULADO (30) */
+  const simulado = [
+      {
+          "d": "Fácil",
+          "texto": "A avaliação social de projetos busca maximizar:",
+          "enun": "",
+          "alts": [
+              "O lucro do investidor.",
+              "O bem-estar da sociedade.",
+              "A arrecadação de impostos.",
+              "O payback.",
+              "A TIR."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Poluição de uma fábrica que afeta a saúde de moradores vizinhos é exemplo de:",
+          "enun": "",
+          "alts": [
+              "Externalidade positiva.",
+              "Externalidade negativa.",
+              "Benefício privado.",
+              "Transferência.",
+              "Preço-sombra."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Na avaliação social, impostos e subsídios são tratados como:",
+          "enun": "",
+          "alts": [
+              "Custos sociais.",
+              "Benefícios sociais.",
+              "Transferências — fora da conta social.",
+              "Externalidades.",
+              "Preços-sombra."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Fácil",
+          "texto": "A regra de decisão da análise custo-benefício social é:",
+          "enun": "",
+          "alts": [
+              "VPL social > 0 (ou RB/C > 1).",
+              "TIR > Selic.",
+              "Payback < 2 anos.",
+              "Lucro contábil > 0.",
+              "RB/C < 1."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Fácil",
+          "texto": "A taxa social de desconto, em comparação com a taxa de mercado, é em geral:",
+          "enun": "",
+          "alts": [
+              "Maior.",
+              "Menor.",
+              "Igual.",
+              "Zero.",
+              "Negativa."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "A análise custo-efetividade é usada quando:",
+          "enun": "",
+          "alts": [
+              "Os benefícios são facilmente monetizáveis.",
+              "Os benefícios não são adequadamente monetizáveis (vidas, educação).",
+              "O projeto é privado.",
+              "Não há custos.",
+              "A taxa é zero."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "O valor estatístico da vida (VEV) baseia-se na:",
+          "enun": "",
+          "alts": [
+              "Herança média da população.",
+              "Disposição a pagar por reduções de risco de morte.",
+              "Expectativa de vida ao nascer.",
+              "Renda per capita.",
+              "Indenização média de seguros."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Preço-sombra é:",
+          "enun": "",
+          "alts": [
+              "O preço do mercado informal.",
+              "O valor social de um bem quando o preço de mercado está distorcido.",
+              "O preço mínimo de venda.",
+              "O custo histórico do ativo.",
+              "O preço de monopólio."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Um projeto com VPL privado negativo e VPL social positivo:",
+          "enun": "",
+          "alts": [
+              "Deve ser abandonado.",
+              "É candidato clássico à provisão estatal.",
+              "É impossível.",
+              "Tem RB/C < 1.",
+              "Viola a lei de licitações."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Fácil",
+          "texto": "Pesos distributivos na avaliação social servem para:",
+          "enun": "",
+          "alts": [
+              "Valorizar mais os benefícios dirigidos à população mais pobre.",
+              "Aumentar a arrecadação.",
+              "Reduzir o VPL social.",
+              "Eliminar externalidades.",
+              "Calcular a TIR."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "Custo 100 mi; benefícios 25 mi/ano × 5 anos; TSD 6% (fator 4,2124). VPL social e RB/C:",
+          "enun": "",
+          "alts": [
+              "−9,88; 0,90.",
+              "+5,31; 1,05.",
+              "+25,00; 1,25.",
+              "+105,31; 4,21.",
+              "−5,23; 0,95."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "O mesmo projeto (100 mi; 25 mi/ano × 5) à taxa de 12% (fator 3,6048) tem VPL de:",
+          "enun": "",
+          "alts": [
+              "+5,31 mi.",
+              "−9,88 mi.",
+              "+90,12 mi.",
+              "−5,23 mi.",
+              "+15,00 mi."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "10.000 pessoas pagariam R$ 500 cada por redução de 1/10.000 no risco de morte. O VEV é:",
+          "enun": "",
+          "alts": [
+              "R$ 500 mil.",
+              "R$ 5 milhões.",
+              "R$ 50 milhões.",
+              "R$ 50 mil.",
+              "R$ 1 milhão."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Programa A: 50 mi / 200 vidas. Programa B: 30 mi / 100 vidas. O mais custo-efetivo e seu custo por vida são:",
+          "enun": "",
+          "alts": [
+              "B — 300 mil/vida.",
+              "A — 250 mil/vida.",
+              "Empate.",
+              "B — 150 mil/vida.",
+              "A — 500 mil/vida."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Fábrica com lucro privado de 10 mi/ano e dano à saúde de 4 mi/ano. O benefício anual social é:",
+          "enun": "",
+          "alts": [
+              "10 mi.",
+              "14 mi.",
+              "6 mi.",
+              "4 mi.",
+              "−4 mi."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "X: custo 1 mi, RB/C 2,0. Y: custo 100 mi, RB/C 1,3 (VP benefícios 130 mi). Excludentes. Escolhe-se:",
+          "enun": "",
+          "alts": [
+              "X (maior RB/C).",
+              "Y (maior VPL social: +30 mi contra +1 mi).",
+              "X (mais barato).",
+              "Empate.",
+              "Nenhum."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Média",
+          "texto": "Hospital com VPL privado de −20 mi e VPL social de +80 mi tem benefício social líquido de:",
+          "enun": "",
+          "alts": [
+              "+60 mi.",
+              "+80 mi.",
+              "+100 mi.",
+              "−20 mi.",
+              "+20 mi."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Custo 500 mi; benefícios 120 mi/ano × 5 anos. À TSD de 6% (fator 4,2124) e à taxa de mercado de 12% (3,6048), os VPLs sociais são:",
+          "enun": "",
+          "alts": [
+              "+5,48 e −67,43.",
+              "−5,48 e +67,43.",
+              "+5,48 e +67,43.",
+              "−5,48 e −67,43.",
+              "+105,46 e −32,57."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Média",
+          "texto": "A justificativa para a TSD ser menor que a taxa de mercado NÃO inclui:",
+          "enun": "",
+          "alts": [
+              "O Estado representa as gerações futuras.",
+              "A impaciência social é menor que a individual.",
+              "Projetos públicos são isentos de risco e de custo de oportunidade.",
+              "O horizonte do Estado é intergeracional.",
+              "O risco agregado público é menor."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Média",
+          "texto": "Contratar desempregados em obra pública: o preço-sombra dessa mão de obra é:",
+          "enun": "",
+          "alts": [
+              "O salário pago.",
+              "Próximo de zero (custo de oportunidade do desempregado).",
+              "O dobro do salário.",
+              "O salário médio do setor.",
+              "O piso da categoria."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Projeto: custo 150 mi; benefícios 40 mi/ano × 5 anos. À TSD de 6% (fator 4,2124) e a 10% (3,7908), os VPLs sociais são, respectivamente:",
+          "enun": "",
+          "alts": [
+              "+18,49 e +1,63.",
+              "−18,49 e −1,63.",
+              "+18,49 e −1,63.",
+              "+168,50 e +151,63.",
+              "+1,63 e +18,49."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre a RB/C como critério, assinale a correta:",
+          "enun": "",
+          "alts": [
+              "RB/C > 1 equivale a VPL social > 0.",
+              "RB/C maior sempre indica o melhor projeto excludente.",
+              "RB/C independe da taxa de desconto.",
+              "RB/C considera a escala do projeto.",
+              "RB/C só se aplica a projetos privados."
+          ],
+          "correta": 0
+      },
+      {
+          "d": "Difícil",
+          "texto": "Custo 200 mi; benefícios 60 mi/ano × 4 anos; taxa 8% (fator 3,3121). A decisão social é:",
+          "enun": "",
+          "alts": [
+              "Aprovar: VPL social +1,27.",
+              "Rejeitar: VPL social ≈ −1,27 mi e RB/C ≈ 0,99.",
+              "Aprovar: RB/C = 1,10.",
+              "Rejeitar: VPL social −60 mi.",
+              "Aprovar: benefícios somam 240 mi."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "A afirmativa INCORRETA sobre a análise de projetos sociais é:",
+          "enun": "",
+          "alts": [
+              "Externalidades devem ser internalizadas no fluxo social.",
+              "Impostos são transferências e saem da conta social.",
+              "A TSD tende a ser menor que a taxa de mercado.",
+              "A custo-efetividade julga se o objetivo vale a pena.",
+              "O VEV deriva da disposição a pagar por redução de risco."
+          ],
+          "correta": 3
+      },
+      {
+          "d": "Difícil",
+          "texto": "Sobre a controvérsia da TSD, a escola do “custo de oportunidade” defende que:",
+          "enun": "",
+          "alts": [
+              "A TSD deve ser próxima de zero.",
+              "A TSD deve refletir o retorno que os recursos teriam no setor privado — logo, mais alta.",
+              "A TSD deve ser sempre negativa.",
+              "Não deve haver desconto intertemporal.",
+              "A TSD é irrelevante."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Um projeto gera benefício privado líquido de 70 mi/ano para o investidor, após pagar 30 mi/ano de impostos ao governo; além disso, gera 10 mi/ano de externalidades positivas. Na avaliação social, o benefício anual considerado é:",
+          "enun": "",
+          "alts": [
+              "70 mi (o privado líquido).",
+              "100 mi (sem a externalidade).",
+              "110 mi (70 + 30 de transferência + 10 de externalidade).",
+              "80 mi (70 + 10).",
+              "40 mi (70 − 30)."
+          ],
+          "correta": 2
+      },
+      {
+          "d": "Difícil",
+          "texto": "O Relatório Stern (2006) ilustra que, em horizontes de muito longo prazo:",
+          "enun": "",
+          "alts": [
+              "A TSD é irrelevante.",
+              "Pequenas diferenças na TSD invertem conclusões inteiras sobre a viabilidade de agir hoje.",
+              "Taxas altas sempre aprovam projetos climáticos.",
+              "A ACB não se aplica ao clima.",
+              "O VPL social é sempre negativo."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Na avaliação de um sistema de TI para a DATAPREV que reduz o tempo de concessão de benefícios previdenciários, os benefícios sociais mais diretos são:",
+          "enun": "",
+          "alts": [
+              "Aumento de arrecadação de impostos.",
+              "Redução de filas e do tempo de espera dos segurados, combate a fraudes e custos administrativos evitados.",
+              "Lucro da DATAPREV.",
+              "Dividendos aos acionistas.",
+              "Redução da folha de benefícios pagos."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "Duas intervenções de trânsito: X custa 10 mi e atende 500 alunos em segurança viária (20 mil/aluno); Y custa 18 mi e atende 1.000 (18 mil/aluno). Com orçamento limitado e mesmo objetivo, a análise custo-efetividade indica:",
+          "enun": "",
+          "alts": [
+              "X, pois custa menos no total.",
+              "Y, pois tem menor custo por aluno atendido.",
+              "X, pois atende menos alunos.",
+              "Empate.",
+              "Impossível comparar."
+          ],
+          "correta": 1
+      },
+      {
+          "d": "Difícil",
+          "texto": "A síntese correta da análise de projetos sociais é:",
+          "enun": "",
+          "alts": [
+              "É idêntica à avaliação privada, só que com taxa menor.",
+              "Monetiza fluxos sociais (com externalidades, sem transferências, a preços-sombra), desconta à TSD e decide por VPL social > 0 / RB/C > 1 — complementada por custo-efetividade quando o benefício não é monetizável.",
+              "Dispensa critérios econômicos por ser social.",
+              "Usa sempre RB/C para escolher entre excludentes.",
+              "Considera impostos como custo social."
+          ],
+          "correta": 1
+      }
+  ];
+  const simGrid = document.getElementById("simGrid");
+  simulado.forEach((q,i)=>{
+    const card = document.createElement("div");
+    card.className="q-card";
+    card.innerHTML = `
+      <div class="q-head"><span class="tag soft">${q.d}</span><span class="tag soft">Questão ${i+1}/30</span></div>
+      ${q.texto && q.texto!=="—" ? `<p class="q-stmt"><b>Contexto:</b> ${q.texto}</p>` : ""}
+      <p class="q-stmt"><b>${q.enun}</b></p>
+      <div class="q-opts">${q.alts.map((a,j)=>`<label data-idx="${j}"><input type="radio" name="sim${i}"><span>${String.fromCharCode(65+j)}) ${a}</span></label>`).join("")}</div>
+    `;
+    simGrid.appendChild(card);
+  });
+
+  let simTimerInt=null, simSeconds=0, simRunning=false;
+  document.getElementById("simStart").addEventListener("click", function(){
+    simGrid.style.display="block";
+    document.getElementById("simResult").classList.remove("show");
+    this.style.display="none";
+    document.getElementById("simSubmit").style.display="inline-flex";
+    simSeconds=0; simRunning=true;
+    simTimerInt = setInterval(()=>{
+      simSeconds++;
+      const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+      document.getElementById("simTimer").textContent = m+":"+s;
+    },1000);
+    simGrid.scrollIntoView({behavior:"smooth"});
+  });
+
+  document.getElementById("simSubmit").addEventListener("click", function(){
+    if(simRunning){ clearInterval(simTimerInt); simRunning=false; }
+    let acertos=0;
+    simulado.forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="sim${i}"]:checked`);
+      const labels = simGrid.children[i].querySelectorAll(".q-opts label");
+      labels.forEach(l=>l.classList.remove("correct","wrong"));
+      labels[q.correta].classList.add("correct");
+      if(chosen){
+        const idx = parseInt(chosen.closest("label").dataset.idx,10);
+        if(idx===q.correta) acertos++;
+        else chosen.closest("label").classList.add("wrong");
+      }
+    });
+    const pct = Math.round(acertos/simulado.length*100);
+    document.getElementById("simScore").textContent = acertos+"/"+simulado.length;
+    document.getElementById("simPercent").textContent = pct+"% de aproveitamento";
+    document.getElementById("simBar").style.width = pct+"%";
+    const m=String(Math.floor(simSeconds/60)).padStart(2,"0"), s=String(simSeconds%60).padStart(2,"0");
+    document.getElementById("simTimeSpent").textContent = "Tempo total: "+m+":"+s;
+    document.getElementById("simResult").classList.add("show");
+    document.getElementById("simResult").scrollIntoView({behavior:"smooth"});
+  });
+
+  /* CHECKLIST */
+  const checklistItems = [
+      "Sei distinguir avaliação privada (lucro do investidor) de avaliação social (bem-estar da sociedade).",
+      "Identifico externalidades positivas e negativas e sei que devem ser internalizadas na ACB.",
+      "Sei que impostos e subsídios são transferências e saem da conta social.",
+      "Aplico os critérios VPL social > 0 e RB/C > 1, e sei que RB/C ignora escala.",
+      "Explico a TSD: menor que a de mercado, defende gerações futuras, favorece projetos de longo prazo.",
+      "Calculo o VEV pela disposição a pagar por redução de risco.",
+      "Sei quando usar custo-efetividade: objetivo dado + benefício não monetizável → menor custo por resultado.",
+      "Conheço as técnicas de monetização: DAP, VEV, custo de viagem, preços hedônicos, custos evitados.",
+      "Reconheço a lacuna VPL privado < 0 / social > 0 como justificativa da ação estatal.",
+      "Fiz o mini-simulado com ≥ 24/30 e revisei todos os erros comentados."
+  ];
+  const cklList = document.getElementById("cklList");
+  const cklKey = STORAGE_KEY+"_checklist";
+  let cklState = {};
+  try{ cklState = JSON.parse(localStorage.getItem(cklKey)) || {}; }catch(e){ cklState={}; }
+  function updateCklProgress(){
+    const total = checklistItems.length;
+    const done = Object.values(cklState).filter(Boolean).length;
+    document.getElementById("cklProgress").textContent = done+" de "+total+" itens concluídos";
+  }
+  checklistItems.forEach((item,i)=>{
+    const label = document.createElement("label");
+    const checked = !!cklState[i];
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${checked?"checked":""}><span>${item}</span>`;
+    label.querySelector("input").addEventListener("change", function(){
+      cklState[i]=this.checked;
+      localStorage.setItem(cklKey, JSON.stringify(cklState));
+      updateCklProgress();
+    });
+    cklList.appendChild(label);
+  });
+  updateCklProgress();
+
+  /* ERROS (20) */
+  const erros = [
+      "Avaliar projeto social com a lógica privada: só fluxos do investidor, preços de mercado e TMA.",
+      "Esquecer de internalizar externalidades negativas — superestima o VPL social.",
+      "Incluir impostos como custo social — são transferências dentro da sociedade.",
+      "Incluir subsídios como benefício social — mesma razão: transferência.",
+      "Usar a taxa de mercado quando a questão pede a taxa social de desconto (e vice-versa).",
+      "Afirmar que a TSD é sempre maior que a de mercado — em geral é menor.",
+      "Escolher entre projetos excludentes pela maior RB/C — compare os VPLs sociais (RB/C ignora escala).",
+      "Confundir RB/C > 1 com RB/C > VPL — RB/C > 1 equivale a VPL social > 0.",
+      "Achar que o VEV é “o preço de uma vida” — é a agregação de disposições a pagar por pequenas reduções de risco.",
+      "No VEV, dividir em vez de multiplicar: 10.000 × R$ 500 = R$ 5 mi.",
+      "Usar custo-benefício quando o benefício não é monetizável — o caso pede custo-efetividade.",
+      "Na custo-efetividade, escolher o programa mais barato no total — o critério é o menor custo por unidade de resultado.",
+      "Achar que a custo-efetividade avalia se o objetivo vale a pena — ela só compara meios de alcançá-lo.",
+      "Ignorar o problema de escala da RB/C em projetos de tamanhos diferentes.",
+      "Somar externalidades à avaliação privada — elas só entram na social.",
+      "Afirmar que TSD baixa prejudica projetos de longo prazo — é o contrário: os favorece.",
+      "Usar o salário pago como custo social de mão de obra desempregada — o preço-sombra é o custo de oportunidade (próximo de zero).",
+      "Tratar a escolha equidade × eficiência como técnica — é política, informada pela análise.",
+      "Esquecer que preços hedônicos e custo de viagem são técnicas de preferência revelada.",
+      "Concluir que VPL privado negativo inviabiliza projeto público — o que manda é o VPL social."
+  ];
+  const errosList = document.getElementById("errosList");
+  erros.forEach(e=>{ const li=document.createElement("li"); li.textContent=e; errosList.appendChild(li); });
+
+  /* GLOSSÁRIO */
+  const glossario = [
+      [
+          "Análise custo-benefício (ACB)",
+          "Avaliação social que monetiza benefícios e custos de um projeto para toda a sociedade e decide por VPL social > 0 ou RB/C > 1."
+      ],
+      [
+          "VPL social",
+          "VP dos benefícios sociais menos VP dos custos sociais, descontados à taxa social de desconto."
+      ],
+      [
+          "RB/C (razão benefício-custo)",
+          "VP dos benefícios ÷ VP dos custos; RB/C > 1 ⇔ VPL social > 0. Ignora a escala do projeto."
+      ],
+      [
+          "Externalidade",
+          "Efeito de uma atividade sobre terceiros, não mediado por preços; positiva (vacina) ou negativa (poluição)."
+      ],
+      [
+          "Preço-sombra",
+          "Valor social de um bem ou insumo usado quando o preço de mercado é distorcido por impostos, subsídios, monopólios ou desemprego."
+      ],
+      [
+          "Transferência",
+          "Movimentação de recursos entre agentes da sociedade (impostos, subsídios, multas); não é custo nem benefício social."
+      ],
+      [
+          "Taxa social de desconto (TSD)",
+          "Taxa com que a sociedade desconta bem-estar futuro; em geral menor que a de mercado, refletindo o horizonte intergeracional do Estado."
+      ],
+      [
+          "Benefício social líquido",
+          "VPL social − VPL privado: a lacuna de valor que justifica a ação do Estado."
+      ],
+      [
+          "Disposição a pagar (DAP)",
+          "Quanto as pessoas pagariam por um benefício sem preço de mercado; base da monetização de intangíveis."
+      ],
+      [
+          "Valor estatístico da vida (VEV)",
+          "DAP agregada por pequenas reduções de risco de morte; usada para monetizar benefícios de saúde e segurança."
+      ],
+      [
+          "Método do custo de viagem",
+          "Infere o valor de bens ambientais e de lazer pelo gasto (tempo e dinheiro) que os visitantes fazem para usufruí-los."
+      ],
+      [
+          "Preços hedônicos",
+          "Técnica que extrai o valor de atributos (ar puro, vista, silêncio) do diferencial de preço de bens transacionados, como imóveis."
+      ],
+      [
+          "Análise custo-efetividade (ACE)",
+          "Compara alternativas pelo custo por unidade de resultado, quando os benefícios não são monetizáveis; não julga o mérito do objetivo."
+      ],
+      [
+          "Pesos distributivos",
+          "Fatores que atribuem maior valor social aos benefícios dirigidos à população de baixa renda."
+      ],
+      [
+          "EVTEA",
+          "Estudo de Viabilidade Técnica e Econômica Ambiental (Lei 14.133/2021): formaliza a avaliação econômica de contratações públicas."
+      ]
+  ];
+  const glossList = document.getElementById("glossList");
+  glossario.forEach(([t,d])=>{
+    const dt=document.createElement("dt"); dt.textContent=t;
+    const dd=document.createElement("dd"); dd.textContent=d;
+    glossList.appendChild(dt); glossList.appendChild(dd);
+  });
+
+})();
+</script>
+</body>
+</html>
